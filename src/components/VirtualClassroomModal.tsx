@@ -22,6 +22,9 @@ import {
   X,
   Maximize2,
   Minimize2,
+  ExternalLink,
+  Settings,
+  Radio,
 } from 'lucide-react';
 import { Lesson, UserRole, TalkeMaterialItem } from '../domain/types';
 import { TALKE_CURRICULUM_MATERIALS } from '../data/talkeMaterials';
@@ -43,6 +46,14 @@ export const VirtualClassroomModal: React.FC<VirtualClassroomModalProps> = ({
   onClose,
   onFinishLesson,
 }) => {
+  // Video Stage Mode: 'daily' (Real Video Call via Daily Prebuilt), 'slides' (Curriculum presentation), 'camera' (WebRTC simulated)
+  const [videoMode, setVideoMode] = useState<'daily' | 'slides' | 'camera'>('daily');
+  const [dailyRoomUrl, setDailyRoomUrl] = useState(
+    lesson.meetingLink || `https://talke.daily.co/talke-${lesson.id}`
+  );
+  const [isEditingRoomUrl, setIsEditingRoomUrl] = useState(false);
+  const [tempRoomUrl, setTempRoomUrl] = useState(dailyRoomUrl);
+
   const [micOn, setMicOn] = useState(true);
   const [videoOn, setVideoOn] = useState(true);
   const [notes, setNotes] = useState(lesson.whiteboardNotes || '');
@@ -64,6 +75,27 @@ export const VirtualClassroomModal: React.FC<VirtualClassroomModalProps> = ({
   const [timeLeftSeconds, setTimeLeftSeconds] = useState(50 * 60); // 50 min
   const [isFinishing, setIsFinishing] = useState(false);
   const [activeTab, setActiveTab] = useState<'whiteboard' | 'chat' | 'materials'>('whiteboard');
+
+  // Fetch or initialize Daily Room URL from backend
+  useEffect(() => {
+    const fetchDailyRoom = async () => {
+      try {
+        const res = await fetch(`/api/lessons/${lesson.id}/daily-room`, {
+          method: 'POST',
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.roomUrl) {
+            setDailyRoomUrl(data.roomUrl);
+            setTempRoomUrl(data.roomUrl);
+          }
+        }
+      } catch (err) {
+        console.warn('[Daily Prebuilt] Fallback to room URL:', err);
+      }
+    };
+    fetchDailyRoom();
+  }, [lesson.id]);
 
   // Screen Sharing states
   const [isScreenSharing, setIsScreenSharing] = useState(false);
@@ -250,15 +282,113 @@ export const VirtualClassroomModal: React.FC<VirtualClassroomModalProps> = ({
         <div className="lg:col-span-7 flex flex-col gap-3 h-full overflow-hidden">
           {/* Main Stage View */}
           <div className="flex-1 bg-neutral-900 rounded-2xl border border-neutral-800 relative overflow-hidden flex flex-col shadow-inner">
-            {/* SCREEN SHARING VIEW */}
-            {isScreenSharing ? (
+            {/* Top Mode Bar */}
+            <div className="bg-neutral-950/90 border-b border-neutral-800 px-3 py-2 flex flex-wrap items-center justify-between gap-2 z-20">
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => setVideoMode('daily')}
+                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                    videoMode === 'daily'
+                      ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-xs'
+                      : 'bg-neutral-900 text-neutral-400 hover:text-white hover:bg-neutral-800'
+                  }`}
+                >
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>Daily Prebuilt (Chamada Real)</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setVideoMode('slides')}
+                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                    videoMode === 'slides'
+                      ? 'bg-cyan-700 text-white shadow-xs'
+                      : 'bg-neutral-900 text-neutral-400 hover:text-white hover:bg-neutral-800'
+                  }`}
+                >
+                  <Presentation className="w-3.5 h-3.5" />
+                  <span>Slides Didáticos</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setVideoMode('camera')}
+                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                    videoMode === 'camera'
+                      ? 'bg-neutral-800 text-white'
+                      : 'bg-neutral-900 text-neutral-400 hover:text-white hover:bg-neutral-800'
+                  }`}
+                >
+                  <Video className="w-3.5 h-3.5" />
+                  <span>Simulador</span>
+                </button>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => window.open(dailyRoomUrl, '_blank', 'noopener,noreferrer')}
+                  className="px-2.5 py-1 bg-cyan-950/80 hover:bg-cyan-900 text-cyan-300 text-[11px] font-bold rounded-lg border border-cyan-800/60 flex items-center gap-1 transition-colors"
+                  title="Abrir Daily em uma nova aba com acesso direto aos dispositivos de câmera e microfone"
+                >
+                  <ExternalLink className="w-3 h-3" />
+                  <span>Nova Aba</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setIsEditingRoomUrl(!isEditingRoomUrl)}
+                  className="p-1 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800"
+                  title="Configurar URL da Sala Daily"
+                >
+                  <Settings className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Config Room Popover */}
+            {isEditingRoomUrl && (
+              <div className="bg-neutral-950 p-3 border-b border-neutral-800 flex items-center gap-2 z-20">
+                <span className="text-xs text-neutral-400 shrink-0">URL da Sala Daily:</span>
+                <input
+                  type="text"
+                  value={tempRoomUrl}
+                  onChange={(e) => setTempRoomUrl(e.target.value)}
+                  placeholder="https://talke.daily.co/nome-da-sala"
+                  className="flex-1 bg-neutral-900 border border-neutral-700 rounded-lg px-2.5 py-1 text-xs text-white"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDailyRoomUrl(tempRoomUrl);
+                    setIsEditingRoomUrl(false);
+                  }}
+                  className="px-3 py-1 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-lg"
+                >
+                  Aplicar
+                </button>
+              </div>
+            )}
+
+            {/* 1. DAILY PREBUILT EMBEDDED CALL */}
+            {videoMode === 'daily' ? (
+              <div className="flex-1 w-full h-full relative bg-neutral-950 flex flex-col">
+                <iframe
+                  src={dailyRoomUrl}
+                  title="Daily Prebuilt Video Class"
+                  allow="camera; microphone; fullscreen; display-capture; autoplay; clipboard-write"
+                  className="w-full h-full border-0"
+                />
+              </div>
+            ) : videoMode === 'slides' || isScreenSharing ? (
+              /* 2. SLIDES & CURRICULUM PRESENTATION VIEW */
               <div className="flex-1 w-full h-full flex flex-col relative bg-slate-950">
-                {/* Status Bar for Screen Share */}
                 <div className="bg-slate-900/90 backdrop-blur-xs px-4 py-2 border-b border-slate-800 flex items-center justify-between text-xs text-white z-20">
                   <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping" />
                     <span className="font-bold text-cyan-300">
-                      {screenStream ? 'Transmitindo sua Tela em Alta Definição' : 'Apresentando Material Didático Talkê'}
+                      Material Didático Talkê em Apresentação
                     </span>
                     {presentedMaterial && (
                       <span className="text-[11px] text-slate-400 hidden sm:inline">
@@ -270,15 +400,14 @@ export const VirtualClassroomModal: React.FC<VirtualClassroomModalProps> = ({
                   <div className="flex items-center gap-2">
                     <button
                       onClick={handleToggleScreenShare}
-                      className="px-2.5 py-1 bg-rose-600 hover:bg-rose-700 text-white text-[11px] font-bold rounded-lg transition-colors flex items-center gap-1 shadow-xs"
+                      className="px-2.5 py-1 bg-cyan-600 hover:bg-cyan-500 text-white text-[11px] font-bold rounded-lg transition-colors flex items-center gap-1 shadow-xs"
                     >
-                      <ScreenShareOff className="w-3 h-3" />
-                      <span>Parar Tela</span>
+                      <ScreenShare className="w-3 h-3" />
+                      <span>{isScreenSharing ? 'Parar Tela' : 'Compartilhar Tela'}</span>
                     </button>
                   </div>
                 </div>
 
-                {/* Actual Media Stream Video or Fallback Slide Viewer */}
                 <div className="flex-1 w-full h-full relative flex items-center justify-center p-2 sm:p-4 overflow-hidden">
                   {screenStream ? (
                     <video
@@ -289,7 +418,6 @@ export const VirtualClassroomModal: React.FC<VirtualClassroomModalProps> = ({
                       className="w-full h-full object-contain rounded-xl border border-slate-800 shadow-2xl"
                     />
                   ) : presentedMaterial ? (
-                    /* Interactive Slide Presentation inside Screen Share */
                     <div className="w-full h-full max-w-2xl bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 text-white rounded-2xl p-6 sm:p-8 flex flex-col justify-between border border-cyan-500/30 shadow-2xl overflow-y-auto">
                       <div className="space-y-4">
                         <div className="flex items-center justify-between border-b border-white/10 pb-3">
@@ -337,7 +465,6 @@ export const VirtualClassroomModal: React.FC<VirtualClassroomModalProps> = ({
                         )}
                       </div>
 
-                      {/* Slide Nav Buttons */}
                       <div className="flex items-center justify-between pt-4 border-t border-white/10 mt-4">
                         <button
                           type="button"
@@ -350,7 +477,7 @@ export const VirtualClassroomModal: React.FC<VirtualClassroomModalProps> = ({
                         </button>
 
                         <span className="text-[11px] text-slate-400">
-                          Use para apresentar ao aluno
+                          Use para conduzir a conversa com o aluno
                         </span>
 
                         <button
@@ -365,41 +492,10 @@ export const VirtualClassroomModal: React.FC<VirtualClassroomModalProps> = ({
                       </div>
                     </div>
                   ) : null}
-
-                  {/* Picture in Picture (Floating mini tiles of Teacher and Student) */}
-                  <div className="absolute top-4 right-4 z-30 flex flex-col gap-2">
-                    {/* Other participant thumbnail */}
-                    <div className="w-28 h-20 bg-neutral-900/90 backdrop-blur-md rounded-xl border border-neutral-700 p-2 flex flex-col justify-between shadow-xl">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[9px] font-bold text-cyan-400 truncate">
-                          {userRole === UserRole.Student ? lesson.teacherName : lesson.studentName}
-                        </span>
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                      </div>
-                      <div className="w-7 h-7 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center mx-auto">
-                        {userRole === UserRole.Student ? lesson.teacherName[0] : lesson.studentName[0]}
-                      </div>
-                      <span className="text-[8px] text-neutral-400 text-center block">Câmera HD</span>
-                    </div>
-
-                    {/* Self thumbnail */}
-                    <div className="w-28 h-20 bg-neutral-900/90 backdrop-blur-md rounded-xl border border-neutral-700 p-2 flex flex-col justify-between shadow-xl">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[9px] font-bold text-white truncate">Você</span>
-                        <span className="text-[9px]">{micOn ? '🎙️' : '🔇'}</span>
-                      </div>
-                      <div className="w-7 h-7 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center justify-center mx-auto">
-                        {currentUserName[0]}
-                      </div>
-                      <span className="text-[8px] text-neutral-400 text-center block">
-                        {videoOn ? 'Transmitindo' : 'Câmera Off'}
-                      </span>
-                    </div>
-                  </div>
                 </div>
               </div>
             ) : (
-              /* STANDARD REMOTE PARTICIPANT VIEW */
+              /* 3. SIMULATOR VIEW */
               <div className="flex-1 flex items-center justify-center relative p-6">
                 <div className="text-center space-y-2 z-10">
                   <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-blue-600 to-cyan-500 text-white flex items-center justify-center text-3xl font-black mx-auto ring-4 ring-cyan-500/30 shadow-lg">
@@ -414,10 +510,9 @@ export const VirtualClassroomModal: React.FC<VirtualClassroomModalProps> = ({
                   </span>
                 </div>
 
-                {/* Speaking indicator overlay */}
                 <div className="absolute top-4 left-4 bg-neutral-950/60 backdrop-blur-xs px-2.5 py-1 rounded-lg text-white text-[11px] flex items-center gap-1.5 border border-neutral-800">
                   <Sparkles className="w-3 h-3 text-cyan-400" />
-                  <span>Áudio & Vídeo HD (WebRTC)</span>
+                  <span>Áudio & Vídeo WebRTC</span>
                 </div>
               </div>
             )}

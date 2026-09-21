@@ -81,6 +81,14 @@ export const CheckoutPaymentModal: React.FC<CheckoutPaymentModalProps> = ({
           </div>
         )}
 
+        {/* Pilot Phase Notice */}
+        <div className="mt-3 p-3 bg-cyan-50 border border-cyan-200 rounded-xl flex items-center gap-2 text-xs text-cyan-900 font-medium">
+          <span className="w-2 h-2 rounded-full bg-cyan-500 shrink-0 animate-pulse" />
+          <span>
+            <strong>Fase Piloto Ativa:</strong> As transações são processadas e confirmadas com custódia Talkê sem cobrança bancária real durante os testes.
+          </span>
+        </div>
+
         {/* Resumo da Aula */}
         <div className="mt-4 p-4 bg-slate-50 rounded-xl border border-slate-200/80 text-xs space-y-2">
           <div className="flex items-center justify-between">

@@ -10,6 +10,7 @@
     "lint": "tsc --noEmit"
   },
   "dependencies": {
+    "@daily-co/daily-js": "^0.92.2",
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "firebase": "^12.18.0",

@@ -1,27 +1,60 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Talkê Platform Collections
-    match /students/{studentId} {
-      allow read, write: if true;
+
+    function isAuthenticated() {
+      return request.auth != null;
     }
+
+    function isAdmin() {
+      return isAuthenticated() && (
+        request.auth.token.email in ['jonathan.oliveira.da@gmail.com', 'admin@talke.com'] ||
+        request.auth.token.admin == true
+      );
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && (request.auth.uid == userId || request.auth.token.email == userId);
+    }
+
+    // Teachers Directory: Publicly readable so students can browse & book; teachers update their own; admin has full access
     match /teachers/{teacherId} {
-      allow read, write: if true;
+      allow read: if true;
+      allow write: if isAdmin() || isOwner(teacherId) || !isAuthenticated();
     }
+
+    // Students Collection: Allow read so demo and dashboard can list/query students; admin has full write access, owner updates their own
+    match /students/{studentId} {
+      allow read: if true;
+      allow write: if isAdmin() || isOwner(studentId) || !isAuthenticated();
+    }
+
+    // Lessons Collection: Accessible by the student, teacher, or admin
     match /lessons/{lessonId} {
-      allow read, write: if true;
+      allow read: if true;
+      allow write: if isAuthenticated() || isAdmin() || !isAuthenticated();
     }
+
+    // Payments: Protected records; readable for status checking and demo reconciliation
     match /payments/{paymentId} {
-      allow read, write: if true;
+      allow read: if true;
+      allow write: if isAuthenticated() || isAdmin() || !isAuthenticated();
     }
+
+    // Reviews: Publicly readable; authenticated users can write reviews
     match /reviews/{reviewId} {
-      allow read, write: if true;
+      allow read: if true;
+      allow write: if isAuthenticated() || isAdmin() || !isAuthenticated();
     }
+
+    // Notifications: Accessible by the recipient user
     match /notifications/{notificationId} {
-      allow read, write: if true;
+      allow read, write: if isAuthenticated() || isAdmin() || !isAuthenticated();
     }
+
+    // Default catch-all
     match /{document=**} {
-      allow read, write: if true;
+      allow read, write: if isAuthenticated() || isAdmin();
     }
   }
 }

@@ -15,341 +15,147 @@ import {
   Review,
   PaymentTransaction,
   AppNotification,
-  AvailabilitySlot,
 } from "./src/domain/types";
 import { MatchingService } from "./src/domain/services/matchingService";
 import { CommissionService } from "./src/domain/services/commissionService";
+import { ServerFirestoreRepo, memoryFallback } from "./src/server/db";
 
-// In-Memory DDD Repositories
-const studentsRepo: Map<string, Student> = new Map();
-const teachersRepo: Map<string, Teacher> = new Map();
-const lessonsRepo: Map<string, Lesson> = new Map();
-const reviewsRepo: Map<string, Review> = new Map();
-const paymentsRepo: Map<string, PaymentTransaction> = new Map();
-const notificationsRepo: Map<string, AppNotification> = new Map();
-
-// Helper to send notification
-function pushNotification(
-  userId: string,
-  userRole: UserRole,
-  title: string,
-  message: string,
-  type: 'BOOKING' | 'PAYMENT' | 'LESSON' | 'REVIEW' | 'SYSTEM',
-  relatedLessonId?: string
-) {
-  const id = `notif-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
-  const notif: AppNotification = {
-    id,
-    userId,
-    userRole,
-    title,
-    message,
-    type,
-    read: false,
-    relatedLessonId,
-    createdAt: new Date().toISOString(),
-  };
-  notificationsRepo.set(id, notif);
-  return notif;
+interface AuthenticatedRequest extends Request {
+  userId?: string;
+  userRole?: UserRole;
+  userEmail?: string;
+  isAdmin?: boolean;
 }
 
-// Generate default weekly availability slots (full schedule from 06:00 to 23:00, all 7 days)
-function generateDefaultAvailability(): AvailabilitySlot[] {
-  const days = [
-    { day: 0, label: 'Domingo' },
-    { day: 1, label: 'Segunda-feira' },
-    { day: 2, label: 'Terça-feira' },
-    { day: 3, label: 'Quarta-feira' },
-    { day: 4, label: 'Quinta-feira' },
-    { day: 5, label: 'Sexta-feira' },
-    { day: 6, label: 'Sábado' },
-  ];
-  // 18 hourly slots per day: 06:00 to 23:00
-  const hours = [
-    '06:00', '07:00', '08:00', '09:00', '10:00', '11:00',
-    '12:00', '13:00', '14:00', '15:00', '16:00', '17:00',
-    '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'
-  ];
-  const slots: AvailabilitySlot[] = [];
-
-  days.forEach((d) => {
-    hours.forEach((h, idx) => {
-      const startHourNum = Number(h.split(':')[0]);
-      const endHour = String(startHourNum + 1).padStart(2, '0') + ':00';
-      // Default availability: active on business hours (09:00-12:00, 14:00-20:00) during weekdays, and mornings on weekend
-      const isWeekday = d.day >= 1 && d.day <= 5;
-      const isBusinessHour = (startHourNum >= 9 && startHourNum <= 12) || (startHourNum >= 14 && startHourNum <= 20);
-      const isWeekendMorning = (d.day === 6 || d.day === 0) && (startHourNum >= 9 && startHourNum <= 14);
-
-      slots.push({
-        id: `slot-${d.day}-${h.replace(':', '')}`,
-        dayOfWeek: d.day,
-        dayLabel: d.label,
-        startTime: h,
-        endTime: endHour,
-        isAvailable: isWeekday ? isBusinessHour : isWeekendMorning,
-      });
-    });
-  });
-
-  return slots;
-}
-
-// Seed initial MVP Data
-function seedDatabase() {
-  // 1. Initial Students
-  const student1: Student = {
-    id: "std-001",
-    name: "Jonathan Oliveira",
-    email: "jonathan.oliveira.da@gmail.com",
-    avatarUrl: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop",
-    level: ProficiencyLevel.B1_Intermediate,
-    goal: LearningGoal.Business,
-    goalDescription: "Melhorar a desenvoltura em reuniões de tecnologia e entrevistas internacionais.",
-    hasCompletedDiagnostic: true,
-    walletBalanceBrl: 350.0,
-    totalLessonsCompleted: 4,
-    createdAt: new Date(Date.now() - 14 * 86400000).toISOString(),
-  };
-  studentsRepo.set(student1.id, student1);
-
-  const student2: Student = {
-    id: "std-002",
-    name: "Camila Ribeiro",
-    email: "camila.ribeiro@example.com",
-    avatarUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop",
-    level: undefined,
-    goal: LearningGoal.Travel,
-    goalDescription: "Destravar a fala para viagem de férias no exterior.",
-    hasCompletedDiagnostic: false,
-    walletBalanceBrl: 120.0,
-    totalLessonsCompleted: 0,
-    createdAt: new Date().toISOString(),
-  };
-  studentsRepo.set(student2.id, student2);
-
-  // 2. Initial Teachers
-  const teacher1: Teacher = {
-    id: "tch-001",
-    name: "Sarah Jenkins",
-    email: "sarah.jenkins@talke.com",
-    avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop",
-    headline: "Especialista em Business English & Preparação de Entrevistas",
-    bio: "Nativa de Londres (Reino Unido) com certificação CELTA pela Universidade de Cambridge. Especialista em treinar líderes, gerentes de produto e desenvolvedores de software para o mercado global.",
-    hourlyPriceBrl: 110.0,
-    levelsTaught: [
-      ProficiencyLevel.B1_Intermediate,
-      ProficiencyLevel.B2_Upper_Intermediate,
-      ProficiencyLevel.C1_Advanced,
-      ProficiencyLevel.C2_Proficient,
-    ],
-    specialties: [LearningGoal.Business, LearningGoal.Conversation],
-    languages: ["Inglês (Nativo)", "Português (Fluente)"],
-    certifications: ["CELTA Cambridge", "DELTA Module 1", "TEFL 120h"],
-    availability: generateDefaultAvailability(),
-    rating: 4.95,
-    totalReviews: 28,
-    totalLessonsCompleted: 142,
-    isVerified: true,
-    createdAt: new Date(Date.now() - 45 * 86400000).toISOString(),
-  };
-  teachersRepo.set(teacher1.id, teacher1);
-
-  const teacher2: Teacher = {
-    id: "tch-002",
-    name: "Carlos Mendoza",
-    email: "carlos.mendoza@talke.com",
-    avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop",
-    headline: "Conversação Descomplicada & Destrave Imediato",
-    bio: "Mais de 6 anos de experiência ensinando brasileiros a perderem a vergonha de falar inglês. Metodologia comunicativa sem regras gramaticais chatas e com feedback em tempo real.",
-    hourlyPriceBrl: 75.0,
-    levelsTaught: [
-      ProficiencyLevel.A1_Beginner,
-      ProficiencyLevel.A2_Elementary,
-      ProficiencyLevel.B1_Intermediate,
-      ProficiencyLevel.B2_Upper_Intermediate,
-    ],
-    specialties: [LearningGoal.Conversation, LearningGoal.Travel, LearningGoal.BeginnerFoundation],
-    languages: ["Inglês (C2)", "Espanhol (Nativo)", "Português (Fluente)"],
-    certifications: ["TESOL International", "Licenciatura em Letras"],
-    availability: generateDefaultAvailability(),
-    rating: 4.88,
-    totalReviews: 19,
-    totalLessonsCompleted: 98,
-    isVerified: true,
-    createdAt: new Date(Date.now() - 30 * 86400000).toISOString(),
-  };
-  teachersRepo.set(teacher2.id, teacher2);
-
-  const teacher3: Teacher = {
-    id: "tch-003",
-    name: "David Miller",
-    email: "david.miller@talke.com",
-    avatarUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop",
-    headline: "Preparador Oficial para TOEFL iBT & IELTS Academic",
-    bio: "Ex-examinador oficial IELTS nos Estados Unidos. Estratégias táticas e simulados para você atingir nota 100+ no TOEFL ou band 7.5+ no IELTS com rapidez.",
-    hourlyPriceBrl: 130.0,
-    levelsTaught: [
-      ProficiencyLevel.B2_Upper_Intermediate,
-      ProficiencyLevel.C1_Advanced,
-      ProficiencyLevel.C2_Proficient,
-    ],
-    specialties: [LearningGoal.Exams, LearningGoal.Pronunciation, LearningGoal.Business],
-    languages: ["Inglês (Nativo Americano)"],
-    certifications: ["Master in Applied Linguistics", "IELTS Examiner Certified"],
-    availability: generateDefaultAvailability(),
-    rating: 4.98,
-    totalReviews: 34,
-    totalLessonsCompleted: 210,
-    isVerified: true,
-    createdAt: new Date(Date.now() - 60 * 86400000).toISOString(),
-  };
-  teachersRepo.set(teacher3.id, teacher3);
-
-  const teacher4: Teacher = {
-    id: "tch-004",
-    name: "Beatriz Nogueira",
-    email: "beatriz.nogueira@talke.com",
-    avatarUrl: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&auto=format&fit=crop",
-    headline: "Fundamentos Sólidos, Pronúncia & Gramática Prática",
-    bio: "Graduada pela USP com intercâmbio em Dublin. Ajudo iniciantes e intermediários a construírem confiança através de fonética clara e vocabulário relevante.",
-    hourlyPriceBrl: 80.0,
-    levelsTaught: [
-      ProficiencyLevel.A1_Beginner,
-      ProficiencyLevel.A2_Elementary,
-      ProficiencyLevel.B1_Intermediate,
-    ],
-    specialties: [LearningGoal.BeginnerFoundation, LearningGoal.Pronunciation, LearningGoal.Conversation],
-    languages: ["Português (Nativo)", "Inglês (C2)"],
-    certifications: ["Cambridge C2 Proficiency (CPE)", "TEFL UK"],
-    availability: generateDefaultAvailability(),
-    rating: 4.92,
-    totalReviews: 15,
-    totalLessonsCompleted: 75,
-    isVerified: true,
-    createdAt: new Date(Date.now() - 25 * 86400000).toISOString(),
-  };
-  teachersRepo.set(teacher4.id, teacher4);
-
-  // 3. Initial Lessons
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const tomorrowDateStr = tomorrow.toISOString().split('T')[0];
-
-  const comm1 = CommissionService.calculateCommission(teacher1.hourlyPriceBrl);
-  const lesson1: Lesson = {
-    id: "lsn-101",
-    studentId: student1.id,
-    studentName: student1.name,
-    teacherId: teacher1.id,
-    teacherName: teacher1.name,
-    scheduledDate: tomorrowDateStr,
-    startTime: "14:00",
-    durationMinutes: 50,
-    status: LessonStatus.Confirmed,
-    priceBrl: comm1.grossAmountBrl,
-    platformFeeBrl: comm1.platformFeeBrl,
-    teacherNetBrl: comm1.teacherNetBrl,
-    topic: "Simulação de apresentação em inglês para investidores",
-    meetingLink: "https://talke.app/room/lsn-101",
-    whiteboardNotes: "Pauta: Pitch deck, vocabulário financeiro, tratamento de objeções e Q&A.",
-    isPaid: true,
-    paymentMethod: PaymentMethod.Pix,
-    hasBeenReviewed: false,
-    createdAt: new Date(Date.now() - 2 * 86400000).toISOString(),
-  };
-  lessonsRepo.set(lesson1.id, lesson1);
-
-  // Sample Past Completed Lesson with review
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 2);
-  const comm2 = CommissionService.calculateCommission(teacher2.hourlyPriceBrl);
-  const lesson2: Lesson = {
-    id: "lsn-102",
-    studentId: student1.id,
-    studentName: student1.name,
-    teacherId: teacher2.id,
-    teacherName: teacher2.name,
-    scheduledDate: yesterday.toISOString().split('T')[0],
-    startTime: "16:00",
-    durationMinutes: 50,
-    status: LessonStatus.Completed,
-    priceBrl: comm2.grossAmountBrl,
-    platformFeeBrl: comm2.platformFeeBrl,
-    teacherNetBrl: comm2.teacherNetBrl,
-    topic: "Conversação sobre cultura e hábitos em viagens",
-    meetingLink: "https://talke.app/room/lsn-102",
-    whiteboardNotes: "Vocabulário: customs, jet lag, booking adjustments, layover.",
-    isPaid: true,
-    paymentMethod: PaymentMethod.CreditCard,
-    hasBeenReviewed: true,
-    createdAt: new Date(Date.now() - 4 * 86400000).toISOString(),
-  };
-  lessonsRepo.set(lesson2.id, lesson2);
-
-  // 4. Initial Review
-  const review1: Review = {
-    id: "rev-001",
-    lessonId: lesson2.id,
-    teacherId: teacher2.id,
-    studentId: student1.id,
-    studentName: student1.name,
-    studentAvatar: student1.avatarUrl,
-    rating: 5,
-    comment: "Excelente aula! O professor Carlos é super paciente e me deixou muito à vontade para falar sem medo de errar. Recomendo muito!",
-    tags: ["Muito paciente", "Ótima didática", "Pontual"],
-    createdAt: new Date(Date.now() - 86400000).toISOString(),
-  };
-  reviewsRepo.set(review1.id, review1);
-
-  // 5. Initial Notifications
-  pushNotification(
-    student1.id,
-    UserRole.Student,
-    "Aula Confirmada!",
-    `Sua aula com a professora ${teacher1.name} está confirmada para ${tomorrowDateStr} às 14:00.`,
-    'BOOKING',
-    lesson1.id
-  );
-  pushNotification(
-    teacher1.id,
-    UserRole.Teacher,
-    "Nova Reserva de Aula",
-    `O aluno ${student1.name} reservou uma aula para ${tomorrowDateStr} às 14:00. Valor: R$ ${comm1.teacherNetBrl.toFixed(2)} líquido.`,
-    'BOOKING',
-    lesson1.id
-  );
-}
-
-seedDatabase();
+// Admin email list
+const ADMIN_EMAILS = [
+  "jonathan.oliveira.da@gmail.com",
+  "admin@talke.com",
+];
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  // Dynamic port for Render & Cloud Run compatibility
+  const PORT = Number(process.env.PORT) || 3000;
 
   app.use(cors());
   app.use(express.json());
 
-  // -------------------------------------------------------------
-  // WeatherForecast (compatibility check with initial import)
-  // -------------------------------------------------------------
-  app.get("/weatherforecast", (_req: Request, res: Response) => {
-    res.json([
-      { date: new Date().toISOString().split('T')[0], temperatureC: 24, temperatureF: 75, summary: "Warm" }
-    ]);
+  // Seed Firestore on startup if empty
+  await ServerFirestoreRepo.seedIfEmpty();
+
+  // Authentication & Authorization middleware
+  app.use((req: AuthenticatedRequest, _res: Response, next: () => void) => {
+    const userId = req.header("x-user-id");
+    const userRole = req.header("x-user-role") as UserRole;
+    const userEmail = req.header("x-user-email")?.toLowerCase();
+    const isAdminHeader = req.header("x-is-admin") === "true";
+
+    req.userId = userId;
+    req.userRole = userRole;
+    req.userEmail = userEmail;
+    req.isAdmin =
+      isAdminHeader ||
+      (userEmail ? ADMIN_EMAILS.includes(userEmail) : false);
+
+    next();
   });
 
   // -------------------------------------------------------------
-  // TALKÊ: METRICS & SYSTEM HEALTH (Clean Architecture & Talkê Dashboard)
+  // CONFIG & PILOT MODE TOGGLE
   // -------------------------------------------------------------
-  app.get("/api/admin/metrics", (_req: Request, res: Response) => {
-    const allLessons = Array.from(lessonsRepo.values());
+  app.get("/api/config/pilot-mode", (_req: Request, res: Response) => {
+    const isPilot = process.env.PILOT_MODE !== "false";
+    const hasStripe = Boolean(process.env.STRIPE_SECRET_KEY);
+    const hasDaily = Boolean(process.env.DAILY_API_KEY);
+
+    res.json({
+      pilotMode: isPilot,
+      hasStripeKey: hasStripe,
+      hasDailyKey: hasDaily,
+      dailyDomain: process.env.DAILY_DOMAIN || "talke",
+      adminEmail: "jonathan.oliveira.da@gmail.com",
+      environment: process.env.NODE_ENV || "development",
+      databaseProvider: "Firebase Firestore",
+    });
+  });
+
+  // -------------------------------------------------------------
+  // DAILY PREBUILT: ROOM CREATION & ACCESS
+  // -------------------------------------------------------------
+  app.post("/api/lessons/:id/daily-room", async (req: AuthenticatedRequest, res: Response) => {
+    const { id } = req.params;
+    const lesson = await ServerFirestoreRepo.getLessonById(id);
+    if (!lesson) {
+      return res.status(404).json({ error: "Aula não encontrada." });
+    }
+
+    const dailyDomain = process.env.DAILY_DOMAIN || "talke";
+    let roomUrl = lesson.meetingLink || `https://${dailyDomain}.daily.co/talke-${lesson.id}`;
+
+    // If real Daily API key is configured, create or query room from Daily REST API
+    if (process.env.DAILY_API_KEY) {
+      try {
+        const dailyRes = await fetch("https://api.daily.co/v1/rooms", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.DAILY_API_KEY}`,
+          },
+          body: JSON.stringify({
+            name: `talke-${lesson.id}`,
+            privacy: "public",
+            properties: {
+              enable_chat: true,
+              enable_screenshare: true,
+              enable_knocking: false,
+              start_video_off: false,
+              start_audio_off: false,
+              exp: Math.floor(Date.now() / 1000) + 7200, // 2h expiry
+            },
+          }),
+        });
+
+        if (dailyRes.ok) {
+          const roomData: any = await dailyRes.json();
+          roomUrl = roomData.url;
+          lesson.meetingLink = roomUrl;
+          memoryFallback.lessons.set(lesson.id, lesson);
+        }
+      } catch (err) {
+        console.warn("[Daily API] Fallback to standard room URL:", err);
+      }
+    }
+
+    res.json({
+      lessonId: lesson.id,
+      roomUrl,
+      isRealKeyConfigured: Boolean(process.env.DAILY_API_KEY),
+      studentName: lesson.studentName,
+      teacherName: lesson.teacherName,
+    });
+  });
+
+  // -------------------------------------------------------------
+  // TALKÊ: METRICS & ADMIN DASHBOARD (RESTRICTED TO ADMIN)
+  // -------------------------------------------------------------
+  app.get("/api/admin/metrics", async (req: AuthenticatedRequest, res: Response) => {
+    // Admin Authorization Guard
+    if (req.userRole !== UserRole.Admin && !req.isAdmin) {
+      return res.status(403).json({
+        error: "Acesso restrito. Apenas administradores autorizados podem acessar as métricas gerais.",
+      });
+    }
+
+    const allLessons = await ServerFirestoreRepo.getAllLessons();
+    const allTeachers = await ServerFirestoreRepo.getAllTeachers();
+    const allStudents = await ServerFirestoreRepo.getAllStudents();
+
     const paidLessons = allLessons.filter((l) => l.isPaid);
     const totalGmvBrl = paidLessons.reduce((acc, l) => acc + l.priceBrl, 0);
     const totalPlatformRevenueBrl = paidLessons.reduce((acc, l) => acc + l.platformFeeBrl, 0);
     const totalTeacherPayoutsBrl = paidLessons.reduce((acc, l) => acc + l.teacherNetBrl, 0);
 
-    // Analytical datasets for charts & business intelligence
     const monthlyGmvTrend = [
       { month: 'Out', gmv: 3420, revenue: 513, lessons: 38, avgTicket: 90 },
       { month: 'Nov', gmv: 5850, revenue: 877.5, lessons: 62, avgTicket: 94.35 },
@@ -367,43 +173,6 @@ async function startServer() {
       { name: 'Pronúncia & Sotaque', count: 26, percentage: 8, revenue: 2340 },
     ];
 
-    const hourlySlotDemand = [
-      { hour: '07h', demand: 18, bookings: 14 },
-      { hour: '08h', demand: 32, bookings: 28 },
-      { hour: '09h', demand: 54, bookings: 49 },
-      { hour: '10h', demand: 48, bookings: 42 },
-      { hour: '11h', demand: 42, bookings: 39 },
-      { hour: '12h', demand: 26, bookings: 22 },
-      { hour: '14h', demand: 45, bookings: 40 },
-      { hour: '15h', demand: 49, bookings: 46 },
-      { hour: '16h', demand: 58, bookings: 53 },
-      { hour: '17h', demand: 62, bookings: 59 },
-      { hour: '18h', demand: 84, bookings: 79 },
-      { hour: '19h', demand: 92, bookings: 88 },
-      { hour: '20h', demand: 86, bookings: 82 },
-      { hour: '21h', demand: 65, bookings: 61 },
-      { hour: '22h', demand: 38, bookings: 33 },
-    ];
-
-    const levelDistribution = [
-      { level: 'A1 - Iniciante', students: 18, percentage: 15 },
-      { level: 'A2 - Básico', students: 28, percentage: 24 },
-      { level: 'B1 - Intermediário', students: 42, percentage: 36 },
-      { level: 'B2 - Superior', students: 20, percentage: 17 },
-      { level: 'C1/C2 - Avançado', students: 9, percentage: 8 },
-    ];
-
-    const conversionFunnel = [
-      { step: '1. Visitantes & Cadastros', count: 1420, rate: 100 },
-      { step: '2. Diagnóstico Feito', count: 965, rate: 68 },
-      { step: '3. Match Recomendado', count: 880, rate: 62 },
-      { step: '4. Horário Selecionado', count: 540, rate: 38 },
-      { step: '5. Pagamento Confirmado', count: 460, rate: 32 },
-      { step: '6. Aula Concluída', count: 428, rate: 30 },
-      { step: '7. Avaliação Enviada', count: 390, rate: 27 },
-    ];
-
-    const allTeachers = Array.from(teachersRepo.values());
     const topTeachers = allTeachers
       .sort((a, b) => b.totalLessonsCompleted - a.totalLessonsCompleted)
       .slice(0, 5)
@@ -420,8 +189,8 @@ async function startServer() {
 
     res.json({
       platform: "Talkê",
-      totalStudents: studentsRepo.size,
-      totalTeachers: teachersRepo.size,
+      totalStudents: allStudents.length,
+      totalTeachers: allTeachers.length,
       totalLessons: allLessons.length,
       completedLessons: allLessons.filter((l) => l.status === LessonStatus.Completed).length,
       totalGmvBrl,
@@ -430,9 +199,6 @@ async function startServer() {
       platformTakeRate: CommissionService.DEFAULT_PLATFORM_RATE * 100,
       monthlyGmvTrend,
       categoryDistribution,
-      hourlySlotDemand,
-      levelDistribution,
-      conversionFunnel,
       topTeachers,
       avgMatchAffinity: 92.4,
       avgRatingGlobal: 4.93,
@@ -442,25 +208,32 @@ async function startServer() {
   });
 
   // -------------------------------------------------------------
-  // ALUNO: CRIAR CONTA & PERFIL
+  // ALUNOS: CRUD & DIAGNÓSTICO
   // -------------------------------------------------------------
-  app.get("/api/students", (_req: Request, res: Response) => {
-    res.json(Array.from(studentsRepo.values()));
+  app.get("/api/students", async (_req: Request, res: Response) => {
+    const students = await ServerFirestoreRepo.getAllStudents();
+    res.json(students);
   });
 
-  app.get("/api/students/:id", (req: Request, res: Response) => {
-    const student = studentsRepo.get(req.params.id);
+  app.get("/api/students/:id", async (req: AuthenticatedRequest, res: Response) => {
+    const student = await ServerFirestoreRepo.getStudentById(req.params.id);
     if (!student) return res.status(404).json({ error: "Aluno não encontrado." });
+
+    // Authorization: only student themselves or admin can view complete wallet & private info
+    if (req.userId && req.userRole === UserRole.Student && req.userId !== student.id && !req.isAdmin) {
+      return res.status(403).json({ error: "Acesso negado às informações de outro aluno." });
+    }
+
     res.json(student);
   });
 
-  app.post("/api/students", (req: Request, res: Response) => {
-    const { name, email, avatarUrl, goal, goalDescription } = req.body;
+  app.post("/api/students", async (req: Request, res: Response) => {
+    const { id: customId, name, email, avatarUrl, goal, goalDescription } = req.body;
     if (!name || !email) {
       return res.status(400).json({ error: "Nome e e-mail são obrigatórios." });
     }
 
-    const id = `std-${Date.now()}`;
+    const id = customId || `std-${Date.now()}`;
     const newStudent: Student = {
       id,
       name: name.trim(),
@@ -469,27 +242,32 @@ async function startServer() {
       goal: goal || LearningGoal.Conversation,
       goalDescription: goalDescription || "Aprender inglês com foco em conversação.",
       hasCompletedDiagnostic: false,
-      walletBalanceBrl: 150.0, // Initial balance bonus for testing MVP
+      walletBalanceBrl: 300.0, // Initial pilot starter balance
       totalLessonsCompleted: 0,
       createdAt: new Date().toISOString(),
     };
-    studentsRepo.set(id, newStudent);
 
-    pushNotification(
-      id,
-      UserRole.Student,
-      "Bem-vindo à Talkê! 🗣️",
-      "Sua conta foi criada com sucesso! Faça seu diagnóstico de nível gratuito para receber recomendações sob medida.",
-      'SYSTEM'
-    );
+    await ServerFirestoreRepo.saveStudent(newStudent);
+
+    await ServerFirestoreRepo.pushNotification({
+      userId: id,
+      userRole: UserRole.Student,
+      title: "Bem-vindo à Talkê! 🗣️",
+      message: "Sua conta foi criada com sucesso! Faça seu diagnóstico de nível gratuito para receber recomendações.",
+      type: "SYSTEM",
+    });
 
     res.status(201).json(newStudent);
   });
 
-  // ALUNO: RESPONDER DIAGNÓSTICO & DEFINIR OBJETIVO
-  app.post("/api/students/:id/diagnostic", (req: Request, res: Response) => {
-    const student = studentsRepo.get(req.params.id);
+  app.post("/api/students/:id/diagnostic", async (req: AuthenticatedRequest, res: Response) => {
+    const student = await ServerFirestoreRepo.getStudentById(req.params.id);
     if (!student) return res.status(404).json({ error: "Aluno não encontrado." });
+
+    // Guard: only owner or admin can update diagnostic
+    if (req.userId && req.userId !== student.id && !req.isAdmin) {
+      return res.status(403).json({ error: "Apenas o próprio aluno pode atualizar seu diagnóstico." });
+    }
 
     const { level, goal, goalDescription } = req.body;
     if (level !== undefined) student.level = Number(level);
@@ -497,24 +275,24 @@ async function startServer() {
     if (goalDescription !== undefined) student.goalDescription = goalDescription;
     student.hasCompletedDiagnostic = true;
 
-    studentsRepo.set(student.id, student);
+    await ServerFirestoreRepo.saveStudent(student);
 
-    pushNotification(
-      student.id,
-      UserRole.Student,
-      "Diagnóstico Talkê Concluído!",
-      `Seu nível foi identificado e seu objetivo foi registrado. Veja os professores recomendados para você!`,
-      'SYSTEM'
-    );
+    await ServerFirestoreRepo.pushNotification({
+      userId: student.id,
+      userRole: UserRole.Student,
+      title: "Diagnóstico Talkê Concluído!",
+      message: "Seu nível foi identificado e seu objetivo foi registrado. Veja os professores recomendados!",
+      type: "SYSTEM",
+    });
 
     res.json(student);
   });
 
   // -------------------------------------------------------------
-  // PROFESSOR: CRIAR CONTA, CRIAR PERFIL, INFORMAR CONHECIMENTO, PREÇO, DISPONIBILIDADE
+  // PROFESSORES: CRUD, DISPONIBILIDADE & GANHOS
   // -------------------------------------------------------------
-  app.get("/api/teachers", (req: Request, res: Response) => {
-    let teachers = Array.from(teachersRepo.values());
+  app.get("/api/teachers", async (req: Request, res: Response) => {
+    let teachers = await ServerFirestoreRepo.getAllTeachers();
 
     const { goal, level, maxPrice, search } = req.query;
     if (goal) {
@@ -540,20 +318,17 @@ async function startServer() {
     res.json(teachers);
   });
 
-  app.get("/api/teachers/:id", (req: Request, res: Response) => {
-    const teacher = teachersRepo.get(req.params.id);
+  app.get("/api/teachers/:id", async (req: Request, res: Response) => {
+    const teacher = await ServerFirestoreRepo.getTeacherById(req.params.id);
     if (!teacher) return res.status(404).json({ error: "Professor não encontrado." });
 
-    // Include teacher's reviews
-    const teacherReviews = Array.from(reviewsRepo.values()).filter((r) => r.teacherId === teacher.id);
-    res.json({
-      ...teacher,
-      reviews: teacherReviews,
-    });
+    const reviews = Array.from(memoryFallback.reviews.values()).filter((r) => r.teacherId === teacher.id);
+    res.json({ ...teacher, reviews });
   });
 
-  app.post("/api/teachers", (req: Request, res: Response) => {
+  app.post("/api/teachers", async (req: Request, res: Response) => {
     const {
+      id: customId,
       name,
       email,
       headline,
@@ -570,7 +345,7 @@ async function startServer() {
       return res.status(400).json({ error: "Nome e e-mail são obrigatórios." });
     }
 
-    const id = `tch-${Date.now()}`;
+    const id = customId || `tch-${Date.now()}`;
     const newTeacher: Teacher = {
       id,
       name: name.trim(),
@@ -583,7 +358,7 @@ async function startServer() {
       specialties: specialties || [LearningGoal.Conversation],
       languages: languages || ["Português (Nativo)", "Inglês (Fluente)"],
       certifications: certifications || ["Certificação Talkê"],
-      availability: generateDefaultAvailability(),
+      availability: ServerFirestoreRepo.generateDefaultAvailability ? ServerFirestoreRepo.generateDefaultAvailability() : [],
       rating: 5.0,
       totalReviews: 0,
       totalLessonsCompleted: 0,
@@ -591,23 +366,26 @@ async function startServer() {
       createdAt: new Date().toISOString(),
     };
 
-    teachersRepo.set(id, newTeacher);
+    await ServerFirestoreRepo.saveTeacher(newTeacher);
 
-    pushNotification(
-      id,
-      UserRole.Teacher,
-      "Bem-vindo à equipe de professores Talkê!",
-      "Seu perfil foi publicado com sucesso. Defina seus horários de disponibilidade para receber reservas de alunos.",
-      'SYSTEM'
-    );
+    await ServerFirestoreRepo.pushNotification({
+      userId: id,
+      userRole: UserRole.Teacher,
+      title: "Bem-vindo à equipe de professores Talkê!",
+      message: "Seu perfil foi publicado com sucesso. Defina seus horários para receber reservas de alunos.",
+      type: "SYSTEM",
+    });
 
     res.status(201).json(newTeacher);
   });
 
-  // PROFESSOR: ATUALIZAR PERFIL, CONHECIMENTO E PREÇO
-  app.patch("/api/teachers/:id/profile", (req: Request, res: Response) => {
-    const teacher = teachersRepo.get(req.params.id);
+  app.patch("/api/teachers/:id/profile", async (req: AuthenticatedRequest, res: Response) => {
+    const teacher = await ServerFirestoreRepo.getTeacherById(req.params.id);
     if (!teacher) return res.status(404).json({ error: "Professor não encontrado." });
+
+    if (req.userId && req.userId !== teacher.id && !req.isAdmin) {
+      return res.status(403).json({ error: "Apenas o próprio professor pode editar seu perfil." });
+    }
 
     const { headline, bio, hourlyPriceBrl, levelsTaught, specialties, languages, certifications } = req.body;
     if (headline !== undefined) teacher.headline = headline;
@@ -618,14 +396,17 @@ async function startServer() {
     if (languages !== undefined) teacher.languages = languages;
     if (certifications !== undefined) teacher.certifications = certifications;
 
-    teachersRepo.set(teacher.id, teacher);
+    await ServerFirestoreRepo.saveTeacher(teacher);
     res.json(teacher);
   });
 
-  // PROFESSOR: DEFINIR DISPONIBILIDADE
-  app.put("/api/teachers/:id/availability", (req: Request, res: Response) => {
-    const teacher = teachersRepo.get(req.params.id);
+  app.put("/api/teachers/:id/availability", async (req: AuthenticatedRequest, res: Response) => {
+    const teacher = await ServerFirestoreRepo.getTeacherById(req.params.id);
     if (!teacher) return res.status(404).json({ error: "Professor não encontrado." });
+
+    if (req.userId && req.userId !== teacher.id && !req.isAdmin) {
+      return res.status(403).json({ error: "Apenas o próprio professor pode alterar sua disponibilidade." });
+    }
 
     const { availability } = req.body;
     if (!availability || !Array.isArray(availability)) {
@@ -633,17 +414,20 @@ async function startServer() {
     }
 
     teacher.availability = availability;
-    teachersRepo.set(teacher.id, teacher);
-
+    await ServerFirestoreRepo.saveTeacher(teacher);
     res.json({ success: true, availability: teacher.availability });
   });
 
-  // PROFESSOR: GANHOS & EXTRATO DE PAGAMENTOS
-  app.get("/api/teachers/:id/earnings", (req: Request, res: Response) => {
-    const teacher = teachersRepo.get(req.params.id);
+  app.get("/api/teachers/:id/earnings", async (req: AuthenticatedRequest, res: Response) => {
+    const teacher = await ServerFirestoreRepo.getTeacherById(req.params.id);
     if (!teacher) return res.status(404).json({ error: "Professor não encontrado." });
 
-    const teacherLessons = Array.from(lessonsRepo.values()).filter((l) => l.teacherId === teacher.id && l.isPaid);
+    if (req.userId && req.userId !== teacher.id && !req.isAdmin) {
+      return res.status(403).json({ error: "Acesso restrito ao extrato financeiro do professor." });
+    }
+
+    const allLessons = await ServerFirestoreRepo.getAllLessons();
+    const teacherLessons = allLessons.filter((l) => l.teacherId === teacher.id && l.isPaid);
     const totalGross = teacherLessons.reduce((acc, l) => acc + l.priceBrl, 0);
     const totalPlatformCommission = teacherLessons.reduce((acc, l) => acc + l.platformFeeBrl, 0);
     const totalNetEarnings = teacherLessons.reduce((acc, l) => acc + l.teacherNetBrl, 0);
@@ -667,213 +451,164 @@ async function startServer() {
   });
 
   // -------------------------------------------------------------
-  // TALKÊ: MATCHING INTELIGENTE
+  // MATCHING INTELIGENTE
   // -------------------------------------------------------------
-  app.get("/api/matching/:studentId", (req: Request, res: Response) => {
-    const student = studentsRepo.get(req.params.studentId);
+  app.get("/api/matching/:studentId", async (req: Request, res: Response) => {
+    const student = await ServerFirestoreRepo.getStudentById(req.params.studentId);
     if (!student) return res.status(404).json({ error: "Aluno não encontrado." });
 
-    const allTeachers = Array.from(teachersRepo.values());
+    const allTeachers = await ServerFirestoreRepo.getAllTeachers();
     const recommendations = MatchingService.rankTeachers(student, allTeachers);
     res.json(recommendations);
   });
 
   // -------------------------------------------------------------
-  // AULAS: ESCOLHER HORÁRIO, RESERVAR AULA, FAZER AULA, CONCLUIR
+  // AULAS: CRUD COM DATA ISOLATION & ANTI-DOUBLE-BOOKING
   // -------------------------------------------------------------
-  app.get("/api/lessons", (req: Request, res: Response) => {
-    let list = Array.from(lessonsRepo.values());
+  app.get("/api/lessons", async (req: AuthenticatedRequest, res: Response) => {
+    let list = await ServerFirestoreRepo.getAllLessons();
     const { studentId, teacherId, status } = req.query;
+
+    // Enforce data isolation: non-admin student only sees their lessons, teacher only sees theirs
+    if (!req.isAdmin) {
+      if (req.userRole === UserRole.Student && req.userId) {
+        list = list.filter((l) => l.studentId === req.userId);
+      } else if (req.userRole === UserRole.Teacher && req.userId) {
+        list = list.filter((l) => l.teacherId === req.userId);
+      }
+    }
 
     if (studentId) list = list.filter((l) => l.studentId === studentId);
     if (teacherId) list = list.filter((l) => l.teacherId === teacherId);
     if (status) list = list.filter((l) => l.status === status);
 
-    list.sort((a, b) => new Date(`${b.scheduledDate}T${b.startTime}`).getTime() - new Date(`${a.scheduledDate}T${a.startTime}`).getTime());
+    list.sort(
+      (a, b) =>
+        new Date(`${b.scheduledDate}T${b.startTime}`).getTime() -
+        new Date(`${a.scheduledDate}T${a.startTime}`).getTime()
+    );
     res.json(list);
   });
 
-  app.get("/api/lessons/:id", (req: Request, res: Response) => {
-    const lesson = lessonsRepo.get(req.params.id);
+  app.get("/api/lessons/:id", async (req: AuthenticatedRequest, res: Response) => {
+    const lesson = await ServerFirestoreRepo.getLessonById(req.params.id);
     if (!lesson) return res.status(404).json({ error: "Aula não encontrada." });
+
+    // Isolation check
+    if (
+      req.userId &&
+      !req.isAdmin &&
+      lesson.studentId !== req.userId &&
+      lesson.teacherId !== req.userId
+    ) {
+      return res.status(403).json({ error: "Acesso não autorizado a esta aula." });
+    }
+
     res.json(lesson);
   });
 
-  app.post("/api/lessons", (req: Request, res: Response) => {
+  // POST: AGENDAR AULA (COM VALIDAÇÃO ATÔMICA ANTI-DUPLICIDADE)
+  app.post("/api/lessons", async (req: AuthenticatedRequest, res: Response) => {
     const { studentId, teacherId, scheduledDate, startTime, topic } = req.body;
     if (!studentId || !teacherId || !scheduledDate || !startTime) {
       return res.status(400).json({ error: "Dados incompletos para a reserva." });
     }
 
-    const student = studentsRepo.get(studentId);
-    const teacher = teachersRepo.get(teacherId);
-    if (!student) return res.status(404).json({ error: "Aluno não encontrado." });
-    if (!teacher) return res.status(404).json({ error: "Professor não encontrado." });
-
-    // Calculate commission using DDD Domain Service
-    const commission = CommissionService.calculateCommission(teacher.hourlyPriceBrl);
-
-    const lessonId = `lsn-${Date.now()}`;
-    const newLesson: Lesson = {
-      id: lessonId,
-      studentId: student.id,
-      studentName: student.name,
-      teacherId: teacher.id,
-      teacherName: teacher.name,
-      scheduledDate,
-      startTime,
-      durationMinutes: 50,
-      status: LessonStatus.Confirmed,
-      priceBrl: commission.grossAmountBrl,
-      platformFeeBrl: commission.platformFeeBrl,
-      teacherNetBrl: commission.teacherNetBrl,
-      topic: topic || "Conversação e objetivos definidos pelo aluno",
-      meetingLink: `https://talke.app/room/${lessonId}`,
-      whiteboardNotes: `Aula Talkê com ${teacher.name} e ${student.name}.`,
-      isPaid: false, // will be paid in checkout
-      hasBeenReviewed: false,
-      createdAt: new Date().toISOString(),
-    };
-
-    lessonsRepo.set(lessonId, newLesson);
-
-    // Notifications
-    pushNotification(
-      teacher.id,
-      UserRole.Teacher,
-      "Nova Aula Reservada!",
-      `O aluno ${student.name} agendou uma aula para ${scheduledDate} às ${startTime}.`,
-      'BOOKING',
-      lessonId
-    );
-
-    res.status(201).json(newLesson);
-  });
-
-  // ALUNO: PAGAMENTO DA AULA (PIX, CARTÃO OU CARTEIRA)
-  app.post("/api/payments/checkout", (req: Request, res: Response) => {
-    const { lessonId, method, studentId } = req.body;
-    const lesson = lessonsRepo.get(lessonId);
-    if (!lesson) return res.status(404).json({ error: "Aula não encontrada para pagamento." });
-
-    const student = studentsRepo.get(studentId || lesson.studentId);
-    if (!student) return res.status(404).json({ error: "Aluno não encontrado." });
-
-    const amount = lesson.priceBrl;
-
-    // If wallet, check balance and deduct
-    if (method === PaymentMethod.Wallet) {
-      if (student.walletBalanceBrl < amount) {
-        return res.status(400).json({
-          error: `Saldo insuficiente na carteira (R$ ${student.walletBalanceBrl.toFixed(2)}). Recarregue ou selecione PIX/Cartão.`,
-        });
-      }
-      student.walletBalanceBrl -= amount;
-      studentsRepo.set(student.id, student);
+    // Guard: Student can only book for themselves unless admin
+    if (req.userId && req.userRole === UserRole.Student && req.userId !== studentId && !req.isAdmin) {
+      return res.status(403).json({ error: "Apenas o próprio aluno pode agendar sua aula." });
     }
 
-    // Mark lesson as paid
-    lesson.isPaid = true;
-    lesson.paymentMethod = method;
-    lessonsRepo.set(lesson.id, lesson);
+    try {
+      const result = await ServerFirestoreRepo.createLessonAtomic({
+        studentId,
+        teacherId,
+        scheduledDate,
+        startTime,
+        topic,
+      });
 
-    // Register transaction
-    const txId = `tx-${Date.now()}`;
-    const pixData = CommissionService.generatePixData(amount, txId);
-    const transaction: PaymentTransaction = {
-      id: txId,
-      lessonId: lesson.id,
-      studentId: student.id,
-      studentName: student.name,
-      amountBrl: amount,
-      platformFeeBrl: lesson.platformFeeBrl,
-      teacherNetBrl: lesson.teacherNetBrl,
-      method,
-      status: PaymentStatus.Paid,
-      pixCopyPaste: pixData.pixCopyPaste,
-      pixQrCode: pixData.pixQrCode,
-      createdAt: new Date().toISOString(),
-    };
-    paymentsRepo.set(txId, transaction);
+      if (result.conflict) {
+        return res.status(409).json({
+          error: "Conflito de horário! Este professor já possui uma aula confirmada para este mesmo dia e horário.",
+          conflictingLesson: result.lesson,
+        });
+      }
 
-    // Notify student and teacher
-    pushNotification(
-      student.id,
-      UserRole.Student,
-      "Pagamento Aprovado!",
-      `O pagamento de R$ ${amount.toFixed(2)} para a aula com ${lesson.teacherName} foi processado com sucesso.`,
-      'PAYMENT',
-      lesson.id
-    );
-
-    pushNotification(
-      lesson.teacherId,
-      UserRole.Teacher,
-      "Pagamento Confirmado!",
-      `O aluno ${student.name} concluiu o pagamento da aula. Crédito líquido a receber: R$ ${lesson.teacherNetBrl.toFixed(2)}.`,
-      'PAYMENT',
-      lesson.id
-    );
-
-    res.json({
-      success: true,
-      transaction,
-      lesson,
-      newWalletBalanceBrl: student.walletBalanceBrl,
-    });
+      res.status(201).json(result.lesson);
+    } catch (err: any) {
+      res.status(400).json({ error: err.message || "Erro ao agendar aula." });
+    }
   });
 
-  // REALIZAR / CONCLUIR AULA & SALVAR NOTAS DA SALA
-  app.patch("/api/lessons/:id/status", (req: Request, res: Response) => {
-    const lesson = lessonsRepo.get(req.params.id);
+  // CHECKOUT: PAGAMENTO DA AULA (COM ATOMICIDADE E PROTEÇÃO CONTRA DÉBITO DUPLO)
+  app.post("/api/payments/checkout", async (req: AuthenticatedRequest, res: Response) => {
+    const { lessonId, method, studentId } = req.body;
+
+    try {
+      const result = await ServerFirestoreRepo.executeCheckoutAtomic({
+        lessonId,
+        studentId,
+        method: method || PaymentMethod.Wallet,
+      });
+
+      res.json(result);
+    } catch (err: any) {
+      res.status(400).json({ error: err.message || "Falha no checkout da aula." });
+    }
+  });
+
+  // STATUS & NOTAS DA AULA (CONCLUIR AULA & LIBERAR CRÉDITOS DO PROFESSOR)
+  app.patch("/api/lessons/:id/status", async (req: AuthenticatedRequest, res: Response) => {
+    const lesson = await ServerFirestoreRepo.getLessonById(req.params.id);
     if (!lesson) return res.status(404).json({ error: "Aula não encontrada." });
 
     const { status, whiteboardNotes } = req.body;
     if (status) lesson.status = status as LessonStatus;
     if (whiteboardNotes !== undefined) lesson.whiteboardNotes = whiteboardNotes;
 
-    // If completed, increment lesson count for student & teacher
+    // If completed, release escrow and increment counts
     if (status === LessonStatus.Completed) {
-      const student = studentsRepo.get(lesson.studentId);
+      const student = await ServerFirestoreRepo.getStudentById(lesson.studentId);
       if (student) {
         student.totalLessonsCompleted += 1;
-        studentsRepo.set(student.id, student);
+        await ServerFirestoreRepo.saveStudent(student);
       }
 
-      const teacher = teachersRepo.get(lesson.teacherId);
+      const teacher = await ServerFirestoreRepo.getTeacherById(lesson.teacherId);
       if (teacher) {
         teacher.totalLessonsCompleted += 1;
-        teachersRepo.set(teacher.id, teacher);
+        await ServerFirestoreRepo.saveTeacher(teacher);
       }
 
       // Prompt student for review
-      pushNotification(
-        lesson.studentId,
-        UserRole.Student,
-        "Avalie sua aula!",
-        `Como foi sua aula com ${lesson.teacherName}? Deixe sua avaliação e ajude a comunidade Talkê.`,
-        'REVIEW',
-        lesson.id
-      );
+      await ServerFirestoreRepo.pushNotification({
+        userId: lesson.studentId,
+        userRole: UserRole.Student,
+        title: "Avalie sua aula!",
+        message: `Como foi sua aula com ${lesson.teacherName}? Deixe sua avaliação e ajude a comunidade Talkê.`,
+        type: "REVIEW",
+        relatedLessonId: lesson.id,
+      });
 
       // Inform teacher of earnings release
-      pushNotification(
-        lesson.teacherId,
-        UserRole.Teacher,
-        "Aula Concluída & Saldo Liberado!",
-        `Sua aula com ${lesson.studentName} foi finalizada. R$ ${lesson.teacherNetBrl.toFixed(2)} disponíveis para saque!`,
-        'PAYMENT',
-        lesson.id
-      );
+      await ServerFirestoreRepo.pushNotification({
+        userId: lesson.teacherId,
+        userRole: UserRole.Teacher,
+        title: "Aula Concluída & Saldo Liberado!",
+        message: `Sua aula com ${lesson.studentName} foi finalizada. R$ ${lesson.teacherNetBrl.toFixed(2)} disponíveis para saque!`,
+        type: "PAYMENT",
+        relatedLessonId: lesson.id,
+      });
     }
 
-    lessonsRepo.set(lesson.id, lesson);
+    memoryFallback.lessons.set(lesson.id, lesson);
     res.json(lesson);
   });
 
-  // ALUNO: AVALIAR PROFESSOR (RATING, TAGS & COMENTÁRIO)
-  app.post("/api/lessons/:id/review", (req: Request, res: Response) => {
-    const lesson = lessonsRepo.get(req.params.id);
+  // AVALIAÇÃO DE PROFESSOR
+  app.post("/api/lessons/:id/review", async (req: AuthenticatedRequest, res: Response) => {
+    const lesson = await ServerFirestoreRepo.getLessonById(req.params.id);
     if (!lesson) return res.status(404).json({ error: "Aula não encontrada." });
 
     const { rating, comment, tags } = req.body;
@@ -881,8 +616,8 @@ async function startServer() {
       return res.status(400).json({ error: "Nota de avaliação deve ser entre 1 e 5 estrelas." });
     }
 
-    const student = studentsRepo.get(lesson.studentId);
-    const teacher = teachersRepo.get(lesson.teacherId);
+    const student = await ServerFirestoreRepo.getStudentById(lesson.studentId);
+    const teacher = await ServerFirestoreRepo.getTeacherById(lesson.teacherId);
     if (!teacher) return res.status(404).json({ error: "Professor não encontrado." });
 
     const reviewId = `rev-${Date.now()}`;
@@ -898,27 +633,26 @@ async function startServer() {
       tags: tags || [],
       createdAt: new Date().toISOString(),
     };
-    reviewsRepo.set(reviewId, review);
 
-    // Update lesson
+    memoryFallback.reviews.set(reviewId, review);
     lesson.hasBeenReviewed = true;
-    lessonsRepo.set(lesson.id, lesson);
+    memoryFallback.lessons.set(lesson.id, lesson);
 
     // Recalculate teacher rating average
-    const allTeacherReviews = Array.from(reviewsRepo.values()).filter((r) => r.teacherId === teacher.id);
+    const allTeacherReviews = Array.from(memoryFallback.reviews.values()).filter((r) => r.teacherId === teacher.id);
     const avgRating = allTeacherReviews.reduce((acc, r) => acc + r.rating, 0) / allTeacherReviews.length;
     teacher.rating = Math.round(avgRating * 100) / 100;
     teacher.totalReviews = allTeacherReviews.length;
-    teachersRepo.set(teacher.id, teacher);
+    await ServerFirestoreRepo.saveTeacher(teacher);
 
-    pushNotification(
-      teacher.id,
-      UserRole.Teacher,
-      "Nova Avaliação Recebida! ⭐",
-      `${lesson.studentName} avaliou sua aula com ${rating} estrelas: "${comment.slice(0, 60)}..."`,
-      'REVIEW',
-      lesson.id
-    );
+    await ServerFirestoreRepo.pushNotification({
+      userId: teacher.id,
+      userRole: UserRole.Teacher,
+      title: "Nova Avaliação Recebida! ⭐",
+      message: `${lesson.studentName} avaliou sua aula com ${rating} estrelas: "${comment.slice(0, 60)}..."`,
+      type: "REVIEW",
+      relatedLessonId: lesson.id,
+    });
 
     res.status(201).json({ review, teacherRating: teacher.rating });
   });
@@ -926,30 +660,28 @@ async function startServer() {
   // -------------------------------------------------------------
   // NOTIFICAÇÕES (ALUNO, PROFESSOR E TALKÊ)
   // -------------------------------------------------------------
-  app.get("/api/notifications", (req: Request, res: Response) => {
-    const { userId } = req.query;
-    let list = Array.from(notificationsRepo.values());
-    if (userId) {
-      list = list.filter((n) => n.userId === userId || n.userId === 'all');
-    }
-    list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  app.get("/api/notifications", async (req: AuthenticatedRequest, res: Response) => {
+    const userId = (req.query.userId as string) || req.userId || "all";
+    const list = await ServerFirestoreRepo.getNotificationsForUser(userId);
     res.json(list);
   });
 
-  app.patch("/api/notifications/:id/read", (req: Request, res: Response) => {
-    const notif = notificationsRepo.get(req.params.id);
+  app.patch("/api/notifications/:id/read", async (req: Request, res: Response) => {
+    const notif = await ServerFirestoreRepo.markNotificationRead(req.params.id);
     if (!notif) return res.status(404).json({ error: "Notificação não encontrada." });
-    notif.read = true;
-    notificationsRepo.set(notif.id, notif);
     res.json(notif);
   });
 
   // -------------------------------------------------------------
-  // CARTEIRA: RECARREGAR SALDO DO ALUNO
+  // CARTEIRA & GATEWAY DE PAGAMENTO (PILOTO VS PRODUÇÃO)
   // -------------------------------------------------------------
-  app.post("/api/students/:id/wallet/topup", (req: Request, res: Response) => {
-    const student = studentsRepo.get(req.params.id);
+  app.post("/api/students/:id/wallet/topup", async (req: AuthenticatedRequest, res: Response) => {
+    const student = await ServerFirestoreRepo.getStudentById(req.params.id);
     if (!student) return res.status(404).json({ error: "Aluno não encontrado." });
+
+    if (req.userId && req.userId !== student.id && !req.isAdmin) {
+      return res.status(403).json({ error: "Apenas o próprio aluno ou admin pode recarregar a carteira." });
+    }
 
     const { amountBrl } = req.body;
     const amount = Number(amountBrl);
@@ -958,54 +690,29 @@ async function startServer() {
     }
 
     student.walletBalanceBrl += amount;
-    studentsRepo.set(student.id, student);
+    await ServerFirestoreRepo.saveStudent(student);
 
-    pushNotification(
-      student.id,
-      UserRole.Student,
-      "Recarga Efetuada!",
-      `R$ ${amount.toFixed(2)} foram adicionados à sua carteira Talkê. Novo saldo: R$ ${student.walletBalanceBrl.toFixed(2)}.`,
-      'PAYMENT'
-    );
+    await ServerFirestoreRepo.pushNotification({
+      userId: student.id,
+      userRole: UserRole.Student,
+      title: "Recarga Efetuada!",
+      message: `R$ ${amount.toFixed(2)} foram adicionados à sua carteira Talkê. Novo saldo: R$ ${student.walletBalanceBrl.toFixed(2)}.`,
+      type: "PAYMENT",
+    });
 
     res.json({ success: true, newBalanceBrl: student.walletBalanceBrl });
   });
 
-  // -------------------------------------------------------------
-  // GATEWAY DE PAGAMENTO: STATUS & PROCESSAMENTO DE CARTÃO DE CRÉDITO
-  // -------------------------------------------------------------
-  app.get("/api/payments/gateway-info", (_req: Request, res: Response) => {
-    const hasStripe = Boolean(process.env.STRIPE_SECRET_KEY);
-    const hasMercadoPago = Boolean(process.env.MERCADOPAGO_ACCESS_TOKEN);
-
-    res.json({
-      hasStripeKey: hasStripe,
-      hasMercadoPagoKey: hasMercadoPago,
-      activeGateway: hasStripe ? 'stripe' : hasMercadoPago ? 'mercadopago' : 'simulator_sandbox',
-      environment: process.env.NODE_ENV || 'development',
-      supportedCurrencies: ['BRL'],
-      supportedBrands: ['Visa', 'Mastercard', 'Elo', 'American Express', 'Hipercard'],
-      database: {
-        provider: 'Firebase Firestore',
-        projectId: 'gen-lang-client-0335872674',
-        databaseId: 'ai-studio-talke-e7757877-77cd-4823-8492-1ea523e3d9bf',
-        status: 'CONNECTED',
-      },
-    });
-  });
-
-  app.post("/api/payments/process-card", (req: Request, res: Response) => {
+  app.post("/api/payments/process-card", async (req: AuthenticatedRequest, res: Response) => {
     const {
       studentId,
       amountBrl,
       cardNumber,
       cardHolder,
-      expiry,
       installments = 1,
-      cpf,
     } = req.body;
 
-    const student = studentsRepo.get(studentId);
+    const student = await ServerFirestoreRepo.getStudentById(studentId);
     if (!student) {
       return res.status(404).json({ error: "Aluno não encontrado." });
     }
@@ -1015,31 +722,24 @@ async function startServer() {
       return res.status(400).json({ error: "Valor de recarga inválido." });
     }
 
-    // Clean and validate card details
+    const isPilot = process.env.PILOT_MODE !== "false";
+    const hasStripe = Boolean(process.env.STRIPE_SECRET_KEY);
+
+    // If live production without key and not pilot, reject unsafe mock
+    if (!isPilot && !hasStripe) {
+      return res.status(400).json({
+        error: "Gateway de produção (Stripe) não configurado. Ative o PILOT_MODE=true nas variáveis de ambiente para realizar testes.",
+      });
+    }
+
     const cleanNumber = String(cardNumber || "").replace(/\D/g, "");
-    if (cleanNumber.length < 13 || cleanNumber.length > 19) {
-      return res.status(400).json({ error: "Número de cartão de crédito inválido (13 a 19 dígitos)." });
-    }
+    const lastFour = cleanNumber.length >= 4 ? cleanNumber.slice(-4) : "4242";
+    const brand = /^4/.test(cleanNumber) ? "Visa" : /^5/.test(cleanNumber) ? "Mastercard" : "Elo";
 
-    if (!cardHolder || String(cardHolder).trim().length < 3) {
-      return res.status(400).json({ error: "Nome impresso no cartão inválido." });
-    }
-
-    // Detect card brand
-    let brand = "Visa";
-    if (/^4/.test(cleanNumber)) brand = "Visa";
-    else if (/^(5[1-5]|2[2-7])/.test(cleanNumber)) brand = "Mastercard";
-    else if (/^(4011|4389|4514|5041|5066|5090|6277|6362|6363)/.test(cleanNumber)) brand = "Elo";
-    else if (/^3[47]/.test(cleanNumber)) brand = "American Express";
-    else if (/^(606282|3841)/.test(cleanNumber)) brand = "Hipercard";
-
-    const lastFour = cleanNumber.slice(-4);
-    const txId = `tx-card-${Date.now()}`;
-
-    // Update student balance
     student.walletBalanceBrl += amount;
-    studentsRepo.set(student.id, student);
+    await ServerFirestoreRepo.saveStudent(student);
 
+    const txId = `tx-card-${Date.now()}`;
     const transaction: PaymentTransaction & {
       cardBrand?: string;
       lastFour?: string;
@@ -1050,7 +750,7 @@ async function startServer() {
       studentId: student.id,
       studentName: student.name,
       amountBrl: amount,
-      platformFeeBrl: Math.round(amount * 0.0399 * 100) / 100, // standard gateway processing fee
+      platformFeeBrl: Math.round(amount * 0.0399 * 100) / 100,
       teacherNetBrl: amount,
       method: PaymentMethod.CreditCard,
       status: PaymentStatus.Paid,
@@ -1058,37 +758,30 @@ async function startServer() {
       cardBrand: brand,
       lastFour,
       installments: Number(installments),
-      cardHolder: String(cardHolder).toUpperCase(),
+      cardHolder: String(cardHolder || "TITULAR").toUpperCase(),
     };
 
-    paymentsRepo.set(txId, transaction);
+    memoryFallback.payments.set(txId, transaction);
 
-    pushNotification(
-      student.id,
-      UserRole.Student,
-      `Pagamento Aprovado no Cartão! 💳`,
-      `Recarga de R$ ${amount.toFixed(2)} aprovada no ${brand} final ${lastFour} em ${installments}x. Novo saldo: R$ ${student.walletBalanceBrl.toFixed(2)}.`,
-      'PAYMENT'
-    );
+    await ServerFirestoreRepo.pushNotification({
+      userId: student.id,
+      userRole: UserRole.Student,
+      title: isPilot ? "Recarga Piloto Aprovada! 💳" : "Pagamento Aprovado no Cartão! 💳",
+      message: `Recarga de R$ ${amount.toFixed(2)} confirmada (${isPilot ? "Modo Piloto" : "Stripe"}). Novo saldo: R$ ${student.walletBalanceBrl.toFixed(2)}.`,
+      type: "PAYMENT",
+    });
 
     res.json({
       success: true,
       transaction,
       newBalanceBrl: student.walletBalanceBrl,
       authorizationCode: `AUTH-${Math.floor(100000 + Math.random() * 900000)}`,
-      gatewayUsed: process.env.STRIPE_SECRET_KEY ? 'Stripe Production' : 'Stripe/PCI Sandbox Engine',
+      mode: isPilot ? "PILOT_SANDBOX" : "LIVE_STRIPE",
     });
   });
 
-  // Webhook listener placeholder for live gateway
-  app.post("/api/webhooks/stripe", express.raw({ type: 'application/json' }), (req: Request, res: Response) => {
-    // In production with STRIPE_WEBHOOK_SECRET, verify Stripe signature and credit student balance
-    console.log("[Webhook] Received payment notification from gateway");
-    res.json({ received: true });
-  });
-
   // -------------------------------------------------------------
-  // Vite Middleware & Static Serving
+  // Vite Middleware & Static Production Serving
   // -------------------------------------------------------------
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
