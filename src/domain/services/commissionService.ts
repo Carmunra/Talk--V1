@@ -1,3 +1,5 @@
+import { ValidationError } from '../errors/DomainError';
+
 export interface CommissionBreakdown {
   grossAmountBrl: number;
   platformRate: number; // e.g., 0.15 (15%)
@@ -15,6 +17,10 @@ export class CommissionService {
     grossAmountBrl: number,
     platformRate: number = CommissionService.DEFAULT_PLATFORM_RATE
   ): CommissionBreakdown {
+    if (!Number.isFinite(grossAmountBrl) || grossAmountBrl <= 0) {
+      throw new ValidationError('O valor bruto da aula deve ser maior que zero.');
+    }
+
     const platformFeeBrl = Math.round(grossAmountBrl * platformRate * 100) / 100;
     const teacherNetBrl = Math.round((grossAmountBrl - platformFeeBrl) * 100) / 100;
 

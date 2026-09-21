@@ -282,6 +282,24 @@ export class ServerFirestoreRepo {
     return memoryFallback.students.get(id) || null;
   }
 
+  public static async getStudentByEmail(email: string): Promise<Student | null> {
+    const lower = email.toLowerCase().trim();
+    const cached = Array.from(memoryFallback.students.values()).find(
+      (s) => s.email.toLowerCase() === lower
+    );
+    if (cached) return cached;
+    try {
+      const q = query(collection(db, STUDENTS_COLLECTION), where('email', '==', lower));
+      const snap = await getDocs(q);
+      if (!snap.empty) {
+        return snap.docs[0].data() as Student;
+      }
+    } catch (err) {
+      console.warn('[Firestore] getStudentByEmail error:', err);
+    }
+    return null;
+  }
+
   public static async saveStudent(student: Student): Promise<void> {
     memoryFallback.students.set(student.id, student);
     try {
@@ -293,6 +311,7 @@ export class ServerFirestoreRepo {
 
   // ================= TEACHERS =================
   public static async getAllTeachers(): Promise<Teacher[]> {
+
     try {
       const snap = await getDocs(collection(db, TEACHERS_COLLECTION));
       if (!snap.empty) {
@@ -320,6 +339,24 @@ export class ServerFirestoreRepo {
     return memoryFallback.teachers.get(id) || null;
   }
 
+  public static async getTeacherByEmail(email: string): Promise<Teacher | null> {
+    const lower = email.toLowerCase().trim();
+    const cached = Array.from(memoryFallback.teachers.values()).find(
+      (t) => t.email.toLowerCase() === lower
+    );
+    if (cached) return cached;
+    try {
+      const q = query(collection(db, TEACHERS_COLLECTION), where('email', '==', lower));
+      const snap = await getDocs(q);
+      if (!snap.empty) {
+        return snap.docs[0].data() as Teacher;
+      }
+    } catch (err) {
+      console.warn('[Firestore] getTeacherByEmail error:', err);
+    }
+    return null;
+  }
+
   public static async saveTeacher(teacher: Teacher): Promise<void> {
     memoryFallback.teachers.set(teacher.id, teacher);
     try {
@@ -342,6 +379,25 @@ export class ServerFirestoreRepo {
       console.warn('[Firestore] getAllLessons error, using cache:', err);
     }
     return Array.from(memoryFallback.lessons.values());
+  }
+
+  public static async getLessonsForTeacher(teacherId: string): Promise<Lesson[]> {
+    const all = await this.getAllLessons();
+    return all.filter((l) => l.teacherId === teacherId);
+  }
+
+  public static async getLessonsForStudent(studentId: string): Promise<Lesson[]> {
+    const all = await this.getAllLessons();
+    return all.filter((l) => l.studentId === studentId);
+  }
+
+  public static async saveLesson(lesson: Lesson): Promise<void> {
+    memoryFallback.lessons.set(lesson.id, lesson);
+    try {
+      await setDoc(doc(db, LESSONS_COLLECTION, lesson.id), lesson, { merge: true });
+    } catch (err) {
+      console.error('[Firestore] Error saving lesson:', err);
+    }
   }
 
   public static async getLessonById(id: string): Promise<Lesson | null> {
@@ -559,7 +615,68 @@ export class ServerFirestoreRepo {
     };
   }
 
+  // ================= PAYMENTS =================
+  public static async getAllPayments(): Promise<PaymentTransaction[]> {
+    try {
+      const snap = await getDocs(collection(db, PAYMENTS_COLLECTION));
+      if (!snap.empty) {
+        const list = snap.docs.map((d) => d.data() as PaymentTransaction);
+        list.forEach((p) => memoryFallback.payments.set(p.id, p));
+        return list;
+      }
+    } catch (err) {
+      console.warn('[Firestore] getAllPayments error:', err);
+    }
+    return Array.from(memoryFallback.payments.values());
+  }
+
+  public static async getPaymentsForStudent(studentId: string): Promise<PaymentTransaction[]> {
+    const all = await this.getAllPayments();
+    return all.filter((p) => p.studentId === studentId);
+  }
+
+  public static async savePayment(payment: PaymentTransaction): Promise<PaymentTransaction> {
+    memoryFallback.payments.set(payment.id, payment);
+    try {
+      await setDoc(doc(db, PAYMENTS_COLLECTION, payment.id), payment, { merge: true });
+    } catch (err) {
+      console.error('[Firestore] Error saving payment:', err);
+    }
+    return payment;
+  }
+
+  // ================= REVIEWS =================
+  public static async getAllReviews(): Promise<Review[]> {
+    try {
+      const snap = await getDocs(collection(db, REVIEWS_COLLECTION));
+      if (!snap.empty) {
+        const list = snap.docs.map((d) => d.data() as Review);
+        list.forEach((r) => memoryFallback.reviews.set(r.id, r));
+        return list;
+      }
+    } catch (err) {
+      console.warn('[Firestore] getAllReviews error:', err);
+    }
+    return Array.from(memoryFallback.reviews.values());
+  }
+
+  public static async getReviewsForTeacher(teacherId: string): Promise<Review[]> {
+    const all = await this.getAllReviews();
+    return all.filter((r) => r.teacherId === teacherId);
+  }
+
+  public static async saveReview(review: Review): Promise<Review> {
+    memoryFallback.reviews.set(review.id, review);
+    try {
+      await setDoc(doc(db, REVIEWS_COLLECTION, review.id), review, { merge: true });
+    } catch (err) {
+      console.error('[Firestore] Error saving review:', err);
+    }
+    return review;
+  }
+
   // ================= NOTIFICATIONS =================
+
   public static async pushNotification(params: {
     userId: string;
     userRole: UserRole;
@@ -596,15 +713,14 @@ export class ServerFirestoreRepo {
       if (!snap.empty) {
         const all = snap.docs.map((d) => d.data() as AppNotification);
         all.forEach((n) => memoryFallback.notifications.set(n.id, n));
-        return all
-          .filter((n) => n.userId === userId || n.userId === 'all')
+        return (userId === 'all' ? all : all.filter((n) => n.userId === userId || n.userId === 'all'))
           .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       }
     } catch (err) {
       console.warn('[Firestore] Error getting notifications from Firestore:', err);
     }
-    return Array.from(memoryFallback.notifications.values())
-      .filter((n) => n.userId === userId || n.userId === 'all')
+    const memList = Array.from(memoryFallback.notifications.values());
+    return (userId === 'all' ? memList : memList.filter((n) => n.userId === userId || n.userId === 'all'))
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   }
 

@@ -237,3 +237,9 @@ export interface StudentDevelopmentRecord {
   updatedAt: string;
 }
 
+// Clean Architecture & DDD Re-exports
+export * from './errors';
+export * from './value-objects';
+export * from './entities';
+export * from './repositories';
+
