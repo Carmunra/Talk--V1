@@ -182,3 +182,58 @@ export interface MatchRecommendation {
   isLevelMatch: boolean;
   isAvailabilityMatch: boolean;
 }
+
+export type TalkeModuleTier = 'BASICO' | 'INTERMEDIARIO' | 'AVANCADO';
+
+export interface TalkeSlidePage {
+  title: string;
+  bullets: string[];
+  example?: string;
+  exercisePrompt?: string;
+}
+
+export interface TalkeMaterialItem {
+  id: string;
+  tier: TalkeModuleTier;
+  tierLabel: string;
+  cefr: string; // "A1 - A2", "B1 - B2", "C1 - C2"
+  unitNumber: number;
+  title: string;
+  objective: string;
+  durationMinutes: number;
+  grammarFocus: string;
+  vocabulary: string[];
+  discussionQuestions: string[];
+  roleplayScenario: string;
+  teacherTips: string;
+  homeworkIdea: string;
+  slides: TalkeSlidePage[];
+}
+
+export interface StudentDevelopmentRecord {
+  id: string;
+  studentId: string;
+  studentName: string;
+  studentEmail?: string;
+  teacherId: string;
+  currentTier: TalkeModuleTier;
+  currentUnitNumber: number;
+  currentLessonTitle: string;
+  checkpointStatus: string; // e.g. "Unidade 3: Aeroporto e Viagens - Parou no exercício 2 de simulação de alfândega"
+  totalLessonsCompleted: number;
+  totalHours: number;
+  lastLessonDate: string;
+  cefrLevel: ProficiencyLevel;
+  targetGoal: LearningGoal;
+  grammarScorePct: number; // 0 to 100
+  vocabularyScorePct: number;
+  pronunciationScorePct: number;
+  fluencyScorePct: number;
+  pedagogicalNotes: string;
+  homeworkAssigned: string;
+  nextRecommendedStep: string;
+  strengths: string[];
+  areasToImprove: string[];
+  updatedAt: string;
+}
+

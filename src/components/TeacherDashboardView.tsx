@@ -10,21 +10,34 @@ import {
   MessageSquare,
   Sparkles,
   ArrowUpRight,
+  TrendingUp,
+  BookOpen,
 } from 'lucide-react';
-import { Teacher, Lesson, Review, LessonStatus, AvailabilitySlot } from '../domain/types';
+import { Teacher, Lesson, Review, LessonStatus, AvailabilitySlot, TalkeModuleTier } from '../domain/types';
+import { TeacherStudentProgressView } from './TeacherStudentProgressView';
+import { TeacherMaterialsView } from './TeacherMaterialsView';
 
 interface TeacherDashboardViewProps {
   currentTeacher: Teacher;
   onEnterClassroom: (lesson: Lesson) => void;
   onRefreshTeacher: () => void;
+  initialTab?: 'reservations' | 'students_progress' | 'materials' | 'availability' | 'earnings' | 'reviews';
 }
 
 export const TeacherDashboardView: React.FC<TeacherDashboardViewProps> = ({
   currentTeacher,
   onEnterClassroom,
   onRefreshTeacher,
+  initialTab = 'reservations',
 }) => {
-  const [activeTab, setActiveTab] = useState<'reservations' | 'availability' | 'earnings' | 'reviews'>('reservations');
+  const [activeTab, setActiveTab] = useState<'reservations' | 'students_progress' | 'materials' | 'availability' | 'earnings' | 'reviews'>(initialTab);
+  const [selectedMaterialNav, setSelectedMaterialNav] = useState<{ tier: TalkeModuleTier; unit: number } | null>(null);
+
+  useEffect(() => {
+    if (initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [initialTab]);
   const [teacherLessons, setTeacherLessons] = useState<Lesson[]>([]);
   const [earningsData, setEarningsData] = useState<{
     totalGross: number;
@@ -65,14 +78,96 @@ export const TeacherDashboardView: React.FC<TeacherDashboardViewProps> = ({
     }
   };
 
+  // Ensure all 126 slots (7 days x 18 hours: 06:00 to 23:00) exist
+  const getFullWeeklySlots = (existingSlots: AvailabilitySlot[]): AvailabilitySlot[] => {
+    const days = [
+      { day: 0, label: 'Domingo' },
+      { day: 1, label: 'Segunda' },
+      { day: 2, label: 'Terça' },
+      { day: 3, label: 'Quarta' },
+      { day: 4, label: 'Quinta' },
+      { day: 5, label: 'Sexta' },
+      { day: 6, label: 'Sábado' },
+    ];
+    const hours = [
+      '06:00', '07:00', '08:00', '09:00', '10:00', '11:00',
+      '12:00', '13:00', '14:00', '15:00', '16:00', '17:00',
+      '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'
+    ];
+    const existingMap = new Map<string, boolean>();
+    existingSlots.forEach((s) => {
+      existingMap.set(`${s.dayOfWeek}-${s.startTime}`, s.isAvailable);
+    });
+
+    const fullSlots: AvailabilitySlot[] = [];
+    days.forEach((d) => {
+      hours.forEach((h) => {
+        const startH = Number(h.split(':')[0]);
+        const endH = String(startH + 1).padStart(2, '0') + ':00';
+        const key = `${d.day}-${h}`;
+        const hasExisting = existingMap.has(key);
+        const isDefault = hasExisting
+          ? existingMap.get(key)!
+          : (d.day >= 1 && d.day <= 5 && startH >= 9 && startH <= 18);
+
+        fullSlots.push({
+          id: `slot-${d.day}-${h.replace(':', '')}`,
+          dayOfWeek: d.day,
+          dayLabel: d.label,
+          startTime: h,
+          endTime: endH,
+          isAvailable: Boolean(isDefault),
+        });
+      });
+    });
+    return fullSlots;
+  };
+
+  const [periodFilter, setPeriodFilter] = useState<'all' | 'morning' | 'afternoon' | 'evening'>('all');
+
   useEffect(() => {
     loadData();
-    setAvailabilitySlots(currentTeacher.availability || []);
+    setAvailabilitySlots(getFullWeeklySlots(currentTeacher.availability || []));
   }, [currentTeacher.id]);
 
   const toggleSlotAvailability = (slotId: string) => {
     setAvailabilitySlots((prev) =>
       prev.map((s) => (s.id === slotId ? { ...s, isAvailable: !s.isAvailable } : s))
+    );
+  };
+
+  // Batch toggle by day
+  const toggleAllSlotsInDay = (dayNum: number) => {
+    setAvailabilitySlots((prev) => {
+      const daySlots = prev.filter((s) => s.dayOfWeek === dayNum);
+      const allActive = daySlots.every((s) => s.isAvailable);
+      return prev.map((s) =>
+        s.dayOfWeek === dayNum ? { ...s, isAvailable: !allActive } : s
+      );
+    });
+  };
+
+  // Presets
+  const applyPreset = (type: 'all' | 'business' | 'evenings_weekends' | 'clear') => {
+    setAvailabilitySlots((prev) =>
+      prev.map((slot) => {
+        const hourNum = Number(slot.startTime.split(':')[0]);
+        const isWeekday = slot.dayOfWeek >= 1 && slot.dayOfWeek <= 5;
+        const isWeekend = slot.dayOfWeek === 0 || slot.dayOfWeek === 6;
+
+        if (type === 'all') return { ...slot, isAvailable: true };
+        if (type === 'clear') return { ...slot, isAvailable: false };
+        if (type === 'business') {
+          return { ...slot, isAvailable: isWeekday && hourNum >= 8 && hourNum <= 18 };
+        }
+        if (type === 'evenings_weekends') {
+          return {
+            ...slot,
+            isAvailable: (isWeekday && hourNum >= 18 && hourNum <= 22) || (isWeekend && hourNum >= 9 && hourNum <= 17),
+          };
+        }
+        return slot;
+      })
     );
   };
 
@@ -171,6 +266,36 @@ export const TeacherDashboardView: React.FC<TeacherDashboardViewProps> = ({
         >
           <Calendar className="w-4 h-4" />
           <span>Minhas Reservas ({teacherLessons.length})</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('students_progress')}
+          className={`px-4 py-2 text-xs font-bold rounded-xl transition-colors flex items-center gap-1.5 shrink-0 ${
+            activeTab === 'students_progress'
+              ? 'bg-blue-600 text-white shadow-xs'
+              : 'text-neutral-600 hover:bg-neutral-100'
+          }`}
+        >
+          <TrendingUp className="w-4 h-4 text-emerald-400" />
+          <span>Evolução dos Alunos (Onde Pararam)</span>
+          <span className="text-[9px] bg-emerald-500/20 text-emerald-700 px-1.5 py-0.5 rounded font-extrabold uppercase">
+            Novo
+          </span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('materials')}
+          className={`px-4 py-2 text-xs font-bold rounded-xl transition-colors flex items-center gap-1.5 shrink-0 ${
+            activeTab === 'materials'
+              ? 'bg-blue-600 text-white shadow-xs'
+              : 'text-neutral-600 hover:bg-neutral-100'
+          }`}
+        >
+          <BookOpen className="w-4 h-4 text-cyan-400" />
+          <span>Materiais & Módulos Talkê</span>
+          <span className="text-[9px] bg-cyan-100 text-cyan-800 px-1.5 py-0.5 rounded font-extrabold uppercase">
+            3 Níveis
+          </span>
         </button>
 
         <button
@@ -278,53 +403,251 @@ export const TeacherDashboardView: React.FC<TeacherDashboardViewProps> = ({
         </div>
       )}
 
-      {/* TAB 2: DEFINIR DISPONIBILIDADE */}
+      {/* TAB 2: EVOLUÇÃO DOS ALUNOS & ONDE PARARAM */}
+      {activeTab === 'students_progress' && (
+        <TeacherStudentProgressView
+          currentTeacher={currentTeacher}
+          onOpenMaterial={(tier, unit) => {
+            setSelectedMaterialNav({ tier, unit });
+            setActiveTab('materials');
+          }}
+          onOpenClassroomWithStudent={(studentName) => {
+            const matchLesson = teacherLessons.find((l) => l.studentName.toLowerCase().includes(studentName.toLowerCase()));
+            if (matchLesson) {
+              onEnterClassroom(matchLesson);
+            } else if (teacherLessons[0]) {
+              onEnterClassroom(teacherLessons[0]);
+            }
+          }}
+        />
+      )}
+
+      {/* TAB 3: MATERIAIS & MÓDULOS DIDÁTICOS TALKÊ */}
+      {activeTab === 'materials' && (
+        <TeacherMaterialsView
+          initialTier={selectedMaterialNav?.tier}
+          initialUnitNumber={selectedMaterialNav?.unit}
+          onLaunchVirtualClassroomWithMaterial={(material) => {
+            if (teacherLessons.length > 0) {
+              onEnterClassroom({
+                ...teacherLessons[0],
+                topic: material.title,
+              });
+            } else {
+              // Synthetic lesson so teacher can test presenting material
+              onEnterClassroom({
+                id: 'demo-material-lesson',
+                studentId: 'stu-1',
+                studentName: 'Lucas Silva',
+                teacherId: currentTeacher.id,
+                teacherName: currentTeacher.name,
+                scheduledDate: new Date().toISOString().split('T')[0],
+                startTime: 'Agora',
+                durationMinutes: 50,
+                status: LessonStatus.InProgress,
+                priceBrl: currentTeacher.hourlyPriceBrl,
+                platformFeeBrl: currentTeacher.hourlyPriceBrl * 0.15,
+                teacherNetBrl: currentTeacher.hourlyPriceBrl * 0.85,
+                topic: material.title,
+                isPaid: true,
+                createdAt: new Date().toISOString(),
+              });
+            }
+          }}
+        />
+      )}
+
+      {/* TAB 4: DEFINIR DISPONIBILIDADE (TODOS OS HORÁRIOS 06h às 23h - 7 DIAS) */}
       {activeTab === 'availability' && (
         <div className="bg-white rounded-2xl border border-neutral-200 p-6 shadow-xs space-y-6">
-          <div className="flex items-center justify-between">
+          {/* Header & Save Action */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-neutral-100">
             <div>
-              <h3 className="text-base font-bold text-neutral-900">Grade de Horários Semanais</h3>
-              <p className="text-xs text-neutral-500">
-                Clique nos blocos para ativar ou desativar horários em que você aceita reservas de 50 minutos.
+              <div className="flex items-center gap-2">
+                <h3 className="text-base font-bold text-neutral-900">Agenda & Grade Completa de Disponibilidade</h3>
+                <span className="text-[10px] font-bold bg-cyan-50 text-cyan-700 border border-cyan-200 px-2 py-0.5 rounded-full">
+                  126 Horários Possíveis / Semana
+                </span>
+              </div>
+              <p className="text-xs text-neutral-500 mt-0.5">
+                Defina exatamente quando aceita aulas particulares (06:00 às 23:00, Domingo a Sábado). Os alunos verão sua grade em tempo real.
               </p>
             </div>
+
             <button
               onClick={handleSaveAvailability}
               disabled={isSavingSlots}
-              className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-500 hover:opacity-95 text-white text-xs font-bold rounded-xl shadow-xs transition-all flex items-center gap-1.5 disabled:opacity-50"
+              className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-500 hover:opacity-95 text-white text-xs font-bold rounded-xl shadow-xs transition-all flex items-center justify-center gap-1.5 disabled:opacity-50 shrink-0"
             >
               <Save className="w-4 h-4" />
-              <span>{isSavingSlots ? 'Salvando...' : 'Salvar Disponibilidade'}</span>
+              <span>{isSavingSlots ? 'Salvando Grade...' : 'Salvar Disponibilidade'}</span>
             </button>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
-            {[1, 2, 3, 4, 5, 6].map((dayNum) => {
-              const daySlots = availabilitySlots.filter((s) => s.dayOfWeek === dayNum);
-              const dayName = daySlots[0]?.dayLabel || `Dia ${dayNum}`;
+          {/* Quick Metrics & Earning Potential */}
+          {(() => {
+            const activeCount = availabilitySlots.filter((s) => s.isAvailable).length;
+            const grossPotential = activeCount * currentTeacher.hourlyPriceBrl;
+            const netPotential = grossPotential * 0.85;
+
+            return (
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-neutral-50 p-4 rounded-2xl border border-neutral-200 text-xs">
+                <div>
+                  <span className="text-[11px] text-neutral-500 font-medium">Horários Ativos:</span>
+                  <div className="text-base font-black text-blue-700 mt-0.5">
+                    {activeCount} <span className="text-xs font-normal text-neutral-400">/ 126 slots</span>
+                  </div>
+                </div>
+                <div>
+                  <span className="text-[11px] text-neutral-500 font-medium">Carga Semanal Aberta:</span>
+                  <div className="text-base font-black text-neutral-800 mt-0.5">
+                    {activeCount * 50} <span className="text-xs font-normal text-neutral-400">minutos</span>
+                  </div>
+                </div>
+                <div>
+                  <span className="text-[11px] text-neutral-500 font-medium">Potencial Bruto:</span>
+                  <div className="text-base font-black text-neutral-900 mt-0.5">
+                    R$ {grossPotential.toFixed(2).replace('.', ',')}
+                  </div>
+                </div>
+                <div>
+                  <span className="text-[11px] text-neutral-500 font-medium">Potencial Líquido (85%):</span>
+                  <div className="text-base font-black text-emerald-600 mt-0.5">
+                    R$ {netPotential.toFixed(2).replace('.', ',')}
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+
+          {/* Preset Buttons */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-neutral-700">Preenchimento Rápido & Ações em Massa:</span>
+              <span className="text-[11px] text-neutral-400">Clique para aplicar padrões instantâneos</span>
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={() => applyPreset('all')}
+                className="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-xs font-semibold border border-blue-200 transition-colors"
+              >
+                ✨ Marcar Todos os 126 Horários (Disponibilidade Total)
+              </button>
+              <button
+                type="button"
+                onClick={() => applyPreset('business')}
+                className="px-3 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-700 rounded-lg text-xs font-semibold border border-sky-200 transition-colors"
+              >
+                🏢 Horário Comercial (Seg-Sex, 08h às 18h)
+              </button>
+              <button
+                type="button"
+                onClick={() => applyPreset('evenings_weekends')}
+                className="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg text-xs font-semibold border border-indigo-200 transition-colors"
+              >
+                🌙 Noites (18h-22h) & Fins de Semana
+              </button>
+              <button
+                type="button"
+                onClick={() => applyPreset('clear')}
+                className="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg text-xs font-semibold border border-rose-200 transition-colors ml-auto"
+              >
+                🗑️ Desmarcar Todos
+              </button>
+            </div>
+          </div>
+
+          {/* Period Filter Tabs */}
+          <div className="flex items-center gap-1.5 border-b border-neutral-200 pb-2">
+            <span className="text-xs font-medium text-neutral-500 mr-2">Filtrar período:</span>
+            {[
+              { id: 'all', label: 'Todos os Horários (06:00 - 23:00)' },
+              { id: 'morning', label: '🌅 Manhã (06:00 - 11:00)' },
+              { id: 'afternoon', label: '☀️ Tarde (12:00 - 17:00)' },
+              { id: 'evening', label: '🌙 Noite (18:00 - 23:00)' },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setPeriodFilter(tab.id as any)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${
+                  periodFilter === tab.id
+                    ? 'bg-neutral-900 text-white shadow-xs'
+                    : 'text-neutral-600 hover:bg-neutral-100'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          {/* 7-Day Interactive Schedule Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
+            {[0, 1, 2, 3, 4, 5, 6].map((dayNum) => {
+              const daySlotsAll = availabilitySlots.filter((s) => s.dayOfWeek === dayNum);
+              const dayName = daySlotsAll[0]?.dayLabel || (dayNum === 0 ? 'Domingo' : `Dia ${dayNum}`);
+              const activeCountInDay = daySlotsAll.filter((s) => s.isAvailable).length;
+
+              // Filter by period if selected
+              const visibleSlots = daySlotsAll.filter((slot) => {
+                const hourNum = Number(slot.startTime.split(':')[0]);
+                if (periodFilter === 'morning') return hourNum >= 6 && hourNum <= 11;
+                if (periodFilter === 'afternoon') return hourNum >= 12 && hourNum <= 17;
+                if (periodFilter === 'evening') return hourNum >= 18 && hourNum <= 23;
+                return true;
+              });
 
               return (
-                <div key={dayNum} className="p-3 bg-neutral-50 rounded-xl border border-neutral-200 space-y-2">
-                  <h4 className="text-xs font-bold text-neutral-800 text-center pb-1 border-b border-neutral-200">
-                    {dayName}
-                  </h4>
-                  <div className="space-y-1.5">
-                    {daySlots.map((slot) => {
-                      return (
-                        <button
-                          key={slot.id}
-                          type="button"
-                          onClick={() => toggleSlotAvailability(slot.id)}
-                          className={`w-full py-1.5 px-2 rounded-lg text-xs font-semibold text-center transition-all ${
-                            slot.isAvailable
-                              ? 'bg-blue-600 text-white shadow-xs'
-                              : 'bg-white text-neutral-400 border border-dashed border-neutral-200 hover:border-neutral-400'
-                          }`}
-                        >
-                          {slot.startTime}
-                        </button>
-                      );
-                    })}
+                <div key={dayNum} className="p-3 bg-neutral-50/80 rounded-2xl border border-neutral-200/80 space-y-2 flex flex-col justify-between">
+                  <div>
+                    {/* Clickable Day Header to toggle all slots in this day */}
+                    <button
+                      type="button"
+                      onClick={() => toggleAllSlotsInDay(dayNum)}
+                      title="Clique para alternar todos os horários deste dia"
+                      className="w-full text-center pb-2 border-b border-neutral-200 hover:bg-white rounded-lg p-1 transition-colors group"
+                    >
+                      <span className="text-xs font-bold text-neutral-900 block group-hover:text-blue-600">
+                        {dayName}
+                      </span>
+                      <span className="text-[10px] text-neutral-500 font-medium">
+                        {activeCountInDay} de {daySlotsAll.length} ativos
+                      </span>
+                    </button>
+
+                    {/* Slots Column */}
+                    <div className="space-y-1 mt-2 max-h-[420px] overflow-y-auto pr-1">
+                      {visibleSlots.map((slot) => {
+                        return (
+                          <button
+                            key={slot.id}
+                            type="button"
+                            onClick={() => toggleSlotAvailability(slot.id)}
+                            className={`w-full py-1 px-1.5 rounded-lg text-xs font-semibold text-center transition-all flex items-center justify-between ${
+                              slot.isAvailable
+                                ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-xs scale-[1.01]'
+                                : 'bg-white text-neutral-400 border border-neutral-200 hover:border-blue-300 hover:text-neutral-700'
+                            }`}
+                          >
+                            <span className="font-mono text-[11px]">{slot.startTime}</span>
+                            <span className="text-[9px] uppercase tracking-wider opacity-80">
+                              {slot.isAvailable ? 'Livre' : 'Off'}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="pt-2 border-t border-neutral-200/60 text-center">
+                    <button
+                      type="button"
+                      onClick={() => toggleAllSlotsInDay(dayNum)}
+                      className="text-[10px] font-semibold text-blue-600 hover:underline"
+                    >
+                      {activeCountInDay === daySlotsAll.length ? 'Desmarcar dia' : 'Marcar dia'}
+                    </button>
                   </div>
                 </div>
               );

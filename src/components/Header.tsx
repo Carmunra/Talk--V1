@@ -17,6 +17,8 @@ import {
   ChevronDown,
   Layers,
   Sparkles,
+  Menu,
+  Globe,
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -34,6 +36,9 @@ interface HeaderProps {
   onSelectTab: (tab: any) => void;
   notifications: AppNotification[];
   onMarkNotificationAsRead: (id: string) => void;
+  onToggleMobileSidebar?: () => void;
+  isCloudSynced?: boolean;
+  onOpenLandingPage?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -51,6 +56,9 @@ export const Header: React.FC<HeaderProps> = ({
   onSelectTab,
   notifications,
   onMarkNotificationAsRead,
+  onToggleMobileSidebar,
+  isCloudSynced,
+  onOpenLandingPage,
 }) => {
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -62,8 +70,19 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Top Tier: Logo, Role Toggle, User Switcher, Wallet, Notifications */}
         <div className="h-16 flex items-center justify-between gap-4">
-          {/* Brand Logo */}
-          <div className="flex items-center gap-6">
+          {/* Brand Logo & Mobile Sidebar Button */}
+          <div className="flex items-center gap-3 sm:gap-6">
+            {onToggleMobileSidebar && (
+              <button
+                type="button"
+                onClick={onToggleMobileSidebar}
+                className="lg:hidden p-2 text-neutral-600 hover:bg-neutral-100 rounded-xl transition-colors"
+                title="Abrir Menu Lateral"
+              >
+                <Menu className="w-5 h-5" />
+              </button>
+            )}
+
             <button
               onClick={() => onSelectTab(currentRole === UserRole.Teacher ? 'teacher-dash' : 'teachers')}
               className="text-left focus:outline-none"
@@ -71,58 +90,38 @@ export const Header: React.FC<HeaderProps> = ({
               <TalkeLogo size="md" />
             </button>
 
-            {/* Role Switcher Pills */}
-            <div className="hidden md:flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-bold">
+            {onOpenLandingPage && (
               <button
                 type="button"
-                onClick={() => {
-                  onChangeRole(UserRole.Student);
-                  onSelectTab('teachers');
-                }}
-                className={`px-3 py-1.5 rounded-lg transition-all ${
-                  currentRole === UserRole.Student
-                    ? 'bg-white text-blue-700 shadow-xs'
-                    : 'text-neutral-600 hover:text-neutral-900'
-                }`}
+                onClick={onOpenLandingPage}
+                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-neutral-600 hover:text-blue-700 bg-neutral-100 hover:bg-neutral-200 rounded-xl transition-colors"
+                title="Visualizar Página Inicial / Site Oficial"
               >
-                Modo Aluno
+                <Globe className="w-3.5 h-3.5 text-blue-600" />
+                <span>Ver Site</span>
               </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  onChangeRole(UserRole.Teacher);
-                  onSelectTab('teacher-dash');
-                }}
-                className={`px-3 py-1.5 rounded-lg transition-all ${
-                  currentRole === UserRole.Teacher
-                    ? 'bg-white text-blue-700 shadow-xs'
-                    : 'text-neutral-600 hover:text-neutral-900'
-                }`}
-              >
-                Modo Professor
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  onChangeRole(UserRole.Admin);
-                  onSelectTab('admin-dash');
-                }}
-                className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1 ${
-                  currentRole === UserRole.Admin
-                    ? 'bg-slate-900 text-white shadow-xs'
-                    : 'text-neutral-600 hover:text-neutral-900'
-                }`}
-              >
-                <Layers className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Talkê Core</span>
-              </button>
-            </div>
+            )}
           </div>
 
           {/* Right Controls */}
           <div className="flex items-center gap-3">
+            {/* Database Cloud Sync Badge */}
+            <div
+              className={`hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border ${
+                isCloudSynced
+                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                  : 'bg-slate-100 text-slate-600 border-slate-200'
+              }`}
+              title="Firebase Firestore Cloud Database Ativo"
+            >
+              <span
+                className={`w-2 h-2 rounded-full ${
+                  isCloudSynced ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'
+                }`}
+              />
+              <span>Firestore Nuvem</span>
+            </div>
+
             {/* Student Wallet Pill */}
             {currentRole === UserRole.Student && currentStudent && (
               <button

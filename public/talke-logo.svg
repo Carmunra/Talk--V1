@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <!-- Background subtle radial glow -->
+    <radialGradient id="bgGlow" cx="50%" cy="48%" r="55%" fx="50%" fy="48%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="70%" stop-color="#F9FBFE" />
+      <stop offset="100%" stop-color="#F2F7FD" />
+    </radialGradient>
+
+    <!-- Main TALKÊ letters gradient from royal ocean blue to turquoise cyan -->
+    <linearGradient id="talkeLettersGrad" x1="40" y1="260" x2="420" y2="260" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2D5CA7" />
+      <stop offset="25%" stop-color="#3273BF" />
+      <stop offset="50%" stop-color="#368DCB" />
+      <stop offset="75%" stop-color="#37A9DA" />
+      <stop offset="100%" stop-color="#36C3DF" />
+    </linearGradient>
+
+    <!-- Speech bubble gradient (coral-red to orange-peach) -->
+    <linearGradient id="speechBubbleGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#F85175" />
+      <stop offset="50%" stop-color="#FA6D79" />
+      <stop offset="100%" stop-color="#FB8E5B" />
+    </linearGradient>
+
+    <!-- Circumflex chevron gradient -->
+    <linearGradient id="chevronGrad" x1="0" y1="1" x2="0.5" y2="0">
+      <stop offset="0%" stop-color="#F76E4B" />
+      <stop offset="100%" stop-color="#FB9F68" />
+    </linearGradient>
+
+    <!-- Soft shadow for speech bubble & circumflex -->
+    <filter id="softShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#F96350" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <!-- Background container (matches image.png) -->
+  <rect width="500" height="500" rx="36" fill="url(#bgGlow)" />
+
+  <!-- ================= TALKÊ Letters ================= -->
+  <g fill="none" stroke="url(#talkeLettersGrad)" stroke-width="20" stroke-linecap="round" stroke-linejoin="round">
+    <!-- T -->
+    <line x1="46" y1="220" x2="114" y2="220" />
+    <line x1="80" y1="220" x2="80" y2="306" />
+
+    <!-- A (no crossbar - stylized apex arch) -->
+    <path d="M 124 306 L 148 226 Q 153 211 159 226 L 183 306" />
+
+    <!-- L -->
+    <path d="M 212 220 L 212 296 Q 212 306 222 306 L 254 306" />
+
+    <!-- K -->
+    <line x1="282" y1="220" x2="282" y2="306" />
+    <line x1="284" y1="266" x2="326" y2="220" />
+    <line x1="298" y1="260" x2="330" y2="306" />
+
+    <!-- E -->
+    <line x1="358" y1="220" x2="358" y2="306" />
+    <line x1="358" y1="220" x2="406" y2="220" />
+    <line x1="358" y1="263" x2="398" y2="263" />
+    <line x1="358" y1="306" x2="406" y2="306" />
+  </g>
+
+  <!-- ================= Speech Bubble & Circumflex on 'E' ================= -->
+  <g filter="url(#softShadow)">
+    <!-- Circumflex Chevron Roof (^) -->
+    <path
+      d="M 368 174 L 388 150 L 408 174"
+      fill="none"
+      stroke="url(#chevronGrad)"
+      stroke-width="15"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+    <!-- Speech Bubble Body -->
+    <path
+      d="M 364 186
+         C 364 178 372 172 388 172
+         C 404 172 414 178 414 186
+         C 414 194 404 200 388 200
+         C 382 200 376 199 372 197
+         L 366 205
+         C 365 206 364 205 364 204
+         L 365 195
+         C 364.5 193 364 189 364 186 Z"
+      fill="url(#speechBubbleGrad)"
+    />
+  </g>
+
+  <!-- ================= Subtitle: — English — ================= -->
+  <!-- Left cyan line -->
+  <line x1="112" y1="360" x2="162" y2="360" stroke="#48C3DE" stroke-width="2.5" stroke-linecap="round" />
+
+  <!-- "English" word in dark indigo sans -->
+  <text
+    x="236"
+    y="368"
+    font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif"
+    font-size="33"
+    font-weight="500"
+    letter-spacing="4px"
+    fill="#20395D"
+    text-anchor="middle"
+  >
+    English
+  </text>
+
+  <!-- Right coral-peach line -->
+  <line x1="310" y1="360" x2="360" y2="360" stroke="#FBA07B" stroke-width="2.5" stroke-linecap="round" />
+</svg>

@@ -52,10 +52,23 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     (s) => s.dayOfWeek === selectedDayOfWeek && s.isAvailable
   );
 
-  // Fallback default hours if none configured
+  // Fallback hours covering morning, afternoon, and evening if none configured
   const timeOptions = daySlots.length > 0
     ? daySlots.map((s) => s.startTime)
-    : ['09:00', '11:00', '14:00', '16:00', '18:00', '20:00'];
+    : [
+        '08:00', '09:00', '10:00', '11:00', '14:00', '15:00',
+        '16:00', '17:00', '18:00', '19:00', '20:00', '21:00'
+      ];
+
+  const [bookingPeriodFilter, setBookingPeriodFilter] = useState<'all' | 'morning' | 'afternoon' | 'evening'>('all');
+
+  const filteredTimeOptions = timeOptions.filter((time) => {
+    const h = Number(time.split(':')[0]);
+    if (bookingPeriodFilter === 'morning') return h >= 6 && h <= 11;
+    if (bookingPeriodFilter === 'afternoon') return h >= 12 && h <= 17;
+    if (bookingPeriodFilter === 'evening') return h >= 18 && h <= 23;
+    return true;
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -131,29 +144,59 @@ export const BookingModal: React.FC<BookingModalProps> = ({
 
           {/* 2. Escolher Horário */}
           <div>
-            <label className="block text-xs font-bold text-neutral-700 mb-2 flex items-center gap-1.5">
-              <Clock className="w-4 h-4 text-blue-600" />
-              2. Horários Disponíveis do Professor
-            </label>
-            <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-              {timeOptions.map((time) => {
-                const isSelected = selectedTime === time;
-                return (
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-xs font-bold text-neutral-700 flex items-center gap-1.5">
+                <Clock className="w-4 h-4 text-blue-600" />
+                2. Horários Disponíveis do Professor ({timeOptions.length} no dia)
+              </label>
+              <div className="flex items-center gap-1 text-[11px]">
+                {[
+                  { id: 'all', label: 'Todos' },
+                  { id: 'morning', label: 'Manhã' },
+                  { id: 'afternoon', label: 'Tarde' },
+                  { id: 'evening', label: 'Noite' },
+                ].map((p) => (
                   <button
-                    key={time}
+                    key={p.id}
                     type="button"
-                    onClick={() => setSelectedTime(time)}
-                    className={`py-2 px-3 rounded-xl border text-xs font-bold transition-all text-center ${
-                      isSelected
-                        ? 'border-cyan-600 bg-cyan-500 text-white shadow-xs'
-                        : 'border-neutral-200 hover:bg-neutral-50 text-neutral-800'
+                    onClick={() => setBookingPeriodFilter(p.id as any)}
+                    className={`px-2 py-0.5 rounded-md font-semibold transition-colors ${
+                      bookingPeriodFilter === p.id
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                     }`}
                   >
-                    {time}
+                    {p.label}
                   </button>
-                );
-              })}
+                ))}
+              </div>
             </div>
+
+            {filteredTimeOptions.length === 0 ? (
+              <p className="text-xs text-neutral-500 py-3 text-center bg-neutral-50 rounded-xl">
+                Nenhum horário disponível para o período selecionado. Escolha outro período acima.
+              </p>
+            ) : (
+              <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-[160px] overflow-y-auto pr-1">
+                {filteredTimeOptions.map((time) => {
+                  const isSelected = selectedTime === time;
+                  return (
+                    <button
+                      key={time}
+                      type="button"
+                      onClick={() => setSelectedTime(time)}
+                      className={`py-2 px-3 rounded-xl border text-xs font-bold transition-all text-center ${
+                        isSelected
+                          ? 'border-blue-600 bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-xs'
+                          : 'border-neutral-200 hover:bg-neutral-50 text-neutral-800'
+                      }`}
+                    >
+                      {time}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {/* 3. Tópico da Aula */}

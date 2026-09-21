@@ -1,7 +1,11 @@
 {
   "name": "Talkê",
   "description": "Plataforma de ensino de idiomas conectando alunos e professores com diagnóstico de proficiência, agendamento de aulas e gestão de créditos.",
-  "requestFramePermissions": [],
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "display-capture"
+  ],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
   ]

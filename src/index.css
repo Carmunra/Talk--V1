@@ -1,7 +1,47 @@
 @import "tailwindcss";
 
+@theme {
+  /* Paleta Soft & Azul Bebê (Baby Blue) */
+  --color-blue-50: #f0f7fd;
+  --color-blue-100: #e0f0fb;
+  --color-blue-200: #bce1f8;
+  --color-blue-300: #8ecbf3;
+  --color-blue-400: #62b5ec;
+  --color-blue-500: #49a6e5;
+  --color-blue-600: #3b95dc; /* Azul bebê suave e vibrante para botões e destaque */
+  --color-blue-700: #2d7ec0;
+  --color-blue-800: #27669a;
+  --color-blue-900: #21537b;
+  --color-blue-950: #143550;
+
+  --color-sky-50: #f4f9fd;
+  --color-sky-100: #e4f3fc;
+  --color-sky-200: #c1e5fa;
+  --color-sky-300: #93d2f6;
+  --color-sky-400: #68bfef;
+  --color-sky-500: #48aee7;
+  --color-sky-600: #3b97db;
+  --color-sky-700: #2d7fc0;
+  --color-sky-800: #27679a;
+  --color-sky-900: #22557c;
+
+  --color-cyan-50: #f0fafd;
+  --color-cyan-100: #dcf2fa;
+  --color-cyan-200: #bee6f6;
+  --color-cyan-300: #8ed4f0;
+  --color-cyan-400: #58bee7;
+  --color-cyan-500: #3baadc;
+  --color-cyan-600: #2d8fc0;
+  --color-cyan-700: #25739c;
+  --color-cyan-800: #225e7e;
+  --color-cyan-900: #1e4d67;
+}
+
 @layer base {
   body {
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background-color: #f6fafe;
+    color: #334155;
   }
 }
+
