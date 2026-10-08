@@ -21,6 +21,7 @@ Copie .env.example e preencha o projeto Firebase e sua configuração pública w
 - npm run build requer configuração pública VITE_FIREBASE_* e gera dist/client, dist/server e dist/scripts.
 - npm run verify:artifacts impede exposição de servidor, mapas de código, segredos e helpers de teste no cliente.
 - npm audit identifica alertas conhecidos de dependências. O lockfile é npm; as versões transitivas corrigidas estão registradas em overrides.
+- npm run verify:lockfile verifica os binários nativos de Windows/Linux/macOS antes da instalação. Se uma instalação local do npm remover dependências opcionais de outro sistema, regenere o lockfile em uma pasta limpa sem node_modules e revise as alterações antes de enviá-lo.
 
 O fluxo CI não publica nem executa cobranças reais. Os testes de navegador não substituem homologação de Mercado Pago/Daily ou revisão de LGPD/ECA Digital.
 

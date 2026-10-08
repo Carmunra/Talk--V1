@@ -15,6 +15,7 @@
     "lint": "tsc --noEmit",
     "test:coverage": "c8 --all --include=src/server/** --check-coverage --lines=80 --branches=70 --functions=75 --reporter=text --reporter=lcov npm test",
     "verify:artifacts": "node scripts/verify-artifacts.mjs",
+    "verify:lockfile": "node scripts/verify-lockfile.mjs",
     "payments:reconcile": "node --env-file-if-exists=.env dist/scripts/reconcile.js",
     "admin:permissions": "node --env-file-if-exists=.env dist/scripts/set-admin.js"
   },

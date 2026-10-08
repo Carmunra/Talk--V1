@@ -30,8 +30,8 @@
     "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1791502421.3608341,
-    "ast_hash": "a6a2eee082c47bb03c076dca11e89e9e",
+    "mtime": 1791503140.3858376,
+    "ast_hash": "d21d569025c3a53281cc36b3e8071108",
     "semantic_hash": ""
   },
   "scripts/reconcile.ts": {
@@ -425,13 +425,13 @@
     "semantic_hash": ""
   },
   ".github/workflows/ci.yml": {
-    "mtime": 1791501348.9628077,
-    "ast_hash": "154fa0e4204426120d3b74b2662dc703",
+    "mtime": 1791503140.6961217,
+    "ast_hash": "5474cf5b82b85ed6b707d4158387d7b6",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1791502761.140509,
-    "ast_hash": "3a60b1567f3a69cca642d0c772bb046d",
+    "mtime": 1791503141.0063164,
+    "ast_hash": "21fd27af7a33e2d5244f8dd2ec2bdf2b",
     "semantic_hash": ""
   },
   "docs/PRIVACIDADE_OPERACAO.md": {
@@ -482,6 +482,11 @@
   "docs/VALIDACAO.md": {
     "mtime": 1791502765.906597,
     "ast_hash": "069aacbbd0f6f67fee57533eb6f75d4d",
+    "semantic_hash": ""
+  },
+  "scripts/verify-lockfile.mjs": {
+    "mtime": 1791503163.4514093,
+    "ast_hash": "841f708dc9ecb5c64ec737be2f4a3cd1",
     "semantic_hash": ""
   }
 }
