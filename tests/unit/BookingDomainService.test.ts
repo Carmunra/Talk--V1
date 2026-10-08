@@ -2,7 +2,13 @@ import { test, describe } from 'node:test';
 import assert from 'node:assert';
 import { BookingDomainService } from '../../src/domain/services/bookingDomainService';
 import { ScheduleConflictError, ValidationError } from '../../src/domain/errors/DomainError';
-import { Teacher, Lesson, LessonStatus, ProficiencyLevel, LearningGoal } from '../../src/domain/types';
+import {
+  Teacher,
+  Lesson,
+  LessonStatus,
+  ProficiencyLevel,
+  LearningGoal,
+} from '../../src/domain/types';
 
 const mockTeacher: Teacher = {
   id: 'tch-book',
@@ -12,7 +18,7 @@ const mockTeacher: Teacher = {
   bio: 'Bio',
   hourlyPriceBrl: 100,
   levelsTaught: [ProficiencyLevel.B1_Intermediate],
-  specialties: [LearningGoal.Speaking],
+  specialties: [LearningGoal.Conversation],
   languages: ['Inglês'],
   certifications: [],
   availability: [

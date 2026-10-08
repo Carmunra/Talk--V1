@@ -45,3 +45,16 @@
   }
 }
 
+@layer components {
+ .card { @apply bg-white border border-slate-200 rounded-2xl p-6 shadow-sm; }
+}
+@layer base {
+ button { @apply cursor-pointer bg-blue-50 text-blue-800 rounded-lg px-4 py-2 font-medium border border-blue-100; }
+ button:disabled { @apply opacity-50 cursor-not-allowed; }
+ button.selected { @apply bg-blue-700 text-white; }
+ label { @apply block text-sm font-medium; }
+ input, select, textarea { @apply border border-slate-300 rounded-lg p-2 bg-white max-w-full; }
+ label > input:not([type=checkbox]), label > select, label > textarea { @apply block mt-1 w-full; }
+ textarea { @apply min-h-24; }
+ a { @apply text-blue-700 underline; }
+}

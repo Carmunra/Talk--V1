@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { X, Calendar, Clock, BookOpen, AlertCircle, ArrowRight } from 'lucide-react';
 import { Teacher, Student } from '../domain/types';
 
@@ -11,6 +11,7 @@ interface BookingModalProps {
     scheduledDate: string;
     startTime: string;
     topic: string;
+    requestKey: string;
   }) => Promise<void>;
 }
 
@@ -25,8 +26,8 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   for (let i = 1; i <= 7; i++) {
     const d = new Date();
     d.setDate(d.getDate() + i);
-    const dateStr = d.toISOString().split('T')[0];
-    const dayOfWeek = d.getDay();
+    const dateStr = new Intl.DateTimeFormat('sv-SE',{timeZone:'America/Sao_Paulo'}).format(d);
+    const dayOfWeek = new Date(dateStr+'T12:00:00Z').getUTCDay();
     const dayName = d.toLocaleDateString('pt-BR', { weekday: 'short' });
     const dayMonth = d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
     availableDates.push({
@@ -37,7 +38,8 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   }
 
   const [selectedDate, setSelectedDate] = useState(availableDates[0].dateStr);
-  const [selectedTime, setSelectedTime] = useState<string>('14:00');
+  const [selectedTime, setSelectedTime] = useState<string>('');
+  const reservationKeys = useRef(new Map<string,string>());
   const [topic, setTopic] = useState<string>(
     currentStudent.goalDescription
       ? `Foco: ${currentStudent.goalDescription}`
@@ -52,13 +54,13 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     (s) => s.dayOfWeek === selectedDayOfWeek && s.isAvailable
   );
 
-  // Fallback hours covering morning, afternoon, and evening if none configured
-  const timeOptions = daySlots.length > 0
-    ? daySlots.map((s) => s.startTime)
-    : [
-        '08:00', '09:00', '10:00', '11:00', '14:00', '15:00',
-        '16:00', '17:00', '18:00', '19:00', '20:00', '21:00'
-      ];
+  const toMinutes = (value:string) => Number(value.slice(0,2))*60+Number(value.slice(3));
+  const timeOptions = [...new Set(daySlots.flatMap(slot=>{
+    const result:string[]=[];
+    for(let minute=toMinutes(slot.startTime);minute+50<=toMinutes(slot.endTime);minute+=60)
+      result.push(String(Math.floor(minute/60)).padStart(2,'0')+':'+String(minute%60).padStart(2,'0'));
+    return result;
+  }))].sort();
 
   const [bookingPeriodFilter, setBookingPeriodFilter] = useState<'all' | 'morning' | 'afternoon' | 'evening'>('all');
 
@@ -72,7 +74,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedDate || !selectedTime) {
+    if (!selectedDate || !timeOptions.includes(selectedTime)) {
       setError('Selecione uma data e um horário.');
       return;
     }
@@ -80,11 +82,14 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     setIsSubmitting(true);
     setError(null);
     try {
+      const payload = JSON.stringify({teacherId:teacher.id,scheduledDate:selectedDate,startTime:selectedTime,topic});
+      if(!reservationKeys.current.has(payload))reservationKeys.current.set(payload,crypto.randomUUID());
       await onConfirmBooking({
         teacherId: teacher.id,
         scheduledDate: selectedDate,
         startTime: selectedTime,
         topic,
+        requestKey: reservationKeys.current.get(payload)!,
       });
       onClose();
     } catch (err: any) {

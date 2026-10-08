@@ -1,674 +1,611 @@
-import React, { useState, useEffect } from 'react';
-import {
-  UserRole,
-  Student,
-  Teacher,
-  Lesson,
-  Review,
-  AppNotification,
-  ProficiencyLevel,
-  LearningGoal,
-  LessonStatus,
-} from './domain/types';
-
-import { Header } from './components/Header';
-import { Sidebar } from './components/Sidebar';
+import React, { useEffect, useState, useRef, lazy, Suspense } from 'react';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from './lib/firebase';
+import { api, post } from './lib/apiClient';
+import { useAuth } from './context/AuthContext';
 import { TeacherDirectory } from './components/TeacherDirectory';
-import { DiagnosticAndGoalView } from './components/DiagnosticAndGoalView';
-import { MyLessonsView } from './components/MyLessonsView';
-import { StudentWalletView } from './components/StudentWalletView';
-import { StudentInteractiveHub } from './components/StudentInteractiveHub';
-import { TeacherDashboardView } from './components/TeacherDashboardView';
-import { TalkeAdminView } from './components/TalkeAdminView';
-import { ApiConsole } from './components/ApiConsole';
-import { StudentProgressAndContentView } from './components/StudentProgressAndContentView';
-import { LandingPageView } from './components/LandingPageView';
-import { TalkeLogo } from './components/TalkeLogo';
-
-// Modals
-import { StudentRegisterModal } from './components/StudentRegisterModal';
-import { TeacherRegisterModal } from './components/TeacherRegisterModal';
 import { TeacherProfileModal } from './components/TeacherProfileModal';
 import { BookingModal } from './components/BookingModal';
-import { CheckoutPaymentModal } from './components/CheckoutPaymentModal';
-import { VirtualClassroomModal } from './components/VirtualClassroomModal';
-import { ReviewModal } from './components/ReviewModal';
-import { FirestoreService } from './lib/firestoreService';
+import { DiagnosticAndGoalView } from './components/DiagnosticAndGoalView';
+import { PrivacyNotice } from './components/PrivacyNotice';
+import { Registration, FamilyForm, TeacherEditor, PrivacyPanel } from './components/AccountForms';
+import { AdminPanel } from './components/AdminPanel';
+import { Teacher, Student, UserRole } from './domain/types';
+import { TALKE_CURRICULUM_MATERIALS } from './data/talkeMaterials';
+const VirtualClassroomModal = lazy(() =>
+  import('./components/VirtualClassroomModal').then((module) => ({
+    default: module.VirtualClassroomModal,
+  })),
+);
 
 export default function App() {
-  // Navigation & Role State
-  const [currentRole, setCurrentRole] = useState<UserRole>(UserRole.Student);
-  const [currentTab, setCurrentTab] = useState<string>('teachers');
-  const [teacherInitialTab, setTeacherInitialTab] = useState<'reservations' | 'students_progress' | 'materials' | 'availability' | 'earnings' | 'reviews'>('reservations');
-  const [adminInitialSection, setAdminInitialSection] = useState<'analytics' | 'teachers' | 'rules' | 'all'>('analytics');
-  const [isShowingLandingPage, setIsShowingLandingPage] = useState<boolean>(false);
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(false);
-  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState<boolean>(false);
-  const [isCloudSynced, setIsCloudSynced] = useState<boolean>(false);
-
-  // Core Data State
-  const [students, setStudents] = useState<Student[]>([]);
-  const [currentStudent, setCurrentStudent] = useState<Student | null>(null);
-
-  const [teachers, setTeachers] = useState<Teacher[]>([]);
-  const [currentTeacher, setCurrentTeacher] = useState<Teacher | null>(null);
-
-  const [lessons, setLessons] = useState<Lesson[]>([]);
-  const [notifications, setNotifications] = useState<AppNotification[]>([]);
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  // Modals
-  const [showStudentModal, setShowStudentModal] = useState<boolean>(false);
-  const [showTeacherModal, setShowTeacherModal] = useState<boolean>(false);
-  const [selectedTeacherForProfile, setSelectedTeacherForProfile] = useState<Teacher | null>(null);
-  const [selectedTeacherForBooking, setSelectedTeacherForBooking] = useState<Teacher | null>(null);
-  const [selectedLessonForPayment, setSelectedLessonForPayment] = useState<Lesson | null>(null);
-  const [activeClassroomLesson, setActiveClassroomLesson] = useState<Lesson | null>(null);
-  const [selectedLessonForReview, setSelectedLessonForReview] = useState<Lesson | null>(null);
-
-  // Load all initial data from server and synchronize with Cloud Firestore
-  const loadInitialData = async () => {
-    try {
-      const [studentsRes, teachersRes, lessonsRes, notifsRes] = await Promise.all([
-        fetch('/api/students'),
-        fetch('/api/teachers'),
-        fetch('/api/lessons'),
-        fetch('/api/notifications'),
+  const {
+    firebaseUser,
+    session,
+    loadingAuth,
+    authError,
+    loginWithGoogle,
+    logout,
+    refreshProfiles,
+  } = useAuth();
+  const [config, setConfig] = useState<any>(null),
+    [tab, setTab] = useState(
+      location.pathname === '/privacidade'
+        ? 'privacy'
+        : location.pathname === '/termos'
+          ? 'terms'
+          : 'teachers',
+    ),
+    [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [lessons, setLessons] = useState<any[]>([]),
+    [payments, setPayments] = useState<any[]>([]),
+    [notes, setNotes] = useState<any[]>([]);
+  const [childId, setChildId] = useState(''),
+    [student, setStudent] = useState<Student | null>(null);
+  const [booking, setBooking] = useState<Teacher | null>(null),
+    [profileTeacher, setProfileTeacher] = useState<Teacher | null>(null),
+    [room, setRoom] = useState<any>(null);
+  const [message, setMessage] = useState(''),
+    [busy, setBusy] = useState(false);
+  const subjectId = childId || firebaseUser?.uid || '',
+    role = session?.profile?.accountType;
+  const active = session?.profile?.status === 'ACTIVE';
+  const currentIdentity = useRef({ uid: firebaseUser?.uid, subjectId });
+  currentIdentity.current = { uid: firebaseUser?.uid, subjectId };
+  const refresh = async () => {
+    setTeachers(await api('/api/teachers'));
+    const expectedUid = firebaseUser?.uid,
+      expectedSubject = subjectId;
+    const same = () =>
+      auth.currentUser?.uid === expectedUid &&
+      currentIdentity.current.subjectId === expectedSubject;
+    if (!firebaseUser || !active || !same()) return;
+    const [freshLessons, freshPayments] = await Promise.all([
+      api<any[]>('/api/lessons'),
+      api<any[]>('/api/payments'),
+    ]);
+    if (!same()) return;
+    setLessons(freshLessons);
+    setPayments(freshPayments);
+    if (role === 'STUDENT' || childId) {
+      const [freshStudent, freshNotes] = await Promise.all([
+        api<Student>('/api/students/' + subjectId),
+        api<any[]>('/api/progress?studentId=' + subjectId),
       ]);
-
-      const studentsData: Student[] = await studentsRes.json();
-      const teachersData: Teacher[] = await teachersRes.json();
-      const lessonsData: Lesson[] = await lessonsRes.json();
-      const notifsData: AppNotification[] = await notifsRes.json();
-
-      // Cloud Firestore synchronization
-      const synced = await FirestoreService.initializeOrSync(
-        studentsData,
-        teachersData,
-        lessonsData,
-        notifsData
-      );
-
-      setIsCloudSynced(synced.isCloudSynced);
-      setStudents(synced.students);
-      setTeachers(synced.teachers);
-      setLessons(synced.lessons);
-      setNotifications(synced.notifications);
-
-      if (synced.students.length > 0 && !currentStudent) {
-        setCurrentStudent(synced.students[0]);
+      if (same()) {
+        setStudent(freshStudent);
+        setNotes(freshNotes);
       }
-      if (synced.teachers.length > 0 && !currentTeacher) {
-        setCurrentTeacher(synced.teachers[0]);
-      }
-    } catch (err) {
-      console.error('Erro ao carregar dados:', err);
-    } finally {
-      setLoading(false);
+    } else if (role === 'TEACHER') {
+      const freshNotes = await api<any[]>('/api/progress');
+      if (same()) setNotes(freshNotes);
     }
   };
-
   useEffect(() => {
-    loadInitialData();
-
-    // Subscribe to real-time lesson status updates from Firestore
-    const unsubscribe = FirestoreService.subscribeToLessons((liveLessons) => {
-      if (liveLessons && liveLessons.length > 0) {
-        setLessons(liveLessons);
-      }
-    });
-
-    return () => {
-      unsubscribe();
-    };
+    api('/api/config')
+      .then(setConfig)
+      .catch((e) => setMessage(e.message));
   }, []);
-
-  // Handlers for Students
-  const handleSelectStudent = (student: Student) => {
-    setCurrentStudent(student);
-  };
-
-  const handleCreatedStudent = (newStudent: Student) => {
-    setStudents((prev) => [newStudent, ...prev]);
-    setCurrentStudent(newStudent);
-    setCurrentRole(UserRole.Student);
-    setCurrentTab('diagnostic'); // guide new student to diagnostic
-    FirestoreService.saveStudent(newStudent);
-  };
-
-  // Handlers for Teachers
-  const handleSelectTeacher = (teacher: Teacher) => {
-    setCurrentTeacher(teacher);
-  };
-
-  const handleCreatedTeacher = (newTeacher: Teacher) => {
-    setTeachers((prev) => [newTeacher, ...prev]);
-    setCurrentTeacher(newTeacher);
-    setCurrentRole(UserRole.Teacher);
-    setCurrentTab('teacher-dash');
-    FirestoreService.saveTeacher(newTeacher);
-  };
-
-  // Save diagnostic & goal
-  const handleSaveDiagnostic = async (
-    level: ProficiencyLevel,
-    goal: LearningGoal,
-    goalDescription: string
-  ) => {
-    if (!currentStudent) return;
-    const res = await fetch(`/api/students/${currentStudent.id}/diagnostic`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ level, goal, goalDescription }),
-    });
-
-    if (res.ok) {
-      const updated: Student = await res.json();
-      setCurrentStudent(updated);
-      setStudents((prev) => prev.map((s) => (s.id === updated.id ? updated : s)));
-      setCurrentTab('teachers'); // go to matched teachers!
-      FirestoreService.saveStudent(updated);
-      loadInitialData();
-    }
-  };
-
-  // Booking a lesson
-  const handleConfirmBooking = async (bookingData: {
-    teacherId: string;
-    scheduledDate: string;
-    startTime: string;
-    topic: string;
-  }) => {
-    if (!currentStudent) return;
-    const res = await fetch('/api/lessons', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        studentId: currentStudent.id,
-        ...bookingData,
-      }),
-    });
-
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'Erro ao agendar aula.');
-    }
-
-    const newLesson: Lesson = await res.json();
-    setLessons((prev) => [newLesson, ...prev]);
-    FirestoreService.saveLesson(newLesson);
-
-    // Open Payment Modal immediately (MVP flow: reservar aula -> pagar)
-    setSelectedLessonForPayment(newLesson);
-    loadInitialData();
-  };
-
-  // Payment confirmation
-  const handlePaymentSuccess = (updatedLesson: Lesson, newWalletBalance?: number) => {
-    setLessons((prev) => prev.map((l) => (l.id === updatedLesson.id ? updatedLesson : l)));
-    FirestoreService.saveLesson(updatedLesson);
-    if (newWalletBalance !== undefined && currentStudent) {
-      const updatedStudent = { ...currentStudent, walletBalanceBrl: newWalletBalance };
-      setCurrentStudent(updatedStudent);
-      setStudents((prev) =>
-        prev.map((s) => (s.id === currentStudent.id ? { ...s, walletBalanceBrl: newWalletBalance } : s))
-      );
-      FirestoreService.saveStudent(updatedStudent);
-    }
-    setCurrentTab('lessons'); // show in scheduled lessons
-    loadInitialData();
-  };
-
-  // Finish lesson in classroom
-  const handleFinishLesson = async (lessonId: string, notes: string) => {
-    const res = await fetch(`/api/lessons/${lessonId}/status`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        status: LessonStatus.Completed,
-        whiteboardNotes: notes,
-      }),
-    });
-
-    if (res.ok) {
-      const finished: Lesson = await res.json();
-      setLessons((prev) => prev.map((l) => (l.id === finished.id ? finished : l)));
-      FirestoreService.saveLesson(finished);
-
-      // If finished as student, open review modal right away (MVP flow: fazer aula -> avaliar)
-      if (currentRole === UserRole.Student) {
-        setSelectedLessonForReview(finished);
-      }
-      loadInitialData();
-    }
-  };
-
-  // Submit review
-  const handleSubmitReview = async (
-    lessonId: string,
-    rating: number,
-    comment: string,
-    tags: string[]
-  ) => {
-    const res = await fetch(`/api/lessons/${lessonId}/review`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ rating, comment, tags }),
-    });
-
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'Erro ao salvar avaliação.');
-    }
-
-    const data = await res.json();
-    if (data.review) {
-      FirestoreService.saveReview(data.review);
-    }
-
-    // Refresh teacher & lessons
-    loadInitialData();
-  };
-
-  // Top up wallet
-  const handleTopUpWallet = async (amount: number) => {
-    if (!currentStudent) return;
-    const res = await fetch(`/api/students/${currentStudent.id}/wallet/topup`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ amountBrl: amount }),
-    });
-
-    if (res.ok) {
-      const data = await res.json();
-      const updated = { ...currentStudent, walletBalanceBrl: data.newBalanceBrl };
-      setCurrentStudent(updated);
-      setStudents((prev) => prev.map((s) => (s.id === updated.id ? updated : s)));
-      FirestoreService.saveStudent(updated);
-      loadInitialData();
-    }
-  };
-
-  // Mark notification as read
-  const handleMarkNotificationAsRead = async (id: string) => {
-    await fetch(`/api/notifications/${id}/read`, { method: 'PATCH' });
-    setNotifications((prev) => {
-      const updated = prev.map((n) => (n.id === id ? { ...n, read: true } : n));
-      const target = updated.find((n) => n.id === id);
-      if (target) FirestoreService.saveNotification(target);
-      return updated;
-    });
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#F5F9FD] flex items-center justify-center p-4">
-        <div className="text-center space-y-4">
-          <div className="animate-pulse flex justify-center">
-            <TalkeLogo size="lg" variant="card" />
-          </div>
-          <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
-            Iniciando Plataforma Talkê...
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  // Map active sidebar nav key
-  const getActiveSidebarNav = () => {
-    if (currentRole === UserRole.Student) {
-      if (currentTab === 'student-content') return 'student_content';
-      if (currentTab === 'interactive_hub') return 'interactive_hub';
-      if (currentTab === 'lessons') return 'my_lessons';
-      return 'teachers';
-    }
-    if (currentRole === UserRole.Teacher) {
-      if (teacherInitialTab === 'students_progress') return 'teacher_students_progress';
-      if (teacherInitialTab === 'materials') return 'teacher_materials';
-      if (teacherInitialTab === 'availability') return 'teacher_availability';
-      if (teacherInitialTab === 'earnings') return 'teacher_earnings';
-      if (teacherInitialTab === 'reviews') return 'teacher_profile';
-      return 'teacher_lessons';
-    }
-    if (currentRole === UserRole.Admin) {
-      if (adminInitialSection === 'teachers') return 'admin_teachers';
-      if (adminInitialSection === 'rules') return 'admin_rules';
-      return 'admin_dashboard';
-    }
-    return 'admin_dashboard';
-  };
-
-  const handleSidebarNavChange = (navId: string) => {
-    if (navId === 'student_content') {
-      setCurrentTab('student-content');
-    } else if (navId === 'teachers') {
-      setCurrentTab('teachers');
-    } else if (navId === 'interactive_hub') {
-      setCurrentTab('interactive_hub');
-    } else if (navId === 'my_lessons') {
-      setCurrentTab('lessons');
-    } else if (navId === 'teacher_lessons') {
-      setCurrentTab('teacher-dash');
-      setTeacherInitialTab('reservations');
-    } else if (navId === 'teacher_students_progress') {
-      setCurrentTab('teacher-dash');
-      setTeacherInitialTab('students_progress');
-    } else if (navId === 'teacher_materials') {
-      setCurrentTab('teacher-dash');
-      setTeacherInitialTab('materials');
-    } else if (navId === 'teacher_availability') {
-      setCurrentTab('teacher-dash');
-      setTeacherInitialTab('availability');
-    } else if (navId === 'teacher_earnings') {
-      setCurrentTab('teacher-dash');
-      setTeacherInitialTab('earnings');
-    } else if (navId === 'teacher_profile') {
-      setCurrentTab('teacher-dash');
-      setTeacherInitialTab('reviews');
-    } else if (navId === 'admin_dashboard') {
-      setCurrentTab('admin-dash');
-      setAdminInitialSection('analytics');
-    } else if (navId === 'admin_teachers') {
-      setCurrentTab('admin-dash');
-      setAdminInitialSection('teachers');
-    } else if (navId === 'admin_rules') {
-      setCurrentTab('admin-dash');
-      setAdminInitialSection('rules');
-    } else if (navId.startsWith('admin_')) {
-      setCurrentTab('admin-dash');
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-[#F5F9FD] flex flex-col font-sans text-slate-700">
-      {isShowingLandingPage ? (
-        <LandingPageView
-          onEnterPlatform={(role) => {
-            setIsShowingLandingPage(false);
-            if (role) {
-              setCurrentRole(role);
-              if (role === UserRole.Teacher) {
-                setCurrentTab('teacher-dash');
-                setTeacherInitialTab('reservations');
-              } else if (role === UserRole.Admin) {
-                setCurrentTab('admin-dash');
-              } else {
-                setCurrentTab('teachers');
-              }
-            }
-          }}
-          onExploreTeachers={() => {
-            setIsShowingLandingPage(false);
-            setCurrentRole(UserRole.Student);
-            setCurrentTab('teachers');
-          }}
-        />
-      ) : (
-        <>
-          {/* Interactive Sidebar */}
-          {currentStudent && currentTeacher && (
-            <Sidebar
-              currentRole={currentRole}
-              onRoleChange={(role) => {
-                setCurrentRole(role);
-                if (role === UserRole.Student) setCurrentTab('teachers');
-                else if (role === UserRole.Teacher) {
-                  setCurrentTab('teacher-dash');
-                  setTeacherInitialTab('reservations');
-                } else if (role === UserRole.Admin) {
-                  setCurrentTab('admin-dash');
-                }
-              }}
-              activeNav={getActiveSidebarNav()}
-              onNavChange={handleSidebarNavChange}
-              isCollapsed={isSidebarCollapsed}
-              onToggleCollapse={() => setIsSidebarCollapsed((prev) => !prev)}
-              isMobileOpen={isMobileSidebarOpen}
-              onCloseMobile={() => setIsMobileSidebarOpen(false)}
-              currentStudent={currentStudent}
-              currentTeacher={currentTeacher}
-              onOpenDiagnostic={() => {
-                setCurrentTab('diagnostic');
-                setIsMobileSidebarOpen(false);
-              }}
-              onOpenWallet={() => {
-                setCurrentTab('wallet');
-                setIsMobileSidebarOpen(false);
-              }}
-              onOpenLandingPage={() => setIsShowingLandingPage(true)}
-            />
-          )}
-
-          {/* Main Content Column with dynamic sidebar padding */}
-          <div
-            className={`flex-1 flex flex-col transition-all duration-300 ${
-              isSidebarCollapsed ? 'lg:pl-20' : 'lg:pl-64'
-            }`}
-          >
-            {/* Header with Talke branding and notifications */}
-            <Header
-              currentRole={currentRole}
-              onChangeRole={(role) => {
-                setCurrentRole(role);
-                if (role === UserRole.Student) setCurrentTab('teachers');
-                else if (role === UserRole.Teacher) {
-                  setCurrentTab('teacher-dash');
-                  setTeacherInitialTab('reservations');
-                } else if (role === UserRole.Admin) {
-                  setCurrentTab('admin-dash');
-                }
-              }}
-              students={students}
-              currentStudent={currentStudent}
-              onSelectStudent={handleSelectStudent}
-              teachers={teachers}
-              currentTeacher={currentTeacher}
-              onSelectTeacher={handleSelectTeacher}
-              onOpenCreateStudent={() => setShowStudentModal(true)}
-              onOpenCreateTeacher={() => setShowTeacherModal(true)}
-              currentTab={currentTab}
-              onSelectTab={setCurrentTab}
-              notifications={notifications}
-              onMarkNotificationAsRead={handleMarkNotificationAsRead}
-              onToggleMobileSidebar={() => setIsMobileSidebarOpen((prev) => !prev)}
-              isCloudSynced={isCloudSynced}
-              onOpenLandingPage={() => setIsShowingLandingPage(true)}
-            />
-
-            {/* Main App Content Body */}
-            <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-              {/* ==================== MODO ALUNO ==================== */}
-              {currentRole === UserRole.Student && (
-                <>
-                  {/* Conteúdo Aplicado & Onde Parei (Trilha Pedagógica Talkê) */}
-                  {currentTab === 'student-content' && currentStudent && (
-                    <StudentProgressAndContentView
-                      currentStudent={currentStudent}
-                      lessons={lessons.filter((l: Lesson) => l.studentId === currentStudent.id)}
-                      teachers={teachers}
-                      onGoToTeachers={() => setCurrentTab('teachers')}
-                      onOpenPracticeLab={() => setCurrentTab('interactive_hub')}
-                      onBookLesson={() => setCurrentTab('teachers')}
-                      onGoToClassroom={(l: Lesson) => setActiveClassroomLesson(l)}
-                    />
-                  )}
-
-                  {currentTab === 'teachers' && (
-                    <TeacherDirectory
-                      teachers={teachers}
-                      currentStudent={currentStudent}
-                      onSelectTeacher={(t) => setSelectedTeacherForProfile(t)}
-                      onBookTeacher={(t) => setSelectedTeacherForBooking(t)}
-                      onGoToDiagnostic={() => setCurrentTab('diagnostic')}
-                    />
-                  )}
-
-                  {/* Laboratório Prático Interativo do Aluno */}
-                  {currentTab === 'interactive_hub' && currentStudent && (
-                    <StudentInteractiveHub
-                      currentStudent={currentStudent}
-                      teachers={teachers}
-                      onBookTeacher={(t) => setSelectedTeacherForBooking(t)}
-                      onGoToTeachers={() => setCurrentTab('teachers')}
-                    />
-                  )}
-
-                  {currentTab === 'diagnostic' && currentStudent && (
-                    <DiagnosticAndGoalView
-                      currentStudent={currentStudent}
-                      onSave={handleSaveDiagnostic}
-                      onGoToTeachers={() => setCurrentTab('teachers')}
-                    />
-                  )}
-
-                  {currentTab === 'lessons' && (
-                    <MyLessonsView
-                      lessons={lessons.filter((l) => l.studentId === currentStudent?.id)}
-                      onEnterClassroom={(l) => setActiveClassroomLesson(l)}
-                      onPayLesson={(l) => setSelectedLessonForPayment(l)}
-                      onReviewLesson={(l) => setSelectedLessonForReview(l)}
-                      onGoToTeachers={() => setCurrentTab('teachers')}
-                    />
-                  )}
-
-                  {currentTab === 'wallet' && currentStudent && (
-                    <StudentWalletView
-                      currentStudent={currentStudent}
-                      onTopUp={handleTopUpWallet}
-                      onGoToTeachers={() => setCurrentTab('teachers')}
-                    />
-                  )}
-                </>
-              )}
-
-              {/* ==================== MODO PROFESSOR ==================== */}
-              {currentRole === UserRole.Teacher && currentTeacher && (
-                <>
-                  {currentTab === 'teacher-dash' && (
-                    <TeacherDashboardView
-                      currentTeacher={currentTeacher}
-                      onEnterClassroom={(l) => setActiveClassroomLesson(l)}
-                      onRefreshTeacher={loadInitialData}
-                      initialTab={teacherInitialTab}
-                    />
-                  )}
-                </>
-              )}
-
-              {/* ==================== TALKÊ CORE / ADMIN ==================== */}
-              {currentRole === UserRole.Admin && (
-                <>
-                  {currentTab === 'admin-dash' && (
-                    <TalkeAdminView
-                      students={students}
-                      teachers={teachers}
-                      activeSection={adminInitialSection}
-                      onSectionChange={(sec) => setAdminInitialSection(sec)}
-                    />
-                  )}
-                </>
-              )}
-
-              {/* ==================== API CONSOLE ==================== */}
-              {currentTab === 'api' && <ApiConsole currentStudent={currentStudent} />}
-            </main>
-          </div>
-        </>
-      )}
-
-      {/* ==================== MODALS ==================== */}
-
-      {/* Criar Conta Aluno Modal */}
-      {showStudentModal && (
-        <StudentRegisterModal
-          onClose={() => setShowStudentModal(false)}
-          onSuccess={handleCreatedStudent}
-        />
-      )}
-
-      {/* Criar Perfil Professor Modal */}
-      {showTeacherModal && (
-        <TeacherRegisterModal
-          onClose={() => setShowTeacherModal(false)}
-          onSuccess={handleCreatedTeacher}
-        />
-      )}
-
-      {/* Visualizar Perfil Completo do Professor */}
-      {selectedTeacherForProfile && (
-        <TeacherProfileModal
-          teacher={selectedTeacherForProfile}
-          reviews={reviews}
-          onClose={() => setSelectedTeacherForProfile(null)}
-          onBookClick={(t) => {
-            setSelectedTeacherForProfile(null);
-            setSelectedTeacherForBooking(t);
-          }}
-        />
-      )}
-
-      {/* Escolher Horário & Reservar Aula */}
-      {selectedTeacherForBooking && currentStudent && (
-        <BookingModal
-          teacher={selectedTeacherForBooking}
-          currentStudent={currentStudent}
-          onClose={() => setSelectedTeacherForBooking(null)}
-          onConfirmBooking={handleConfirmBooking}
-        />
-      )}
-
-      {/* Pagar Aula (PIX / Cartão / Carteira) */}
-      {selectedLessonForPayment && currentStudent && (
-        <CheckoutPaymentModal
-          lesson={selectedLessonForPayment}
-          currentStudent={currentStudent}
-          onClose={() => setSelectedLessonForPayment(null)}
-          onPaymentSuccess={handlePaymentSuccess}
-        />
-      )}
-
-      {/* Fazer Aula / Realizar Aula (Virtual Classroom) */}
-      {activeClassroomLesson && (
-        <VirtualClassroomModal
-          lesson={activeClassroomLesson}
-          userRole={currentRole}
-          currentUserName={
-            currentRole === UserRole.Student
-              ? currentStudent?.name || 'Aluno'
-              : currentTeacher?.name || 'Professor'
+  useEffect(() => {
+    let cancelled = false;
+    setLessons([]);
+    setPayments([]);
+    setStudent(null);
+    setNotes([]);
+    setRoom(null);
+    setBooking(null);
+    (async () => {
+      try {
+        const catalog = await api<Teacher[]>('/api/teachers');
+        if (cancelled) return;
+        setTeachers(catalog);
+        if (!firebaseUser || !active) return;
+        const [ls, ps] = await Promise.all([
+          api<any[]>('/api/lessons'),
+          api<any[]>('/api/payments'),
+        ]);
+        if (cancelled) return;
+        setLessons(ls);
+        setPayments(ps);
+        if (role === 'STUDENT' || childId) {
+          const st = await api<Student>('/api/students/' + subjectId),
+            ns = await api<any[]>('/api/progress?studentId=' + subjectId);
+          if (!cancelled) {
+            setStudent(st);
+            setNotes(ns);
           }
-          onClose={() => setActiveClassroomLesson(null)}
-          onFinishLesson={handleFinishLesson}
-        />
-      )}
-
-      {/* Avaliar Aula & Professor */}
-      {selectedLessonForReview && (
-        <ReviewModal
-          lesson={selectedLessonForReview}
-          onClose={() => setSelectedLessonForReview(null)}
-          onSubmitReview={handleSubmitReview}
-        />
-      )}
-
-      {/* Footer */}
-      <footer className="border-t border-slate-200 bg-white py-6 mt-12 text-center text-xs text-slate-500">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="text-left">
-            <span className="font-bold text-slate-800 block">
-              Talkê — Plataforma de Aulas Particulares & Diagnóstico de Inglês
-            </span>
-            <span className="text-[11px] text-slate-400">
-              Arquitetura Clean Code, Clean Architecture & Domain-Driven Design (DDD).
-            </span>
+        } else if (role === 'TEACHER') {
+          const ns = await api<any[]>('/api/progress');
+          if (!cancelled) setNotes(ns);
+        }
+      } catch (e) {
+        if (!cancelled) setMessage((e as Error).message);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [firebaseUser?.uid, session, childId]);
+  useEffect(() => {
+    setChildId('');
+    setMessage('');
+  }, [firebaseUser?.uid]);
+  const action = async (work: () => Promise<unknown>, success = 'Operação concluída') => {
+    setBusy(true);
+    setMessage('');
+    try {
+      await work();
+      setMessage(success);
+      await refresh();
+    } catch (e) {
+      setMessage((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
+  if (!config)
+    return (
+      <main className="p-8">
+        <p role="status">{message || 'Carregando Talkê…'}</p>
+      </main>
+    );
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-800">
+      <header className="bg-white border-b p-4 flex items-center justify-between flex-wrap gap-4">
+        <a href="/" className="text-3xl font-bold text-blue-700">
+          Talkê<span className="text-sky-400">.</span>
+        </a>
+        <span>Aulas de inglês · 50 minutos</span>
+        {firebaseUser ? (
+          <div className="flex gap-4 items-center">
+            <span>{session?.profile?.name || firebaseUser.displayName || 'Sua conta'}</span>
+            <button
+              onClick={async () => {
+                await logout();
+                setTab('teachers');
+              }}
+            >
+              Sair
+            </button>
           </div>
-          <div className="text-xs text-slate-400">
-            Talkê Take-Rate: 15% • Liquidação Segura por Aula
-          </div>
-        </div>
+        ) : (
+          <button onClick={() => void action(loginWithGoogle, 'Login realizado')}>
+            Entrar com Google
+          </button>
+        )}
+      </header>
+      {import.meta.env.MODE === 'test' && !firebaseUser && (
+        <form
+          className="p-4 flex gap-2"
+          aria-label="Login de teste"
+          onSubmit={async (e) => {
+            e.preventDefault();
+            const data = new FormData(e.currentTarget);
+            await action(
+              () =>
+                signInWithEmailAndPassword(
+                  auth,
+                  String(data.get('email')),
+                  String(data.get('password')),
+                ),
+              'Login realizado',
+            );
+          }}
+        >
+          <input aria-label="E-mail de teste" name="email" type="email" required />
+          <input aria-label="Senha de teste" name="password" type="password" required />
+          <button>Entrar no emulador</button>
+        </form>
+      )}
+      <div className="max-w-7xl mx-auto p-4 md:p-8">
+        <nav aria-label="Navegação" className="flex gap-2 mb-6 flex-wrap">
+          {[
+            ['teachers', 'Professores'],
+            ...(active
+              ? [
+                  ['lessons', 'Minhas aulas'],
+                  ['payments', 'Pagamentos'],
+                  ['progress', 'Desenvolvimento'],
+                  ['materials', 'Materiais'],
+                ]
+              : []),
+            ...(firebaseUser && session?.profile ? [['privacy-panel', 'Meus dados']] : []),
+            ...(active && (role === 'STUDENT' || childId) ? [['diagnostic', 'Objetivos']] : []),
+            ...(active && role === 'GUARDIAN' ? [['family', 'Família']] : []),
+            ...(active && role === 'TEACHER' ? [['teacher-profile', 'Meu perfil']] : []),
+            ...(session?.isAdmin ? [['admin', 'Administração']] : []),
+            ['privacy', 'Privacidade'],
+            ['terms', 'Termos'],
+          ].map(([value, label]) => (
+            <button
+              className={tab === value ? 'selected' : ''}
+              key={value}
+              onClick={() => setTab(value)}
+            >
+              {label}
+            </button>
+          ))}
+        </nav>
+        {(message || authError) && (
+          <p role="status" className="p-4 mb-4 rounded-xl bg-blue-50">
+            {message || authError}
+          </p>
+        )}
+        {loadingAuth && <p>Verificando sua sessão…</p>}
+        {active && role === 'GUARDIAN' && (
+          <label className="mb-6">
+            Dependente selecionado
+            <select
+              aria-label="Dependente"
+              value={childId}
+              onChange={(e) => setChildId(e.target.value)}
+            >
+              <option value="">Selecione um dependente</option>
+              {session?.dependents.map((child) => (
+                <option key={child.id} value={child.id}>
+                  {child.name} · {child.status === 'ACTIVE' ? 'Liberado' : 'Pendente ou suspenso'}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
+        {tab === 'privacy' ? (
+          <PrivacyNotice config={config} />
+        ) : tab === 'terms' ? (
+          <PrivacyNotice config={config} terms />
+        ) : tab === 'privacy-panel' && subjectId ? (
+          <PrivacyPanel subjectId={subjectId} />
+        ) : tab === 'admin' && session?.isAdmin ? (
+          <AdminPanel />
+        ) : firebaseUser &&
+          session &&
+          (!session.profile || session.profile.termsVersion !== config.termsVersion) ? (
+          <Registration config={config} profile={session.profile} onSaved={refreshProfiles} />
+        ) : session?.profile && !active ? (
+          <section className="card space-y-4">
+            <p>
+              Cadastro suspenso ou em análise de idade/vínculo. Procure{' '}
+              {config.supportEmail || 'o atendimento'}.
+            </p>
+            <button onClick={() => void action(refreshProfiles, 'Cadastro atualizado')}>
+              Atualizar cadastro
+            </button>
+          </section>
+        ) : tab === 'teachers' ? (
+          <>
+            {!firebaseUser && (
+              <section className="card mb-6">
+                <h1 className="text-3xl font-bold">Encontre seu professor de inglês</h1>
+                <p>Escolha seu objetivo, reserve uma aula e pague pelo Mercado Pago.</p>
+              </section>
+            )}
+            <TeacherDirectory
+              teachers={teachers}
+              currentStudent={student}
+              onSelectTeacher={setProfileTeacher}
+              onBookTeacher={(teacher) => {
+                if (!active || !student)
+                  setMessage('Entre como aluno ou selecione um dependente liberado para reservar.');
+                else setBooking(teacher);
+              }}
+              onGoToDiagnostic={() => setTab('diagnostic')}
+            />
+            {!teachers.length && <p>Nenhum professor disponível para reservas neste momento.</p>}
+          </>
+        ) : tab === 'family' ? (
+          <FamilyForm config={config} onSaved={refreshProfiles} />
+        ) : tab === 'teacher-profile' && session?.teacher ? (
+          <TeacherEditor teacher={session.teacher} onSaved={refreshProfiles} />
+        ) : tab === 'diagnostic' && student ? (
+          <DiagnosticAndGoalView
+            currentStudent={student}
+            onGoToTeachers={() => setTab('teachers')}
+            onSave={async (level, goal, goalDescription) => {
+              await post('/api/students/' + student.id + '/diagnostic', {
+                level,
+                goal,
+                goalDescription,
+              });
+              await refresh();
+              setTab('teachers');
+            }}
+          />
+        ) : tab === 'lessons' ? (
+          <section className="space-y-4">
+            <div className="flex justify-between">
+              <h1 className="text-2xl font-bold">Minhas aulas</h1>
+              <button disabled={busy} onClick={() => void action(refresh, 'Aulas atualizadas')}>
+                Atualizar status
+              </button>
+            </div>
+            {lessons
+              .filter((l) => !childId || l.studentId === childId)
+              .map((l) => (
+                <article className="card space-y-3" key={l.id}>
+                  <h2 className="font-bold">
+                    {l.teacherName} · {l.studentName}
+                  </h2>
+                  <p>
+                    {l.scheduledDate} · {l.startTime} (Brasília) · {l.durationMinutes} min
+                  </p>
+                  <p>
+                    R$ {l.priceBrl.toFixed(2)} ·{' '}
+                    {(
+                      {
+                        CONFIRMED: 'Confirmada',
+                        REQUESTED: 'Aguardando pagamento',
+                        COMPLETED: 'Concluída',
+                        CANCELLED: 'Cancelada',
+                      } as any
+                    )[l.status] || 'Em andamento'}{' '}
+                    · {l.isPaid ? 'Pagamento confirmado' : 'Sem confirmação de pagamento'}
+                  </p>
+                  <div className="flex flex-wrap gap-3">
+                    {l.status === 'REQUESTED' && l.payerId === firebaseUser?.uid && (
+                      <button
+                        disabled={busy}
+                        onClick={() =>
+                          void action(async () => {
+                            const result = await post('/api/lessons/' + l.id + '/checkout', {});
+                            window.location.assign(result.url);
+                          }, 'Redirecionando para Mercado Pago')
+                        }
+                      >
+                        Pagar no Mercado Pago
+                      </button>
+                    )}
+                    {l.isPaid && l.status === 'CONFIRMED' && (
+                      <button onClick={() => setRoom(l)}>Entrar na sala</button>
+                    )}
+                    {['REQUESTED', 'CONFIRMED'].includes(l.status) && (
+                      <button
+                        disabled={busy}
+                        onClick={() =>
+                          void action(
+                            () => post('/api/lessons/' + l.id + '/cancel', {}),
+                            'Cancelamento registrado. Reembolsos ficam em acompanhamento.',
+                          )
+                        }
+                      >
+                        Cancelar aula
+                      </button>
+                    )}
+                    {l.teacherId === firebaseUser?.uid && l.status === 'CONFIRMED' && (
+                      <button
+                        disabled={busy}
+                        onClick={() =>
+                          void action(
+                            () => post('/api/lessons/' + l.id + '/complete', {}),
+                            'Aula concluída',
+                          )
+                        }
+                      >
+                        Concluir aula
+                      </button>
+                    )}
+                  </div>
+                  {l.status === 'COMPLETED' && l.teacherId === firebaseUser?.uid && (
+                    <form
+                      className="space-y-3"
+                      onSubmit={async (e) => {
+                        e.preventDefault();
+                        const data = new FormData(e.currentTarget);
+                        await action(
+                          () =>
+                            post('/api/lessons/' + l.id + '/notes', {
+                              notes: data.get('notes'),
+                              homework: data.get('homework'),
+                            }),
+                          'Registro pedagógico salvo',
+                        );
+                      }}
+                    >
+                      <label>
+                        Registro pedagógico
+                        <textarea name="notes" required maxLength={2000} />
+                      </label>
+                      <label>
+                        Tarefa
+                        <textarea name="homework" maxLength={1000} />
+                      </label>
+                      <button disabled={busy}>Salvar desenvolvimento</button>
+                    </form>
+                  )}
+                  {l.status === 'COMPLETED' && l.payerId === firebaseUser?.uid && (
+                    <form
+                      className="flex gap-3 flex-wrap"
+                      onSubmit={async (e) => {
+                        e.preventDefault();
+                        const data = new FormData(e.currentTarget);
+                        await action(
+                          () =>
+                            post('/api/lessons/' + l.id + '/review', {
+                              rating: Number(data.get('rating')),
+                              comment: data.get('comment'),
+                            }),
+                          'Avaliação registrada',
+                        );
+                      }}
+                    >
+                      <label>
+                        Nota
+                        <select name="rating">
+                          {[5, 4, 3, 2, 1].map((n) => (
+                            <option key={n}>{n}</option>
+                          ))}
+                        </select>
+                      </label>
+                      <label>
+                        Comentário
+                        <input name="comment" maxLength={1000} />
+                      </label>
+                      <button disabled={busy}>Avaliar aula</button>
+                    </form>
+                  )}
+                  <details>
+                    <summary>Relatar problema</summary>
+                    <form
+                      className="space-y-3"
+                      onSubmit={async (e) => {
+                        e.preventDefault();
+                        const data = new FormData(e.currentTarget);
+                        await action(
+                          () =>
+                            post('/api/safety/reports', {
+                              lessonId: l.id,
+                              details: data.get('details'),
+                            }),
+                          'Relato enviado para acompanhamento',
+                        );
+                      }}
+                    >
+                      <label>
+                        O que aconteceu?
+                        <textarea name="details" required minLength={10} maxLength={2000} />
+                      </label>
+                      <button disabled={busy}>Enviar relato</button>
+                    </form>
+                  </details>
+                </article>
+              ))}
+            {!lessons.length && <p>Você ainda não tem aulas reservadas.</p>}
+          </section>
+        ) : tab === 'payments' ? (
+          <section className="card space-y-4">
+            <h1 className="text-2xl font-bold">Pagamentos</h1>
+            <button disabled={busy} onClick={() => void action(refresh, 'Status atualizado')}>
+              Atualizar status
+            </button>
+            <p>
+              Pagamentos por aula no Checkout Pro. O servidor confirma o status após consulta ao
+              Mercado Pago.
+            </p>
+            {role === 'TEACHER' && (
+              <>
+                <p>
+                  A parcela estimada desconta 15% Talkê e ainda está sujeita às tarifas do Mercado
+                  Pago. Consulte disponibilidade e retiradas na sua conta.
+                </p>
+                <a href="https://www.mercadopago.com.br/home" rel="noreferrer" target="_blank">
+                  Abrir minha conta Mercado Pago
+                </a>
+              </>
+            )}
+            {payments.map((p) => (
+              <div key={p.id} className="border-t pt-3">
+                Aula {p.lessonId} · R$ {(p.amountCents / 100).toFixed(2)} ·{' '}
+                {(
+                  {
+                    PENDING: 'Aguardando pagamento',
+                    PAID: 'Pago',
+                    REFUND_PENDING: 'Reembolso em acompanhamento',
+                    REFUNDED: 'Reembolsado',
+                    CANCELLED: 'Cancelado',
+                    DISPUTED: 'Contestação',
+                    PARTIAL_REFUND_REVIEW: 'Reembolso parcial em análise',
+                  } as any
+                )[p.status] || p.status}
+              </div>
+            ))}
+            {!payments.length && <p>Não há pagamentos nesta conta.</p>}
+          </section>
+        ) : tab === 'privacy-panel' && subjectId ? (
+          <PrivacyPanel subjectId={subjectId} />
+        ) : tab === 'progress' ? (
+          <section className="card space-y-4">
+            <h1 className="text-2xl font-bold">Desenvolvimento</h1>
+            {notes.map((n) => (
+              <article className="border-t pt-4" key={n.id}>
+                <p>{n.notes}</p>
+                <p>Tarefa: {n.homework || 'Sem tarefa registrada'}</p>
+                <small>{new Date(n.updatedAt).toLocaleDateString('pt-BR')}</small>
+              </article>
+            ))}
+            {!notes.length && (
+              <p>
+                Ainda não há registros pedagógicos. Seu professor poderá registrar seu
+                desenvolvimento após as aulas.
+              </p>
+            )}
+          </section>
+        ) : tab === 'materials' ? (
+          <section className="space-y-4">
+            <h1 className="text-2xl font-bold">Materiais para estudar</h1>
+            {TALKE_CURRICULUM_MATERIALS.map((m) => (
+              <details className="card" key={m.id}>
+                <summary>
+                  {m.title} · {m.cefr}
+                </summary>
+                <p>{m.objective}</p>
+                {m.slides.map((s, i) => (
+                  <article className="mt-4" key={i}>
+                    <h2 className="font-bold">{s.title}</h2>
+                    <ul>
+                      {s.bullets.map((b, n) => (
+                        <li key={n}>{b}</li>
+                      ))}
+                    </ul>
+                    {s.example && <p>{s.example}</p>}
+                    {s.exercisePrompt && <p>{s.exercisePrompt}</p>}
+                  </article>
+                ))}
+              </details>
+            ))}
+          </section>
+        ) : tab === 'admin' && session?.isAdmin ? (
+          <AdminPanel />
+        ) : (
+          <p>Selecione uma opção disponível para sua conta.</p>
+        )}
+      </div>
+      <footer className="border-t p-6 text-center text-sm">
+        <a href="/privacidade">Aviso de privacidade</a> · <a href="/termos">Termos de uso</a>
+        <p>
+          {config.legalName || 'Talkê em preparação'} · {config.supportEmail}
+        </p>
       </footer>
+      {booking && student && (
+        <BookingModal
+          teacher={booking}
+          currentStudent={student}
+          onClose={() => setBooking(null)}
+          onConfirmBooking={async (data) => {
+            const { requestKey, ...payload } = data;
+            await post(
+              '/api/lessons',
+              { studentId: student.id, ...payload },
+              { 'Idempotency-Key': requestKey },
+            );
+            await refresh();
+            setBooking(null);
+            setTab('lessons');
+            setMessage('Reserva criada. Pague antes de expirar o prazo de 30 minutos.');
+          }}
+        />
+      )}
+      {profileTeacher && (
+        <TeacherProfileModal
+          teacher={profileTeacher}
+          reviews={[]}
+          onClose={() => setProfileTeacher(null)}
+          onBookClick={(teacher) => {
+            setProfileTeacher(null);
+            if (student) setBooking(teacher);
+            else setMessage('Entre e conclua o cadastro para reservar.');
+          }}
+        />
+      )}
+      {room && (
+        <Suspense fallback={<p role="status">Abrindo sala…</p>}>
+          <VirtualClassroomModal
+            lesson={room}
+            userRole={role === 'TEACHER' ? UserRole.Teacher : UserRole.Student}
+            currentUserName={session?.profile?.name || ''}
+            onClose={() => setRoom(null)}
+            onFinishLesson={async () => {}}
+          />
+        </Suspense>
+      )}
     </div>
   );
 }

@@ -11,6 +11,7 @@ describe('StudentEntity Domain Entity', () => {
       id: 'std-100',
       name: 'João Silva',
       email: 'joao@talke.com',
+      hasCompletedDiagnostic: false,
       walletBalanceBrl: 150.0,
       totalLessonsCompleted: 3,
       createdAt: new Date().toISOString(),
@@ -27,6 +28,7 @@ describe('StudentEntity Domain Entity', () => {
       id: 'std-100',
       name: 'João Silva',
       email: 'joao@talke.com',
+      hasCompletedDiagnostic: false,
       walletBalanceBrl: 100.0,
       totalLessonsCompleted: 0,
       createdAt: new Date().toISOString(),
@@ -44,6 +46,7 @@ describe('StudentEntity Domain Entity', () => {
       id: 'std-100',
       name: 'João Silva',
       email: 'joao@talke.com',
+      hasCompletedDiagnostic: false,
       walletBalanceBrl: 30.0,
       totalLessonsCompleted: 0,
       createdAt: new Date().toISOString(),
@@ -59,6 +62,7 @@ describe('StudentEntity Domain Entity', () => {
       id: 'std-100',
       name: 'João Silva',
       email: 'joao@talke.com',
+      hasCompletedDiagnostic: false,
       walletBalanceBrl: 0,
       totalLessonsCompleted: 0,
       createdAt: new Date().toISOString(),
@@ -66,13 +70,13 @@ describe('StudentEntity Domain Entity', () => {
 
     student.updateDiagnostic(
       ProficiencyLevel.B2_Upper_Intermediate,
-      LearningGoal.Career,
-      'Entrevistas internacionais'
+      LearningGoal.Business,
+      'Entrevistas internacionais',
     );
 
     assert.strictEqual(student.hasCompletedDiagnostic, true);
     assert.strictEqual(student.level, ProficiencyLevel.B2_Upper_Intermediate);
-    assert.strictEqual(student.goal, LearningGoal.Career);
+    assert.strictEqual(student.goal, LearningGoal.Business);
   });
 
   test('throws ValidationError if missing mandatory fields', () => {
@@ -81,6 +85,7 @@ describe('StudentEntity Domain Entity', () => {
         id: '',
         name: 'Invalido',
         email: 'inv@talke.com',
+        hasCompletedDiagnostic: false,
         walletBalanceBrl: 0,
         totalLessonsCompleted: 0,
         createdAt: new Date().toISOString(),

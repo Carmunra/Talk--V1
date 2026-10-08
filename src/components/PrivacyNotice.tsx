@@ -1,0 +1,109 @@
+import React from 'react';
+export function PrivacyNotice({ config, terms = false }: { config: any; terms?: boolean }) {
+  return (
+    <article className="card space-y-4 max-w-3xl">
+      <h1 className="text-2xl font-bold">{terms ? 'Termos de uso' : 'Privacidade e seus dados'}</h1>
+      <p>
+        Versão {config.termsVersion}. Controlador: {config.legalName || 'Ainda não configurado'} ·
+        CNPJ {config.legalCnpj || 'pendente'}.
+      </p>
+      {!config.legalApproved && (
+        <p>
+          Ambiente em preparação. A publicação comercial exige aprovação dos documentos e canais de
+          atendimento.
+        </p>
+      )}
+      {terms ? (
+        <>
+          <p>
+            A Talkê oferece reservas e aulas de inglês de 50 minutos, no horário de Brasília. O
+            preço informado vale para uma aula.
+          </p>
+          <p>
+            A reserva aguarda pagamento por até 30 minutos. O servidor confirma o pagamento após
+            consultar o Mercado Pago. O retorno do checkout não confirma pagamento.
+          </p>
+          <p>
+            O Checkout Pro é operado pelo Mercado Pago. A comissão Talkê é de 15% do preço da aula.
+            As tarifas do Mercado Pago são adicionais e descontadas da parcela do professor.
+            Disponibilidade e retiradas dependem das condições do provedor.
+          </p>
+          <p>
+            Você pode cancelar antes de iniciar a aula. Quando houver pagamento, o reembolso é
+            solicitado e acompanhado até a confirmação. Problemas durante ou após a aula exigem
+            atendimento. Seus direitos previstos no Código de Defesa do Consumidor permanecem
+            aplicáveis, inclusive o arrependimento quando cabível.
+          </p>
+          <p>
+            Menores são cadastrados pelo responsável adulto e só podem reservar após aprovação do
+            vínculo. Professores precisam de aprovação administrativa e conexão Mercado Pago.
+          </p>
+          <p>
+            Assédio, discriminação, exposição de dados e contato inadequado com menores são
+            proibidos. Use “Relatar problema” na aula. A administração pode suspender acesso para
+            apurar fatos e proteger participantes.
+          </p>
+          <p>
+            A sala de vídeo é privada e temporária. A plataforma não oferece gravação automática.
+            Não grave nem divulgue imagens ou conteúdo dos participantes sem autorização adequada.
+          </p>
+        </>
+      ) : (
+        <>
+          <p>
+            Coletamos nome, e-mail verificado, nascimento, tipo de conta, vínculo com responsável,
+            objetivos de aprendizagem, reservas, avaliações e registros pedagógicos. Professores
+            fornecem perfil profissional, disponibilidade, preço e autorização de conexão Mercado
+            Pago.
+          </p>
+          <p>
+            Usamos os dados para autenticar, prestar aulas, gerir pagamentos, prevenir fraude,
+            proteger menores e atender solicitações. O aceite dos termos registra a contratação. As
+            bases legais de cada tratamento devem constar no registro do controlador. Autorizações
+            do responsável são registradas separadamente e avaliadas considerando o melhor interesse
+            do menor.
+          </p>
+          <p>
+            O Firebase processa autenticação e armazenamento, o Mercado Pago processa pagamentos, e
+            o Daily fornece vídeo. A Talkê não solicita número completo de cartão ou código de
+            segurança.
+          </p>
+          <p>
+            O catálogo publica apenas o perfil profissional aprovado. Dados de alunos e responsáveis
+            não são públicos. Professores acessam informações necessárias às suas próprias aulas.
+            Não ativamos publicidade comportamental ou análise opcional.
+          </p>
+          <p>
+            Você pode exportar dados e solicitar acesso, correção, exclusão, oposição ou retirada de
+            autorização. O responsável pode agir pelo dependente. Pedidos recebem protocolo e
+            análise. Registros financeiros e de defesa de direitos podem precisar ser mantidos, com
+            acesso restrito e justificativa.
+          </p>
+          <p>
+            A exclusão exige resolver aulas, pagamentos e vínculos em aberto. O controlador deve
+            informar prazos e justificativas de retenção, inclusive dos backups, e esclarecer
+            transferências internacionais e suas salvaguardas. Consulte o canal de privacidade.
+          </p>
+          <p>
+            O login usa armazenamento necessário à sessão. Rastreamento opcional está desativado; a
+            inclusão de novas finalidades exige informação e configuração adequada.
+          </p>
+        </>
+      )}
+      <p>
+        Privacidade:{' '}
+        {config.privacyEmail ? (
+          <a href={'mailto:' + config.privacyEmail}>{config.privacyEmail}</a>
+        ) : (
+          'canal pendente'
+        )}
+        . Atendimento: {config.supportEmail || 'canal pendente'}.
+      </p>
+      <p>
+        Para crianças: seu responsável cuida do cadastro. Seu professor vê informações para ajudar
+        você a aprender. Se algo incomodar, saia da sala e conte ao responsável. Vocês podem pedir
+        ajuda e informações sobre seus dados.
+      </p>
+    </article>
+  );
+}

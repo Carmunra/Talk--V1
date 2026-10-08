@@ -1,17 +1,26 @@
-import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getFirestore, Firestore } from 'firebase/firestore';
-import { getAuth, GoogleAuthProvider, Auth } from 'firebase/auth';
-import firebaseConfig from '../../firebase-applet-config.json';
-
-const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
-
-// Initialize Firestore with specific databaseId configured in firebase-applet-config.json
-export const db: Firestore = firebaseConfig.firestoreDatabaseId
-  ? getFirestore(app, firebaseConfig.firestoreDatabaseId)
-  : getFirestore(app);
-
-export const auth: Auth = getAuth(app);
+import { initializeApp } from 'firebase/app';
+import {
+  connectAuthEmulator,
+  getAuth,
+  GoogleAuthProvider,
+  setPersistence,
+  inMemoryPersistence,
+  browserSessionPersistence,
+} from 'firebase/auth';
+const test = import.meta.env.MODE === 'test';
+const app = initializeApp({
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || (test ? 'demo-key' : ''),
+  authDomain:
+    import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || (test ? 'demo-talke.firebaseapp.com' : ''),
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || (test ? 'demo-talke' : ''),
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || (test ? 'demo-app' : ''),
+});
+export const auth = getAuth(app);
+if (test) connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true });
+export const authReady = setPersistence(
+  auth,
+  test ? inMemoryPersistence : browserSessionPersistence,
+);
 export const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: 'select_account' });
-
 export { app };

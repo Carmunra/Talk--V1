@@ -44,10 +44,10 @@ export class TeacherEntity implements Teacher {
     this.languages = Array.isArray(data.languages) ? [...data.languages] : ['Português', 'Inglês'];
     this.certifications = Array.isArray(data.certifications) ? [...data.certifications] : [];
     this.availability = Array.isArray(data.availability) ? [...data.availability] : [];
-    this.rating = Number(data.rating) || 5.0;
+    this.rating = Number(data.rating) || 0;
     this.totalReviews = Number(data.totalReviews) || 0;
     this.totalLessonsCompleted = Number(data.totalLessonsCompleted) || 0;
-    this.isVerified = data.isVerified ?? true;
+    this.isVerified = data.isVerified ?? false;
     this.createdAt = data.createdAt || new Date().toISOString();
   }
 

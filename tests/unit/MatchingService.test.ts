@@ -1,12 +1,7 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert';
 import { MatchingService } from '../../src/domain/services/matchingService';
-import {
-  Teacher,
-  Student,
-  ProficiencyLevel,
-  LearningGoal,
-} from '../../src/domain/types';
+import { Teacher, Student, ProficiencyLevel, LearningGoal } from '../../src/domain/types';
 
 const mockTeachers: Teacher[] = [
   {
@@ -17,7 +12,7 @@ const mockTeachers: Teacher[] = [
     bio: 'Instrutora executiva.',
     hourlyPriceBrl: 110,
     levelsTaught: [ProficiencyLevel.B1_Intermediate, ProficiencyLevel.B2_Upper_Intermediate],
-    specialties: [LearningGoal.Business, LearningGoal.Interviews],
+    specialties: [LearningGoal.Business, LearningGoal.Pronunciation],
     languages: ['Inglês', 'Português'],
     certifications: ['CELTA'],
     availability: [],
@@ -35,7 +30,7 @@ const mockTeachers: Teacher[] = [
     bio: 'Preparador oficial.',
     hourlyPriceBrl: 130,
     levelsTaught: [ProficiencyLevel.B2_Upper_Intermediate, ProficiencyLevel.C1_Advanced],
-    specialties: [LearningGoal.Exams, LearningGoal.Academic],
+    specialties: [LearningGoal.Exams, LearningGoal.Travel],
     languages: ['Inglês'],
     certifications: ['Master'],
     availability: [],

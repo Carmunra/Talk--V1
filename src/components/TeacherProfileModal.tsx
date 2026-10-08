@@ -29,7 +29,7 @@ export const TeacherProfileModal: React.FC<TeacherProfileModalProps> = ({
         <div className="flex items-start justify-between pb-4 border-b border-neutral-100">
           <div className="flex items-center gap-4">
             <img
-              src={teacher.avatarUrl}
+              src={teacher.avatarUrl || '/avatar.svg'}
               alt={teacher.name}
               className="w-16 h-16 rounded-2xl object-cover border-2 border-blue-500 shadow-xs"
             />

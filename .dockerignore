@@ -1,0 +1,15 @@
+node_modules
+.git
+.env
+.env.*
+!.env.example
+dist
+cypress/videos
+cypress/screenshots
+*.log
+*service-account*.json
+graphify-out
+.test-runtime
+coverage
+.firebase
+TestResults

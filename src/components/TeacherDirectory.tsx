@@ -46,8 +46,8 @@ export const TeacherDirectory: React.FC<TeacherDirectoryProps> = ({
     ? MatchingService.rankTeachers(currentStudent, teachers)
     : teachers.map((t) => ({
         teacher: t,
-        matchScore: 85,
-        matchReasons: ['Excelente qualificação e didática recomendada'],
+        matchScore: 0,
+        matchReasons: [],
         isGoalMatch: false,
         isLevelMatch: false,
         isAvailabilityMatch: true,
@@ -207,7 +207,7 @@ export const TeacherDirectory: React.FC<TeacherDirectoryProps> = ({
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-3">
                   <img
-                    src={teacher.avatarUrl}
+                    src={teacher.avatarUrl || '/avatar.svg'}
                     alt={teacher.name}
                     className="w-14 h-14 rounded-2xl object-cover border-2 border-blue-500/20 group-hover:border-blue-500 transition-colors shadow-xs"
                   />
