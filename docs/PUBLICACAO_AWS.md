@@ -18,7 +18,18 @@ Esta arquitetura inicial usa uma única zona/instância por ambiente. Uma falha 
 
 ## Custos e aprovação antes de ativar
 
-Ainda não há estimativa final, plano aplicado, servidor criado ou cobranças iniciadas por esta preparação. Antes de criar recursos, registrar a estimativa na [calculadora AWS](https://calculator.aws/), considerando 730 horas de EC2 por ambiente, 20 GB gp3 por ambiente, dois IPv4, Secrets Manager, ECR, logs de 30 dias, métricas/alarmes, dados enviados e impostos. Homologação ligada também consome crédito.
+Estimativa consultada em 11/10/2026 na [calculadora AWS](https://calculator.aws/), região São Paulo, Linux compartilhado sob demanda, sem reservas e com produção e homologação ligadas por 730 horas mensais:
+
+| Componente | Cálculo | US$/mês |
+| --- | --- | ---: |
+| Duas EC2 t3.small | 2 × 730 h × US$ 0,0336/h | 49,06 |
+| Dois discos gp3 de 20 GB | 40 GB × US$ 0,152/GB-mês | 6,08 |
+| Dois IPv4 públicos | 2 × 730 h × US$ 0,005/h | 7,30 |
+| Base de servidores, discos e IPs | Soma arredondada | **62,44** |
+
+O preço IPv4 está na [tabela oficial VPC](https://aws.amazon.com/vpc/pricing/). A calculadora de EC2 exibiu US$ 55,14 para servidores e discos; o IPv4 foi calculado separadamente. Secrets Manager, armazenamento de imagens ECR, logs de 30 dias, métricas/alarmes, transferência de dados, backups e impostos não estão nessa base. Os custos variáveis dependem de uso ainda não medido. Um orçamento inicial proposto de **US$ 100/mês** reserva US$ 37,56 acima da base para os demais componentes AWS; é uma proposta pendente, não uma cotação completa ou garantia. Firebase/Google Cloud, Daily e Mercado Pago ficam fora desse orçamento AWS.
+
+Não há plano aplicado, servidor criado ou cobranças iniciadas por esta preparação. Antes de criar recursos, aprovar o orçamento, confirmar a estimativa dos componentes variáveis e revisar o plano real na conta. Homologação ligada também consome crédito; interromper a EC2 não elimina custos de discos e IPs reservados. Nenhuma compra de Savings Plans ou reservas foi realizada.
 
 O módulo exige monthly_budget_usd informado e deployment_confirmed=true após revisão de recursos, custos e acesso. Os alertas previstos medem custos brutos da conta AWS, sem descontar créditos/reembolsos, e notificam o contato operacional aprovado a 80% do realizado e 100% do previsto. São alertas, não bloqueios de cobrança. Aprovar o destinatário e confirmar a inscrição SNS. Não comprar Savings Plans, assinaturas ou outras reservas como parte deste procedimento.
 
