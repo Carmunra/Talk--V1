@@ -34,7 +34,7 @@ try:
         # Only this isolated fixture uses plain HTTP. Production uses automatic public TLS.
         production_text = runtime.proxy_text({"slot": "blue"})
         assert "https_port 8443" in production_text
-        runtime.proxy_text = lambda release: "{\n http_port 8080\n admin localhost:2019\n}\nhttp://127.0.0.1 {\n reverse_proxy talke-" + release["slot"] + ":3000\n}\n"
+        runtime.proxy_text = lambda release: "{\n http_port 8080\n admin localhost:2019\n}\nhttp://127.0.0.1:8080 {\n reverse_proxy talke-" + release["slot"] + ":3000\n}\n"
         runtime.docker("network", "create", "talke-edge")
         args = ["run", "-d", "--name", "talke-blue", "--network", "talke-edge",
                 "--read-only", "--cap-drop=ALL", "--security-opt=no-new-privileges"]
@@ -67,6 +67,14 @@ try:
         with get("/api/health") as response:
             assert response.code == 200
         print("AWS proxy: nonroot, read-only, isolated admin port, protected API, CSP and reload verified")
+except Exception:
+    # Only these isolated fixture containers exist here; no credentials are supplied.
+    for name in ("talke-proxy", "talke-blue"):
+        try:
+            print(name + " fixture logs:", runtime.docker("logs", "--tail", "40", name))
+        except Exception:
+            pass
+    raise
 finally:
     for name in ("talke-proxy", "talke-blue"):
         runtime.remove(name)

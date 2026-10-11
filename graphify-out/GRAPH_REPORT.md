@@ -1,7 +1,7 @@
 # Graph Report - talk-v1-production  (2026-10-11)
 
 ## Corpus Check
-- 132 files · ~60,159 words
+- 132 files · ~60,398 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `a9b84dc5`
+- Built from commit: `ffb742a8`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -31,10 +31,10 @@
 - AppNotification
 - fixture.ts
 - marketplace.ts
-- Store
-- video.ts
-- Refinamento — Sprint 1: primeiras 3 tarefas de código
 - Row
+- Store
+- Refinamento — Sprint 1: primeiras 3 tarefas de código
+- FakeGateway
 - server.ts
 - Categorização do backlog Talkê (TLK-1 a TLK-29)
 - runtime.py
@@ -82,22 +82,22 @@
   tests/support/fixture.ts → src/server/config.ts
 - `FakeGateway` --implements--> `PaymentGateway`  [EXTRACTED]
   tests/support/fixture.ts → src/server/marketplace.ts
-- `ReviewModalProps` --references--> `Lesson`  [EXTRACTED]
-  src/components/ReviewModal.tsx → src/domain/types.ts
+- `MemoryStore` --implements--> `Store`  [EXTRACTED]
+  tests/support/memory-store.ts → src/server/store.ts
 
 ## Import Cycles
-- 3-file cycle: `src/domain/repositories/IReviewRepository.ts -> src/domain/types.ts -> src/domain/repositories/index.ts -> src/domain/repositories/IReviewRepository.ts`
-- 3-file cycle: `src/domain/entities/AppNotificationEntity.ts -> src/domain/types.ts -> src/domain/entities/index.ts -> src/domain/entities/AppNotificationEntity.ts`
-- 3-file cycle: `src/domain/repositories/ITeacherRepository.ts -> src/domain/types.ts -> src/domain/repositories/index.ts -> src/domain/repositories/ITeacherRepository.ts`
 - 3-file cycle: `src/domain/repositories/ILessonRepository.ts -> src/domain/types.ts -> src/domain/repositories/index.ts -> src/domain/repositories/ILessonRepository.ts`
 - 3-file cycle: `src/domain/repositories/INotificationRepository.ts -> src/domain/types.ts -> src/domain/repositories/index.ts -> src/domain/repositories/INotificationRepository.ts`
 - 3-file cycle: `src/domain/repositories/IPaymentRepository.ts -> src/domain/types.ts -> src/domain/repositories/index.ts -> src/domain/repositories/IPaymentRepository.ts`
+- 3-file cycle: `src/domain/repositories/IReviewRepository.ts -> src/domain/types.ts -> src/domain/repositories/index.ts -> src/domain/repositories/IReviewRepository.ts`
 - 3-file cycle: `src/domain/repositories/IStudentRepository.ts -> src/domain/types.ts -> src/domain/repositories/index.ts -> src/domain/repositories/IStudentRepository.ts`
-- 3-file cycle: `src/domain/entities/ReviewEntity.ts -> src/domain/types.ts -> src/domain/entities/index.ts -> src/domain/entities/ReviewEntity.ts`
-- 3-file cycle: `src/domain/entities/TeacherEntity.ts -> src/domain/types.ts -> src/domain/entities/index.ts -> src/domain/entities/TeacherEntity.ts`
+- 3-file cycle: `src/domain/repositories/ITeacherRepository.ts -> src/domain/types.ts -> src/domain/repositories/index.ts -> src/domain/repositories/ITeacherRepository.ts`
+- 3-file cycle: `src/domain/entities/AppNotificationEntity.ts -> src/domain/types.ts -> src/domain/entities/index.ts -> src/domain/entities/AppNotificationEntity.ts`
 - 3-file cycle: `src/domain/entities/LessonEntity.ts -> src/domain/types.ts -> src/domain/entities/index.ts -> src/domain/entities/LessonEntity.ts`
 - 3-file cycle: `src/domain/entities/PaymentTransactionEntity.ts -> src/domain/types.ts -> src/domain/entities/index.ts -> src/domain/entities/PaymentTransactionEntity.ts`
+- 3-file cycle: `src/domain/entities/ReviewEntity.ts -> src/domain/types.ts -> src/domain/entities/index.ts -> src/domain/entities/ReviewEntity.ts`
 - 3-file cycle: `src/domain/entities/StudentEntity.ts -> src/domain/types.ts -> src/domain/entities/index.ts -> src/domain/entities/StudentEntity.ts`
+- 3-file cycle: `src/domain/entities/TeacherEntity.ts -> src/domain/types.ts -> src/domain/entities/index.ts -> src/domain/entities/TeacherEntity.ts`
 
 ## Communities (50 total, 8 thin omitted)
 
@@ -158,20 +158,20 @@ Cohesion: 0.47
 Nodes (7): setup(), admin, fixture(), guardian, other, student, teacher
 
 ### Community 15 - "marketplace.ts"
-Cohesion: 0.30
-Nodes (4): SellerTokens, ApiError, seal(), unseal()
+Cohesion: 0.35
+Nodes (5): SellerTokens, ApiError, seal(), unseal(), verifyWebhook()
 
-### Community 16 - "Store"
-Cohesion: 0.13
-Nodes (7): RuntimeConfig, MaintenanceDependencies, runMaintenance(), Store, UnitOfWork, MemoryStore, now
+### Community 16 - "Row"
+Cohesion: 0.17
+Nodes (6): MaintenanceDependencies, runMaintenance(), Row, UnitOfWork, MemoryStore, now
+
+### Community 17 - "Store"
+Cohesion: 0.21
+Nodes (4): RuntimeConfig, Store, roomName(), VideoService
 
 ### Community 18 - "Refinamento — Sprint 1: primeiras 3 tarefas de código"
 Cohesion: 0.17
 Nodes (11): 5 erros comuns nessa fase (e como evitar), As 3 primeiras tarefas (ordem obrigatória, não escolha livre), Boas práticas aplicadas nesse refinamento, Diagnóstico do estado atual (feito lendo o repo, não suposição), Exercício antes de codarmos juntos, O que fica para depois (e por quê), Refinamento — Sprint 1: primeiras 3 tarefas de código, Subtasks refinadas (como um Tech Lead faria no planning) (+3 more)
-
-### Community 19 - "Row"
-Cohesion: 0.24
-Nodes (3): ProviderPayment, Row, FakeGateway
 
 ### Community 20 - "server.ts"
 Cohesion: 0.16
@@ -194,8 +194,8 @@ Cohesion: 0.07
 Nodes (15): MyLessonsViewProps, LessonEntity, DomainError, EntityNotFoundError, InvalidLessonStateError, ScheduleConflictError, ValidationError, ILessonRepository (+7 more)
 
 ### Community 33 - "app.ts"
-Cohesion: 0.21
-Nodes (10): AppDependencies, AuthRequest, createApp(), Identity, PrivacyService, verifyWebhook(), auth, firebase (+2 more)
+Cohesion: 0.22
+Nodes (9): AppDependencies, AuthRequest, createApp(), Identity, PrivacyService, auth, firebase, host (+1 more)
 
 ### Community 34 - "domain/types.ts"
 Cohesion: 0.05

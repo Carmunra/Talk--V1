@@ -665,8 +665,8 @@
     "semantic_hash": ""
   },
   "scripts/aws/smoke-proxy.py": {
-    "mtime": 1791747931.4332058,
-    "ast_hash": "69e3314ab66e7c32a51c9a5ac2c3411f",
+    "mtime": 1791749473.1709893,
+    "ast_hash": "4ae3cb1c3c2ffad42d69b663ba1610df",
     "semantic_hash": ""
   },
   "scripts/aws/tests/release.test.mjs": {
@@ -690,8 +690,8 @@
     "semantic_hash": ""
   },
   "docs/PUBLICACAO_AWS.md": {
-    "mtime": 1791748104.2365444,
-    "ast_hash": "fea0bfc8a471ae06033643d22c78438f",
+    "mtime": 1791749036.8453064,
+    "ast_hash": "671fa42a04bcaa2c68a2b2feaab9435a",
     "semantic_hash": ""
   }
 }

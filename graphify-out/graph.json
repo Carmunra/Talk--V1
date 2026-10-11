@@ -1739,8 +1739,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scripts_reconcile",
-      "community": 15,
-      "community_name": "marketplace.ts",
+      "community": 16,
+      "community_name": "Row",
       "norm_label": "reconcile.ts"
     },
     {
@@ -1751,8 +1751,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "scripts_reconcile_pages",
-      "community": 15,
-      "community_name": "marketplace.ts",
+      "community": 16,
+      "community_name": "Row",
       "norm_label": "pages()"
     },
     {
@@ -5061,7 +5061,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_server_config_runtimeconfig",
-      "community": 16,
+      "community": 17,
       "community_name": "Store",
       "norm_label": "runtimeconfig"
     },
@@ -5085,7 +5085,7 @@
       "_origin": "ast",
       "id": "src_server_maintenance",
       "community": 16,
-      "community_name": "Store",
+      "community_name": "Row",
       "norm_label": "maintenance.ts"
     },
     {
@@ -5098,7 +5098,7 @@
       "_origin": "ast",
       "id": "src_server_maintenance_maintenancedependencies",
       "community": 16,
-      "community_name": "Store",
+      "community_name": "Row",
       "norm_label": "maintenancedependencies"
     },
     {
@@ -5110,7 +5110,7 @@
       "_origin": "ast",
       "id": "src_server_maintenance_runmaintenance",
       "community": 16,
-      "community_name": "Store",
+      "community_name": "Row",
       "norm_label": "runmaintenance()"
     },
     {
@@ -5134,7 +5134,7 @@
       "_origin": "ast",
       "id": "src_server_marketplace_providerpayment",
       "community": 19,
-      "community_name": "Row",
+      "community_name": "FakeGateway",
       "norm_label": "providerpayment"
     },
     {
@@ -5256,7 +5256,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_marketplace_mercadopagogateway_constructor",
-      "community": 16,
+      "community": 17,
       "community_name": "Store",
       "norm_label": ".constructor()"
     },
@@ -5401,7 +5401,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_platform_platform_constructor",
-      "community": 16,
+      "community": 17,
       "community_name": "Store",
       "norm_label": ".constructor()"
     },
@@ -5856,8 +5856,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_security_verifywebhook",
-      "community": 33,
-      "community_name": "app.ts",
+      "community": 15,
+      "community_name": "marketplace.ts",
       "norm_label": "verifywebhook()"
     },
     {
@@ -5868,7 +5868,7 @@
       "_origin": "ast",
       "id": "src_server_store",
       "community": 16,
-      "community_name": "Store",
+      "community_name": "Row",
       "norm_label": "store.ts"
     },
     {
@@ -5880,7 +5880,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_server_store_row",
-      "community": 19,
+      "community": 16,
       "community_name": "Row",
       "norm_label": "row"
     },
@@ -5894,7 +5894,7 @@
       "_origin": "ast",
       "id": "src_server_store_unitofwork",
       "community": 16,
-      "community_name": "Store",
+      "community_name": "Row",
       "norm_label": "unitofwork"
     },
     {
@@ -5918,7 +5918,7 @@
       "_origin": "ast",
       "id": "src_server_store_unitofwork_find",
       "community": 16,
-      "community_name": "Store",
+      "community_name": "Row",
       "norm_label": ".find()"
     },
     {
@@ -5930,7 +5930,7 @@
       "_origin": "ast",
       "id": "src_server_store_unitofwork_set",
       "community": 16,
-      "community_name": "Store",
+      "community_name": "Row",
       "norm_label": ".set()"
     },
     {
@@ -5942,7 +5942,7 @@
       "_origin": "ast",
       "id": "src_server_store_unitofwork_remove",
       "community": 16,
-      "community_name": "Store",
+      "community_name": "Row",
       "norm_label": ".remove()"
     },
     {
@@ -5954,7 +5954,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_server_store_store",
-      "community": 16,
+      "community": 17,
       "community_name": "Store",
       "norm_label": "store"
     },
@@ -5966,7 +5966,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_store_store_transaction",
-      "community": 16,
+      "community": 17,
       "community_name": "Store",
       "norm_label": ".transaction()"
     },
@@ -5978,7 +5978,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_store_store_get",
-      "community": 16,
+      "community": 17,
       "community_name": "Store",
       "norm_label": ".get()"
     },
@@ -5990,7 +5990,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_store_store_find",
-      "community": 16,
+      "community": 17,
       "community_name": "Store",
       "norm_label": ".find()"
     },
@@ -6175,7 +6175,7 @@
       "_origin": "ast",
       "id": "src_server_video",
       "community": 17,
-      "community_name": "video.ts",
+      "community_name": "Store",
       "norm_label": "video.ts"
     },
     {
@@ -6187,7 +6187,7 @@
       "_origin": "ast",
       "id": "src_server_video_roomname",
       "community": 17,
-      "community_name": "video.ts",
+      "community_name": "Store",
       "norm_label": "roomname()"
     },
     {
@@ -6200,7 +6200,7 @@
       "_origin": "ast",
       "id": "src_server_video_videoservice",
       "community": 17,
-      "community_name": "video.ts",
+      "community_name": "Store",
       "norm_label": "videoservice"
     },
     {
@@ -6211,7 +6211,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_video_videoservice_constructor",
-      "community": 16,
+      "community": 17,
       "community_name": "Store",
       "norm_label": ".constructor()"
     },
@@ -6224,7 +6224,7 @@
       "_origin": "ast",
       "id": "src_server_video_videoservice_request",
       "community": 17,
-      "community_name": "video.ts",
+      "community_name": "Store",
       "norm_label": ".request()"
     },
     {
@@ -6236,7 +6236,7 @@
       "_origin": "ast",
       "id": "src_server_video_videoservice_room",
       "community": 17,
-      "community_name": "video.ts",
+      "community_name": "Store",
       "norm_label": ".room()"
     },
     {
@@ -6248,7 +6248,7 @@
       "_origin": "ast",
       "id": "src_server_video_videoservice_close",
       "community": 17,
-      "community_name": "video.ts",
+      "community_name": "Store",
       "norm_label": ".close()"
     },
     {
@@ -6260,7 +6260,7 @@
       "_origin": "ast",
       "id": "src_server_video_videoservice_closesubject",
       "community": 17,
-      "community_name": "video.ts",
+      "community_name": "Store",
       "norm_label": ".closesubject()"
     },
     {
@@ -6272,7 +6272,7 @@
       "_origin": "ast",
       "id": "src_server_video_videoservice_retryclosures",
       "community": 17,
-      "community_name": "video.ts",
+      "community_name": "Store",
       "norm_label": ".retryclosures()"
     },
     {
@@ -6495,7 +6495,7 @@
       "_origin": "ast",
       "id": "tests_support_fixture_fakegateway",
       "community": 19,
-      "community_name": "Row",
+      "community_name": "FakeGateway",
       "norm_label": "fakegateway"
     },
     {
@@ -6507,7 +6507,7 @@
       "_origin": "ast",
       "id": "tests_support_fixture_fakegateway_search",
       "community": 19,
-      "community_name": "Row",
+      "community_name": "FakeGateway",
       "norm_label": ".search()"
     },
     {
@@ -6519,7 +6519,7 @@
       "_origin": "ast",
       "id": "tests_support_fixture_fakegateway_connect",
       "community": 19,
-      "community_name": "Row",
+      "community_name": "FakeGateway",
       "norm_label": ".connect()"
     },
     {
@@ -6531,7 +6531,7 @@
       "_origin": "ast",
       "id": "tests_support_fixture_fakegateway_callback",
       "community": 19,
-      "community_name": "Row",
+      "community_name": "FakeGateway",
       "norm_label": ".callback()"
     },
     {
@@ -6543,7 +6543,7 @@
       "_origin": "ast",
       "id": "tests_support_fixture_fakegateway_checkout",
       "community": 19,
-      "community_name": "Row",
+      "community_name": "FakeGateway",
       "norm_label": ".checkout()"
     },
     {
@@ -6555,7 +6555,7 @@
       "_origin": "ast",
       "id": "tests_support_fixture_fakegateway_payment",
       "community": 19,
-      "community_name": "Row",
+      "community_name": "FakeGateway",
       "norm_label": ".payment()"
     },
     {
@@ -6567,7 +6567,7 @@
       "_origin": "ast",
       "id": "tests_support_fixture_fakegateway_refund",
       "community": 19,
-      "community_name": "Row",
+      "community_name": "FakeGateway",
       "norm_label": ".refund()"
     },
     {
@@ -6579,7 +6579,7 @@
       "_origin": "ast",
       "id": "tests_support_fixture_fakegateway_approve",
       "community": 19,
-      "community_name": "Row",
+      "community_name": "FakeGateway",
       "norm_label": ".approve()"
     },
     {
@@ -6602,7 +6602,7 @@
       "_origin": "ast",
       "id": "tests_support_memory_store",
       "community": 16,
-      "community_name": "Store",
+      "community_name": "Row",
       "norm_label": "memory-store.ts"
     },
     {
@@ -6615,7 +6615,7 @@
       "_origin": "ast",
       "id": "tests_support_memory_store_memorystore",
       "community": 16,
-      "community_name": "Store",
+      "community_name": "Row",
       "norm_label": "memorystore"
     },
     {
@@ -6627,7 +6627,7 @@
       "_origin": "ast",
       "id": "tests_support_memory_store_memorystore_replacefortest",
       "community": 16,
-      "community_name": "Store",
+      "community_name": "Row",
       "norm_label": ".replacefortest()"
     },
     {
@@ -6639,7 +6639,7 @@
       "_origin": "ast",
       "id": "tests_support_memory_store_memorystore_check",
       "community": 16,
-      "community_name": "Store",
+      "community_name": "Row",
       "norm_label": ".check()"
     },
     {
@@ -6651,7 +6651,7 @@
       "_origin": "ast",
       "id": "tests_support_memory_store_memorystore_get",
       "community": 16,
-      "community_name": "Store",
+      "community_name": "Row",
       "norm_label": ".get()"
     },
     {
@@ -6663,7 +6663,7 @@
       "_origin": "ast",
       "id": "tests_support_memory_store_memorystore_find",
       "community": 16,
-      "community_name": "Store",
+      "community_name": "Row",
       "norm_label": ".find()"
     },
     {
@@ -6675,7 +6675,7 @@
       "_origin": "ast",
       "id": "tests_support_memory_store_memorystore_transaction",
       "community": 16,
-      "community_name": "Store",
+      "community_name": "Row",
       "norm_label": ".transaction()"
     },
     {
@@ -6830,7 +6830,7 @@
       "_origin": "ast",
       "id": "tests_unit_maintenance_test",
       "community": 16,
-      "community_name": "Store",
+      "community_name": "Row",
       "norm_label": "maintenance.test.ts"
     },
     {
@@ -6841,7 +6841,7 @@
       "_origin": "ast",
       "id": "tests_unit_maintenance_test_now",
       "community": 16,
-      "community_name": "Store",
+      "community_name": "Row",
       "norm_label": "now"
     },
     {
@@ -6853,7 +6853,7 @@
       "_origin": "ast",
       "id": "tests_unit_maintenance_test_deps",
       "community": 16,
-      "community_name": "Store",
+      "community_name": "Row",
       "norm_label": "deps()"
     },
     {
@@ -6987,7 +6987,7 @@
       "_origin": "ast",
       "id": "tests_unit_video_test",
       "community": 17,
-      "community_name": "video.ts",
+      "community_name": "Store",
       "norm_label": "video.test.ts"
     },
     {
@@ -7863,7 +7863,7 @@
       "label": "Prepara\u00e7\u00e3o das contas",
       "file_type": "document",
       "source_file": "docs/PUBLICACAO_AWS.md",
-      "source_location": "L25",
+      "source_location": "L36",
       "_origin": "ast",
       "id": "docs_publicacao_aws_prepara\u00e7\u00e3o_das_contas",
       "community": 47,
@@ -7874,7 +7874,7 @@
       "label": "Provisionamento revis\u00e1vel",
       "file_type": "document",
       "source_file": "docs/PUBLICACAO_AWS.md",
-      "source_location": "L34",
+      "source_location": "L45",
       "_origin": "ast",
       "id": "docs_publicacao_aws_provisionamento_revis\u00e1vel",
       "community": 47,
@@ -7885,7 +7885,7 @@
       "label": "Formato do segredo",
       "file_type": "document",
       "source_file": "docs/PUBLICACAO_AWS.md",
-      "source_location": "L44",
+      "source_location": "L55",
       "_origin": "ast",
       "id": "docs_publicacao_aws_formato_do_segredo",
       "community": 47,
@@ -7896,7 +7896,7 @@
       "label": "Publica\u00e7\u00e3o e recupera\u00e7\u00e3o",
       "file_type": "document",
       "source_file": "docs/PUBLICACAO_AWS.md",
-      "source_location": "L70",
+      "source_location": "L81",
       "_origin": "ast",
       "id": "docs_publicacao_aws_publica\u00e7\u00e3o_e_recupera\u00e7\u00e3o",
       "community": 47,
@@ -24216,7 +24216,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PUBLICACAO_AWS.md",
-      "source_location": "L44",
+      "source_location": "L55",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_publicacao_aws_hospedagem_aws_da_talk\u00ea",
@@ -24227,7 +24227,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PUBLICACAO_AWS.md",
-      "source_location": "L25",
+      "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_publicacao_aws_hospedagem_aws_da_talk\u00ea",
@@ -24238,7 +24238,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PUBLICACAO_AWS.md",
-      "source_location": "L34",
+      "source_location": "L45",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_publicacao_aws_hospedagem_aws_da_talk\u00ea",
@@ -24249,7 +24249,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PUBLICACAO_AWS.md",
-      "source_location": "L70",
+      "source_location": "L81",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_publicacao_aws_hospedagem_aws_da_talk\u00ea",
@@ -24478,5 +24478,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "a9b84dc577c0e34c3792b5bf4cb03a0ecada0e72"
+  "built_at_commit": "ffb742a82f8452631d19b120a75e4e9df6c37c67"
 }
