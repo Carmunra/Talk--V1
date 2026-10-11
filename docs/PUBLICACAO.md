@@ -10,6 +10,8 @@ A sala Daily é privada, com token individual, janela de tempo e confirmação d
 
 ## Preparação e implantação
 
+Para atualizações de ambientes já provisionados, seguir [Publicação automática e reversão](PUBLICACAO_AUTOMATICA.md).
+
 1. Usar projetos Firebase distintos para desenvolvimento, homologação e produção. Habilitar Google Auth e domínio autorizado. Configurar banco, região e backups. Usar IAM mínimo e identidade do serviço, evitando arquivos de chave no repositório.
 2. Copiar .env.example para desenvolvimento e preencher a configuração pública web e as variáveis do servidor. Nunca incluir segredos em VITE_ ou no código do navegador. O build exige os quatro valores públicos VITE_FIREBASE_*; o projeto deve corresponder ao projeto do servidor.
 3. Aprovar documentos, controlador, contatos, idade mínima, procedimento de aferição de idade e proteção de menores. Ler PRIVACIDADE_OPERACAO.md. LEGAL_APPROVED e MINORS_SAFEGUARDS_APPROVED são declarações do operador após executar os requisitos; não executam a validação jurídica.

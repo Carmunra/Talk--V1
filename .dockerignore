@@ -14,5 +14,7 @@ coverage
 .firebase
 TestResults
 infra
+gha-creds-*.json
+.release
 *.tfstate
 *.tfvars

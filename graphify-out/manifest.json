@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "cypress/e2e/readiness.cy.ts": {
-    "mtime": 1791502421.3481162,
-    "ast_hash": "8ae138160d5bf3a89c8c9a39c675a1dd",
+    "mtime": 1791741659.9671798,
+    "ast_hash": "18655b1feda3e9a93645c2f1b0c5a5e3",
     "semantic_hash": ""
   },
   "firebase-applet-config.json": {
@@ -70,8 +70,8 @@
     "semantic_hash": ""
   },
   "src/components/BookingModal.tsx": {
-    "mtime": 1791500565.0266783,
-    "ast_hash": "ab01d8a72fc995c36ab6938db15987a8",
+    "mtime": 1791741659.798179,
+    "ast_hash": "d5079275c9862feee61af5b1d9775d25",
     "semantic_hash": ""
   },
   "src/components/DiagnosticAndGoalView.tsx": {
@@ -80,8 +80,8 @@
     "semantic_hash": ""
   },
   "src/components/ErrorBoundary.tsx": {
-    "mtime": 1791499367.8010025,
-    "ast_hash": "97cd94f7e948adcdec7b103988af957f",
+    "mtime": 1791741659.89018,
+    "ast_hash": "179ad7124603859e21709b789a527a2b",
     "semantic_hash": ""
   },
   "src/components/MyLessonsView.tsx": {
@@ -100,8 +100,8 @@
     "semantic_hash": ""
   },
   "src/components/ReviewModal.tsx": {
-    "mtime": 1791499367.8040035,
-    "ast_hash": "d7a6b27a9f223cf160238d529c43536f",
+    "mtime": 1791741659.863178,
+    "ast_hash": "5bf86641bd64154ffdecb0c09d8818cc",
     "semantic_hash": ""
   },
   "src/components/StudentInteractiveHub.tsx": {
@@ -115,18 +115,18 @@
     "semantic_hash": ""
   },
   "src/components/TeacherDirectory.tsx": {
-    "mtime": 1791501414.7363229,
-    "ast_hash": "4bb7bf55b8e0141d1128db2ad87bff21",
+    "mtime": 1791741659.91818,
+    "ast_hash": "d3dc2a5abdcd0b4bf7290a13f785a8c4",
     "semantic_hash": ""
   },
   "src/components/TeacherProfileModal.tsx": {
-    "mtime": 1791501415.073263,
-    "ast_hash": "e5634c60fee96217ef4e71a2d498ac3e",
+    "mtime": 1791741659.8381941,
+    "ast_hash": "195dc2bf9724d16c74d56ea98ac37a84",
     "semantic_hash": ""
   },
   "src/components/VirtualClassroomModal.tsx": {
-    "mtime": 1791502421.0380695,
-    "ast_hash": "381756c8763f21fb4d481f650f8b26c7",
+    "mtime": 1791741659.8771796,
+    "ast_hash": "367241766924d9ed084b2ba3ad52bdea",
     "semantic_hash": ""
   },
   "src/context/AuthContext.tsx": {
@@ -425,13 +425,13 @@
     "semantic_hash": ""
   },
   ".github/workflows/ci.yml": {
-    "mtime": 1791738687.2979853,
-    "ast_hash": "ad77deb6b1d76015b73d3a99a33ec9c7",
+    "mtime": 1791742190.9986665,
+    "ast_hash": "30edeaaedfcb16d1d753c4a198e8f898",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1791738952.9515786,
-    "ast_hash": "88a7b0b289a7999dce7de45c9d50313f",
+    "mtime": 1791742057.896209,
+    "ast_hash": "bdaf3743b0ccc2300981894d3530321d",
     "semantic_hash": ""
   },
   "docs/PRIVACIDADE_OPERACAO.md": {
@@ -440,8 +440,8 @@
     "semantic_hash": ""
   },
   "docs/PUBLICACAO.md": {
-    "mtime": 1791738952.5917509,
-    "ast_hash": "20777623d2e556499bdf8f3de8089eff",
+    "mtime": 1791742058.2714398,
+    "ast_hash": "867ab8d9811045f2f18ac5a19783b37d",
     "semantic_hash": ""
   },
   "docs/categorizacao-backlog.md": {
@@ -480,8 +480,8 @@
     "semantic_hash": ""
   },
   "docs/VALIDACAO.md": {
-    "mtime": 1791739334.7994254,
-    "ast_hash": "e70403453ec2e493a3017020a63ad62c",
+    "mtime": 1791742338.579658,
+    "ast_hash": "e7e9ca4281bb030a214dd818e7b6cd8d",
     "semantic_hash": ""
   },
   "scripts/verify-lockfile.mjs": {
@@ -550,8 +550,43 @@
     "semantic_hash": ""
   },
   "docs/OPERACAO.md": {
-    "mtime": 1791738951.8769555,
-    "ast_hash": "4bec51cb7859314f4f60acca870a22ba",
+    "mtime": 1791742015.1489444,
+    "ast_hash": "b2b40103a7aa8265f7a07ffaeca0c70a",
+    "semantic_hash": ""
+  },
+  "scripts/release.ts": {
+    "mtime": 1791742019.5914452,
+    "ast_hash": "943503cf165b835524093de8ae78c4d0",
+    "semantic_hash": ""
+  },
+  "src/lib/bookingDates.ts": {
+    "mtime": 1791741659.7221787,
+    "ast_hash": "fdc6fd3fd56bc96ae24ef806321c3ed8",
+    "semantic_hash": ""
+  },
+  "src/lib/useDialog.ts": {
+    "mtime": 1791742013.69462,
+    "ast_hash": "08bb0ecb3500c0fcf4447bb1128476ce",
+    "semantic_hash": ""
+  },
+  "tests/unit/bookingDates.test.ts": {
+    "mtime": 1791741474.5057354,
+    "ast_hash": "8b942374e93fa181036d7e67466f644d",
+    "semantic_hash": ""
+  },
+  "tests/unit/release.test.ts": {
+    "mtime": 1791741887.9009094,
+    "ast_hash": "4f726abe72429f4eb09a8d4e7ba06928",
+    "semantic_hash": ""
+  },
+  ".github/workflows/deploy.yml": {
+    "mtime": 1791741887.1368198,
+    "ast_hash": "ee572519493e317779562c068e17cbdd",
+    "semantic_hash": ""
+  },
+  "docs/PUBLICACAO_AUTOMATICA.md": {
+    "mtime": 1791742019.673921,
+    "ast_hash": "4b606a100672bbbe07a099b58d2997b9",
     "semantic_hash": ""
   }
 }

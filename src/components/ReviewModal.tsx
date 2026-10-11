@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import { X, Star, CheckCircle2 } from 'lucide-react';
 import { Lesson } from '../domain/types';
+import { useDialog } from '../lib/useDialog';
 
 interface ReviewModalProps {
   lesson: Lesson;
   onClose: () => void;
-  onSubmitReview: (lessonId: string, rating: number, comment: string, tags: string[]) => Promise<void>;
+  onSubmitReview: (
+    lessonId: string,
+    rating: number,
+    comment: string,
+    tags: string[],
+  ) => Promise<void>;
 }
 
-export const ReviewModal: React.FC<ReviewModalProps> = ({
-  lesson,
-  onClose,
-  onSubmitReview,
-}) => {
+export const ReviewModal: React.FC<ReviewModalProps> = ({ lesson, onClose, onSubmitReview }) => {
   const [rating, setRating] = useState<number>(5);
   const [hoverRating, setHoverRating] = useState<number | null>(null);
   const [comment, setComment] = useState<string>('');
@@ -21,6 +23,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
     'Muito paciente',
   ]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const dialog = useDialog(onClose, !isSubmitting);
   const [error, setError] = useState<string | null>(null);
 
   const availableTags = [
@@ -56,7 +59,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
         lesson.id,
         rating,
         comment.trim() || 'Ótima aula! Aprendi bastante e me senti seguro para falar.',
-        selectedTags
+        selectedTags,
       );
       onClose();
     } catch (err: any) {
@@ -68,7 +71,14 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-neutral-200 animate-in fade-in zoom-in-95 duration-150">
+      <div
+        ref={dialog}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Avaliar aula"
+        tabIndex={-1}
+        className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-neutral-200 animate-in fade-in zoom-in-95 duration-150"
+      >
         <div className="flex items-center justify-between pb-3 border-b border-neutral-100">
           <div>
             <h3 className="text-base font-bold text-neutral-900">Avaliar Aula Talkê</h3>
@@ -76,7 +86,13 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
               Sua avaliação ajuda a comunidade e valoriza o trabalho de {lesson.teacherName}
             </p>
           </div>
-          <button onClick={onClose} className="text-neutral-400 hover:text-neutral-600 p-1">
+          <button
+            type="button"
+            aria-label="Fechar avaliação"
+            disabled={isSubmitting}
+            onClick={onClose}
+            className="text-neutral-400 hover:text-neutral-600 p-1"
+          >
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -100,6 +116,8 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
                   <button
                     key={star}
                     type="button"
+                    aria-label={star + (star === 1 ? ' estrela' : ' estrelas')}
+                    aria-pressed={rating === star}
                     onMouseEnter={() => setHoverRating(star)}
                     onMouseLeave={() => setHoverRating(null)}
                     onClick={() => setRating(star)}
@@ -136,6 +154,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
                     key={tag}
                     type="button"
                     onClick={() => toggleTag(tag)}
+                    aria-pressed={isSelected}
                     className={`px-2.5 py-1 rounded-lg text-xs font-medium border transition-all ${
                       isSelected
                         ? 'bg-amber-50 border-amber-400 text-amber-900 font-bold ring-1 ring-amber-400/30'
@@ -155,6 +174,8 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
               Escreva seu feedback (opcional)
             </label>
             <textarea
+              aria-label="Comentário sobre a aula"
+              maxLength={1000}
               rows={3}
               placeholder="O que você mais gostou na didática ou na postura do professor?"
               value={comment}
@@ -166,6 +187,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
           <div className="pt-3 border-t border-neutral-100 flex items-center justify-end gap-2">
             <button
               type="button"
+              disabled={isSubmitting}
               onClick={onClose}
               className="px-4 py-2 text-xs font-semibold text-neutral-600 hover:bg-neutral-100 rounded-xl transition-colors"
             >

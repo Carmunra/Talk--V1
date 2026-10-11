@@ -10,6 +10,8 @@ A configuração usa Google Cloud para aproveitar o Firebase já adotado. Pode s
 
 ## Ativação
 
+Após provisionar o ambiente, seguir [PUBLICACAO_AUTOMATICA.md](PUBLICACAO_AUTOMATICA.md) para configurar a identidade temporária do GitHub, publicar revisões testadas e acompanhar reversões.
+
 1. Criar/selecionar projetos isolados de homologação e produção, habilitar faturamento, Firebase Auth/Google e Firestore. Aprovar região, fornecedores, contatos, retenção e documentos. Provisionar um repositório privado de imagens no Artifact Registry.
 2. Criar os quatro segredos referenciados no exemplo diretamente no Secret Manager, com versões numéricas e recuperação segura da chave de criptografia. Não colocar seus valores no Terraform, GitHub, imagens, logs ou variáveis públicas VITE_.
 3. Preencher a configuração pública Firebase e a configuração operacional aprovada em ambiente seguro. Construir a imagem com os quatro argumentos VITE_FIREBASE_*, usando exatamente o projeto do servidor. Executar npm run publication:check após npm run build: o relatório lista pendências sem imprimir credenciais e não acessa a nuvem.

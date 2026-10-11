@@ -36,6 +36,20 @@ describe('Fluxos comerciais protegidos com Auth emulator e gateway de teste', ()
       .its('status')
       .should('eq', 401);
   });
+  it('mantém foco na reserva, fecha com Escape e devolve foco ao botão de origem', () => {
+    login('student');
+    cy.contains('button', 'Agendar').first().as('trigger').click();
+    cy.get('[role="dialog"]').should('have.attr', 'aria-modal', 'true');
+    cy.get('[aria-label="Fechar reserva"]')
+      .focus()
+      .trigger('keydown', { key: 'Tab', shiftKey: true });
+    cy.focused().should('have.attr', 'type', 'submit');
+    cy.focused().trigger('keydown', { key: 'Tab' });
+    cy.focused().should('have.attr', 'aria-label', 'Fechar reserva');
+    cy.focused().trigger('keydown', { key: 'Escape' });
+    cy.get('[role="dialog"]').should('not.exist');
+    cy.get('@trigger').should('have.focus');
+  });
   it('reserva na interface, aguarda confirmação real do servidor e cancela com reembolso pendente', () => {
     login('student');
     cy.contains('button', 'Agendar').first().click();

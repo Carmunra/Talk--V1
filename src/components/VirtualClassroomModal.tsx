@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import DailyIframe from '@daily-co/daily-js';
 import { api } from '../lib/apiClient';
 import { Lesson, UserRole } from '../domain/types';
+import { useDialog } from '../lib/useDialog';
 interface Props {
   lesson: Lesson;
   userRole: UserRole;
@@ -10,6 +11,7 @@ interface Props {
   onFinishLesson: (id: string, notes: string) => Promise<void>;
 }
 export function VirtualClassroomModal({ lesson, onClose }: Props) {
+  const dialog = useDialog(onClose);
   const host = useRef<HTMLDivElement>(null),
     [error, setError] = useState('');
   useEffect(() => {
@@ -38,7 +40,14 @@ export function VirtualClassroomModal({ lesson, onClose }: Props) {
     };
   }, [lesson.id]);
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950 flex flex-col">
+    <div
+      ref={dialog}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Sala de aula privada"
+      tabIndex={-1}
+      className="fixed inset-0 z-50 bg-slate-950 flex flex-col"
+    >
       <div className="p-4 text-white flex justify-between">
         <span>
           Aula privada · {lesson.scheduledDate} {lesson.startTime} (Brasília)

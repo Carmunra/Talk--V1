@@ -6,6 +6,8 @@ Esta versão substitui os fluxos demonstrativos por autenticação no servidor, 
 
 Antes de publicar, consulte [Publicação](docs/PUBLICACAO.md) e [LGPD e proteção de menores](docs/PRIVACIDADE_OPERACAO.md). Credenciais, habilitação de split, identidade jurídica, homologação externa, matriz de retenção e procedimentos de aferição de idade permanecem requisitos do operador. Os indicadores de aprovação não substituem esses procedimentos.
 
+O fluxo de [publicação automática e reversão](docs/PUBLICACAO_AUTOMATICA.md) testa a imagem, valida a revisão candidata e atualiza site/manutenção com recibo de recuperação. Depende da configuração dos projetos reais e da identidade temporária do GitHub.
+
 ## Desenvolvimento
 
 Requisitos: Node 22.17+, npm 10 e Java 21 para o emulador Firestore.
