@@ -1,4 +1,6 @@
 import importlib.util
+import base64
+import gzip
 import json
 import os
 from pathlib import Path
@@ -13,6 +15,13 @@ runtime = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(runtime)
 
 class ReleaseTests(unittest.TestCase):
+    def test_bootstrap_payload_has_space_for_config_under_ec2_limit(self):
+        module = Path(__file__).parents[1]
+        template = (module / "bootstrap.sh.tftpl").read_text()
+        packed = base64.b64encode(gzip.compress((module / "runtime.py").read_bytes())).decode()
+        payload = template.replace("${runtime_b64}", packed).replace("${config_b64}", "x" * 4096)
+        self.assertLess(len(payload.encode()), 16384)
+
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)

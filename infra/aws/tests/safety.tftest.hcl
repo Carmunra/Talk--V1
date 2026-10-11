@@ -17,10 +17,6 @@ variables {
 run "safe_defaults" {
   command = plan
   assert {
-    condition     = length(aws_instance.app.user_data) < 16000
-    error_message = "Bootstrap deve caber no limite EC2; não incluir segredos em user_data."
-  }
-  assert {
     condition     = aws_instance.app.metadata_options[0].http_tokens == "required" && aws_instance.app.metadata_options[0].http_put_response_hop_limit == 1
     error_message = "Exigir IMDSv2 e impedir uso de metadata por containers."
   }
