@@ -1,5 +1,7 @@
 # Publicação automática e reversão
 
+Alternativa Google Cloud. O operador selecionou AWS em 11/10/2026; seguir [Publicação AWS](PUBLICACAO_AWS.md) para o lançamento. Este workflow exige HOSTING_PROVIDER=google, além das demais aprovações; não executá-lo na seleção AWS.
+
 O workflow Publish platform em .github/workflows/deploy.yml publica uma imagem testada em recursos Cloud Run já provisionados. A primeira ativação de projeto, faturamento, banco, identidades, segredos, regras e domínio segue OPERACAO.md. O workflow não cria esses recursos nem muda configurações jurídicas, financeiras ou permissões.
 
 ## Configuração

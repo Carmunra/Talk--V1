@@ -36,6 +36,8 @@ jobs:
       - run: npm run verify:lockfile
       - run: npm ci
       - run: npm run lint
+      - run: node --test scripts/aws/tests/*.test.mjs
+      - run: python3 -m unittest discover -s infra/aws/tests -p 'test_*.py' -v
       - run: npm run test:coverage
       - run: npm run test:rules
       - run: npm run test:e2e
@@ -50,6 +52,10 @@ jobs:
       - run: terraform -chdir=infra/cloud-run init -backend=false -input=false -lockfile=readonly
       - run: terraform -chdir=infra/cloud-run validate
       - run: terraform -chdir=infra/cloud-run test
+      - run: terraform -chdir=infra/aws fmt -check -recursive
+      - run: terraform -chdir=infra/aws init -backend=false -input=false -lockfile=readonly
+      - run: terraform -chdir=infra/aws validate
+      - run: terraform -chdir=infra/aws test
       - name: Build production container
         run: >-
           docker build --tag talke-ci:local
@@ -58,6 +64,8 @@ jobs:
           --build-arg VITE_FIREBASE_AUTH_DOMAIN
           --build-arg VITE_FIREBASE_APP_ID .
       - run: npm run test:container
+      # The host controller owns root-only runtime files; reproduce that host context.
+      - run: sudo python3 scripts/aws/smoke-proxy.py
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:

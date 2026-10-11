@@ -1,5 +1,7 @@
 # Validação das correções — 11 de outubro de 2026
 
+Adaptação AWS: 106 testes unitários/integrados da aplicação passaram localmente, com cobertura de linhas 91,14%, branches 87,22% e funções 93,05%. Outros cinco testes do controlador de publicação e treze do host verificam destino, scan, credenciais, rollback e recuperação. Os três planos simulados AWS passaram, além da verificação de tipos e workflows. A CI inclui proxy Caddy real em Docker, Firestore, Cypress e container; homologação na AWS e nos provedores permanece pendente. Consultar o PR/commit para confirmar a CI completa.
+
 Verificação local da versão preparada para revisão. Dados de teste são fictícios; nenhuma cobrança real ou implantação remota foi executada.
 
 | Verificação                                            | Resultado                                                                    |

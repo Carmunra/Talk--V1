@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 export interface RuntimeConfig {
   production: boolean;
+  trustProxyHops: number;
   origin: string;
   projectId: string;
   databaseId: string;
@@ -37,9 +38,12 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): RuntimeConfig 
   if (env.MP_ENVIRONMENT !== undefined && !['sandbox', 'live'].includes(env.MP_ENVIRONMENT))
     throw new Error('MP_ENVIRONMENT deve ser sandbox ou live');
   const production = env.NODE_ENV === 'production';
+  if (env.TRUST_PROXY_HOPS !== undefined && !['0', '1'].includes(env.TRUST_PROXY_HOPS))
+    throw new Error('TRUST_PROXY_HOPS deve ser 0 ou 1; habilite somente atrás de um proxy isolado');
   const origin = env.APP_ORIGIN || 'http://localhost:3000';
   const config: RuntimeConfig = {
     production,
+    trustProxyHops: Number(env.TRUST_PROXY_HOPS || 0),
     origin,
     projectId: env.FIREBASE_PROJECT_ID || '',
     databaseId: env.FIRESTORE_DATABASE_ID || '(default)',

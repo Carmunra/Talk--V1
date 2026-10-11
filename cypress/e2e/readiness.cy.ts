@@ -134,7 +134,8 @@ describe('Fluxos comerciais protegidos com Auth emulator e gateway de teste', ()
     cy.get('input[name="consent"]').check();
     cy.contains('button', 'Enviar para verificação').click();
     cy.contains('Cadastro enviado para verificação').should('be.visible');
-    cy.get('[aria-label="Dependente"] option')
+    cy.get('[aria-label="Dependente"] option:not([value=""])')
+      .should('have.length', 1)
       .last()
       .then((option) => {
         const childId = String(option.val());
