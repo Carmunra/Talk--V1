@@ -39,7 +39,8 @@ test('public monthly catalog has approved BRL prices and cannot activate recurri
         plan.currency === 'BRL' &&
         plan.interval === 'month' &&
         plan.automaticRenewal === true &&
-        plan.multipleTeachers === true,
+        plan.multipleTeachers === true &&
+        plan.carryoverCycles === 1,
     ),
   );
   await request(f.app)

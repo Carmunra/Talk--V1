@@ -15,7 +15,7 @@ Canal de privacidade/LGPD confirmado pelo operador: contato@talke.club. Esse end
 | CNPJ na variável LEGAL_CNPJ                        | 68199377000155                                                                                                               |
 | Provedor do DNS                                    | Hostinger; operador possui acesso                                                                                            |
 | AWS                                                | Acesso confirmado; saldo estimado USD 1.100 verificado: Activate USD 1.000 até 31/10/2028 e Free Tier USD 100 até 06/10/2027 |
-| Gateway escolhido                                  | Mercado Pago, Checkout Pro com split                                                                                         |
+| Gateways previstos                                 | Mercado Pago para aulas avulsas; Asaas autorizado para preparar os planos mensais                                            |
 | Público pretendido                                 | Brasil, adultos e menores                                                                                                    |
 
 ## Pendências de definição e acesso
@@ -24,7 +24,7 @@ Canal de privacidade/LGPD confirmado pelo operador: contato@talke.club. Esse end
 - Projeto Firebase/Google Cloud de produção, faturamento e projeto separado para homologação.
 - Cadastro e verificação dos dois administradores no projeto Firebase correto.
 - Credenciais dos provedores em cofre, homologação real de pagamento/split e vídeo, documentos e procedimentos aprovados para menores.
-- Assinaturas mensais: 4/6/8/12/16 aulas por R$ 439/569/709/969/1.239. Renovação automática, professores diferentes e repasses automáticos confirmados; solução financeira compatível, remuneração por aula e destino das aulas não usadas ainda pendentes. Consultar [Planos mensais](PLANOS_MENSAIS.md).
+- Assinaturas mensais: 4/6/8/12/16 aulas por R$ 439/569/709/969/1.239. Renovação automática, professores diferentes e repasses automáticos confirmados. R$ 40 por aula concluída em todos os planos; aulas não utilizadas acumulam por mais um ciclo. Para o repasse, professor conclui e aluno adulto/pagador ou responsável confirma a realização, conforme aprovação do operador. Asaas autorizado para preparação do código; o operador informou não ter conta ainda. Cadastro, credenciais, aprovação comercial, cancelamentos/contestação e liquidação ainda pendentes. Consultar [Planos mensais](PLANOS_MENSAIS.md) e [Homologação Asaas](ASAAS_HOMOLOGACAO.md).
 
 O operador escolheu AWS para a hospedagem, mantendo Firebase para login e banco. Seguir [Publicação AWS](PUBLICACAO_AWS.md). Não há recursos AWS criados ou plano aplicado; estimativa, orçamento e permissões precisam de revisão e aprovação. O crédito AWS não cobre Firebase/Google Cloud, Daily ou tarifas Mercado Pago. A lista Activate inclui os componentes AWS previstos.
 

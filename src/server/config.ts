@@ -23,6 +23,10 @@ export interface RuntimeConfig {
   dailyKey: string;
   dailyDomain: string;
   termsVersion: string;
+  asaasSandboxEnabled: boolean;
+  asaasApiKey: string;
+  asaasWebhookToken: string;
+  asaasAccountId: string;
 }
 export function readConfig(env: NodeJS.ProcessEnv = process.env): RuntimeConfig {
   for (const flag of [
@@ -31,6 +35,7 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): RuntimeConfig 
     'MINORS_SAFEGUARDS_APPROVED',
     'PAYMENTS_ENABLED',
     'PAYMENTS_HOMOLOGATED',
+    'ASAAS_SANDBOX_ENABLED',
   ]) {
     if (env[flag] !== undefined && !['true', 'false'].includes(env[flag]!))
       throw new Error(`${flag} deve ser true ou false`);
@@ -70,7 +75,22 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): RuntimeConfig 
     dailyKey: env.DAILY_API_KEY || '',
     dailyDomain: env.DAILY_DOMAIN || '',
     termsVersion: env.TERMS_VERSION || '2026-10-08',
+    asaasSandboxEnabled: env.ASAAS_SANDBOX_ENABLED === 'true',
+    asaasApiKey: env.ASAAS_SANDBOX_API_KEY || '',
+    asaasWebhookToken: env.ASAAS_SANDBOX_WEBHOOK_TOKEN || '',
+    asaasAccountId: env.ASAAS_SANDBOX_ACCOUNT_ID || '',
   };
+  if (
+    config.asaasSandboxEnabled &&
+    (production ||
+      !config.asaasApiKey ||
+      !/^\S{32,255}$/.test(config.asaasWebhookToken) ||
+      config.asaasWebhookToken === config.asaasApiKey ||
+      !z.string().uuid().safeParse(config.asaasAccountId).success)
+  )
+    throw new Error(
+      'Asaas exige ambiente de homologação, chave Sandbox, token separado e ID da conta',
+    );
   if (!Number.isInteger(config.minimumAge) || config.minimumAge < 6 || config.minimumAge > 18)
     throw new Error('MINIMUM_AGE inválida');
   if (config.supportEmails.some((email) => !z.string().email().safeParse(email).success))

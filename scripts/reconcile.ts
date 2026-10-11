@@ -7,6 +7,8 @@ import { Platform } from '../src/server/platform';
 import { VideoService } from '../src/server/video';
 import { runMaintenance } from '../src/server/maintenance';
 import { requireCondition } from '../src/server/security';
+import { AsaasSandboxGateway } from '../src/server/asaas';
+import { MonthlySubscriptions } from '../src/server/subscriptions';
 
 try {
   const config = readConfig();
@@ -33,6 +35,15 @@ try {
   const result = await runMaintenance(
     {
       store,
+      ...(config.asaasSandboxEnabled
+        ? {
+            reconcileSubscriptions: () =>
+              new MonthlySubscriptions(
+                platform,
+                new AsaasSandboxGateway(config.asaasApiKey, true),
+              ).drainEvents(),
+          }
+        : {}),
       pages,
       reconcile: (id) => platform.reconcileOrder(id),
       closeRoom: (id) => {

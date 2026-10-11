@@ -1,16 +1,16 @@
 # Graph Report - talk-v1-production  (2026-10-11)
 
 ## Corpus Check
-- 135 files · ~61,476 words
+- 141 files · ~71,183 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 713 nodes · 1424 edges · 50 communities (42 shown, 8 thin omitted)
+- 809 nodes · 1741 edges · 55 communities (48 shown, 7 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 3 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `2922a7fc`
+- Built from commit: `9e77356c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -26,12 +26,12 @@
 - dependencies
 - smoke-container.mjs
 - .prettierrc.json
-- config.ts
-- MemoryStore
+- Lesson
+- SubscriptionGateway
 - fixture.ts
 - marketplace.ts
 - Row
-- reconcile.ts
+- video.ts
 - Refinamento — Sprint 1: primeiras 3 tarefas de código
 - PaymentGateway
 - server.ts
@@ -39,86 +39,91 @@
 - runtime.py
 - set-admin.ts
 - TalkeLogo.tsx
-- AppNotification
-- PaymentTransaction
+- Review
+- Student
 - TimeSlot
 - Validação das correções — 11 de outubro de 2026
 - domain/types.ts
-- Review
+- DomainError.ts
+- Teacher
+- app.ts
 - ReleaseTests
 - verify-lockfile.mjs
+- AsaasSandboxGateway
 - package.json
 - overrides
 - release.test.mjs
 - react-dom
-- DADOS_PUBLICACAO.md
+- Dados fornecidos para a publicação
 - Preparação técnica e operação
 - Hospedagem AWS da Talkê
 - Publicação comercial — Brasil
-- Conectar talke.club
+- DOMINIO_HOSTINGER.md
 - LGPD, menores e atendimento — requisitos de operação
 - Publicação automática e reversão
 - Talkê
+- Planos mensais — homologação Asaas
+- Planos mensais da Talkê
 
 ## God Nodes (most connected - your core abstractions)
-1. `requireCondition()` - 38 edges
-2. `Platform` - 33 edges
-3. `Money` - 32 edges
-4. `Teacher` - 26 edges
-5. `Student` - 23 edges
-6. `Lesson` - 20 edges
-7. `ValidationError` - 19 edges
-8. `Row` - 18 edges
-9. `scripts` - 17 edges
-10. `createApp()` - 16 edges
+1. `requireCondition()` - 65 edges
+2. `Platform` - 35 edges
+3. `MonthlySubscriptions` - 34 edges
+4. `Money` - 32 edges
+5. `Teacher` - 26 edges
+6. `Student` - 23 edges
+7. `Row` - 22 edges
+8. `Lesson` - 20 edges
+9. `ValidationError` - 19 edges
+10. `createApp()` - 19 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `validateRuntime()` --calls--> `readConfig()`  [EXTRACTED]
   scripts/release.ts → src/server/config.ts
-- `setup()` --calls--> `createApp()`  [EXTRACTED]
-  tests/integration/api.test.ts → src/server/app.ts
 - `fixture()` --calls--> `readConfig()`  [EXTRACTED]
   tests/support/fixture.ts → src/server/config.ts
-- `MemoryStore` --implements--> `Store`  [EXTRACTED]
-  tests/support/memory-store.ts → src/server/store.ts
 - `ReviewModalProps` --references--> `Lesson`  [EXTRACTED]
   src/components/ReviewModal.tsx → src/domain/types.ts
+- `setup()` --calls--> `createApp()`  [EXTRACTED]
+  tests/integration/api.test.ts → src/server/app.ts
+- `appFixture()` --calls--> `createApp()`  [EXTRACTED]
+  tests/integration/subscriptions.test.ts → src/server/app.ts
 
 ## Import Cycles
+- 3-file cycle: `src/domain/repositories/INotificationRepository.ts -> src/domain/types.ts -> src/domain/repositories/index.ts -> src/domain/repositories/INotificationRepository.ts`
+- 3-file cycle: `src/domain/entities/StudentEntity.ts -> src/domain/types.ts -> src/domain/entities/index.ts -> src/domain/entities/StudentEntity.ts`
 - 3-file cycle: `src/domain/repositories/ITeacherRepository.ts -> src/domain/types.ts -> src/domain/repositories/index.ts -> src/domain/repositories/ITeacherRepository.ts`
-- 3-file cycle: `src/domain/repositories/IStudentRepository.ts -> src/domain/types.ts -> src/domain/repositories/index.ts -> src/domain/repositories/IStudentRepository.ts`
-- 3-file cycle: `src/domain/repositories/ILessonRepository.ts -> src/domain/types.ts -> src/domain/repositories/index.ts -> src/domain/repositories/ILessonRepository.ts`
-- 3-file cycle: `src/domain/entities/AppNotificationEntity.ts -> src/domain/types.ts -> src/domain/entities/index.ts -> src/domain/entities/AppNotificationEntity.ts`
+- 3-file cycle: `src/domain/entities/TeacherEntity.ts -> src/domain/types.ts -> src/domain/entities/index.ts -> src/domain/entities/TeacherEntity.ts`
 - 3-file cycle: `src/domain/entities/LessonEntity.ts -> src/domain/types.ts -> src/domain/entities/index.ts -> src/domain/entities/LessonEntity.ts`
+- 3-file cycle: `src/domain/entities/AppNotificationEntity.ts -> src/domain/types.ts -> src/domain/entities/index.ts -> src/domain/entities/AppNotificationEntity.ts`
 - 3-file cycle: `src/domain/entities/PaymentTransactionEntity.ts -> src/domain/types.ts -> src/domain/entities/index.ts -> src/domain/entities/PaymentTransactionEntity.ts`
 - 3-file cycle: `src/domain/entities/ReviewEntity.ts -> src/domain/types.ts -> src/domain/entities/index.ts -> src/domain/entities/ReviewEntity.ts`
-- 3-file cycle: `src/domain/entities/StudentEntity.ts -> src/domain/types.ts -> src/domain/entities/index.ts -> src/domain/entities/StudentEntity.ts`
-- 3-file cycle: `src/domain/entities/TeacherEntity.ts -> src/domain/types.ts -> src/domain/entities/index.ts -> src/domain/entities/TeacherEntity.ts`
-- 3-file cycle: `src/domain/repositories/INotificationRepository.ts -> src/domain/types.ts -> src/domain/repositories/index.ts -> src/domain/repositories/INotificationRepository.ts`
+- 3-file cycle: `src/domain/repositories/ILessonRepository.ts -> src/domain/types.ts -> src/domain/repositories/index.ts -> src/domain/repositories/ILessonRepository.ts`
 - 3-file cycle: `src/domain/repositories/IPaymentRepository.ts -> src/domain/types.ts -> src/domain/repositories/index.ts -> src/domain/repositories/IPaymentRepository.ts`
 - 3-file cycle: `src/domain/repositories/IReviewRepository.ts -> src/domain/types.ts -> src/domain/repositories/index.ts -> src/domain/repositories/IReviewRepository.ts`
+- 3-file cycle: `src/domain/repositories/IStudentRepository.ts -> src/domain/types.ts -> src/domain/repositories/index.ts -> src/domain/repositories/IStudentRepository.ts`
 
-## Communities (50 total, 8 thin omitted)
+## Communities (55 total, 7 thin omitted)
 
 ### Community 0 - "platform.ts"
-Cohesion: 0.27
-Nodes (9): ApiError, appointment(), bookingSchema, diagnosticSchema, id, profileSchema, teacherSchema, text (+1 more)
+Cohesion: 0.31
+Nodes (8): appointment(), bookingSchema, diagnosticSchema, id, profileSchema, teacherSchema, text, time
 
 ### Community 1 - "App.tsx"
 Cohesion: 0.06
-Nodes (41): App(), VirtualClassroomModal, FamilyForm(), PrivacyPanel(), Registration(), TeacherEditor(), AdminPanel(), BookingModal() (+33 more)
+Nodes (40): App(), VirtualClassroomModal, FamilyForm(), PrivacyPanel(), Registration(), TeacherEditor(), AdminPanel(), BookingModal() (+32 more)
 
 ### Community 2 - "Money"
-Cohesion: 0.06
-Nodes (5): MyLessonsViewProps, LessonEntity, ILessonRepository, Lesson, Money
+Cohesion: 0.07
+Nodes (4): PaymentTransactionEntity, IPaymentRepository, PaymentTransaction, Money
 
 ### Community 3 - "devDependencies"
 Cohesion: 0.05
 Nodes (39): c8, cypress, esbuild, @firebase/rules-unit-testing, firebase-tools, devDependencies, c8, cypress (+31 more)
 
 ### Community 4 - "requireCondition"
-Cohesion: 0.15
-Nodes (7): AppDependencies, Identity, Platform, PrivacyService, requireCondition(), UnitOfWork, minutes()
+Cohesion: 0.12
+Nodes (12): AppDependencies, cents(), Identity, Platform, PrivacyService, requireCondition(), addCalendarMonths(), adverse() (+4 more)
 
 ### Community 5 - "scripts"
 Cohesion: 0.12
@@ -140,33 +145,41 @@ Nodes (19): @daily-co/daily-js, express, express-rate-limit, firebase, firebase-
 Cohesion: 0.50
 Nodes (3): printWidth, singleQuote, trailingComma
 
-### Community 12 - "config.ts"
-Cohesion: 0.42
-Nodes (4): report, readConfig(), preflight(), env
+### Community 12 - "Lesson"
+Cohesion: 0.10
+Nodes (9): MyLessonsViewProps, LessonEntity, ScheduleConflictError, ILessonRepository, BookingDomainService, Lesson, LessonStatus, PaymentMethod (+1 more)
+
+### Community 13 - "SubscriptionGateway"
+Cohesion: 0.08
+Nodes (3): AsaasPayment, SubscriptionGateway, FakeSubscriptions
 
 ### Community 14 - "fixture.ts"
-Cohesion: 0.23
-Nodes (12): ProviderPayment, setup(), auth, firebase, host, server, admin, fixture() (+4 more)
+Cohesion: 0.20
+Nodes (18): createApp(), setup(), appFixture(), auth, firebase, host, server, subscriptionGateway (+10 more)
 
 ### Community 15 - "marketplace.ts"
-Cohesion: 0.25
-Nodes (5): MercadoPagoGateway, SellerTokens, seal(), unseal(), verifyWebhook()
+Cohesion: 0.24
+Nodes (5): MercadoPagoGateway, SellerTokens, ApiError, seal(), unseal()
 
 ### Community 16 - "Row"
-Cohesion: 0.21
-Nodes (6): RuntimeConfig, MaintenanceDependencies, runMaintenance(), Row, Store, now
+Cohesion: 0.13
+Nodes (8): MaintenanceDependencies, runMaintenance(), FirestoreStore, Row, Store, UnitOfWork, MemoryStore, now
 
-### Community 17 - "reconcile.ts"
-Cohesion: 0.29
-Nodes (4): AuthRequest, createApp(), roomName(), VideoService
+### Community 17 - "video.ts"
+Cohesion: 0.27
+Nodes (3): RuntimeConfig, roomName(), VideoService
 
 ### Community 18 - "Refinamento — Sprint 1: primeiras 3 tarefas de código"
 Cohesion: 0.17
 Nodes (11): 5 erros comuns nessa fase (e como evitar), As 3 primeiras tarefas (ordem obrigatória, não escolha livre), Boas práticas aplicadas nesse refinamento, Diagnóstico do estado atual (feito lendo o repo, não suposição), Exercício antes de codarmos juntos, O que fica para depois (e por quê), Refinamento — Sprint 1: primeiras 3 tarefas de código, Subtasks refinadas (como um Tech Lead faria no planning) (+3 more)
 
+### Community 19 - "PaymentGateway"
+Cohesion: 0.12
+Nodes (3): PaymentGateway, ProviderPayment, FakeGateway
+
 ### Community 20 - "server.ts"
-Cohesion: 0.16
-Nodes (8): app, auth, config, firebase, platform, server, store, FirestoreStore
+Cohesion: 0.15
+Nodes (12): report, app, auth, config, firebase, platform, server, store (+4 more)
 
 ### Community 21 - "Categorização do backlog Talkê (TLK-1 a TLK-29)"
 Cohesion: 0.29
@@ -180,25 +193,33 @@ Nodes (21): await_ready(), aws(), command(), config(), docker(), health(), login
 Cohesion: 0.33
 Nodes (6): AdminAuth, parseAdminArguments(), setAdminPermission(), args, auth, firebase
 
-### Community 29 - "AppNotification"
-Cohesion: 0.22
-Nodes (4): NotificationsPopoverProps, AppNotificationEntity, INotificationRepository, AppNotification
+### Community 29 - "Review"
+Cohesion: 0.12
+Nodes (7): NotificationsPopoverProps, AppNotificationEntity, ReviewEntity, INotificationRepository, IReviewRepository, AppNotification, Review
 
-### Community 30 - "PaymentTransaction"
-Cohesion: 0.23
-Nodes (3): PaymentTransactionEntity, IPaymentRepository, PaymentTransaction
+### Community 30 - "Student"
+Cohesion: 0.16
+Nodes (8): DiagnosticAndGoalViewProps, Question, StudentInteractiveHubProps, StudentEntity, IStudentRepository, LearningGoal, ProficiencyLevel, Student
 
 ### Community 32 - "Validação das correções — 11 de outubro de 2026"
 Cohesion: 0.67
 Nodes (3): Limites da evidência e próxima liberação, O que os testes demonstram, Validação das correções — 11 de outubro de 2026
 
-### Community 34 - "domain/types.ts"
-Cohesion: 0.05
-Nodes (37): DiagnosticAndGoalViewProps, Question, StudentInteractiveHubProps, TeacherDirectory(), TeacherDirectoryProps, StudentEntity, TeacherEntity, DomainError (+29 more)
+### Community 33 - "domain/types.ts"
+Cohesion: 0.14
+Nodes (13): TeacherDirectory(), TeacherDirectoryProps, MatchingService, LearningGoalLabels, LessonStatusLabels, MatchRecommendation, PaymentStatus, ProficiencyLevelLabels (+5 more)
 
-### Community 35 - "Review"
-Cohesion: 0.33
-Nodes (3): ReviewEntity, IReviewRepository, Review
+### Community 34 - "DomainError.ts"
+Cohesion: 0.17
+Nodes (7): DomainError, EntityNotFoundError, InsufficientFundsError, InvalidLessonStateError, ValidationError, CommissionBreakdown, CommissionService
+
+### Community 35 - "Teacher"
+Cohesion: 0.17
+Nodes (4): TeacherEntity, ITeacherRepository, AvailabilitySlot, Teacher
+
+### Community 36 - "app.ts"
+Cohesion: 0.20
+Nodes (11): MONTHLY_PLANS, AuthRequest, asaasPaymentSchema, AsaasSubscription, asaasSubscriptionSchema, AsaasTransfer, asaasTransferSchema, identifier (+3 more)
 
 ### Community 40 - "package.json"
 Cohesion: 0.25
@@ -212,9 +233,9 @@ Nodes (8): chokidar, uuid, overrides, basic-ftp, firebase-tools, @grpc/grpc-js, 
 Cohesion: 0.32
 Nodes (4): publish(), settings(), env, sha
 
-### Community 45 - "DADOS_PUBLICACAO.md"
-Cohesion: 0.20
-Nodes (7): Configuração e acesso, Dados fornecidos para a publicação, Pendências de definição e acesso, Resultado, Validação do e-mail talke.club — 11/10/2026, Integração financeira pendente, Planos mensais da Talkê
+### Community 45 - "Dados fornecidos para a publicação"
+Cohesion: 0.67
+Nodes (3): Configuração e acesso, Dados fornecidos para a publicação, Pendências de definição e acesso
 
 ### Community 46 - "Preparação técnica e operação"
 Cohesion: 0.29
@@ -228,9 +249,9 @@ Nodes (7): Custos e aprovação antes de ativar, Estrutura preparada, Formato do
 Cohesion: 0.29
 Nodes (7): Comandos, Contratos, atendimento e obrigações financeiras, Dados legados e continuidade, Homologação Mercado Pago pendente, O que mudou, Preparação e implantação, Publicação comercial — Brasil
 
-### Community 49 - "Conectar talke.club"
-Cohesion: 0.40
-Nodes (5): Alternativa Google Cloud, não selecionada, Ativação da alternativa Google Cloud, Conectar talke.club, Consulta pública antes da mudança, Rota AWS escolhida
+### Community 49 - "DOMINIO_HOSTINGER.md"
+Cohesion: 0.22
+Nodes (7): Resultado, Validação do e-mail talke.club — 11/10/2026, Alternativa Google Cloud, não selecionada, Ativação da alternativa Google Cloud, Conectar talke.club, Consulta pública antes da mudança, Rota AWS escolhida
 
 ### Community 50 - "LGPD, menores e atendimento — requisitos de operação"
 Cohesion: 0.40
@@ -244,25 +265,33 @@ Nodes (5): Configuração, Execução, Falha e reversão, Identidade da publica�
 Cohesion: 0.50
 Nodes (4): API e identidade, Desenvolvimento, Talkê, Verificação
 
+### Community 53 - "Planos mensais — homologação Asaas"
+Cohesion: 0.33
+Nodes (6): Antes de qualquer liberação real, Configuração e limites, Dados pessoais, Fluxo implementado para homologação, Operação e acesso, Planos mensais — homologação Asaas
+
+### Community 54 - "Planos mensais da Talkê"
+Cohesion: 0.33
+Nodes (6): Asaas selecionado para preparação, Documento comercial recebido, Integração financeira pendente, Planos mensais da Talkê, Repasse dos planos confirmado, Validade das aulas confirmada
+
 ## Knowledge Gaps
-- **184 isolated node(s):** `singleQuote`, `trailingComma`, `printWidth`, `name`, `private` (+179 more)
+- **201 isolated node(s):** `singleQuote`, `trailingComma`, `printWidth`, `name`, `private` (+196 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **8 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **7 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Teacher` connect `domain/types.ts` to `App.tsx`, `Money`?**
+- **Why does `requireCondition()` connect `requireCondition` to `platform.ts`, `app.ts`, `AsaasSandboxGateway`, `fixture.ts`, `marketplace.ts`, `Row`, `video.ts`, `server.ts`?**
+  _High betweenness centrality (0.044) - this node is a cross-community bridge._
+- **Why does `Teacher` connect `Teacher` to `App.tsx`, `DomainError.ts`, `domain/types.ts`, `Lesson`, `Student`?**
   _High betweenness centrality (0.034) - this node is a cross-community bridge._
-- **Why does `Money` connect `Money` to `domain/types.ts`, `PaymentTransaction`?**
-  _High betweenness centrality (0.033) - this node is a cross-community bridge._
-- **Why does `Platform` connect `requireCondition` to `platform.ts`, `fixture.ts`, `Row`, `reconcile.ts`, `server.ts`?**
-  _High betweenness centrality (0.031) - this node is a cross-community bridge._
+- **Why does `Money` connect `Money` to `DomainError.ts`, `Student`?**
+  _High betweenness centrality (0.030) - this node is a cross-community bridge._
 - **What connects `singleQuote`, `trailingComma`, `printWidth` to the rest of the system?**
-  _184 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _201 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `App.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.06153846153846154 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06400409626216078 - nodes in this community are weakly interconnected._
 - **Should `Money` be split into smaller, more focused modules?**
-  _Cohesion score 0.056429232192414434 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07357357357357357 - nodes in this community are weakly interconnected._
 - **Should `devDependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.05128205128205128 - nodes in this community are weakly interconnected._

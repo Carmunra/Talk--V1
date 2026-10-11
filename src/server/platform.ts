@@ -12,6 +12,7 @@ import {
   diagnosticSchema,
 } from './validation';
 import { VideoService } from './video';
+import type { MonthlySubscriptions } from './subscriptions';
 
 export interface Identity {
   uid: string;
@@ -349,10 +350,16 @@ export class Platform {
     const teaching = await this.store.find('lessons', 'teacherId', actor.uid);
     return [...new Map([...mine, ...teaching].map((l) => [l.id, l])).values()];
   }
-  async booking(actor: Identity, raw: unknown, requestKey: string) {
+  async booking(
+    actor: Identity,
+    raw: unknown,
+    requestKey: string,
+    funding?: { subscriptions: MonthlySubscriptions; subscriptionId: string },
+  ) {
     await this.ready(actor);
     requireCondition(
-      this.config.paymentsEnabled,
+      this.config.paymentsEnabled ||
+        (funding && this.config.asaasSandboxEnabled && !this.config.production),
       503,
       'Reservas com pagamento ainda não habilitadas',
     );
@@ -387,7 +394,11 @@ export class Platform {
             existing.teacherId === input.teacherId &&
             existing.scheduledDate === input.scheduledDate &&
             existing.startTime === input.startTime &&
-            existing.topic === input.topic,
+            existing.topic === input.topic &&
+            (funding
+              ? existing.fundingSource === 'ASAAS_SUBSCRIPTION' &&
+                existing.subscriptionId === funding.subscriptionId
+              : existing.fundingSource !== 'ASAAS_SUBSCRIPTION'),
           409,
           'Identificador já usado em outra reserva',
         );
@@ -396,14 +407,14 @@ export class Platform {
       const teacher = await tx.get('teachers', input.teacherId);
       const teacherProfile = await tx.get('profiles', input.teacherId);
       const seller = await tx.get('seller_credentials', input.teacherId);
+      const recipient = funding ? await tx.get('asaas_recipients', input.teacherId) : null;
       requireCondition(
         teacher &&
           teacherProfile?.status === 'ACTIVE' &&
           teacherProfile.accountType === 'TEACHER' &&
           teacherProfile.termsVersion === this.config.termsVersion &&
           teacher.isVerified &&
-          teacher.paymentConnected &&
-          seller,
+          (funding ? recipient?.verified === true : teacher.paymentConnected && seller),
         409,
         'Professor indisponível para reservas',
       );
@@ -436,9 +447,10 @@ export class Platform {
         409,
         'Já existe uma reserva que ocupa este intervalo',
       );
-      const amountCents = Math.round(teacher.hourlyPriceBrl * 100);
+      const amountCents = funding ? 0 : Math.round(teacher.hourlyPriceBrl * 100);
       requireCondition(
-        Number.isSafeInteger(amountCents) && amountCents >= 1000 && amountCents <= 200000,
+        funding ||
+          (Number.isSafeInteger(amountCents) && amountCents >= 1000 && amountCents <= 200000),
         409,
         'Preço do professor inválido',
       );
@@ -459,19 +471,28 @@ export class Platform {
         status: 'REQUESTED',
         priceBrl: amountCents / 100,
         platformFeeBrl: feeCents / 100,
-        teacherNetBrl: (amountCents - feeCents) / 100,
-        isPaid: false,
+        teacherNetBrl: funding ? 40 : (amountCents - feeCents) / 100,
+        isPaid: Boolean(funding),
         scheduledAt: slot.timestamp,
         expiresAt,
         createdAt: this.stamp(),
         orderId: lessonId,
+        ...(funding
+          ? {
+              fundingSource: 'ASAAS_SUBSCRIPTION',
+              subscriptionId: funding.subscriptionId,
+              status: 'CONFIRMED',
+              paymentMethod: 'ASAAS_SUBSCRIPTION',
+            }
+          : {}),
       };
+      if (funding) await funding.subscriptions.reserve(tx, actor, funding.subscriptionId, lesson);
       const reservation = {
         lessonId,
         start: slot.startMinutes,
         end: slot.endMinutes,
         expiresAt,
-        paid: false,
+        paid: Boolean(funding),
       };
       tx.set('booking_days', {
         id: `${input.teacherId}_${input.scheduledDate}`,
@@ -482,19 +503,20 @@ export class Platform {
         slots: [...studentSlots, reservation],
       });
       tx.set('lessons', lesson);
-      tx.set('orders', {
-        id: lessonId,
-        lessonId,
-        studentId: input.studentId,
-        payerId: actor.uid,
-        teacherId: input.teacherId,
-        sellerId: seller.sellerId,
-        amountCents,
-        feeCents,
-        status: 'PENDING',
-        expiresAt,
-        createdAt: this.stamp(),
-      });
+      if (!funding)
+        tx.set('orders', {
+          id: lessonId,
+          lessonId,
+          studentId: input.studentId,
+          payerId: actor.uid,
+          teacherId: input.teacherId,
+          sellerId: seller!.sellerId,
+          amountCents,
+          feeCents,
+          status: 'PENDING',
+          expiresAt,
+          createdAt: this.stamp(),
+        });
       return lesson;
     });
   }
@@ -735,6 +757,11 @@ export class Platform {
         ['REQUESTED', 'CONFIRMED', 'CANCELLED'].includes(lesson.status),
         409,
         'Aula iniciada ou concluída requer atendimento do suporte',
+      );
+      requireCondition(
+        lesson.fundingSource !== 'ASAAS_SUBSCRIPTION',
+        409,
+        'Cancelamento de aula do plano requer a política de reposição e atendimento do suporte',
       );
       const order = await tx.get('orders', lessonId);
       const teacherDay = await tx.get(

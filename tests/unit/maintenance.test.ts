@@ -16,6 +16,30 @@ function deps(store = new MemoryStore()): MaintenanceDependencies {
     closeRoom: async () => {},
   };
 }
+
+test('subscription worker runs inside maintenance lease, reports isolated failures and continues orders', async () => {
+  for (const throwing of [false, true]) {
+    const d = deps(),
+      logs: any[] = [];
+    let checked = false;
+    d.log = (event) => logs.push(event);
+    d.reconcileSubscriptions = async () => {
+      assert.equal(
+        (await d.store.get('maintenance_locks', 'reconciliation'))!.expiresAt > now,
+        true,
+      );
+      if (throwing) throw new Error('sensitive-sandbox-key');
+      return { failures: 1 };
+    };
+    d.reconcile = async () => {
+      checked = true;
+    };
+    const result = await runMaintenance(d, 'order');
+    assert.equal(result.status, 'FAILED');
+    assert.equal(checked, true);
+    assert.equal(JSON.stringify(logs).includes('sensitive-sandbox-key'), false);
+  }
+});
 test('closure and order failures are isolated; all remaining work runs and reports failure', async () => {
   const d = deps(),
     seen: string[] = [],

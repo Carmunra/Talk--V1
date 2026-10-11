@@ -6,6 +6,7 @@ export interface MonthlyPlan {
   interval: 'month';
   automaticRenewal: boolean;
   multipleTeachers: boolean;
+  carryoverCycles: 1;
 }
 
 // The server publishes this catalog; the browser does not choose charge amounts.
@@ -18,6 +19,7 @@ export const MONTHLY_PLANS: readonly MonthlyPlan[] = [
     interval: 'month',
     automaticRenewal: true,
     multipleTeachers: true,
+    carryoverCycles: 1,
   },
   {
     id: 'monthly-6',
@@ -27,6 +29,7 @@ export const MONTHLY_PLANS: readonly MonthlyPlan[] = [
     interval: 'month',
     automaticRenewal: true,
     multipleTeachers: true,
+    carryoverCycles: 1,
   },
   {
     id: 'monthly-8',
@@ -36,6 +39,7 @@ export const MONTHLY_PLANS: readonly MonthlyPlan[] = [
     interval: 'month',
     automaticRenewal: true,
     multipleTeachers: true,
+    carryoverCycles: 1,
   },
   {
     id: 'monthly-12',
@@ -45,6 +49,7 @@ export const MONTHLY_PLANS: readonly MonthlyPlan[] = [
     interval: 'month',
     automaticRenewal: true,
     multipleTeachers: true,
+    carryoverCycles: 1,
   },
   {
     id: 'monthly-16',
@@ -54,5 +59,6 @@ export const MONTHLY_PLANS: readonly MonthlyPlan[] = [
     interval: 'month',
     automaticRenewal: true,
     multipleTeachers: true,
+    carryoverCycles: 1,
   },
 ];

@@ -13,6 +13,8 @@ import { Platform } from '../../src/server/platform';
 import { readConfig } from '../../src/server/config';
 import { FakeGateway, student, teacher, other } from '../support/fixture';
 import { randomUUID } from 'node:crypto';
+import { MonthlySubscriptions } from '../../src/server/subscriptions';
+import { subscriptionFixture } from '../support/subscription-fixture';
 let env: RulesTestEnvironment;
 before(async () => {
   env = await initializeTestEnvironment({
@@ -25,6 +27,45 @@ before(async () => {
       walletBalanceBrl: 0,
     });
   });
+});
+
+test('Firestore transaction prevents two non-overlapping lessons from spending the final subscription credit', async () => {
+  const f = await subscriptionFixture();
+  const firebase = initializeApp({ projectId: 'demo-talke' }, 'subscription-rules-adapter');
+  try {
+    const store = new FirestoreStore(getFirestore(firebase));
+    const cycle = (await f.store.find('subscription_cycles', 'subscriptionId', 'sub_student'))[0];
+    const copies: [string, string][] = [
+      ['profiles', 'student'],
+      ['profiles', 'teacher'],
+      ['students', 'student'],
+      ['teachers', 'teacher'],
+      ['asaas_recipients', 'teacher'],
+      ['subscriptions', 'sub_student'],
+      ['asaas_payments', 'pay_first'],
+    ];
+    await store.transaction(async (tx) => {
+      for (const [collection, id] of copies)
+        tx.set(collection, (await f.store.get(collection, id))!);
+      tx.set('subscription_cycles', { ...cycle, remaining: 1 });
+    });
+    const platform = new Platform(store, f.config, new FakeGateway(), f.platform.now);
+    const subscriptions = new MonthlySubscriptions(platform, f.gateway);
+    const results = await Promise.allSettled(
+      ['10:00', '11:00'].map((startTime) =>
+        platform.booking(student, { ...f.booking, startTime }, randomUUID(), {
+          subscriptions,
+          subscriptionId: 'sub_student',
+        }),
+      ),
+    );
+    if (results.filter((r) => r.status === 'fulfilled').length !== 1)
+      throw new Error('Expected exactly one funded lesson');
+    if ((await store.get('subscription_cycles', cycle.id))!.remaining !== 0)
+      throw new Error('Final subscription credit was not consumed atomically');
+  } finally {
+    await deleteApp(firebase);
+  }
 });
 after(async () => {
   await env.cleanup();
@@ -47,6 +88,15 @@ for (const identity of ['anonymous', 'student', 'teacher', 'admin']) {
       'student_progress',
       'privacy_requests',
       'safety_reports',
+      'subscriptions',
+      'subscription_cycles',
+      'subscription_reservations',
+      'subscription_payouts',
+      'asaas_events',
+      'asaas_payments',
+      'asaas_recipients',
+      'asaas_customers',
+      'asaas_checkouts',
     ]) {
       await assertFails(getDoc(doc(db, name + '/student')));
       await assertFails(
