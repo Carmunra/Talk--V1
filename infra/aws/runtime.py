@@ -160,6 +160,21 @@ def proxy_text(release):
 }
 """
 
+def proxy_runtime_image(base_image):
+    if not re.fullmatch(r"caddy@sha256:[a-f0-9]{64}", base_image):
+        raise ValueError("Proxy base must be an immutable official Caddy digest")
+    image = "talke-proxy:" + base_image.split(":")[-1]
+    docker("pull", base_image)
+    # A fresh inode preserves binary contents without the upstream file capability.
+    # This permits cap-drop=ALL and nonroot ports, without granting NET_BIND_SERVICE.
+    recipe = ("FROM " + base_image + "\nUSER root\n"
+              "RUN cat /usr/bin/caddy > /usr/bin/caddy-unprivileged && "
+              "chmod 0755 /usr/bin/caddy-unprivileged && "
+              "mv /usr/bin/caddy-unprivileged /usr/bin/caddy\nUSER 1000:1000\n")
+    docker("build", "--network=none", "--tag", image, "-", stdin=recipe, timeout=300)
+    return image
+
+
 def switch_proxy(release):
     cfg = config()
     folder = BASE / "caddy"
@@ -170,7 +185,7 @@ def switch_proxy(release):
     os.chown(data, 1000, 1000)
     write(folder / "Caddyfile", proxy_text(release), 0o644)
     if not docker("ps", "-q", "--filter", "name=^talke-proxy$"):
-        docker("pull", cfg["proxy_image"])
+        proxy_image = proxy_runtime_image(cfg["proxy_image"])
         remove("talke-proxy")
         docker("run", "-d", "--name", "talke-proxy", "--user", "1000:1000",
                "--restart", "unless-stopped", "--read-only", "--cap-drop=ALL",
@@ -182,7 +197,7 @@ def switch_proxy(release):
                "-v", str(data) + ":/data",
                "--log-driver", "local", "--log-opt", "max-size=5m",
                "--log-opt", "max-file=2",
-               cfg["proxy_image"], "caddy", "run", "--config", "/etc/caddy/Caddyfile")
+               proxy_image, "caddy", "run", "--config", "/etc/caddy/Caddyfile")
     else:
         docker("exec", "talke-proxy", "caddy", "reload", "--config", "/etc/caddy/Caddyfile")
 

@@ -7,7 +7,7 @@ A lista de serviços do crédito Activate inclui EC2, VPC, ECR, Secrets Manager,
 ## Estrutura preparada
 
 - Uma EC2 t3.small por ambiente, Amazon Linux 2023 oficial x86_64, em São Paulo (sa-east-1). Produção e homologação têm instâncias, repositórios, segredos e projetos Firebase separados; podem usar a mesma conta AWS.
-- IP público fixo para o registro A na Hostinger. DNS de e-mail preservado. Caddy oficial pelo digest, HTTPS automático e administração do proxy somente dentro do container.
+- IP público fixo para o registro A na Hostinger. DNS de e-mail preservado. Caddy oficial pelo digest, HTTPS automático e administração do proxy somente dentro do container. O host prepara uma imagem derivada que copia o mesmo binário para retirar sua capability de arquivo; a construção não acessa a rede. O proxy continua sem privilégios, cap-drop=ALL e no-new-privileges, nas portas internas 8080/8443.
 - Aplicação Node sem privilégios, sistema de arquivos somente leitura e porta de acesso local/privada. Credenciais em Secrets Manager, carregadas em /run após boot; nenhum valor secreto no Terraform, imagem, GitHub ou relatório.
 - Acesso administrativo por Systems Manager; nenhuma chave SSH, porta 22 ou chave AWS permanente para o workflow. IMDSv2 obrigatório, hop limit 1 e bloqueio adicional do endereço de metadata para containers.
 - Releases por imagem imutável e versão imutável do segredo, com testes antes de enviar tráfego, verificação real de TLS/banco/API privada, rollback e registro de recuperação após reinicialização.

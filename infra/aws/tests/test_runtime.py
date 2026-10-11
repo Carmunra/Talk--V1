@@ -15,6 +15,13 @@ runtime = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(runtime)
 
 class ReleaseTests(unittest.TestCase):
+    def test_proxy_base_rejects_mutable_or_untrusted_image_before_docker(self):
+        for image in ("caddy:latest", "untrusted@sha256:" + "a" * 64, "caddy@sha256:" + "a" * 64 + "\nRUN echo unsafe"):
+            with patch.object(runtime, "docker") as docker:
+                with self.assertRaises(ValueError):
+                    runtime.proxy_runtime_image(image)
+                docker.assert_not_called()
+
     def test_bootstrap_payload_has_space_for_config_under_ec2_limit(self):
         module = Path(__file__).parents[1]
         template = (module / "bootstrap.sh.tftpl").read_text()

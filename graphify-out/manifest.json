@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "cypress/e2e/readiness.cy.ts": {
-    "mtime": 1791751006.1019194,
-    "ast_hash": "30c8d4083df3524cc4458549718f7d5d",
+    "mtime": 1791751472.8167694,
+    "ast_hash": "3b709cb6fb2a33b9a20bcf9935848f4e",
     "semantic_hash": ""
   },
   "firebase-applet-config.json": {
@@ -55,7 +55,7 @@
     "semantic_hash": ""
   },
   "src/App.tsx": {
-    "mtime": 1791751006.2009103,
+    "mtime": 1791751422.9207928,
     "ast_hash": "3e21002a0c93f6bd68c38a23ae1338f3",
     "semantic_hash": ""
   },
@@ -275,7 +275,7 @@
     "semantic_hash": ""
   },
   "src/server/app.ts": {
-    "mtime": 1791751006.2099123,
+    "mtime": 1791751422.925768,
     "ast_hash": "05afc8fefac7c6a76a89dbe55e3d56d8",
     "semantic_hash": ""
   },
@@ -330,7 +330,7 @@
     "semantic_hash": ""
   },
   "tests/integration/api.test.ts": {
-    "mtime": 1791751006.234909,
+    "mtime": 1791751422.9307692,
     "ast_hash": "06fbb53a80c5732fa1cc48465abf86ba",
     "semantic_hash": ""
   },
@@ -440,7 +440,7 @@
     "semantic_hash": ""
   },
   "docs/PUBLICACAO.md": {
-    "mtime": 1791751006.140907,
+    "mtime": 1791751422.8887792,
     "ast_hash": "018c2d1eb951d101fa078768d7a52a8f",
     "semantic_hash": ""
   },
@@ -480,8 +480,8 @@
     "semantic_hash": ""
   },
   "docs/VALIDACAO.md": {
-    "mtime": 1791748895.453907,
-    "ast_hash": "8cb183a164b9f3ba944d940581b5f682",
+    "mtime": 1791751474.7921002,
+    "ast_hash": "513900c6c6314b67fc488deb0af17a3a",
     "semantic_hash": ""
   },
   "scripts/verify-lockfile.mjs": {
@@ -605,7 +605,7 @@
     "semantic_hash": ""
   },
   "docs/DADOS_PUBLICACAO.md": {
-    "mtime": 1791751006.1319153,
+    "mtime": 1791751422.882769,
     "ast_hash": "d260261022deb5648c46b63352be24e7",
     "semantic_hash": ""
   },
@@ -635,8 +635,8 @@
     "semantic_hash": ""
   },
   "infra/aws/runtime.py": {
-    "mtime": 1791747996.2616887,
-    "ast_hash": "ee4e5c15f8448242e28d081234eb1b49",
+    "mtime": 1791751470.654954,
+    "ast_hash": "a9111cacfdfbb4462d578afde1239b76",
     "semantic_hash": ""
   },
   "infra/aws/tests/safety.tftest.hcl": {
@@ -645,8 +645,8 @@
     "semantic_hash": ""
   },
   "infra/aws/tests/test_runtime.py": {
-    "mtime": 1791748414.8516142,
-    "ast_hash": "90c1410c879648278a0686e5423cdd3f",
+    "mtime": 1791751472.3626935,
+    "ast_hash": "6b4cbcf26dc5e40631368f19cb08a057",
     "semantic_hash": ""
   },
   "infra/aws/variables.tf": {
@@ -665,8 +665,8 @@
     "semantic_hash": ""
   },
   "scripts/aws/smoke-proxy.py": {
-    "mtime": 1791751006.8816705,
-    "ast_hash": "f11ea24365a9d5556c6a07a616a948d9",
+    "mtime": 1791751471.8189015,
+    "ast_hash": "8dbf5b711831644fee6d0a855e56af5b",
     "semantic_hash": ""
   },
   "scripts/aws/tests/release.test.mjs": {
@@ -690,8 +690,8 @@
     "semantic_hash": ""
   },
   "docs/PUBLICACAO_AWS.md": {
-    "mtime": 1791749036.8453064,
-    "ast_hash": "671fa42a04bcaa2c68a2b2feaab9435a",
+    "mtime": 1791751473.8548162,
+    "ast_hash": "b00c89323fb25b2e788dca6038381477",
     "semantic_hash": ""
   }
 }

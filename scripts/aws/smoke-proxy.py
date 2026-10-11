@@ -61,6 +61,8 @@ try:
         inspected = json.loads(runtime.docker("inspect", "talke-proxy"))[0]
         assert inspected["Config"]["User"] == "1000:1000"
         assert inspected["HostConfig"]["ReadonlyRootfs"] is True
+        assert "ALL" in inspected["HostConfig"]["CapDrop"]
+        assert not inspected["HostConfig"]["CapAdd"]
         assert "2019/tcp" not in inspected["HostConfig"]["PortBindings"]
         # Exercise real Caddy reload. It must use the currently mounted directory and node alias.
         runtime.switch_proxy({"slot": "blue"})
