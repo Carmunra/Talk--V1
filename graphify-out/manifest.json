@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "cypress/e2e/readiness.cy.ts": {
-    "mtime": 1791751561.8383777,
-    "ast_hash": "fba5dbe0d6968ad3e3fea1688d9a5a56",
+    "mtime": 1791754368.6530917,
+    "ast_hash": "7d812a2f4ad17f9e26c665d6aa4465c2",
     "semantic_hash": ""
   },
   "firebase-applet-config.json": {
@@ -35,8 +35,8 @@
     "semantic_hash": ""
   },
   "scripts/reconcile.ts": {
-    "mtime": 1791742772.5763361,
-    "ast_hash": "8db20f3eefebea2c4e9d83926f5efabe",
+    "mtime": 1791754368.1090705,
+    "ast_hash": "691b513f59b2efd25d10e1669a3a0242",
     "semantic_hash": ""
   },
   "scripts/set-admin.ts": {
@@ -45,17 +45,17 @@
     "semantic_hash": ""
   },
   "scripts/verify-artifacts.mjs": {
-    "mtime": 1791742772.5787692,
-    "ast_hash": "2aebe57980873a8a45792d92ef59808c",
+    "mtime": 1791754368.1410885,
+    "ast_hash": "ed74fc511635103ad0696d365c81feaa",
     "semantic_hash": ""
   },
   "server.ts": {
-    "mtime": 1791742772.579784,
-    "ast_hash": "63ccb5a868fba28e4e906f3d1fce0115",
+    "mtime": 1791754368.0898216,
+    "ast_hash": "3b0d2e56d9a742f7b0632841cd6faff9",
     "semantic_hash": ""
   },
   "src/App.tsx": {
-    "mtime": 1791751561.8623724,
+    "mtime": 1791752184.8452084,
     "ast_hash": "528c100ab8b8c96e7dd98410d61be8d5",
     "semantic_hash": ""
   },
@@ -275,13 +275,13 @@
     "semantic_hash": ""
   },
   "src/server/app.ts": {
-    "mtime": 1791751561.8743758,
-    "ast_hash": "c06aca960ae132e7c8e89cd65967e54e",
+    "mtime": 1791754367.9115064,
+    "ast_hash": "50f6160edbde5de6b8d98fca3a9d9c63",
     "semantic_hash": ""
   },
   "src/server/config.ts": {
-    "mtime": 1791746877.8704123,
-    "ast_hash": "991c751605e66d6f6ae40a728990940b",
+    "mtime": 1791754367.8123953,
+    "ast_hash": "de38e76906fa0fab442e1ed832ea0bf9",
     "semantic_hash": ""
   },
   "src/server/marketplace.ts": {
@@ -290,13 +290,13 @@
     "semantic_hash": ""
   },
   "src/server/platform.ts": {
-    "mtime": 1791742772.591229,
-    "ast_hash": "0607cf69319babc1a98ca1962b07a82a",
+    "mtime": 1791754367.9946074,
+    "ast_hash": "aef0fbb0ff00d355284ad76ce007e6fa",
     "semantic_hash": ""
   },
   "src/server/privacy.ts": {
-    "mtime": 1791742772.591229,
-    "ast_hash": "b766793e51f55e5cf3621db1d59d78c3",
+    "mtime": 1791754897.7449248,
+    "ast_hash": "23d0742f740b976653d7d3a66c561e61",
     "semantic_hash": ""
   },
   "src/server/security.ts": {
@@ -330,8 +330,8 @@
     "semantic_hash": ""
   },
   "tests/integration/api.test.ts": {
-    "mtime": 1791751561.8763723,
-    "ast_hash": "8c466a462ad3178cc26f9a0d065df7ae",
+    "mtime": 1791753817.5599084,
+    "ast_hash": "8a9a653f3aaf24c96b508a63fb81bb99",
     "semantic_hash": ""
   },
   "tests/integration/platform.test.ts": {
@@ -345,13 +345,13 @@
     "semantic_hash": ""
   },
   "tests/rules/firestore.test.ts": {
-    "mtime": 1791742772.5962276,
-    "ast_hash": "46f9c4744b0b70a4bb923ce567ff0bdd",
+    "mtime": 1791754368.525106,
+    "ast_hash": "62d38ade7ede6e5300c2882eb3ae84ad",
     "semantic_hash": ""
   },
   "tests/support/e2e-server.ts": {
-    "mtime": 1791742772.5972254,
-    "ast_hash": "8d20b865504e0f4ecd0c94f62289be4b",
+    "mtime": 1791754368.470141,
+    "ast_hash": "902d62a5191ba8d8fd0634a26d51d79d",
     "semantic_hash": ""
   },
   "tests/support/fixture.ts": {
@@ -425,12 +425,12 @@
     "semantic_hash": ""
   },
   ".github/workflows/ci.yml": {
-    "mtime": 1791748893.999935,
+    "mtime": 1791752184.7412167,
     "ast_hash": "dc954e503a3497a155a6de7911f218d9",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1791748200.5480926,
+    "mtime": 1791752184.757224,
     "ast_hash": "0f768ab97e971aec533b2988e89ec210",
     "semantic_hash": ""
   },
@@ -440,8 +440,8 @@
     "semantic_hash": ""
   },
   "docs/PUBLICACAO.md": {
-    "mtime": 1791751561.845375,
-    "ast_hash": "ec5af05445dc40b50ac8e55fdb3bb774",
+    "mtime": 1791754910.0313196,
+    "ast_hash": "adbe3f13dcc02a0ac528db42b4efaf83",
     "semantic_hash": ""
   },
   "docs/categorizacao-backlog.md": {
@@ -480,8 +480,8 @@
     "semantic_hash": ""
   },
   "docs/VALIDACAO.md": {
-    "mtime": 1791751474.7921002,
-    "ast_hash": "513900c6c6314b67fc488deb0af17a3a",
+    "mtime": 1791754910.0283194,
+    "ast_hash": "cb327fa1b57978a61ce7d84c22bff56d",
     "semantic_hash": ""
   },
   "scripts/verify-lockfile.mjs": {
@@ -530,8 +530,8 @@
     "semantic_hash": ""
   },
   "src/server/maintenance.ts": {
-    "mtime": 1791742772.5902312,
-    "ast_hash": "b40a8468f96483a3f1d99b49984c7c63",
+    "mtime": 1791754368.0496123,
+    "ast_hash": "24007cb385fd17218bec842ac4b84945",
     "semantic_hash": ""
   },
   "src/server/preflight.ts": {
@@ -540,8 +540,8 @@
     "semantic_hash": ""
   },
   "tests/unit/maintenance.test.ts": {
-    "mtime": 1791742772.6012266,
-    "ast_hash": "00819f8e10345edce95876b8bd3258f3",
+    "mtime": 1791754368.1910884,
+    "ast_hash": "de69fd125f325e9cbabfdb8c96837dd5",
     "semantic_hash": ""
   },
   "tests/unit/preflight.test.ts": {
@@ -580,12 +580,12 @@
     "semantic_hash": ""
   },
   ".github/workflows/deploy.yml": {
-    "mtime": 1791747337.7402725,
+    "mtime": 1791752184.7462063,
     "ast_hash": "73dbea686bac09a083dcc6042f5acc35",
     "semantic_hash": ""
   },
   "docs/PUBLICACAO_AUTOMATICA.md": {
-    "mtime": 1791748203.2931435,
+    "mtime": 1791752184.7742167,
     "ast_hash": "1f478637163f96411131fe203fabe065",
     "semantic_hash": ""
   },
@@ -605,8 +605,8 @@
     "semantic_hash": ""
   },
   "docs/DADOS_PUBLICACAO.md": {
-    "mtime": 1791751561.8413785,
-    "ast_hash": "f0eea9309c7832e72b036be13a05720b",
+    "mtime": 1791754669.840557,
+    "ast_hash": "6aa1275e88d8c3c4430612775557cf06",
     "semantic_hash": ""
   },
   "firebase.hosting.json": {
@@ -615,98 +615,128 @@
     "semantic_hash": ""
   },
   "docs/DOMINIO_HOSTINGER.md": {
-    "mtime": 1791748271.3731873,
+    "mtime": 1791752184.7682176,
     "ast_hash": "d2428d19165de9a251b8cd65c4aa4f50",
     "semantic_hash": ""
   },
   "infra/aws/.terraform.lock.hcl": {
-    "mtime": 1791747497.3930287,
+    "mtime": 1791752184.8022091,
     "ast_hash": "0244676b38f7291dea57c1bc0e4f2ee6",
     "semantic_hash": ""
   },
   "infra/aws/main.tf": {
-    "mtime": 1791748282.1567209,
+    "mtime": 1791752184.8073132,
     "ast_hash": "f58068e3473052e57f33c0a120bd3b17",
     "semantic_hash": ""
   },
   "infra/aws/outputs.tf": {
-    "mtime": 1791747030.6335323,
+    "mtime": 1791752184.8092086,
     "ast_hash": "595d613e70fb7559ac495e850da68e51",
     "semantic_hash": ""
   },
   "infra/aws/runtime.py": {
-    "mtime": 1791751470.654954,
+    "mtime": 1791752184.812208,
     "ast_hash": "a9111cacfdfbb4462d578afde1239b76",
     "semantic_hash": ""
   },
   "infra/aws/tests/safety.tftest.hcl": {
-    "mtime": 1791748414.4469304,
+    "mtime": 1791752184.8152115,
     "ast_hash": "6550c94112fdba70ea75ff98609bce1c",
     "semantic_hash": ""
   },
   "infra/aws/tests/test_runtime.py": {
-    "mtime": 1791751472.3626935,
+    "mtime": 1791752184.818207,
     "ast_hash": "6b4cbcf26dc5e40631368f19cb08a057",
     "semantic_hash": ""
   },
   "infra/aws/variables.tf": {
-    "mtime": 1791747136.3175704,
+    "mtime": 1791752184.8212068,
     "ast_hash": "77449a1c10fc63252390f2de4935da2c",
     "semantic_hash": ""
   },
   "infra/aws/versions.tf": {
-    "mtime": 1791747029.241486,
+    "mtime": 1791752184.824323,
     "ast_hash": "d7b5462c6439132d00721429b015184f",
     "semantic_hash": ""
   },
   "scripts/aws/release.mjs": {
-    "mtime": 1791747941.4149776,
+    "mtime": 1791752184.8322127,
     "ast_hash": "e40a18b6da598b45ded46eae01beb908",
     "semantic_hash": ""
   },
   "scripts/aws/smoke-proxy.py": {
-    "mtime": 1791751471.8189015,
+    "mtime": 1791752184.83621,
     "ast_hash": "8dbf5b711831644fee6d0a855e56af5b",
     "semantic_hash": ""
   },
   "scripts/aws/tests/release.test.mjs": {
-    "mtime": 1791747941.4689803,
+    "mtime": 1791752184.84121,
     "ast_hash": "a804e90ab999af8c7f0729817ca9fa7f",
     "semantic_hash": ""
   },
   "tests/integration/proxy.test.ts": {
-    "mtime": 1791747941.6190715,
+    "mtime": 1791752184.8592062,
     "ast_hash": "b807f53596b33f79c112f70a66a3827a",
     "semantic_hash": ""
   },
   ".github/workflows/deploy-aws.yml": {
-    "mtime": 1791747337.3708398,
+    "mtime": 1791752184.7432175,
     "ast_hash": "d3e2e1b73c9f153c910ba93e734f922f",
     "semantic_hash": ""
   },
   "docs/DNS_EMAIL.md": {
-    "mtime": 1791746379.1277893,
+    "mtime": 1791752184.7652104,
     "ast_hash": "000ffcdd7b7aef18926cef271c45004c",
     "semantic_hash": ""
   },
   "docs/PUBLICACAO_AWS.md": {
-    "mtime": 1791751473.8548162,
+    "mtime": 1791752184.776217,
     "ast_hash": "b00c89323fb25b2e788dca6038381477",
     "semantic_hash": ""
   },
   "src/components/MonthlyPlans.tsx": {
-    "mtime": 1791751561.865373,
-    "ast_hash": "65211bc2669618db0949feb87d102d9b",
+    "mtime": 1791753472.3775089,
+    "ast_hash": "3b271060a989044181499d4b4b412011",
     "semantic_hash": ""
   },
   "src/domain/monthlyPlans.ts": {
-    "mtime": 1791751561.8713772,
-    "ast_hash": "f17e16397e8d399edd3469ce169b60d1",
+    "mtime": 1791753406.6027255,
+    "ast_hash": "cddeaf31fb18e9c578b4242dbe5cc3bd",
     "semantic_hash": ""
   },
   "docs/PLANOS_MENSAIS.md": {
-    "mtime": 1791751561.844373,
-    "ast_hash": "931798a84b03c914ce1b6774719e4656",
+    "mtime": 1791754369.0095432,
+    "ast_hash": "7dd7c37ca0d7a6969198a4a829f26aa9",
+    "semantic_hash": ""
+  },
+  "src/server/asaas.ts": {
+    "mtime": 1791754367.643338,
+    "ast_hash": "a648193e4c82b254597a5fd8f41e12c8",
+    "semantic_hash": ""
+  },
+  "src/server/subscriptions.ts": {
+    "mtime": 1791754896.7536273,
+    "ast_hash": "ade27eb66cf95437a01282e2d1a5c09a",
+    "semantic_hash": ""
+  },
+  "tests/integration/subscriptions.test.ts": {
+    "mtime": 1791754912.4998703,
+    "ast_hash": "16d445f83eff96aab9dc80985077f958",
+    "semantic_hash": ""
+  },
+  "tests/support/subscription-fixture.ts": {
+    "mtime": 1791754368.410173,
+    "ast_hash": "d2ecb09bd17939c5693ddeda1d7b87c3",
+    "semantic_hash": ""
+  },
+  "tests/unit/asaas.test.ts": {
+    "mtime": 1791754368.1741514,
+    "ast_hash": "e0661d6141e7ff4d847a410c4ab75caf",
+    "semantic_hash": ""
+  },
+  "docs/ASAAS_HOMOLOGACAO.md": {
+    "mtime": 1791754669.5198138,
+    "ast_hash": "af405f249a35393667cd4fc242ca10fa",
     "semantic_hash": ""
   }
 }

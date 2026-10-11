@@ -8,6 +8,8 @@ import { readConfig } from './src/server/config';
 import { FirestoreStore } from './src/server/store';
 import { Platform } from './src/server/platform';
 import { MercadoPagoGateway } from './src/server/marketplace';
+import { AsaasSandboxGateway } from './src/server/asaas';
+import { MonthlySubscriptions } from './src/server/subscriptions';
 
 const config = readConfig();
 if (!config.projectId) throw new Error('Configure FIREBASE_PROJECT_ID antes de iniciar');
@@ -17,6 +19,14 @@ const store = new FirestoreStore(getFirestore(firebase, config.databaseId));
 const platform = new Platform(store, config, new MercadoPagoGateway(store, config));
 const app = createApp({
   platform,
+  ...(config.asaasSandboxEnabled
+    ? {
+        subscriptions: new MonthlySubscriptions(
+          platform,
+          new AsaasSandboxGateway(config.asaasApiKey, true),
+        ),
+      }
+    : {}),
   verifyToken: async (token) => {
     const decoded = await auth.verifyIdToken(token, true);
     return {

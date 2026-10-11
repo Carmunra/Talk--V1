@@ -42,6 +42,7 @@ describe('Fluxos comerciais protegidos com Auth emulator e gateway de teste', ()
         .and('contain.text', `R$\u00a0${amount}`);
     }
     cy.contains('A contratação dos planos ainda não está disponível.').should('be.visible');
+    cy.contains('As aulas não usadas acumulam por mais um ciclo mensal.').should('be.visible');
     cy.contains('button', /assinar|contratar|comprar/i).should('not.exist');
     cy.contains('button', 'Professores').click();
     cy.get('section[aria-label="Planos mensais"] article').should('have.length', 5);
@@ -286,5 +287,52 @@ describe('Fluxos comerciais protegidos com Auth emulator e gateway de teste', ()
     );
     cy.contains('button', 'Atualizar cadastro').click();
     cy.contains('button', 'Minhas aulas').should('be.visible');
+  });
+  it('reserva uma aula do plano e libera um único repasse de R$40 após conclusão e confirmação', () => {
+    cy.request({
+      method: 'POST',
+      url: '/_test/subscriptions/seed',
+      headers: { 'x-test-key': 'local-e2e' },
+    }).then(({ body }) => {
+      token('student').then((bearer) => {
+        cy.request({
+          method: 'POST',
+          url: `/api/subscriptions/${body.subscriptionId}/bookings`,
+          headers: { Authorization: 'Bearer ' + bearer, 'Idempotency-Key': crypto.randomUUID() },
+          body: body.booking,
+        }).then(({ body: lesson }) => {
+          expect(lesson.status).to.eq('CONFIRMED');
+          expect(lesson.fundingSource).to.eq('ASAAS_SUBSCRIPTION');
+          cy.request({
+            method: 'POST',
+            url: `/_test/subscriptions/finish/${lesson.id}`,
+            headers: { 'x-test-key': 'local-e2e' },
+          });
+          token('teacher').then((teacherToken) =>
+            cy.request({
+              method: 'POST',
+              url: `/api/lessons/${lesson.id}/complete`,
+              headers: { Authorization: 'Bearer ' + teacherToken },
+              body: {},
+            }),
+          );
+          for (let i = 0; i < 2; i++)
+            cy.request({
+              method: 'POST',
+              url: `/api/lessons/${lesson.id}/confirm-completion`,
+              headers: { Authorization: 'Bearer ' + bearer },
+              body: {},
+            });
+          cy.request({
+            url: '/_test/subscriptions/status',
+            headers: { 'x-test-key': 'local-e2e' },
+          }).then(({ body: result }) => {
+            expect(result.calls).to.eq(1);
+            expect(result.transfers[0].value).to.eq(40);
+            expect(result.transfers[0].status).to.eq('DONE');
+          });
+        });
+      });
+    });
   });
 });

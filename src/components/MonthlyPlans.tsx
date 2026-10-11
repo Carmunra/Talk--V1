@@ -41,6 +41,9 @@ export function MonthlyPlans({
         ))}
       </div>
       <p className="text-sm text-slate-600">
+        As aulas não usadas acumulam por mais um ciclo mensal.
+      </p>
+      <p className="text-sm text-slate-600">
         Assinatura mensal com renovação automática. A contratação dos planos ainda não está
         disponível.
       </p>

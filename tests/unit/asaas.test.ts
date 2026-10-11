@@ -1,0 +1,161 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { AsaasSandboxGateway, cents, verifyAsaasWebhook } from '../../src/server/asaas';
+import { readConfig } from '../../src/server/config';
+import { account, wallet } from '../support/subscription-fixture';
+
+test('Asaas has an explicit sandbox gate, distinct webhook token and no production switch', () => {
+  assert.equal(readConfig({}).asaasSandboxEnabled, false);
+  const env = {
+    ASAAS_SANDBOX_ENABLED: 'true',
+    ASAAS_SANDBOX_API_KEY: 'key',
+    ASAAS_SANDBOX_WEBHOOK_TOKEN: 't'.repeat(40),
+    ASAAS_SANDBOX_ACCOUNT_ID: account,
+  };
+  assert.equal(readConfig(env).asaasSandboxEnabled, true);
+  for (const invalid of [
+    { NODE_ENV: 'production' },
+    { ASAAS_SANDBOX_ENABLED: 'yes' },
+    { ASAAS_SANDBOX_API_KEY: '' },
+    { ASAAS_SANDBOX_WEBHOOK_TOKEN: 'short' },
+    { ASAAS_SANDBOX_WEBHOOK_TOKEN: 't'.repeat(40), ASAAS_SANDBOX_API_KEY: 't'.repeat(40) },
+    { ASAAS_SANDBOX_ACCOUNT_ID: 'invalid' },
+  ])
+    assert.throws(() => readConfig({ ...env, ...invalid }));
+});
+test('webhook comparison rejects empty, missing, short and forged tokens', () => {
+  const secret = 't'.repeat(40);
+  verifyAsaasWebhook(secret, secret);
+  for (const token of ['', 't'.repeat(39), 'f'.repeat(40)])
+    assert.throws(() => verifyAsaasWebhook(token, secret));
+  assert.throws(() => verifyAsaasWebhook('', ''));
+});
+test('amounts use exact integer cents and reject fractional cents or unsafe values', () => {
+  assert.equal(cents(1239), 123900);
+  assert.equal(cents(40), 4000);
+  for (const amount of [-1, NaN, Infinity, 0.001, Number.MAX_SAFE_INTEGER])
+    assert.throws(() => cents(amount));
+});
+test('hosted recurring checkout uses approved catalog and never receives card data', async () => {
+  let body: any;
+  const gateway = new AsaasSandboxGateway('private-key', true, async (url, options) => {
+    assert.equal(String(url), 'https://api-sandbox.asaas.com/v3/checkouts');
+    assert.equal((options!.headers as any).access_token, 'private-key');
+    assert.equal(options!.redirect, 'error');
+    body = JSON.parse(String(options!.body));
+    return new Response(JSON.stringify({ id: account }));
+  });
+  const result = await gateway.checkout(
+    'monthly-16',
+    'checkout_ref',
+    'https://talke.club',
+    '2026-10-11',
+  );
+  assert.equal(result.id, account);
+  assert.equal(new URL(result.url).hostname, 'sandbox.asaas.com');
+  assert.deepEqual(body.billingTypes, ['CREDIT_CARD']);
+  assert.deepEqual(body.chargeTypes, ['RECURRENT']);
+  assert.equal(body.items[0].value, 1239);
+  assert.equal(body.subscription.cycle, 'MONTHLY');
+  assert.equal(body.subscription.nextDueDate, '2026-10-11');
+  assert.equal(body.externalReference, 'checkout_ref');
+  assert.equal(body.callback.successUrl, 'https://talke.club/planos?checkout=retorno');
+  assert.equal(JSON.stringify(body).includes('private-key'), false);
+  assert.equal('creditCard' in body, false);
+  await assert.rejects(() => gateway.checkout('forged', 'ref', 'https://talke.club', '2026-10-11'));
+  await assert.rejects(() =>
+    gateway.checkout('monthly-4', 'ref', 'https://talke.club/path', '2026-10-11'),
+  );
+  await assert.rejects(() =>
+    gateway.checkout('monthly-4', 'ref', 'https://talke.club', '2026-02-30'),
+  );
+});
+test('Asaas sandbox reads validate identifiers, strip sensitive fields, paginate and use no GET body', async () => {
+  const seen: string[] = [];
+  const gateway = new AsaasSandboxGateway('key', true, async (url, options) => {
+    seen.push(String(url));
+    if (options!.method === 'GET') assert.equal(options!.body, undefined);
+    const path = new URL(String(url)).pathname;
+    const payment = {
+      id: 'pay_1',
+      subscription: 'sub_1',
+      customer: 'cus_1',
+      value: 439,
+      netValue: null,
+      status: 'PENDING',
+      dueDate: '2026-10-11',
+      creditCard: { number: 'sensitive' },
+    };
+    const row = path.endsWith('/balance')
+      ? { balance: 100 }
+      : path.endsWith('/cus_1')
+        ? { id: 'cus_1', email: 'one@example.test', cpfCnpj: 'sensitive' }
+        : path.endsWith('/sub_1')
+          ? {
+              id: 'sub_1',
+              customer: 'cus_1',
+              value: 439,
+              cycle: 'MONTHLY',
+              billingType: 'CREDIT_CARD',
+              status: 'ACTIVE',
+            }
+          : path.endsWith('/pay_1')
+            ? payment
+            : path.endsWith('/transfer_1')
+              ? {
+                  id: 'transfer_1',
+                  value: 40,
+                  status: 'DONE',
+                  externalReference: 'talke-one',
+                  account: { walletId: wallet, name: 'sensitive' },
+                }
+              : path.endsWith('/payments')
+                ? {
+                    data: [payment],
+                    hasMore: new URL(String(url)).searchParams.get('offset') === '0',
+                  }
+                : { deleted: true };
+    return new Response(JSON.stringify(row));
+  });
+  assert.equal((await gateway.subscription('sub_1')).id, 'sub_1');
+  assert.equal(JSON.stringify(await gateway.customer('cus_1')).includes('sensitive'), false);
+  assert.equal(JSON.stringify(await gateway.payment('pay_1')).includes('sensitive'), false);
+  assert.equal(await gateway.balance(), 10000);
+  assert.equal((await gateway.transfer('transfer_1')).status, 'DONE');
+  assert.equal((await gateway.checkoutPayments(account)).length, 2);
+  assert.equal((await gateway.subscriptionPayments('sub_1')).length, 2);
+  await gateway.cancelSubscription('sub_1');
+  const before = seen.length;
+  await assert.rejects(() => gateway.payment('../steal'));
+  assert.equal(seen.length, before);
+});
+test('provider failures are redacted, redirects forbidden and POST operations never automatically retried', async () => {
+  let calls = 0;
+  const gateway = new AsaasSandboxGateway('sensitive-key', true, async () => {
+    calls++;
+    throw new Error('sensitive-key and customer-card');
+  });
+  await assert.rejects(
+    () => gateway.sendTransfer('ref', wallet, 4000),
+    (error: any) => error.status === 502 && !error.message.includes('sensitive-key'),
+  );
+  assert.equal(calls, 1);
+  await assert.rejects(() => gateway.sendTransfer('ref', wallet, 3999));
+  assert.equal(calls, 1);
+  await assert.rejects(() => new AsaasSandboxGateway('key', false).balance());
+  await assert.rejects(() => new AsaasSandboxGateway('', true).balance());
+  const rejected = new AsaasSandboxGateway(
+    'key',
+    true,
+    async () => new Response('sensitive body', { status: 400 }),
+  );
+  await assert.rejects(() => rejected.balance(), /Asaas indisponível/);
+});
+test('transfer payload is exactly R$40 to the linked wallet, with a correlation reference', async () => {
+  const gateway = new AsaasSandboxGateway('key', true, async (_url, options) => {
+    const body = JSON.parse(String(options!.body));
+    assert.deepEqual(body, { value: 40, walletId: wallet, externalReference: 'talke-ref' });
+    return new Response(JSON.stringify({ id: 'transfer_1', ...body, status: 'PENDING' }));
+  });
+  assert.equal((await gateway.sendTransfer('talke-ref', wallet, 4000)).status, 'PENDING');
+});

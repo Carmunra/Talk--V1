@@ -8,6 +8,7 @@ export interface MaintenanceDependencies {
   closeRoom: (lessonId: string) => Promise<unknown>;
   now?: () => number;
   log?: (event: Record<string, unknown>) => void;
+  reconcileSubscriptions?: () => Promise<{ failures: number }>;
 }
 
 // The lease prevents overlapping scheduler executions. Each provider operation
@@ -52,6 +53,15 @@ export async function runMaintenance(deps: MaintenanceDependencies, orderId?: st
     log({ severity: 'ERROR', event, ...(targetId ? { targetId } : {}) });
   };
   try {
+    if (deps.reconcileSubscriptions) {
+      await renew();
+      try {
+        const result = await deps.reconcileSubscriptions();
+        if (result.failures) failure('subscription_reconciliation_failed');
+      } catch {
+        failure('subscription_reconciliation_failed');
+      }
+    }
     const closures = await store.find('room_closures', 'status', 'PENDING');
     for (const room of closures) {
       await renew();

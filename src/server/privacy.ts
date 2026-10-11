@@ -52,6 +52,21 @@ export class PrivacyService {
     const refunds = (
       await Promise.all(orders.map((order) => store.find('refunds', 'orderId', order.id)))
     ).flat();
+    const subscriptions = await store.find(
+      'subscriptions',
+      own ? 'payerId' : 'studentId',
+      subjectId,
+    );
+    const subscriptionPayments = await store.find(
+      'asaas_payments',
+      own ? 'payerId' : 'studentId',
+      subjectId,
+    );
+    const subscriptionPayouts =
+      profile.accountType === 'TEACHER'
+        ? await store.find('subscription_payouts', 'teacherId', subjectId)
+        : [];
+    const sanitizeSubscription = ({ payerId, studentId, customerId, ...row }: any) => row;
     return {
       exportedAt: new Date().toISOString(),
       profile,
@@ -64,6 +79,11 @@ export class PrivacyService {
       lessonNotes: lessonNotes.map(sanitizeNotes),
       payments: payments.map(sanitizePayment),
       refunds: refunds.map(({ teacherId, ...row }) => row),
+      subscriptions: subscriptions.map(sanitizeSubscription),
+      subscriptionPayments: subscriptionPayments.map(sanitizeSubscription),
+      subscriptionPayouts: subscriptionPayouts.map(
+        ({ teacherId, payerId, studentId, walletId, externalReference, ...row }) => row,
+      ),
       retention:
         'Registros financeiros e evidências sujeitos a obrigação legal ou defesa de direitos são segregados; consulte o controlador para prazos e base aplicável.',
     };
@@ -110,6 +130,17 @@ export class PrivacyService {
       const reviews = await tx.find('reviews', 'payerId', request.subjectId);
       const credentials = await tx.get('seller_credentials', request.subjectId);
       const teacherOrders = await tx.find('orders', 'teacherId', request.subjectId);
+      const subscriptions = await tx.find('subscriptions', 'payerId', request.subjectId);
+      const studentSubscriptions = await tx.find('subscriptions', 'studentId', request.subjectId);
+      const payouts = await tx.find('subscription_payouts', 'teacherId', request.subjectId);
+      const checkouts = await tx.find('asaas_checkouts', 'payerId', request.subjectId);
+      requireCondition(
+        ![...subscriptions, ...studentSubscriptions].some((s) => s.status !== 'CANCELLED') &&
+          !payouts.some((p) => p.status !== 'DONE' || p.reviewRequired) &&
+          !checkouts.some((c) => ['CREATED', 'SUBMITTING', 'UNKNOWN'].includes(c.status)),
+        409,
+        'Resolva assinaturas e repasses em aberto antes da exclusão',
+      );
       requireCondition(
         profile && !dependents.some((p) => !p.deletedAt),
         409,
@@ -121,7 +152,13 @@ export class PrivacyService {
         ).values(),
       ];
       requireCondition(
-        !lessons.some((l) => ['REQUESTED', 'CONFIRMED', 'IN_PROGRESS'].includes(l.status)),
+        !lessons.some(
+          (l) =>
+            ['REQUESTED', 'CONFIRMED', 'IN_PROGRESS'].includes(l.status) ||
+            (l.fundingSource === 'ASAAS_SUBSCRIPTION' &&
+              l.status === 'COMPLETED' &&
+              !l.payerConfirmedAt),
+        ),
         409,
         'Resolva as aulas e pagamentos em aberto',
       );
@@ -135,6 +172,7 @@ export class PrivacyService {
       tx.remove('students', profile.id);
       tx.remove('teachers', profile.id);
       tx.remove('seller_credentials', profile.id);
+      tx.remove('asaas_recipients', profile.id);
       if (
         credentials &&
         teacherOrders.some((order) =>

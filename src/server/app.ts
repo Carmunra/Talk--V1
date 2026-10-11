@@ -9,14 +9,22 @@ import { id, text } from './validation';
 import { PrivacyService } from './privacy';
 import { VideoService } from './video';
 import { MONTHLY_PLANS } from '../domain/monthlyPlans';
+import { verifyAsaasWebhook } from './asaas';
+import type { MonthlySubscriptions } from './subscriptions';
 
 export interface AppDependencies {
+  subscriptions?: MonthlySubscriptions;
   platform: Platform;
   verifyToken: (token: string) => Promise<Identity>;
   revokeSessions?: (uid: string) => Promise<void>;
 }
 type AuthRequest = Request & { identity?: Identity };
-export function createApp({ platform, verifyToken, revokeSessions }: AppDependencies) {
+export function createApp({
+  platform,
+  verifyToken,
+  revokeSessions,
+  subscriptions,
+}: AppDependencies) {
   const app = express();
   const config = platform.config;
   app.disable('x-powered-by');
@@ -94,6 +102,16 @@ export function createApp({ platform, verifyToken, revokeSessions }: AppDependen
   const privacy = new PrivacyService(platform);
   const video = new VideoService(platform.store, config);
   app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
+  if (subscriptions) {
+    app.post(
+      '/api/subscriptions/asaas/webhook',
+      wrap(async (req, res) => {
+        verifyAsaasWebhook(req.header('asaas-access-token') || '', config.asaasWebhookToken);
+        await subscriptions.receiveEvent(req.body);
+        res.json({ received: true });
+      }),
+    );
+  }
   app.get(
     '/api/ready',
     wrap(async (_req, res) => {
@@ -174,6 +192,107 @@ export function createApp({ platform, verifyToken, revokeSessions }: AppDependen
     '/me',
     wrap(async (req, res) => res.json(await platform.me(actor(req)))),
   );
+  if (subscriptions) {
+    privateApi.get(
+      '/subscriptions',
+      wrap(async (req, res) => res.json(await subscriptions.summary(actor(req)))),
+    );
+    privateApi.post(
+      '/subscriptions/sandbox/checkout',
+      wrap(async (req, res) => {
+        const input = z.object({ planId: id, studentId: id }).strict().parse(req.body);
+        res.json(
+          await subscriptions.checkout(actor(req), input, req.header('Idempotency-Key') || ''),
+        );
+      }),
+    );
+    privateApi.post(
+      '/subscriptions/:id/bookings',
+      wrap(async (req, res) => {
+        res
+          .status(201)
+          .json(
+            await platform.booking(actor(req), req.body, req.header('Idempotency-Key') || '', {
+              subscriptions,
+              subscriptionId: subject(req),
+            }),
+          );
+      }),
+    );
+    privateApi.post(
+      '/subscriptions/:id/cancel',
+      wrap(async (req, res) => res.json(await subscriptions.cancel(actor(req), subject(req)))),
+    );
+    privateApi.post(
+      '/lessons/:id/confirm-completion',
+      wrap(async (req, res) =>
+        res.json(await subscriptions.confirmCompletion(actor(req), subject(req))),
+      ),
+    );
+    privateApi.post(
+      '/admin/subscriptions/bind',
+      wrap(async (req, res) => {
+        const input = z
+          .object({
+            subscriptionId: id,
+            planId: id,
+            payerId: id,
+            studentId: id,
+            firstDueDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+          })
+          .strict()
+          .parse(req.body);
+        res.json(await subscriptions.bind(actor(req), input));
+      }),
+    );
+    privateApi.post(
+      '/admin/subscriptions/reconcile',
+      wrap(async (req, res) => {
+        await platform.ready(actor(req));
+        requireCondition(actor(req).admin, 403, 'Acesso restrito à administração');
+        res.json(await subscriptions.drainEvents());
+      }),
+    );
+    privateApi.post(
+      '/admin/subscriptions/recipients/:id',
+      wrap(async (req, res) => {
+        await platform.ready(actor(req));
+        requireCondition(actor(req).admin, 403, 'Acesso restrito à administração');
+        const input = z
+          .object({
+            walletId: z.string().uuid(),
+            verified: z.boolean(),
+            evidence: z.string().trim().min(10).max(1000),
+          })
+          .strict()
+          .parse(req.body);
+        await platform.store.transaction(async (tx) => {
+          const profile = await tx.get('profiles', subject(req));
+          requireCondition(
+            profile?.accountType === 'TEACHER' && profile.status === 'ACTIVE',
+            409,
+            'Professor indisponível',
+          );
+          tx.set('asaas_recipients', {
+            id: subject(req),
+            walletId: input.walletId,
+            verified: input.verified,
+            accountId: config.asaasAccountId,
+            verifiedBy: actor(req).uid,
+          });
+          tx.set('audit_events', {
+            id: randomUUID(),
+            actorId: actor(req).uid,
+            action: 'VERIFY_SANDBOX_RECIPIENT',
+            subjectId: subject(req),
+            evidence: input.evidence,
+            createdAt: new Date(platform.now()).toISOString(),
+          });
+        });
+        res.json({ updated: true, sandbox: true });
+      }),
+    );
+  }
   privateApi.post(
     '/profiles',
     wrap(async (req, res) => res.status(201).json(await platform.register(actor(req), req.body))),
