@@ -9,6 +9,7 @@ export interface RuntimeConfig {
   legalCnpj: string;
   privacyEmail: string;
   supportEmail: string;
+  supportEmails: string[];
   minimumAge: number;
   legalApproved: boolean;
   minorsEnabled: boolean;
@@ -46,6 +47,13 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): RuntimeConfig 
     legalCnpj: env.LEGAL_CNPJ || '',
     privacyEmail: env.PRIVACY_EMAIL || '',
     supportEmail: env.SUPPORT_EMAIL || '',
+    supportEmails: [
+      ...new Set(
+        [env.SUPPORT_EMAIL, env.SUPPORT_EMAIL_SECONDARY].filter((email): email is string =>
+          Boolean(email),
+        ),
+      ),
+    ],
     minimumAge: Number(env.MINIMUM_AGE || 18),
     legalApproved: env.LEGAL_APPROVED === 'true',
     minorsEnabled: env.MINORS_ENABLED === 'true',
@@ -61,6 +69,8 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): RuntimeConfig 
   };
   if (!Number.isInteger(config.minimumAge) || config.minimumAge < 6 || config.minimumAge > 18)
     throw new Error('MINIMUM_AGE inválida');
+  if (config.supportEmails.some((email) => !z.string().email().safeParse(email).success))
+    throw new Error('Canais de suporte devem ser e-mails válidos');
   const parsedOrigin = z.string().url().safeParse(origin);
   if (
     !parsedOrigin.success ||

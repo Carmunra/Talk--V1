@@ -1,4 +1,5 @@
 import React from 'react';
+import { SupportContacts } from './SupportContacts';
 export function PrivacyNotice({ config, terms = false }: { config: any; terms?: boolean }) {
   return (
     <article className="card space-y-4 max-w-3xl">
@@ -97,7 +98,7 @@ export function PrivacyNotice({ config, terms = false }: { config: any; terms?: 
         ) : (
           'canal pendente'
         )}
-        . Atendimento: {config.supportEmail || 'canal pendente'}.
+        . Atendimento: <SupportContacts config={config} />.
       </p>
       <p>
         Para crianças: seu responsável cuida do cadastro. Seu professor vê informações para ajudar

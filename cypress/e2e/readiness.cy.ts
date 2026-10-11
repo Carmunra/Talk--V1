@@ -30,6 +30,8 @@ describe('Fluxos comerciais protegidos com Auth emulator e gateway de teste', ()
     cy.visit('/');
     cy.contains('a', 'Aviso de privacidade').click();
     cy.contains('Privacidade e seus dados').should('be.visible');
+    cy.get('article a[href="mailto:support@example.test"]').should('be.visible');
+    cy.get('article a[href="mailto:alternate@example.test"]').should('be.visible');
     cy.contains('a', 'Termos de uso').click();
     cy.contains('A Talkê oferece reservas').should('be.visible');
     cy.request({ url: '/api/lessons', failOnStatusCode: false, headers: { 'x-is-admin': 'true' } })
