@@ -5,7 +5,7 @@
     "semantic_hash": ""
   },
   "cypress/e2e/readiness.cy.ts": {
-    "mtime": 1791744298.674364,
+    "mtime": 1791751006.1019194,
     "ast_hash": "30c8d4083df3524cc4458549718f7d5d",
     "semantic_hash": ""
   },
@@ -55,7 +55,7 @@
     "semantic_hash": ""
   },
   "src/App.tsx": {
-    "mtime": 1791744298.6933613,
+    "mtime": 1791751006.2009103,
     "ast_hash": "3e21002a0c93f6bd68c38a23ae1338f3",
     "semantic_hash": ""
   },
@@ -275,7 +275,7 @@
     "semantic_hash": ""
   },
   "src/server/app.ts": {
-    "mtime": 1791746882.3939607,
+    "mtime": 1791751006.2099123,
     "ast_hash": "05afc8fefac7c6a76a89dbe55e3d56d8",
     "semantic_hash": ""
   },
@@ -330,7 +330,7 @@
     "semantic_hash": ""
   },
   "tests/integration/api.test.ts": {
-    "mtime": 1791744298.7043629,
+    "mtime": 1791751006.234909,
     "ast_hash": "06fbb53a80c5732fa1cc48465abf86ba",
     "semantic_hash": ""
   },
@@ -440,7 +440,7 @@
     "semantic_hash": ""
   },
   "docs/PUBLICACAO.md": {
-    "mtime": 1791748201.358231,
+    "mtime": 1791751006.140907,
     "ast_hash": "018c2d1eb951d101fa078768d7a52a8f",
     "semantic_hash": ""
   },
@@ -605,7 +605,7 @@
     "semantic_hash": ""
   },
   "docs/DADOS_PUBLICACAO.md": {
-    "mtime": 1791748280.0845497,
+    "mtime": 1791751006.1319153,
     "ast_hash": "d260261022deb5648c46b63352be24e7",
     "semantic_hash": ""
   },
@@ -665,8 +665,8 @@
     "semantic_hash": ""
   },
   "scripts/aws/smoke-proxy.py": {
-    "mtime": 1791749473.1709893,
-    "ast_hash": "4ae3cb1c3c2ffad42d69b663ba1610df",
+    "mtime": 1791751006.8816705,
+    "ast_hash": "f11ea24365a9d5556c6a07a616a948d9",
     "semantic_hash": ""
   },
   "scripts/aws/tests/release.test.mjs": {

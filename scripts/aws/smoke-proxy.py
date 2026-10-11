@@ -71,7 +71,9 @@ except Exception:
     # Only these isolated fixture containers exist here; no credentials are supplied.
     for name in ("talke-proxy", "talke-blue"):
         try:
-            print(name + " fixture logs:", runtime.docker("logs", "--tail", "40", name))
+            result = subprocess.run(["docker", "logs", "--tail", "40", name],
+                                    capture_output=True, text=True, timeout=10)
+            print(name + " fixture logs:", result.stdout, result.stderr)
         except Exception:
             pass
     raise
