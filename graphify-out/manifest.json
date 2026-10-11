@@ -425,8 +425,8 @@
     "semantic_hash": ""
   },
   ".github/workflows/ci.yml": {
-    "mtime": 1791747931.9240887,
-    "ast_hash": "3ac837d5ed9fd4a349b2b79b4d77ae2f",
+    "mtime": 1791748893.999935,
+    "ast_hash": "dc954e503a3497a155a6de7911f218d9",
     "semantic_hash": ""
   },
   "README.md": {
@@ -480,8 +480,8 @@
     "semantic_hash": ""
   },
   "docs/VALIDACAO.md": {
-    "mtime": 1791748271.8199065,
-    "ast_hash": "2bbc6f8076da66e0f1b798cf24b32144",
+    "mtime": 1791748895.453907,
+    "ast_hash": "8cb183a164b9f3ba944d940581b5f682",
     "semantic_hash": ""
   },
   "scripts/verify-lockfile.mjs": {
