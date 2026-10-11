@@ -108,6 +108,7 @@ export function createApp({ platform, verifyToken, revokeSessions }: AppDependen
       legalCnpj: config.legalCnpj,
       privacyEmail: config.privacyEmail,
       supportEmail: config.supportEmail,
+      supportEmails: config.supportEmails,
       termsVersion: config.termsVersion,
       legalApproved: config.legalApproved,
     }),

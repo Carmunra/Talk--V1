@@ -3,6 +3,23 @@ import assert from 'node:assert/strict';
 import { createHmac } from 'node:crypto';
 import { seal, unseal, verifyWebhook } from '../../src/server/security';
 import { readConfig } from '../../src/server/config';
+test('support contacts reject invalid addresses and retain backward-compatible primary contact', () => {
+  assert.deepEqual(readConfig({}).supportEmails, []);
+  const config = readConfig({
+    SUPPORT_EMAIL: 'support@example.test',
+    SUPPORT_EMAIL_SECONDARY: 'alternate@example.test',
+  });
+  assert.equal(config.supportEmail, 'support@example.test');
+  assert.deepEqual(config.supportEmails, ['support@example.test', 'alternate@example.test']);
+  assert.deepEqual(
+    readConfig({
+      SUPPORT_EMAIL: 'support@example.test',
+      SUPPORT_EMAIL_SECONDARY: 'support@example.test',
+    }).supportEmails,
+    ['support@example.test'],
+  );
+  assert.throws(() => readConfig({ SUPPORT_EMAIL_SECONDARY: 'invalid' }));
+});
 test('seller credentials are encrypted with integrity and cannot be decrypted under another key', () => {
   const key = Buffer.alloc(32, 1).toString('base64'),
     sealed = seal({ access_token: 'secret' }, key);

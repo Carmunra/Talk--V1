@@ -8,6 +8,7 @@ import { TeacherProfileModal } from './components/TeacherProfileModal';
 import { BookingModal } from './components/BookingModal';
 import { DiagnosticAndGoalView } from './components/DiagnosticAndGoalView';
 import { PrivacyNotice } from './components/PrivacyNotice';
+import { SupportContacts } from './components/SupportContacts';
 import { Registration, FamilyForm, TeacherEditor, PrivacyPanel } from './components/AccountForms';
 import { AdminPanel } from './components/AdminPanel';
 import { Teacher, Student, UserRole } from './domain/types';
@@ -265,7 +266,7 @@ export default function App() {
           <section className="card space-y-4">
             <p>
               Cadastro suspenso ou em análise de idade/vínculo. Procure{' '}
-              {config.supportEmail || 'o atendimento'}.
+              <SupportContacts config={config} fallback="o atendimento" />.
             </p>
             <button onClick={() => void action(refreshProfiles, 'Cadastro atualizado')}>
               Atualizar cadastro
@@ -561,7 +562,7 @@ export default function App() {
       <footer className="border-t p-6 text-center text-sm">
         <a href="/privacidade">Aviso de privacidade</a> · <a href="/termos">Termos de uso</a>
         <p>
-          {config.legalName || 'Talkê em preparação'} · {config.supportEmail}
+          {config.legalName || 'Talkê em preparação'} · <SupportContacts config={config} />
         </p>
       </footer>
       {booking && student && (

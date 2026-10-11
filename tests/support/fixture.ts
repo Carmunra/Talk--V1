@@ -81,6 +81,8 @@ export async function fixture() {
   const config = readConfig({
     NODE_ENV: 'test',
     FIREBASE_PROJECT_ID: 'demo-talke',
+    SUPPORT_EMAIL: 'support@example.test',
+    SUPPORT_EMAIL_SECONDARY: 'alternate@example.test',
     PAYMENTS_ENABLED: 'true',
     MINORS_ENABLED: 'true',
     MINIMUM_AGE: '6',

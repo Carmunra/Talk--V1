@@ -13,6 +13,7 @@ runtime_env = {
   LEGAL_CNPJ = ""
   PRIVACY_EMAIL = ""
   SUPPORT_EMAIL = ""
+  SUPPORT_EMAIL_SECONDARY = ""
   LEGAL_APPROVED = "false"
   MINIMUM_AGE = "18"
   MINORS_ENABLED = "false"

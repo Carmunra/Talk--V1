@@ -107,6 +107,10 @@ test('origin restrictions, no-store and security headers protect API responses',
   assert.equal(response.headers['cache-control'], 'no-store');
   assert.ok(response.headers['content-security-policy'].includes("frame-ancestors 'none'"));
   assert.equal(response.headers['x-powered-by'], undefined);
+  assert.deepEqual(response.body.supportEmails, ['support@example.test', 'alternate@example.test']);
+  assert.equal(response.body.supportEmail, 'support@example.test');
+  assert.equal(response.body.mpWebhookSecret, undefined);
+  assert.equal(response.body.tokenKey, undefined);
 });
 test('unverified emails and revoked/invalid sessions fail closed', async () => {
   const f = await fixture(),

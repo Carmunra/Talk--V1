@@ -17,6 +17,8 @@ Verificação local da versão preparada para revisão. Dados de teste são fict
 
 ## O que os testes demonstram
 
+Complemento de configuração dos contatos e administradores, em 11/10/2026: nova execução local com **103 testes unitários/integrados aprovados**, cobertura do servidor de **91,12% de linhas, 87,07% de ramos e 93,05% de funções**, tipagem, compilação e separação de artefatos aprovadas. Foram adicionados testes de concessão por e-mail verificado, preservação de claims, rejeição de conta desativada/e-mail divergente e revogação mesmo em conta bloqueada. O cenário Cypress de privacidade também verifica os dois links de atendimento; consultar o CI da atualização para o resultado dessa nova asserção.
+
 - Identidade forjada por cabeçalhos não autoriza operações; token inválido, e-mail não verificado e acesso entre contas são recusados. Retorno atrasado da sessão anterior não recoloca dados privados na interface após trocar de conta.
 - Reservas concorrentes respeitam os intervalos do professor e do aluno. Repetição da mesma operação reutiliza a reserva; preço, comissão, duração e confirmação financeira são calculados e verificados no servidor.
 - O gateway valida OAuth com PKCE e estado descartável, criptografia de credenciais, assinatura de webhook, contrato de preferência, consulta e reembolso. Aprovação duplicada, valor/conta/moeda/ambiente incorretos, aprovação tardia, reembolso parcial e chargeback não concedem acesso indevido.
