@@ -36,6 +36,22 @@ jobs:
       - run: npm run build
       - run: npm run verify:artifacts
       - run: npm audit --audit-level=moderate
+      - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # v4.0.1
+        with:
+          terraform_version: '1.16.5'
+          terraform_wrapper: false
+      - run: terraform -chdir=infra/cloud-run fmt -check -recursive
+      - run: terraform -chdir=infra/cloud-run init -backend=false -input=false -lockfile=readonly
+      - run: terraform -chdir=infra/cloud-run validate
+      - run: terraform -chdir=infra/cloud-run test
+      - name: Build production container
+        run: >-
+          docker build --tag talke-ci:local
+          --build-arg VITE_FIREBASE_API_KEY
+          --build-arg VITE_FIREBASE_PROJECT_ID
+          --build-arg VITE_FIREBASE_AUTH_DOMAIN
+          --build-arg VITE_FIREBASE_APP_ID .
+      - run: npm run test:container
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:

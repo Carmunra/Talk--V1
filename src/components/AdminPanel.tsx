@@ -27,6 +27,15 @@ export function AdminPanel() {
         Atualizar fila
       </button>
       {message && <p role="status">{message}</p>}
+      <h2 className="font-bold">Manutenção de pagamentos e salas</h2>
+      {queue?.maintenance ? (
+        <p>
+          Última execução: {queue.maintenance.finishedAt || queue.maintenance.startedAt} ·{' '}
+          {queue.maintenance.status} · {queue.maintenance.failures} falha(s)
+        </p>
+      ) : (
+        <p>Nenhuma execução registrada. Configure e acompanhe o serviço de manutenção.</p>
+      )}
       {[
         ['ageReviews', 'Aferição de idade de adultos', 'age'],
         ['teachers', 'Professores', 'teacher'],

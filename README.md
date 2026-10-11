@@ -34,3 +34,5 @@ As regras Firestore/Storage negam acesso pelo navegador. Firebase Admin depende 
 Os detalhes operacionais e critérios de liberação comercial estão em docs/PUBLICACAO.md.
 
 Os resultados executados e seus limites estão em [Validação](docs/VALIDACAO.md).
+
+A infraestrutura preparada e os procedimentos de ativação, restauração e incidentes estão em [Operação](docs/OPERACAO.md). A configuração Terraform é validada com provedor simulado; a ativação requer projeto, imagem, contatos, segredos e aprovações reais.

@@ -416,16 +416,25 @@ export function createApp({ platform, verifyToken, revokeSessions }: AppDependen
     '/admin/queue',
     wrap(async (req, res) => {
       requireCondition(actor(req).admin, 403, 'Acesso restrito à administração');
-      const [teachers, guardians, privacyRequests, reports, refunds, ageReviews, roomClosures] =
-        await Promise.all([
-          platform.store.find('teachers', 'isVerified', false),
-          platform.store.find('profiles', 'status', 'PENDING_GUARDIAN_REVIEW'),
-          platform.store.find('privacy_requests', 'status', 'OPEN'),
-          platform.store.find('safety_reports', 'status', 'OPEN'),
-          platform.store.find('refunds', 'status', 'REQUIRES_SUPPORT'),
-          platform.store.find('profiles', 'status', 'PENDING_AGE_REVIEW'),
-          platform.store.find('room_closures', 'status', 'PENDING'),
-        ]);
+      const [
+        teachers,
+        guardians,
+        privacyRequests,
+        reports,
+        refunds,
+        ageReviews,
+        roomClosures,
+        maintenance,
+      ] = await Promise.all([
+        platform.store.find('teachers', 'isVerified', false),
+        platform.store.find('profiles', 'status', 'PENDING_GUARDIAN_REVIEW'),
+        platform.store.find('privacy_requests', 'status', 'OPEN'),
+        platform.store.find('safety_reports', 'status', 'OPEN'),
+        platform.store.find('refunds', 'status', 'REQUIRES_SUPPORT'),
+        platform.store.find('profiles', 'status', 'PENDING_AGE_REVIEW'),
+        platform.store.find('room_closures', 'status', 'PENDING'),
+        platform.store.get('system', 'maintenance'),
+      ]);
       res.json({
         teachers,
         guardians,
@@ -434,6 +443,7 @@ export function createApp({ platform, verifyToken, revokeSessions }: AppDependen
         refunds,
         ageReviews,
         roomClosures,
+        maintenance,
       });
     }),
   );

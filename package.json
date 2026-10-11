@@ -11,13 +11,15 @@
     "test": "tsx --test tests/unit/*.test.ts tests/integration/*.test.ts",
     "test:e2e": "firebase emulators:exec --project demo-talke --only auth \"start-server-and-test test:e2e:server http://127.0.0.1:3000/api/health cypress:run\"",
     "test:rules": "firebase emulators:exec --project demo-talke --only firestore \"tsx --test tests/rules/*.test.ts\"",
-    "build": "vite build && esbuild server.ts --bundle --platform=node --format=esm --packages=external --outfile=dist/server/index.js && esbuild scripts/reconcile.ts scripts/set-admin.ts --bundle --platform=node --format=esm --packages=external --outdir=dist/scripts",
+    "build": "vite build && esbuild server.ts --bundle --platform=node --format=esm --packages=external --outfile=dist/server/index.js && esbuild scripts/reconcile.ts scripts/set-admin.ts scripts/preflight.ts --bundle --platform=node --format=esm --packages=external --outdir=dist/scripts",
     "lint": "tsc --noEmit",
     "test:coverage": "c8 --all --include=src/server/** --check-coverage --lines=80 --branches=70 --functions=75 --reporter=text --reporter=lcov npm test",
     "verify:artifacts": "node scripts/verify-artifacts.mjs",
     "verify:lockfile": "node scripts/verify-lockfile.mjs",
     "payments:reconcile": "node --env-file-if-exists=.env dist/scripts/reconcile.js",
-    "admin:permissions": "node --env-file-if-exists=.env dist/scripts/set-admin.js"
+    "admin:permissions": "node --env-file-if-exists=.env dist/scripts/set-admin.js",
+    "publication:check": "node --env-file-if-exists=.env dist/scripts/preflight.js",
+    "test:container": "node scripts/smoke-container.mjs"
   },
   "dependencies": {
     "@daily-co/daily-js": "^0.92.2",

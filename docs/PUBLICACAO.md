@@ -52,7 +52,11 @@ Definir RPO/RTO, retenção/expurgo, plano de reversão compatível com regras r
 
 ## Comandos
 
+A preparação técnica adicional de hospedagem, manutenção, backups, incidentes e proteção do repositório está em [OPERACAO.md](OPERACAO.md). O registro técnico de tratamentos, com campos jurídicos pendentes, está em [REGISTRO_TRATAMENTO.csv](REGISTRO_TRATAMENTO.csv).
+
 - npm run dev — desenvolvimento com .env.
+- npm run publication:check — verifica configurações e aprovação antes da publicação, sem revelar segredos ou acessar a nuvem.
+- npm run test:container — verifica a imagem de produção no Docker; executado também no CI.
 - npm run test:coverage — unitários/integrados e cobertura mínima.
 - npm run test:rules — emulador Firestore; Java 21 necessário.
 - npm run test:e2e — Auth emulator + Cypress, sem dados ou pagamentos reais.

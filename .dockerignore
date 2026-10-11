@@ -13,3 +13,6 @@ graphify-out
 coverage
 .firebase
 TestResults
+infra
+*.tfstate
+*.tfvars

@@ -23,6 +23,18 @@ export interface RuntimeConfig {
   termsVersion: string;
 }
 export function readConfig(env: NodeJS.ProcessEnv = process.env): RuntimeConfig {
+  for (const flag of [
+    'LEGAL_APPROVED',
+    'MINORS_ENABLED',
+    'MINORS_SAFEGUARDS_APPROVED',
+    'PAYMENTS_ENABLED',
+    'PAYMENTS_HOMOLOGATED',
+  ]) {
+    if (env[flag] !== undefined && !['true', 'false'].includes(env[flag]!))
+      throw new Error(`${flag} deve ser true ou false`);
+  }
+  if (env.MP_ENVIRONMENT !== undefined && !['sandbox', 'live'].includes(env.MP_ENVIRONMENT))
+    throw new Error('MP_ENVIRONMENT deve ser sandbox ou live');
   const production = env.NODE_ENV === 'production';
   const origin = env.APP_ORIGIN || 'http://localhost:3000';
   const config: RuntimeConfig = {
@@ -49,6 +61,24 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): RuntimeConfig 
   };
   if (!Number.isInteger(config.minimumAge) || config.minimumAge < 6 || config.minimumAge > 18)
     throw new Error('MINIMUM_AGE inválida');
+  const parsedOrigin = z.string().url().safeParse(origin);
+  if (
+    !parsedOrigin.success ||
+    new URL(origin).origin !== origin ||
+    !['http:', 'https:'].includes(new URL(origin).protocol)
+  )
+    throw new Error(
+      'APP_ORIGIN deve ser somente a origem, sem caminho, barra final ou credenciais',
+    );
+  if (config.paymentsEnabled && config.livePayments) {
+    if (
+      new URL(origin).protocol !== 'https:' ||
+      env.PAYMENTS_HOMOLOGATED !== 'true' ||
+      env.FIREBASE_AUTH_EMULATOR_HOST ||
+      env.FIRESTORE_EMULATOR_HOST
+    )
+      throw new Error('Pagamentos reais exigem HTTPS, homologação e Firebase sem emuladores');
+  }
   if (production) {
     if (!z.string().url().safeParse(origin).success || new URL(origin).protocol !== 'https:')
       throw new Error('APP_ORIGIN deve usar HTTPS');
