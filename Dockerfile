@@ -11,6 +11,8 @@ ARG VITE_FIREBASE_APP_ID
 RUN npm run build
 
 FROM node:22-bookworm-slim AS runtime
+ARG VITE_FIREBASE_PROJECT_ID
+LABEL com.talke.firebase.project=$VITE_FIREBASE_PROJECT_ID
 ENV NODE_ENV=production
 WORKDIR /app
 COPY package.json package-lock.json ./

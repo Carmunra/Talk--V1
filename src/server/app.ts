@@ -19,6 +19,7 @@ export function createApp({ platform, verifyToken, revokeSessions }: AppDependen
   const app = express();
   const config = platform.config;
   app.disable('x-powered-by');
+  app.set('trust proxy', config.trustProxyHops);
   app.use(
     helmet({
       crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' },

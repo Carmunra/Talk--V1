@@ -94,14 +94,433 @@
       "norm_label": "login()"
     },
     {
+      "label": "runtime.py",
+      "file_type": "code",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "infra_aws_runtime",
+      "community": 22,
+      "community_name": "runtime.py",
+      "norm_label": "runtime.py"
+    },
+    {
+      "label": "command()",
+      "file_type": "code",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L23",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_runtime_command",
+      "community": 22,
+      "community_name": "runtime.py",
+      "norm_label": "command()"
+    },
+    {
+      "label": "config()",
+      "file_type": "code",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L28",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_runtime_config",
+      "community": 22,
+      "community_name": "runtime.py",
+      "norm_label": "config()"
+    },
+    {
+      "label": "aws()",
+      "file_type": "code",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L31",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_runtime_aws",
+      "community": 22,
+      "community_name": "runtime.py",
+      "norm_label": "aws()"
+    },
+    {
+      "label": "docker()",
+      "file_type": "code",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L34",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_runtime_docker",
+      "community": 22,
+      "community_name": "runtime.py",
+      "norm_label": "docker()"
+    },
+    {
+      "label": "read()",
+      "file_type": "code",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L37",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_runtime_read",
+      "community": 22,
+      "community_name": "runtime.py",
+      "norm_label": "read()"
+    },
+    {
+      "label": "write()",
+      "file_type": "code",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L40",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_runtime_write",
+      "community": 22,
+      "community_name": "runtime.py",
+      "norm_label": "write()"
+    },
+    {
+      "label": "validate_release()",
+      "file_type": "code",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L47",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_runtime_validate_release",
+      "community": 22,
+      "community_name": "runtime.py",
+      "norm_label": "validate_release()"
+    },
+    {
+      "label": "secret_files()",
+      "file_type": "code",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L57",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_runtime_secret_files",
+      "community": 22,
+      "community_name": "runtime.py",
+      "norm_label": "secret_files()"
+    },
+    {
+      "label": "login()",
+      "file_type": "code",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L86",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_runtime_login",
+      "community": 22,
+      "community_name": "runtime.py",
+      "norm_label": "login()"
+    },
+    {
+      "label": "remove()",
+      "file_type": "code",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L91",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_runtime_remove",
+      "community": 22,
+      "community_name": "runtime.py",
+      "norm_label": "remove()"
+    },
+    {
+      "label": "prepare()",
+      "file_type": "code",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L95",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_runtime_prepare",
+      "community": 22,
+      "community_name": "runtime.py",
+      "norm_label": "prepare()"
+    },
+    {
+      "label": "probe()",
+      "file_type": "code",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L124",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_runtime_probe",
+      "community": 22,
+      "community_name": "runtime.py",
+      "norm_label": "probe()"
+    },
+    {
+      "label": "await_ready()",
+      "file_type": "code",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L138",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_runtime_await_ready",
+      "community": 22,
+      "community_name": "runtime.py",
+      "norm_label": "await_ready()"
+    },
+    {
+      "label": "proxy_text()",
+      "file_type": "code",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L148",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_runtime_proxy_text",
+      "community": 22,
+      "community_name": "runtime.py",
+      "norm_label": "proxy_text()"
+    },
+    {
+      "label": "switch_proxy()",
+      "file_type": "code",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L163",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_runtime_switch_proxy",
+      "community": 22,
+      "community_name": "runtime.py",
+      "norm_label": "switch_proxy()"
+    },
+    {
+      "label": "restore()",
+      "file_type": "code",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L189",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_runtime_restore",
+      "community": 22,
+      "community_name": "runtime.py",
+      "norm_label": "restore()"
+    },
+    {
+      "label": "release()",
+      "file_type": "code",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L209",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_runtime_release",
+      "community": 22,
+      "community_name": "runtime.py",
+      "norm_label": "release()"
+    },
+    {
+      "label": "maintenance()",
+      "file_type": "code",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L246",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_runtime_maintenance",
+      "community": 22,
+      "community_name": "runtime.py",
+      "norm_label": "maintenance()"
+    },
+    {
+      "label": "health()",
+      "file_type": "code",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L271",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_runtime_health",
+      "community": 22,
+      "community_name": "runtime.py",
+      "norm_label": "health()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L285",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_runtime_main",
+      "community": 22,
+      "community_name": "runtime.py",
+      "norm_label": "main()"
+    },
+    {
+      "label": "test_runtime.py",
+      "file_type": "code",
+      "source_file": "infra/aws/tests/test_runtime.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "infra_aws_tests_test_runtime",
+      "community": 37,
+      "community_name": "ReleaseTests",
+      "norm_label": "test_runtime.py"
+    },
+    {
+      "label": "ReleaseTests",
+      "file_type": "code",
+      "source_file": "infra/aws/tests/test_runtime.py",
+      "source_location": "L15",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "id": "infra_aws_tests_test_runtime_releasetests",
+      "community": 37,
+      "community_name": "ReleaseTests",
+      "norm_label": "releasetests"
+    },
+    {
+      "label": ".setUp()",
+      "file_type": "code",
+      "source_file": "infra/aws/tests/test_runtime.py",
+      "source_location": "L16",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_tests_test_runtime_releasetests_setup",
+      "community": 37,
+      "community_name": "ReleaseTests",
+      "norm_label": ".setup()"
+    },
+    {
+      "label": ".test_candidate_readiness_failure_preserves_prior_and_never_switches_traffic()",
+      "file_type": "code",
+      "source_file": "infra/aws/tests/test_runtime.py",
+      "source_location": "L37",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_tests_test_runtime_releasetests_test_candidate_readiness_failure_preserves_prior_and_never_switches_traffic",
+      "community": 37,
+      "community_name": "ReleaseTests",
+      "norm_label": ".test_candidate_readiness_failure_preserves_prior_and_never_switches_traffic()"
+    },
+    {
+      "label": ".test_public_probe_failure_rolls_back_and_clears_journal()",
+      "file_type": "code",
+      "source_file": "infra/aws/tests/test_runtime.py",
+      "source_location": "L45",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_tests_test_runtime_releasetests_test_public_probe_failure_rolls_back_and_clears_journal",
+      "community": 37,
+      "community_name": "ReleaseTests",
+      "norm_label": ".test_public_probe_failure_rolls_back_and_clears_journal()"
+    },
+    {
+      "label": ".test_failed_rollback_keeps_journal_and_blocks_maintenance()",
+      "file_type": "code",
+      "source_file": "infra/aws/tests/test_runtime.py",
+      "source_location": "L53",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_tests_test_runtime_releasetests_test_failed_rollback_keeps_journal_and_blocks_maintenance",
+      "community": 37,
+      "community_name": "ReleaseTests",
+      "norm_label": ".test_failed_rollback_keeps_journal_and_blocks_maintenance()"
+    },
+    {
+      "label": ".test_success_commits_same_image_and_secret_and_retains_rollback_record()",
+      "file_type": "code",
+      "source_file": "infra/aws/tests/test_runtime.py",
+      "source_location": "L63",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_tests_test_runtime_releasetests_test_success_commits_same_image_and_secret_and_retains_rollback_record",
+      "community": 37,
+      "community_name": "ReleaseTests",
+      "norm_label": ".test_success_commits_same_image_and_secret_and_retains_rollback_record()"
+    },
+    {
+      "label": ".test_interrupted_release_restores_committed_version_on_reboot()",
+      "file_type": "code",
+      "source_file": "infra/aws/tests/test_runtime.py",
+      "source_location": "L70",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_tests_test_runtime_releasetests_test_interrupted_release_restores_committed_version_on_reboot",
+      "community": 37,
+      "community_name": "ReleaseTests",
+      "norm_label": ".test_interrupted_release_restores_committed_version_on_reboot()"
+    },
+    {
+      "label": ".test_first_uncommitted_release_is_removed_on_reboot()",
+      "file_type": "code",
+      "source_file": "infra/aws/tests/test_runtime.py",
+      "source_location": "L78",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_tests_test_runtime_releasetests_test_first_uncommitted_release_is_removed_on_reboot",
+      "community": 37,
+      "community_name": "ReleaseTests",
+      "norm_label": ".test_first_uncommitted_release_is_removed_on_reboot()"
+    },
+    {
+      "label": ".test_reboot_journal_takes_precedence_over_an_incomplete_commit()",
+      "file_type": "code",
+      "source_file": "infra/aws/tests/test_runtime.py",
+      "source_location": "L86",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_tests_test_runtime_releasetests_test_reboot_journal_takes_precedence_over_an_incomplete_commit",
+      "community": 37,
+      "community_name": "ReleaseTests",
+      "norm_label": ".test_reboot_journal_takes_precedence_over_an_incomplete_commit()"
+    },
+    {
+      "label": ".test_rejects_mutable_and_other_environment_images()",
+      "file_type": "code",
+      "source_file": "infra/aws/tests/test_runtime.py",
+      "source_location": "L94",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_tests_test_runtime_releasetests_test_rejects_mutable_and_other_environment_images",
+      "community": 37,
+      "community_name": "ReleaseTests",
+      "norm_label": ".test_rejects_mutable_and_other_environment_images()"
+    },
+    {
+      "label": ".test_secret_rejects_arbitrary_env_injection_and_wrong_firebase_project()",
+      "file_type": "code",
+      "source_file": "infra/aws/tests/test_runtime.py",
+      "source_location": "L101",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_tests_test_runtime_releasetests_test_secret_rejects_arbitrary_env_injection_and_wrong_firebase_project",
+      "community": 37,
+      "community_name": "ReleaseTests",
+      "norm_label": ".test_secret_rejects_arbitrary_env_injection_and_wrong_firebase_project()"
+    },
+    {
+      "label": ".test_failed_or_stale_maintenance_is_unhealthy()",
+      "file_type": "code",
+      "source_file": "infra/aws/tests/test_runtime.py",
+      "source_location": "L117",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_tests_test_runtime_releasetests_test_failed_or_stale_maintenance_is_unhealthy",
+      "community": 37,
+      "community_name": "ReleaseTests",
+      "norm_label": ".test_failed_or_stale_maintenance_is_unhealthy()"
+    },
+    {
+      "label": ".test_healthy_requires_database_probe_and_recent_successful_maintenance()",
+      "file_type": "code",
+      "source_file": "infra/aws/tests/test_runtime.py",
+      "source_location": "L125",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "infra_aws_tests_test_runtime_releasetests_test_healthy_requires_database_probe_and_recent_successful_maintenance",
+      "community": 37,
+      "community_name": "ReleaseTests",
+      "norm_label": ".test_healthy_requires_database_probe_and_recent_successful_maintenance()"
+    },
+    {
       "label": "package.json",
       "file_type": "code",
       "source_file": "package.json",
       "source_location": "L1",
       "_origin": "ast",
       "id": "package",
-      "community": 5,
-      "community_name": "scripts",
+      "community": 40,
+      "community_name": "package.json",
       "norm_label": "package.json"
     },
     {
@@ -111,8 +530,8 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "package_name",
-      "community": 5,
-      "community_name": "scripts",
+      "community": 40,
+      "community_name": "package.json",
       "norm_label": "name"
     },
     {
@@ -122,8 +541,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "package_private",
-      "community": 5,
-      "community_name": "scripts",
+      "community": 40,
+      "community_name": "package.json",
       "norm_label": "private"
     },
     {
@@ -133,8 +552,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "package_version",
-      "community": 5,
-      "community_name": "scripts",
+      "community": 40,
+      "community_name": "package.json",
       "norm_label": "version"
     },
     {
@@ -144,8 +563,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "package_type",
-      "community": 5,
-      "community_name": "scripts",
+      "community": 40,
+      "community_name": "package.json",
       "norm_label": "type"
     },
     {
@@ -529,8 +948,8 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "package_dependencies_react_dom",
-      "community": 8,
-      "community_name": "dependencies",
+      "community": 43,
+      "community_name": "react-dom",
       "norm_label": "react-dom"
     },
     {
@@ -540,8 +959,8 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "react_dom",
-      "community": 8,
-      "community_name": "dependencies",
+      "community": 43,
+      "community_name": "react-dom",
       "norm_label": "react-dom"
     },
     {
@@ -1002,8 +1421,8 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "package_overrides",
-      "community": 5,
-      "community_name": "scripts",
+      "community": 41,
+      "community_name": "overrides",
       "norm_label": "overrides"
     },
     {
@@ -1013,8 +1432,8 @@
       "source_location": "L58",
       "_origin": "ast",
       "id": "package_overrides_basic_ftp",
-      "community": 5,
-      "community_name": "scripts",
+      "community": 41,
+      "community_name": "overrides",
       "norm_label": "basic-ftp"
     },
     {
@@ -1024,8 +1443,8 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "package_overrides_opentelemetry_core",
-      "community": 5,
-      "community_name": "scripts",
+      "community": 41,
+      "community_name": "overrides",
       "norm_label": "@opentelemetry/core"
     },
     {
@@ -1035,8 +1454,8 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "package_overrides_re2",
-      "community": 5,
-      "community_name": "scripts",
+      "community": 41,
+      "community_name": "overrides",
       "norm_label": "re2"
     },
     {
@@ -1046,8 +1465,8 @@
       "source_location": "L61",
       "_origin": "ast",
       "id": "package_overrides_grpc_grpc_js",
-      "community": 5,
-      "community_name": "scripts",
+      "community": 41,
+      "community_name": "overrides",
       "norm_label": "@grpc/grpc-js"
     },
     {
@@ -1057,8 +1476,8 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "package_overrides_firebase_tools",
-      "community": 5,
-      "community_name": "scripts",
+      "community": 41,
+      "community_name": "overrides",
       "norm_label": "firebase-tools"
     },
     {
@@ -1068,8 +1487,8 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "package_firebase_tools_uuid",
-      "community": 5,
-      "community_name": "scripts",
+      "community": 41,
+      "community_name": "overrides",
       "norm_label": "uuid"
     },
     {
@@ -1079,8 +1498,8 @@
       "source_location": "L64",
       "_origin": "ast",
       "id": "package_firebase_tools_chokidar",
-      "community": 5,
-      "community_name": "scripts",
+      "community": 41,
+      "community_name": "overrides",
       "norm_label": "chokidar"
     },
     {
@@ -1090,8 +1509,8 @@
       "source_location": "L67",
       "_origin": "ast",
       "id": "package_engines",
-      "community": 5,
-      "community_name": "scripts",
+      "community": 40,
+      "community_name": "package.json",
       "norm_label": "engines"
     },
     {
@@ -1101,8 +1520,8 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "package_engines_node",
-      "community": 5,
-      "community_name": "scripts",
+      "community": 40,
+      "community_name": "package.json",
       "norm_label": "node"
     },
     {
@@ -1112,8 +1531,8 @@
       "source_location": "L69",
       "_origin": "ast",
       "id": "package_engines_npm",
-      "community": 5,
-      "community_name": "scripts",
+      "community": 40,
+      "community_name": "package.json",
       "norm_label": "npm"
     },
     {
@@ -1163,6 +1582,121 @@
       "community": 24,
       "community_name": "set-admin.ts",
       "norm_label": "setadminpermission()"
+    },
+    {
+      "label": "release.mjs",
+      "file_type": "code",
+      "source_file": "scripts/aws/release.mjs",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scripts_aws_release",
+      "community": 42,
+      "community_name": "release.test.mjs",
+      "norm_label": "release.mjs"
+    },
+    {
+      "label": "settings()",
+      "file_type": "code",
+      "source_file": "scripts/aws/release.mjs",
+      "source_location": "L5",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_aws_release_settings",
+      "community": 42,
+      "community_name": "release.test.mjs",
+      "norm_label": "settings()"
+    },
+    {
+      "label": "aws()",
+      "file_type": "code",
+      "source_file": "scripts/aws/release.mjs",
+      "source_location": "L53",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_aws_release_aws",
+      "community": 42,
+      "community_name": "release.test.mjs",
+      "norm_label": "aws()"
+    },
+    {
+      "label": "publish()",
+      "file_type": "code",
+      "source_file": "scripts/aws/release.mjs",
+      "source_location": "L63",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_aws_release_publish",
+      "community": 42,
+      "community_name": "release.test.mjs",
+      "norm_label": "publish()"
+    },
+    {
+      "label": "smoke-proxy.py",
+      "file_type": "code",
+      "source_file": "scripts/aws/smoke-proxy.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scripts_aws_smoke_proxy",
+      "community": 44,
+      "community_name": "smoke-proxy.py",
+      "norm_label": "smoke-proxy.py"
+    },
+    {
+      "label": "get()",
+      "file_type": "code",
+      "source_file": "scripts/aws/smoke-proxy.py",
+      "source_location": "L25",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_aws_smoke_proxy_get",
+      "community": 44,
+      "community_name": "smoke-proxy.py",
+      "norm_label": "get()"
+    },
+    {
+      "label": "release.test.mjs",
+      "file_type": "code",
+      "source_file": "scripts/aws/tests/release.test.mjs",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scripts_aws_tests_release_test",
+      "community": 42,
+      "community_name": "release.test.mjs",
+      "norm_label": "release.test.mjs"
+    },
+    {
+      "label": "sha",
+      "file_type": "code",
+      "source_file": "scripts/aws/tests/release.test.mjs",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "scripts_aws_tests_release_test_sha",
+      "community": 42,
+      "community_name": "release.test.mjs",
+      "norm_label": "sha"
+    },
+    {
+      "label": "env",
+      "file_type": "code",
+      "source_file": "scripts/aws/tests/release.test.mjs",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "scripts_aws_tests_release_test_env",
+      "community": 42,
+      "community_name": "release.test.mjs",
+      "norm_label": "env"
+    },
+    {
+      "label": "cloud()",
+      "file_type": "code",
+      "source_file": "scripts/aws/tests/release.test.mjs",
+      "source_location": "L26",
+      "_callable": true,
+      "_origin": "ast",
+      "id": "scripts_aws_tests_release_test_cloud",
+      "community": 42,
+      "community_name": "release.test.mjs",
+      "norm_label": "cloud()"
     },
     {
       "label": "scripts/preflight.ts",
@@ -1664,8 +2198,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_bookingmodal",
-      "community": 29,
-      "community_name": "Lesson",
+      "community": 1,
+      "community_name": "App.tsx",
       "norm_label": "bookingmodal.tsx"
     },
     {
@@ -1677,8 +2211,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_bookingmodal_bookingmodalprops",
-      "community": 34,
-      "community_name": "Student",
+      "community": 1,
+      "community_name": "App.tsx",
       "norm_label": "bookingmodalprops"
     },
     {
@@ -1689,8 +2223,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_bookingmodal_bookingmodal",
-      "community": 29,
-      "community_name": "Lesson",
+      "community": 1,
+      "community_name": "App.tsx",
       "norm_label": "bookingmodal()"
     },
     {
@@ -1942,8 +2476,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_reviewmodal",
-      "community": 29,
-      "community_name": "Lesson",
+      "community": 1,
+      "community_name": "App.tsx",
       "norm_label": "reviewmodal.tsx"
     },
     {
@@ -1955,8 +2489,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_reviewmodal_reviewmodalprops",
-      "community": 29,
-      "community_name": "Lesson",
+      "community": 1,
+      "community_name": "App.tsx",
       "norm_label": "reviewmodalprops"
     },
     {
@@ -1967,8 +2501,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_reviewmodal_reviewmodal",
-      "community": 29,
-      "community_name": "Lesson",
+      "community": 1,
+      "community_name": "App.tsx",
       "norm_label": "reviewmodal()"
     },
     {
@@ -1978,8 +2512,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_studentinteractivehub",
-      "community": 34,
-      "community_name": "Student",
+      "community": 0,
+      "community_name": "Teacher",
       "norm_label": "studentinteractivehub.tsx"
     },
     {
@@ -1991,8 +2525,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_studentinteractivehub_studentinteractivehubprops",
-      "community": 34,
-      "community_name": "Student",
+      "community": 0,
+      "community_name": "Teacher",
       "norm_label": "studentinteractivehubprops"
     },
     {
@@ -2003,8 +2537,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_studentinteractivehub_studentinteractivehub",
-      "community": 34,
-      "community_name": "Student",
+      "community": 0,
+      "community_name": "Teacher",
       "norm_label": "studentinteractivehub()"
     },
     {
@@ -2073,8 +2607,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_teacherdirectory",
-      "community": 0,
-      "community_name": "Teacher",
+      "community": 34,
+      "community_name": "Student",
       "norm_label": "teacherdirectory.tsx"
     },
     {
@@ -2086,8 +2620,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_teacherdirectory_teacherdirectoryprops",
-      "community": 0,
-      "community_name": "Teacher",
+      "community": 34,
+      "community_name": "Student",
       "norm_label": "teacherdirectoryprops"
     },
     {
@@ -2098,8 +2632,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_teacherdirectory_teacherdirectory",
-      "community": 0,
-      "community_name": "Teacher",
+      "community": 34,
+      "community_name": "Student",
       "norm_label": "teacherdirectory()"
     },
     {
@@ -2109,8 +2643,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_teacherprofilemodal",
-      "community": 0,
-      "community_name": "Teacher",
+      "community": 1,
+      "community_name": "App.tsx",
       "norm_label": "teacherprofilemodal.tsx"
     },
     {
@@ -2122,8 +2656,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_teacherprofilemodal_teacherprofilemodalprops",
-      "community": 0,
-      "community_name": "Teacher",
+      "community": 1,
+      "community_name": "App.tsx",
       "norm_label": "teacherprofilemodalprops"
     },
     {
@@ -2134,8 +2668,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_teacherprofilemodal_teacherprofilemodal",
-      "community": 0,
-      "community_name": "Teacher",
+      "community": 1,
+      "community_name": "App.tsx",
       "norm_label": "teacherprofilemodal()"
     },
     {
@@ -2145,8 +2679,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_virtualclassroommodal",
-      "community": 29,
-      "community_name": "Lesson",
+      "community": 1,
+      "community_name": "App.tsx",
       "norm_label": "virtualclassroommodal.tsx"
     },
     {
@@ -2158,8 +2692,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_virtualclassroommodal_props",
-      "community": 29,
-      "community_name": "Lesson",
+      "community": 1,
+      "community_name": "App.tsx",
       "norm_label": "props"
     },
     {
@@ -2170,8 +2704,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_virtualclassroommodal_virtualclassroommodal",
-      "community": 29,
-      "community_name": "Lesson",
+      "community": 1,
+      "community_name": "App.tsx",
       "norm_label": "virtualclassroommodal()"
     },
     {
@@ -2492,8 +3026,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_domain_entities_paymenttransactionentity_paymenttransactionentity",
-      "community": 33,
-      "community_name": "PaymentTransaction",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": "paymenttransactionentity"
     },
     {
@@ -2504,8 +3038,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_entities_paymenttransactionentity_paymenttransactionentity_constructor",
-      "community": 33,
-      "community_name": "PaymentTransaction",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": ".constructor()"
     },
     {
@@ -2528,8 +3062,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_entities_paymenttransactionentity_paymenttransactionentity_markpaid",
-      "community": 33,
-      "community_name": "PaymentTransaction",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": ".markpaid()"
     },
     {
@@ -2540,8 +3074,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_entities_paymenttransactionentity_paymenttransactionentity_markrefunded",
-      "community": 33,
-      "community_name": "PaymentTransaction",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": ".markrefunded()"
     },
     {
@@ -2552,8 +3086,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_entities_paymenttransactionentity_paymenttransactionentity_tojson",
-      "community": 33,
-      "community_name": "PaymentTransaction",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": ".tojson()"
     },
     {
@@ -2913,8 +3447,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_domain_errors_domainerror_scheduleconflicterror",
-      "community": 30,
-      "community_name": "DomainError.ts",
+      "community": 29,
+      "community_name": "Lesson",
       "norm_label": "scheduleconflicterror"
     },
     {
@@ -2925,8 +3459,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_errors_domainerror_scheduleconflicterror_constructor",
-      "community": 30,
-      "community_name": "DomainError.ts",
+      "community": 29,
+      "community_name": "Lesson",
       "norm_label": ".constructor()"
     },
     {
@@ -3107,8 +3641,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_repositories_ilessonrepository_ilessonrepository_updatestatus",
-      "community": 30,
-      "community_name": "DomainError.ts",
+      "community": 29,
+      "community_name": "Lesson",
       "norm_label": ".updatestatus()"
     },
     {
@@ -3214,8 +3748,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_domain_repositories_ipaymentrepository",
-      "community": 33,
-      "community_name": "PaymentTransaction",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": "ipaymentrepository.ts"
     },
     {
@@ -3227,8 +3761,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_domain_repositories_ipaymentrepository_ipaymentrepository",
-      "community": 33,
-      "community_name": "PaymentTransaction",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": "ipaymentrepository"
     },
     {
@@ -3239,8 +3773,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_repositories_ipaymentrepository_ipaymentrepository_findbyid",
-      "community": 33,
-      "community_name": "PaymentTransaction",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": ".findbyid()"
     },
     {
@@ -3251,8 +3785,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_repositories_ipaymentrepository_ipaymentrepository_findall",
-      "community": 33,
-      "community_name": "PaymentTransaction",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": ".findall()"
     },
     {
@@ -3263,8 +3797,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_repositories_ipaymentrepository_ipaymentrepository_findbystudentid",
-      "community": 33,
-      "community_name": "PaymentTransaction",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": ".findbystudentid()"
     },
     {
@@ -3275,8 +3809,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_repositories_ipaymentrepository_ipaymentrepository_save",
-      "community": 33,
-      "community_name": "PaymentTransaction",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": ".save()"
     },
     {
@@ -3561,8 +4095,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_domain_services_bookingdomainservice",
-      "community": 30,
-      "community_name": "DomainError.ts",
+      "community": 29,
+      "community_name": "Lesson",
       "norm_label": "bookingdomainservice.ts"
     },
     {
@@ -3574,8 +4108,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_domain_services_bookingdomainservice_bookingdomainservice",
-      "community": 30,
-      "community_name": "DomainError.ts",
+      "community": 29,
+      "community_name": "Lesson",
       "norm_label": "bookingdomainservice"
     },
     {
@@ -3586,8 +4120,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_services_bookingdomainservice_bookingdomainservice_validatebookingslot",
-      "community": 0,
-      "community_name": "Teacher",
+      "community": 29,
+      "community_name": "Lesson",
       "norm_label": ".validatebookingslot()"
     },
     {
@@ -3646,8 +4180,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_domain_services_index",
-      "community": 36,
-      "community_name": "matchingService.ts",
+      "community": 34,
+      "community_name": "Student",
       "norm_label": "services/index.ts"
     },
     {
@@ -3657,8 +4191,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_domain_services_matchingservice",
-      "community": 36,
-      "community_name": "matchingService.ts",
+      "community": 34,
+      "community_name": "Student",
       "norm_label": "matchingservice.ts"
     },
     {
@@ -3670,8 +4204,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_domain_services_matchingservice_matchingservice",
-      "community": 36,
-      "community_name": "matchingService.ts",
+      "community": 34,
+      "community_name": "Student",
       "norm_label": "matchingservice"
     },
     {
@@ -3682,8 +4216,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_services_matchingservice_matchingservice_calculatematch",
-      "community": 36,
-      "community_name": "matchingService.ts",
+      "community": 34,
+      "community_name": "Student",
       "norm_label": ".calculatematch()"
     },
     {
@@ -3694,8 +4228,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_services_matchingservice_matchingservice_rankteachers",
-      "community": 36,
-      "community_name": "matchingService.ts",
+      "community": 34,
+      "community_name": "Student",
       "norm_label": ".rankteachers()"
     },
     {
@@ -3718,8 +4252,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_domain_types_userrole",
-      "community": 29,
-      "community_name": "Lesson",
+      "community": 1,
+      "community_name": "App.tsx",
       "norm_label": "userrole"
     },
     {
@@ -3742,8 +4276,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "src_domain_types_proficiencylevellabels",
-      "community": 0,
-      "community_name": "Teacher",
+      "community": 34,
+      "community_name": "Student",
       "norm_label": "proficiencylevellabels"
     },
     {
@@ -3766,8 +4300,8 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "src_domain_types_learninggoallabels",
-      "community": 0,
-      "community_name": "Teacher",
+      "community": 1,
+      "community_name": "App.tsx",
       "norm_label": "learninggoallabels"
     },
     {
@@ -3779,8 +4313,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_domain_types_lessonstatus",
-      "community": 30,
-      "community_name": "DomainError.ts",
+      "community": 29,
+      "community_name": "Lesson",
       "norm_label": "lessonstatus"
     },
     {
@@ -3816,8 +4350,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_domain_types_paymentstatus",
-      "community": 33,
-      "community_name": "PaymentTransaction",
+      "community": 39,
+      "community_name": "domain/types.ts",
       "norm_label": "paymentstatus"
     },
     {
@@ -3894,8 +4428,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_domain_types_paymenttransaction",
-      "community": 33,
-      "community_name": "PaymentTransaction",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": "paymenttransaction"
     },
     {
@@ -3920,8 +4454,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_domain_types_matchrecommendation",
-      "community": 36,
-      "community_name": "matchingService.ts",
+      "community": 34,
+      "community_name": "Student",
       "norm_label": "matchrecommendation"
     },
     {
@@ -4341,8 +4875,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_lib_bookingdates",
-      "community": 29,
-      "community_name": "Lesson",
+      "community": 1,
+      "community_name": "App.tsx",
       "norm_label": "bookingdates.ts"
     },
     {
@@ -4353,8 +4887,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_lib_bookingdates_bookingdates",
-      "community": 29,
-      "community_name": "Lesson",
+      "community": 1,
+      "community_name": "App.tsx",
       "norm_label": "bookingdates()"
     },
     {
@@ -4419,8 +4953,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_lib_usedialog",
-      "community": 29,
-      "community_name": "Lesson",
+      "community": 1,
+      "community_name": "App.tsx",
       "norm_label": "usedialog.ts"
     },
     {
@@ -4431,8 +4965,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_lib_usedialog_usedialog",
-      "community": 29,
-      "community_name": "Lesson",
+      "community": 1,
+      "community_name": "App.tsx",
       "norm_label": "usedialog()"
     },
     {
@@ -4453,8 +4987,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_server_app",
-      "community": 4,
-      "community_name": "requireCondition",
+      "community": 33,
+      "community_name": "platform.ts",
       "norm_label": "app.ts"
     },
     {
@@ -4466,8 +5000,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_server_app_appdependencies",
-      "community": 4,
-      "community_name": "requireCondition",
+      "community": 33,
+      "community_name": "platform.ts",
       "norm_label": "appdependencies"
     },
     {
@@ -4479,8 +5013,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_server_app_authrequest",
-      "community": 17,
-      "community_name": "createApp",
+      "community": 33,
+      "community_name": "platform.ts",
       "norm_label": "authrequest"
     },
     {
@@ -4491,8 +5025,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_app_createapp",
-      "community": 17,
-      "community_name": "createApp",
+      "community": 33,
+      "community_name": "platform.ts",
       "norm_label": "createapp()"
     },
     {
@@ -4515,15 +5049,15 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_server_config_runtimeconfig",
-      "community": 22,
-      "community_name": "Store",
+      "community": 16,
+      "community_name": "Row",
       "norm_label": "runtimeconfig"
     },
     {
       "label": "readConfig()",
       "file_type": "code",
       "source_file": "src/server/config.ts",
-      "source_location": "L26",
+      "source_location": "L27",
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_config_readconfig",
@@ -4587,8 +5121,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_server_marketplace_providerpayment",
-      "community": 16,
-      "community_name": "Row",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": "providerpayment"
     },
     {
@@ -4710,8 +5244,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_marketplace_mercadopagogateway_constructor",
-      "community": 22,
-      "community_name": "Store",
+      "community": 16,
+      "community_name": "Row",
       "norm_label": ".constructor()"
     },
     {
@@ -4817,8 +5351,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_server_platform",
-      "community": 4,
-      "community_name": "requireCondition",
+      "community": 33,
+      "community_name": "platform.ts",
       "norm_label": "platform.ts"
     },
     {
@@ -4830,8 +5364,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_server_platform_identity",
-      "community": 4,
-      "community_name": "requireCondition",
+      "community": 33,
+      "community_name": "platform.ts",
       "norm_label": "identity"
     },
     {
@@ -4855,8 +5389,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_platform_platform_constructor",
-      "community": 22,
-      "community_name": "Store",
+      "community": 16,
+      "community_name": "Row",
       "norm_label": ".constructor()"
     },
     {
@@ -5165,8 +5699,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_server_privacy",
-      "community": 4,
-      "community_name": "requireCondition",
+      "community": 33,
+      "community_name": "platform.ts",
       "norm_label": "privacy.ts"
     },
     {
@@ -5178,8 +5712,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_server_privacy_privacyservice",
-      "community": 4,
-      "community_name": "requireCondition",
+      "community": 33,
+      "community_name": "platform.ts",
       "norm_label": "privacyservice"
     },
     {
@@ -5190,8 +5724,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_privacy_privacyservice_constructor",
-      "community": 4,
-      "community_name": "requireCondition",
+      "community": 33,
+      "community_name": "platform.ts",
       "norm_label": ".constructor()"
     },
     {
@@ -5202,8 +5736,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_privacy_privacyservice_export",
-      "community": 4,
-      "community_name": "requireCondition",
+      "community": 33,
+      "community_name": "platform.ts",
       "norm_label": ".export()"
     },
     {
@@ -5214,8 +5748,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_privacy_privacyservice_request",
-      "community": 4,
-      "community_name": "requireCondition",
+      "community": 33,
+      "community_name": "platform.ts",
       "norm_label": ".request()"
     },
     {
@@ -5226,8 +5760,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_privacy_privacyservice_fulfilldeletion",
-      "community": 4,
-      "community_name": "requireCondition",
+      "community": 33,
+      "community_name": "platform.ts",
       "norm_label": ".fulfilldeletion()"
     },
     {
@@ -5347,8 +5881,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_server_store_unitofwork",
-      "community": 4,
-      "community_name": "requireCondition",
+      "community": 36,
+      "community_name": "UnitOfWork",
       "norm_label": "unitofwork"
     },
     {
@@ -5371,8 +5905,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_store_unitofwork_find",
-      "community": 4,
-      "community_name": "requireCondition",
+      "community": 36,
+      "community_name": "UnitOfWork",
       "norm_label": ".find()"
     },
     {
@@ -5383,8 +5917,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_store_unitofwork_set",
-      "community": 4,
-      "community_name": "requireCondition",
+      "community": 36,
+      "community_name": "UnitOfWork",
       "norm_label": ".set()"
     },
     {
@@ -5395,8 +5929,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_store_unitofwork_remove",
-      "community": 4,
-      "community_name": "requireCondition",
+      "community": 36,
+      "community_name": "UnitOfWork",
       "norm_label": ".remove()"
     },
     {
@@ -5408,8 +5942,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_server_store_store",
-      "community": 22,
-      "community_name": "Store",
+      "community": 16,
+      "community_name": "Row",
       "norm_label": "store"
     },
     {
@@ -5420,8 +5954,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_store_store_transaction",
-      "community": 22,
-      "community_name": "Store",
+      "community": 16,
+      "community_name": "Row",
       "norm_label": ".transaction()"
     },
     {
@@ -5432,8 +5966,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_store_store_get",
-      "community": 22,
-      "community_name": "Store",
+      "community": 16,
+      "community_name": "Row",
       "norm_label": ".get()"
     },
     {
@@ -5444,8 +5978,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_store_store_find",
-      "community": 22,
-      "community_name": "Store",
+      "community": 16,
+      "community_name": "Row",
       "norm_label": ".find()"
     },
     {
@@ -5516,8 +6050,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_server_validation",
-      "community": 4,
-      "community_name": "requireCondition",
+      "community": 33,
+      "community_name": "platform.ts",
       "norm_label": "validation.ts"
     },
     {
@@ -5527,8 +6061,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_server_validation_id",
-      "community": 4,
-      "community_name": "requireCondition",
+      "community": 33,
+      "community_name": "platform.ts",
       "norm_label": "id"
     },
     {
@@ -5538,8 +6072,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_server_validation_text",
-      "community": 4,
-      "community_name": "requireCondition",
+      "community": 33,
+      "community_name": "platform.ts",
       "norm_label": "text"
     },
     {
@@ -5549,8 +6083,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_server_validation_time",
-      "community": 4,
-      "community_name": "requireCondition",
+      "community": 33,
+      "community_name": "platform.ts",
       "norm_label": "time"
     },
     {
@@ -5560,8 +6094,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "src_server_validation_profileschema",
-      "community": 4,
-      "community_name": "requireCondition",
+      "community": 33,
+      "community_name": "platform.ts",
       "norm_label": "profileschema"
     },
     {
@@ -5571,8 +6105,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_server_validation_bookingschema",
-      "community": 4,
-      "community_name": "requireCondition",
+      "community": 33,
+      "community_name": "platform.ts",
       "norm_label": "bookingschema"
     },
     {
@@ -5582,8 +6116,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "src_server_validation_teacherschema",
-      "community": 4,
-      "community_name": "requireCondition",
+      "community": 33,
+      "community_name": "platform.ts",
       "norm_label": "teacherschema"
     },
     {
@@ -5593,8 +6127,8 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "src_server_validation_diagnosticschema",
-      "community": 4,
-      "community_name": "requireCondition",
+      "community": 33,
+      "community_name": "platform.ts",
       "norm_label": "diagnosticschema"
     },
     {
@@ -5605,8 +6139,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_validation_appointment",
-      "community": 4,
-      "community_name": "requireCondition",
+      "community": 33,
+      "community_name": "platform.ts",
       "norm_label": "appointment()"
     },
     {
@@ -5617,8 +6151,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_validation_minutes",
-      "community": 4,
-      "community_name": "requireCondition",
+      "community": 33,
+      "community_name": "platform.ts",
       "norm_label": "minutes()"
     },
     {
@@ -5629,7 +6163,7 @@
       "_origin": "ast",
       "id": "src_server_video",
       "community": 17,
-      "community_name": "createApp",
+      "community_name": "video.ts",
       "norm_label": "video.ts"
     },
     {
@@ -5641,7 +6175,7 @@
       "_origin": "ast",
       "id": "src_server_video_roomname",
       "community": 17,
-      "community_name": "createApp",
+      "community_name": "video.ts",
       "norm_label": "roomname()"
     },
     {
@@ -5654,7 +6188,7 @@
       "_origin": "ast",
       "id": "src_server_video_videoservice",
       "community": 17,
-      "community_name": "createApp",
+      "community_name": "video.ts",
       "norm_label": "videoservice"
     },
     {
@@ -5665,8 +6199,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_video_videoservice_constructor",
-      "community": 22,
-      "community_name": "Store",
+      "community": 16,
+      "community_name": "Row",
       "norm_label": ".constructor()"
     },
     {
@@ -5678,7 +6212,7 @@
       "_origin": "ast",
       "id": "src_server_video_videoservice_request",
       "community": 17,
-      "community_name": "createApp",
+      "community_name": "video.ts",
       "norm_label": ".request()"
     },
     {
@@ -5690,7 +6224,7 @@
       "_origin": "ast",
       "id": "src_server_video_videoservice_room",
       "community": 17,
-      "community_name": "createApp",
+      "community_name": "video.ts",
       "norm_label": ".room()"
     },
     {
@@ -5702,7 +6236,7 @@
       "_origin": "ast",
       "id": "src_server_video_videoservice_close",
       "community": 17,
-      "community_name": "createApp",
+      "community_name": "video.ts",
       "norm_label": ".close()"
     },
     {
@@ -5714,7 +6248,7 @@
       "_origin": "ast",
       "id": "src_server_video_videoservice_closesubject",
       "community": 17,
-      "community_name": "createApp",
+      "community_name": "video.ts",
       "norm_label": ".closesubject()"
     },
     {
@@ -5726,7 +6260,7 @@
       "_origin": "ast",
       "id": "src_server_video_videoservice_retryclosures",
       "community": 17,
-      "community_name": "createApp",
+      "community_name": "video.ts",
       "norm_label": ".retryclosures()"
     },
     {
@@ -5736,8 +6270,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_types",
-      "community": 36,
-      "community_name": "matchingService.ts",
+      "community": 34,
+      "community_name": "Student",
       "norm_label": "src/types.ts"
     },
     {
@@ -5784,6 +6318,17 @@
       "community": 14,
       "community_name": "fixture.ts",
       "norm_label": "platform.test.ts"
+    },
+    {
+      "label": "proxy.test.ts",
+      "file_type": "code",
+      "source_file": "tests/integration/proxy.test.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_integration_proxy_test",
+      "community": 12,
+      "community_name": "config.ts",
+      "norm_label": "proxy.test.ts"
     },
     {
       "label": "room.test.ts",
@@ -6021,8 +6566,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "tests_support_fixture_fakegateway_approve",
-      "community": 16,
-      "community_name": "Row",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": ".approve()"
     },
     {
@@ -6057,8 +6602,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "tests_support_memory_store_memorystore",
-      "community": 37,
-      "community_name": "MemoryStore",
+      "community": 36,
+      "community_name": "UnitOfWork",
       "norm_label": "memorystore"
     },
     {
@@ -6069,8 +6614,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "tests_support_memory_store_memorystore_replacefortest",
-      "community": 37,
-      "community_name": "MemoryStore",
+      "community": 36,
+      "community_name": "UnitOfWork",
       "norm_label": ".replacefortest()"
     },
     {
@@ -6081,8 +6626,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "tests_support_memory_store_memorystore_check",
-      "community": 37,
-      "community_name": "MemoryStore",
+      "community": 36,
+      "community_name": "UnitOfWork",
       "norm_label": ".check()"
     },
     {
@@ -6093,8 +6638,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "tests_support_memory_store_memorystore_get",
-      "community": 37,
-      "community_name": "MemoryStore",
+      "community": 36,
+      "community_name": "UnitOfWork",
       "norm_label": ".get()"
     },
     {
@@ -6105,8 +6650,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "tests_support_memory_store_memorystore_find",
-      "community": 37,
-      "community_name": "MemoryStore",
+      "community": 36,
+      "community_name": "UnitOfWork",
       "norm_label": ".find()"
     },
     {
@@ -6117,8 +6662,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "tests_support_memory_store_memorystore_transaction",
-      "community": 37,
-      "community_name": "MemoryStore",
+      "community": 36,
+      "community_name": "UnitOfWork",
       "norm_label": ".transaction()"
     },
     {
@@ -6128,8 +6673,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_unit_bookingdomainservice_test",
-      "community": 30,
-      "community_name": "DomainError.ts",
+      "community": 29,
+      "community_name": "Lesson",
       "norm_label": "bookingdomainservice.test.ts"
     },
     {
@@ -6139,8 +6684,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "tests_unit_bookingdomainservice_test_mockteacher",
-      "community": 30,
-      "community_name": "DomainError.ts",
+      "community": 29,
+      "community_name": "Lesson",
       "norm_label": "mockteacher"
     },
     {
@@ -6161,8 +6706,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_unit_matchingservice_test",
-      "community": 36,
-      "community_name": "matchingService.ts",
+      "community": 34,
+      "community_name": "Student",
       "norm_label": "matchingservice.test.ts"
     },
     {
@@ -6172,8 +6717,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "tests_unit_matchingservice_test_mockteachers",
-      "community": 36,
-      "community_name": "matchingService.ts",
+      "community": 34,
+      "community_name": "Student",
       "norm_label": "mockteachers"
     },
     {
@@ -6183,8 +6728,8 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "tests_unit_matchingservice_test_mockstudent",
-      "community": 36,
-      "community_name": "matchingService.ts",
+      "community": 34,
+      "community_name": "Student",
       "norm_label": "mockstudent"
     },
     {
@@ -6261,8 +6806,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_unit_bookingdates_test",
-      "community": 29,
-      "community_name": "Lesson",
+      "community": 1,
+      "community_name": "App.tsx",
       "norm_label": "bookingdates.test.ts"
     },
     {
@@ -6430,7 +6975,7 @@
       "_origin": "ast",
       "id": "tests_unit_video_test",
       "community": 17,
-      "community_name": "createApp",
+      "community_name": "video.ts",
       "norm_label": "video.test.ts"
     },
     {
@@ -6760,7 +7305,7 @@
       "_origin": "ast",
       "id": "readme",
       "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community_name": "README.md",
       "norm_label": "readme.md"
     },
     {
@@ -6770,8 +7315,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "readme_talk\u00ea",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community": 52,
+      "community_name": "Talk\u00ea",
       "norm_label": "talke"
     },
     {
@@ -6781,8 +7326,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "readme_desenvolvimento",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community": 52,
+      "community_name": "Talk\u00ea",
       "norm_label": "desenvolvimento"
     },
     {
@@ -6792,8 +7337,8 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "readme_verifica\u00e7\u00e3o",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community": 52,
+      "community_name": "Talk\u00ea",
       "norm_label": "verificacao"
     },
     {
@@ -6803,8 +7348,8 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "readme_api_e_identidade",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community": 52,
+      "community_name": "Talk\u00ea",
       "norm_label": "api e identidade"
     },
     {
@@ -6814,8 +7359,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_dados_publicacao",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community": 45,
+      "community_name": "PUBLICACAO.md",
       "norm_label": "dados_publicacao.md"
     },
     {
@@ -6825,31 +7370,64 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_dados_publicacao_dados_fornecidos_para_a_publica\u00e7\u00e3o",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community": 53,
+      "community_name": "Dados fornecidos para a publica\u00e7\u00e3o",
       "norm_label": "dados fornecidos para a publicacao"
     },
     {
       "label": "Pend\u00eancias de defini\u00e7\u00e3o e acesso",
       "file_type": "document",
       "source_file": "docs/DADOS_PUBLICACAO.md",
-      "source_location": "L19",
+      "source_location": "L21",
       "_origin": "ast",
       "id": "docs_dados_publicacao_pend\u00eancias_de_defini\u00e7\u00e3o_e_acesso",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community": 53,
+      "community_name": "Dados fornecidos para a publica\u00e7\u00e3o",
       "norm_label": "pendencias de definicao e acesso"
     },
     {
       "label": "Configura\u00e7\u00e3o e acesso",
       "file_type": "document",
       "source_file": "docs/DADOS_PUBLICACAO.md",
-      "source_location": "L29",
+      "source_location": "L30",
       "_origin": "ast",
       "id": "docs_dados_publicacao_configura\u00e7\u00e3o_e_acesso",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community": 53,
+      "community_name": "Dados fornecidos para a publica\u00e7\u00e3o",
       "norm_label": "configuracao e acesso"
+    },
+    {
+      "label": "DNS_EMAIL.md",
+      "file_type": "document",
+      "source_file": "docs/DNS_EMAIL.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_dns_email",
+      "community": 45,
+      "community_name": "PUBLICACAO.md",
+      "norm_label": "dns_email.md"
+    },
+    {
+      "label": "Valida\u00e7\u00e3o do e-mail talke.club \u2014 11/10/2026",
+      "file_type": "document",
+      "source_file": "docs/DNS_EMAIL.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_dns_email_valida\u00e7\u00e3o_do_e_mail_talke_club_11_10_2026",
+      "community": 45,
+      "community_name": "PUBLICACAO.md",
+      "norm_label": "validacao do e-mail talke.club \u2014 11/10/2026"
+    },
+    {
+      "label": "Resultado",
+      "file_type": "document",
+      "source_file": "docs/DNS_EMAIL.md",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "docs_dns_email_resultado",
+      "community": 45,
+      "community_name": "PUBLICACAO.md",
+      "norm_label": "resultado"
     },
     {
       "label": "DOMINIO_HOSTINGER.md",
@@ -6858,8 +7436,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_dominio_hostinger",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community": 45,
+      "community_name": "PUBLICACAO.md",
       "norm_label": "dominio_hostinger.md"
     },
     {
@@ -6869,41 +7447,52 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_dominio_hostinger_conectar_talke_club",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community": 49,
+      "community_name": "Conectar talke.club",
       "norm_label": "conectar talke.club"
     },
     {
-      "label": "Rota preparada",
+      "label": "Rota AWS escolhida",
       "file_type": "document",
       "source_file": "docs/DOMINIO_HOSTINGER.md",
       "source_location": "L5",
       "_origin": "ast",
-      "id": "docs_dominio_hostinger_rota_preparada",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
-      "norm_label": "rota preparada"
+      "id": "docs_dominio_hostinger_rota_aws_escolhida",
+      "community": 49,
+      "community_name": "Conectar talke.club",
+      "norm_label": "rota aws escolhida"
     },
     {
-      "label": "Ativa\u00e7\u00e3o",
+      "label": "Alternativa Google Cloud, n\u00e3o selecionada",
       "file_type": "document",
       "source_file": "docs/DOMINIO_HOSTINGER.md",
       "source_location": "L13",
       "_origin": "ast",
-      "id": "docs_dominio_hostinger_ativa\u00e7\u00e3o",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
-      "norm_label": "ativacao"
+      "id": "docs_dominio_hostinger_alternativa_google_cloud_n\u00e3o_selecionada",
+      "community": 49,
+      "community_name": "Conectar talke.club",
+      "norm_label": "alternativa google cloud, nao selecionada"
+    },
+    {
+      "label": "Ativa\u00e7\u00e3o da alternativa Google Cloud",
+      "file_type": "document",
+      "source_file": "docs/DOMINIO_HOSTINGER.md",
+      "source_location": "L21",
+      "_origin": "ast",
+      "id": "docs_dominio_hostinger_ativa\u00e7\u00e3o_da_alternativa_google_cloud",
+      "community": 49,
+      "community_name": "Conectar talke.club",
+      "norm_label": "ativacao da alternativa google cloud"
     },
     {
       "label": "Consulta p\u00fablica antes da mudan\u00e7a",
       "file_type": "document",
       "source_file": "docs/DOMINIO_HOSTINGER.md",
-      "source_location": "L26",
+      "source_location": "L34",
       "_origin": "ast",
       "id": "docs_dominio_hostinger_consulta_p\u00fablica_antes_da_mudan\u00e7a",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community": 49,
+      "community_name": "Conectar talke.club",
       "norm_label": "consulta publica antes da mudanca"
     },
     {
@@ -6914,7 +7503,7 @@
       "_origin": "ast",
       "id": "docs_operacao",
       "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community_name": "README.md",
       "norm_label": "operacao.md"
     },
     {
@@ -6924,7 +7513,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_operacao_prepara\u00e7\u00e3o_t\u00e9cnica_e_opera\u00e7\u00e3o",
-      "community": 10,
+      "community": 46,
       "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
       "norm_label": "preparacao tecnica e operacao"
     },
@@ -6935,7 +7524,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "docs_operacao_entrega_t\u00e9cnica",
-      "community": 10,
+      "community": 46,
       "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
       "norm_label": "entrega tecnica"
     },
@@ -6946,7 +7535,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "docs_operacao_ativa\u00e7\u00e3o",
-      "community": 10,
+      "community": 46,
       "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
       "norm_label": "ativacao"
     },
@@ -6957,7 +7546,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "docs_operacao_manuten\u00e7\u00e3o_e_alertas",
-      "community": 10,
+      "community": 46,
       "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
       "norm_label": "manutencao e alertas"
     },
@@ -6968,7 +7557,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "docs_operacao_restaura\u00e7\u00e3o_e_dados_exclu\u00eddos",
-      "community": 10,
+      "community": 46,
       "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
       "norm_label": "restauracao e dados excluidos"
     },
@@ -6979,7 +7568,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "docs_operacao_resposta_a_incidente_e_revers\u00e3o",
-      "community": 10,
+      "community": 46,
       "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
       "norm_label": "resposta a incidente e reversao"
     },
@@ -6990,7 +7579,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "docs_operacao_prote\u00e7\u00e3o_do_reposit\u00f3rio",
-      "community": 10,
+      "community": 46,
       "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
       "norm_label": "protecao do repositorio"
     },
@@ -7002,7 +7591,7 @@
       "_origin": "ast",
       "id": "docs_privacidade_operacao",
       "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community_name": "README.md",
       "norm_label": "privacidade_operacao.md"
     },
     {
@@ -7012,8 +7601,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_privacidade_operacao_lgpd_menores_e_atendimento_requisitos_de_opera\u00e7\u00e3o",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community": 50,
+      "community_name": "LGPD, menores e atendimento \u2014 requisitos de opera\u00e7\u00e3o",
       "norm_label": "lgpd, menores e atendimento \u2014 requisitos de operacao"
     },
     {
@@ -7023,8 +7612,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "docs_privacidade_operacao_identifica\u00e7\u00e3o_e_documentos",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community": 50,
+      "community_name": "LGPD, menores e atendimento \u2014 requisitos de opera\u00e7\u00e3o",
       "norm_label": "identificacao e documentos"
     },
     {
@@ -7034,8 +7623,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "docs_privacidade_operacao_menores_e_aferi\u00e7\u00e3o_de_idade",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community": 50,
+      "community_name": "LGPD, menores e atendimento \u2014 requisitos de opera\u00e7\u00e3o",
       "norm_label": "menores e afericao de idade"
     },
     {
@@ -7045,8 +7634,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "docs_privacidade_operacao_atendimento_a_titulares",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community": 50,
+      "community_name": "LGPD, menores e atendimento \u2014 requisitos de opera\u00e7\u00e3o",
       "norm_label": "atendimento a titulares"
     },
     {
@@ -7056,8 +7645,8 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "docs_privacidade_operacao_operadores_transfer\u00eancias_e_incidentes",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community": 50,
+      "community_name": "LGPD, menores e atendimento \u2014 requisitos de opera\u00e7\u00e3o",
       "norm_label": "operadores, transferencias e incidentes"
     },
     {
@@ -7067,8 +7656,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_publicacao",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community": 45,
+      "community_name": "PUBLICACAO.md",
       "norm_label": "publicacao.md"
     },
     {
@@ -7078,8 +7667,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_publicacao_publica\u00e7\u00e3o_comercial_brasil",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community": 48,
+      "community_name": "Publica\u00e7\u00e3o comercial \u2014 Brasil",
       "norm_label": "publicacao comercial \u2014 brasil"
     },
     {
@@ -7089,8 +7678,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "docs_publicacao_o_que_mudou",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community": 48,
+      "community_name": "Publica\u00e7\u00e3o comercial \u2014 Brasil",
       "norm_label": "o que mudou"
     },
     {
@@ -7100,8 +7689,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "docs_publicacao_prepara\u00e7\u00e3o_e_implanta\u00e7\u00e3o",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community": 48,
+      "community_name": "Publica\u00e7\u00e3o comercial \u2014 Brasil",
       "norm_label": "preparacao e implantacao"
     },
     {
@@ -7111,8 +7700,8 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "docs_publicacao_homologa\u00e7\u00e3o_mercado_pago_pendente",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community": 48,
+      "community_name": "Publica\u00e7\u00e3o comercial \u2014 Brasil",
       "norm_label": "homologacao mercado pago pendente"
     },
     {
@@ -7122,8 +7711,8 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "docs_publicacao_contratos_atendimento_e_obriga\u00e7\u00f5es_financeiras",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community": 48,
+      "community_name": "Publica\u00e7\u00e3o comercial \u2014 Brasil",
       "norm_label": "contratos, atendimento e obrigacoes financeiras"
     },
     {
@@ -7133,8 +7722,8 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "docs_publicacao_dados_legados_e_continuidade",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community": 48,
+      "community_name": "Publica\u00e7\u00e3o comercial \u2014 Brasil",
       "norm_label": "dados legados e continuidade"
     },
     {
@@ -7144,8 +7733,8 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "docs_publicacao_comandos",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community": 48,
+      "community_name": "Publica\u00e7\u00e3o comercial \u2014 Brasil",
       "norm_label": "comandos"
     },
     {
@@ -7156,7 +7745,7 @@
       "_origin": "ast",
       "id": "docs_publicacao_automatica",
       "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community_name": "README.md",
       "norm_label": "publicacao_automatica.md"
     },
     {
@@ -7166,53 +7755,141 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_publicacao_automatica_publica\u00e7\u00e3o_autom\u00e1tica_e_revers\u00e3o",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community": 51,
+      "community_name": "Publica\u00e7\u00e3o autom\u00e1tica e revers\u00e3o",
       "norm_label": "publicacao automatica e reversao"
     },
     {
       "label": "Configura\u00e7\u00e3o",
       "file_type": "document",
       "source_file": "docs/PUBLICACAO_AUTOMATICA.md",
-      "source_location": "L5",
+      "source_location": "L7",
       "_origin": "ast",
       "id": "docs_publicacao_automatica_configura\u00e7\u00e3o",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community": 51,
+      "community_name": "Publica\u00e7\u00e3o autom\u00e1tica e revers\u00e3o",
       "norm_label": "configuracao"
     },
     {
       "label": "Identidade da publica\u00e7\u00e3o",
       "file_type": "document",
       "source_file": "docs/PUBLICACAO_AUTOMATICA.md",
-      "source_location": "L32",
+      "source_location": "L34",
       "_origin": "ast",
       "id": "docs_publicacao_automatica_identidade_da_publica\u00e7\u00e3o",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community": 51,
+      "community_name": "Publica\u00e7\u00e3o autom\u00e1tica e revers\u00e3o",
       "norm_label": "identidade da publicacao"
     },
     {
       "label": "Execu\u00e7\u00e3o",
       "file_type": "document",
       "source_file": "docs/PUBLICACAO_AUTOMATICA.md",
-      "source_location": "L50",
+      "source_location": "L52",
       "_origin": "ast",
       "id": "docs_publicacao_automatica_execu\u00e7\u00e3o",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community": 51,
+      "community_name": "Publica\u00e7\u00e3o autom\u00e1tica e revers\u00e3o",
       "norm_label": "execucao"
     },
     {
       "label": "Falha e revers\u00e3o",
       "file_type": "document",
       "source_file": "docs/PUBLICACAO_AUTOMATICA.md",
-      "source_location": "L60",
+      "source_location": "L62",
       "_origin": "ast",
       "id": "docs_publicacao_automatica_falha_e_revers\u00e3o",
-      "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community": 51,
+      "community_name": "Publica\u00e7\u00e3o autom\u00e1tica e revers\u00e3o",
       "norm_label": "falha e reversao"
+    },
+    {
+      "label": "PUBLICACAO_AWS.md",
+      "file_type": "document",
+      "source_file": "docs/PUBLICACAO_AWS.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_publicacao_aws",
+      "community": 45,
+      "community_name": "PUBLICACAO.md",
+      "norm_label": "publicacao_aws.md"
+    },
+    {
+      "label": "Hospedagem AWS da Talk\u00ea",
+      "file_type": "document",
+      "source_file": "docs/PUBLICACAO_AWS.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_publicacao_aws_hospedagem_aws_da_talk\u00ea",
+      "community": 47,
+      "community_name": "Hospedagem AWS da Talk\u00ea",
+      "norm_label": "hospedagem aws da talke"
+    },
+    {
+      "label": "Estrutura preparada",
+      "file_type": "document",
+      "source_file": "docs/PUBLICACAO_AWS.md",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "docs_publicacao_aws_estrutura_preparada",
+      "community": 47,
+      "community_name": "Hospedagem AWS da Talk\u00ea",
+      "norm_label": "estrutura preparada"
+    },
+    {
+      "label": "Custos e aprova\u00e7\u00e3o antes de ativar",
+      "file_type": "document",
+      "source_file": "docs/PUBLICACAO_AWS.md",
+      "source_location": "L19",
+      "_origin": "ast",
+      "id": "docs_publicacao_aws_custos_e_aprova\u00e7\u00e3o_antes_de_ativar",
+      "community": 47,
+      "community_name": "Hospedagem AWS da Talk\u00ea",
+      "norm_label": "custos e aprovacao antes de ativar"
+    },
+    {
+      "label": "Prepara\u00e7\u00e3o das contas",
+      "file_type": "document",
+      "source_file": "docs/PUBLICACAO_AWS.md",
+      "source_location": "L25",
+      "_origin": "ast",
+      "id": "docs_publicacao_aws_prepara\u00e7\u00e3o_das_contas",
+      "community": 47,
+      "community_name": "Hospedagem AWS da Talk\u00ea",
+      "norm_label": "preparacao das contas"
+    },
+    {
+      "label": "Provisionamento revis\u00e1vel",
+      "file_type": "document",
+      "source_file": "docs/PUBLICACAO_AWS.md",
+      "source_location": "L34",
+      "_origin": "ast",
+      "id": "docs_publicacao_aws_provisionamento_revis\u00e1vel",
+      "community": 47,
+      "community_name": "Hospedagem AWS da Talk\u00ea",
+      "norm_label": "provisionamento revisavel"
+    },
+    {
+      "label": "Formato do segredo",
+      "file_type": "document",
+      "source_file": "docs/PUBLICACAO_AWS.md",
+      "source_location": "L44",
+      "_origin": "ast",
+      "id": "docs_publicacao_aws_formato_do_segredo",
+      "community": 47,
+      "community_name": "Hospedagem AWS da Talk\u00ea",
+      "norm_label": "formato do segredo"
+    },
+    {
+      "label": "Publica\u00e7\u00e3o e recupera\u00e7\u00e3o",
+      "file_type": "document",
+      "source_file": "docs/PUBLICACAO_AWS.md",
+      "source_location": "L70",
+      "_origin": "ast",
+      "id": "docs_publicacao_aws_publica\u00e7\u00e3o_e_recupera\u00e7\u00e3o",
+      "community": 47,
+      "community_name": "Hospedagem AWS da Talk\u00ea",
+      "norm_label": "publicacao e recuperacao"
     },
     {
       "label": "VALIDACAO.md",
@@ -7222,7 +7899,7 @@
       "_origin": "ast",
       "id": "docs_validacao",
       "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community_name": "README.md",
       "norm_label": "validacao.md"
     },
     {
@@ -7233,29 +7910,29 @@
       "_origin": "ast",
       "id": "docs_validacao_valida\u00e7\u00e3o_das_corre\u00e7\u00f5es_11_de_outubro_de_2026",
       "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community_name": "README.md",
       "norm_label": "validacao das correcoes \u2014 11 de outubro de 2026"
     },
     {
       "label": "O que os testes demonstram",
       "file_type": "document",
       "source_file": "docs/VALIDACAO.md",
-      "source_location": "L18",
+      "source_location": "L20",
       "_origin": "ast",
       "id": "docs_validacao_o_que_os_testes_demonstram",
       "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community_name": "README.md",
       "norm_label": "o que os testes demonstram"
     },
     {
       "label": "Limites da evid\u00eancia e pr\u00f3xima libera\u00e7\u00e3o",
       "file_type": "document",
       "source_file": "docs/VALIDACAO.md",
-      "source_location": "L35",
+      "source_location": "L37",
       "_origin": "ast",
       "id": "docs_validacao_limites_da_evid\u00eancia_e_pr\u00f3xima_libera\u00e7\u00e3o",
       "community": 10,
-      "community_name": "Prepara\u00e7\u00e3o t\u00e9cnica e opera\u00e7\u00e3o",
+      "community_name": "README.md",
       "norm_label": "limites da evidencia e proxima liberacao"
     },
     {
@@ -7534,6 +8211,1005 @@
       "_origin": "ast",
       "source": "cypress_e2e_readiness_cy",
       "target": "cypress_e2e_readiness_cy_token",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L138",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime",
+      "target": "infra_aws_runtime_await_ready",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L31",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime",
+      "target": "infra_aws_runtime_aws",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime",
+      "target": "infra_aws_runtime_command",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L28",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime",
+      "target": "infra_aws_runtime_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime",
+      "target": "infra_aws_runtime_docker",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L271",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime",
+      "target": "infra_aws_runtime_health",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L86",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime",
+      "target": "infra_aws_runtime_login",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L285",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime",
+      "target": "infra_aws_runtime_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L246",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime",
+      "target": "infra_aws_runtime_maintenance",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L95",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime",
+      "target": "infra_aws_runtime_prepare",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L124",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime",
+      "target": "infra_aws_runtime_probe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L148",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime",
+      "target": "infra_aws_runtime_proxy_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime",
+      "target": "infra_aws_runtime_read",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L209",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime",
+      "target": "infra_aws_runtime_release",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L91",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime",
+      "target": "infra_aws_runtime_remove",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L189",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime",
+      "target": "infra_aws_runtime_restore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L57",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime",
+      "target": "infra_aws_runtime_secret_files",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L163",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime",
+      "target": "infra_aws_runtime_switch_proxy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L47",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime",
+      "target": "infra_aws_runtime_validate_release",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L40",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime",
+      "target": "infra_aws_runtime_write",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_aws",
+      "target": "infra_aws_runtime_command",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_docker",
+      "target": "infra_aws_runtime_command",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_aws",
+      "target": "infra_aws_runtime_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L277",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_health",
+      "target": "infra_aws_runtime_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L87",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_login",
+      "target": "infra_aws_runtime_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L250",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_maintenance",
+      "target": "infra_aws_runtime_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L108",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_prepare",
+      "target": "infra_aws_runtime_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L149",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_proxy_text",
+      "target": "infra_aws_runtime_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L224",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_release",
+      "target": "infra_aws_runtime_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L198",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_restore",
+      "target": "infra_aws_runtime_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L58",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_secret_files",
+      "target": "infra_aws_runtime_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L164",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_switch_proxy",
+      "target": "infra_aws_runtime_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L48",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_validate_release",
+      "target": "infra_aws_runtime_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L280",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_health",
+      "target": "infra_aws_runtime_aws",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L89",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_login",
+      "target": "infra_aws_runtime_aws",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L59",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_secret_files",
+      "target": "infra_aws_runtime_aws",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L88",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_login",
+      "target": "infra_aws_runtime_docker",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L256",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_maintenance",
+      "target": "infra_aws_runtime_docker",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L99",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_prepare",
+      "target": "infra_aws_runtime_docker",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L93",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_remove",
+      "target": "infra_aws_runtime_docker",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L172",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_switch_proxy",
+      "target": "infra_aws_runtime_docker",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L272",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_health",
+      "target": "infra_aws_runtime_read",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L247",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_maintenance",
+      "target": "infra_aws_runtime_read",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L212",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_release",
+      "target": "infra_aws_runtime_read",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L190",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_restore",
+      "target": "infra_aws_runtime_read",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L265",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_maintenance",
+      "target": "infra_aws_runtime_write",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L221",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_release",
+      "target": "infra_aws_runtime_write",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L199",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_restore",
+      "target": "infra_aws_runtime_write",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L79",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_secret_files",
+      "target": "infra_aws_runtime_write",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L171",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_switch_proxy",
+      "target": "infra_aws_runtime_write",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L96",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_prepare",
+      "target": "infra_aws_runtime_validate_release",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L213",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_release",
+      "target": "infra_aws_runtime_validate_release",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L251",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_maintenance",
+      "target": "infra_aws_runtime_secret_files",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L97",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_prepare",
+      "target": "infra_aws_runtime_secret_files",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L98",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_prepare",
+      "target": "infra_aws_runtime_login",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L253",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_maintenance",
+      "target": "infra_aws_runtime_remove",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L107",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_prepare",
+      "target": "infra_aws_runtime_remove",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L219",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_release",
+      "target": "infra_aws_runtime_remove",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L203",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_restore",
+      "target": "infra_aws_runtime_remove",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L174",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_switch_proxy",
+      "target": "infra_aws_runtime_remove",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L217",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_release",
+      "target": "infra_aws_runtime_prepare",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L195",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_restore",
+      "target": "infra_aws_runtime_prepare",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L141",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_await_ready",
+      "target": "infra_aws_runtime_probe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L277",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_health",
+      "target": "infra_aws_runtime_probe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L217",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_release",
+      "target": "infra_aws_runtime_await_ready",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L196",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_restore",
+      "target": "infra_aws_runtime_await_ready",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L171",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_switch_proxy",
+      "target": "infra_aws_runtime_proxy_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L223",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_release",
+      "target": "infra_aws_runtime_switch_proxy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L197",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_restore",
+      "target": "infra_aws_runtime_switch_proxy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L302",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_main",
+      "target": "infra_aws_runtime_restore",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L300",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_main",
+      "target": "infra_aws_runtime_release",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L304",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_main",
+      "target": "infra_aws_runtime_maintenance",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/runtime.py",
+      "source_location": "L289",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_runtime_main",
+      "target": "infra_aws_runtime_health",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/tests/test_runtime.py",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_tests_test_runtime",
+      "target": "infra_aws_tests_test_runtime_releasetests",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/tests/test_runtime.py",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_tests_test_runtime_releasetests",
+      "target": "infra_aws_tests_test_runtime_releasetests_setup",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/tests/test_runtime.py",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_tests_test_runtime_releasetests",
+      "target": "infra_aws_tests_test_runtime_releasetests_test_candidate_readiness_failure_preserves_prior_and_never_switches_traffic",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/tests/test_runtime.py",
+      "source_location": "L117",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_tests_test_runtime_releasetests",
+      "target": "infra_aws_tests_test_runtime_releasetests_test_failed_or_stale_maintenance_is_unhealthy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/tests/test_runtime.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_tests_test_runtime_releasetests",
+      "target": "infra_aws_tests_test_runtime_releasetests_test_failed_rollback_keeps_journal_and_blocks_maintenance",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/tests/test_runtime.py",
+      "source_location": "L78",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_tests_test_runtime_releasetests",
+      "target": "infra_aws_tests_test_runtime_releasetests_test_first_uncommitted_release_is_removed_on_reboot",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/tests/test_runtime.py",
+      "source_location": "L125",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_tests_test_runtime_releasetests",
+      "target": "infra_aws_tests_test_runtime_releasetests_test_healthy_requires_database_probe_and_recent_successful_maintenance",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/tests/test_runtime.py",
+      "source_location": "L70",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_tests_test_runtime_releasetests",
+      "target": "infra_aws_tests_test_runtime_releasetests_test_interrupted_release_restores_committed_version_on_reboot",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/tests/test_runtime.py",
+      "source_location": "L45",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_tests_test_runtime_releasetests",
+      "target": "infra_aws_tests_test_runtime_releasetests_test_public_probe_failure_rolls_back_and_clears_journal",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/tests/test_runtime.py",
+      "source_location": "L86",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_tests_test_runtime_releasetests",
+      "target": "infra_aws_tests_test_runtime_releasetests_test_reboot_journal_takes_precedence_over_an_incomplete_commit",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/tests/test_runtime.py",
+      "source_location": "L94",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_tests_test_runtime_releasetests",
+      "target": "infra_aws_tests_test_runtime_releasetests_test_rejects_mutable_and_other_environment_images",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/tests/test_runtime.py",
+      "source_location": "L101",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_tests_test_runtime_releasetests",
+      "target": "infra_aws_tests_test_runtime_releasetests_test_secret_rejects_arbitrary_env_injection_and_wrong_firebase_project",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "infra/aws/tests/test_runtime.py",
+      "source_location": "L63",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "infra_aws_tests_test_runtime_releasetests",
+      "target": "infra_aws_tests_test_runtime_releasetests_test_success_commits_same_image_and_secret_and_retains_rollback_record",
       "confidence_score": 1.0
     },
     {
@@ -8704,6 +10380,119 @@
       "_origin": "ast",
       "source": "tests_unit_admin_permissions_test",
       "target": "scripts_admin_permissions_setadminpermission",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/aws/release.mjs",
+      "source_location": "L53",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scripts_aws_release",
+      "target": "scripts_aws_release_aws",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/aws/release.mjs",
+      "source_location": "L63",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scripts_aws_release",
+      "target": "scripts_aws_release_publish",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/aws/release.mjs",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scripts_aws_release",
+      "target": "scripts_aws_release_settings",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/aws/tests/release.test.mjs",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scripts_aws_tests_release_test",
+      "target": "scripts_aws_release",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/aws/tests/release.test.mjs",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scripts_aws_tests_release_test",
+      "target": "scripts_aws_release_settings",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/aws/tests/release.test.mjs",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scripts_aws_tests_release_test",
+      "target": "scripts_aws_release_publish",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/aws/smoke-proxy.py",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scripts_aws_smoke_proxy",
+      "target": "scripts_aws_smoke_proxy_get",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/aws/tests/release.test.mjs",
+      "source_location": "L26",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scripts_aws_tests_release_test",
+      "target": "scripts_aws_tests_release_test_cloud",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/aws/tests/release.test.mjs",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scripts_aws_tests_release_test",
+      "target": "scripts_aws_tests_release_test_env",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/aws/tests/release.test.mjs",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scripts_aws_tests_release_test",
+      "target": "scripts_aws_tests_release_test_sha",
       "confidence_score": 1.0
     },
     {
@@ -16482,6 +18271,18 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "tests/integration/proxy.test.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_integration_proxy_test",
+      "target": "src_server_app",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "tests/integration/room.test.ts",
       "source_location": "L5",
       "weight": 1.0,
@@ -16532,7 +18333,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/server/app.ts",
-      "source_location": "L67",
+      "source_location": "L68",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_server_app_createapp",
@@ -16544,7 +18345,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/server/app.ts",
-      "source_location": "L371",
+      "source_location": "L372",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_server_app_createapp",
@@ -16556,7 +18357,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/server/app.ts",
-      "source_location": "L473",
+      "source_location": "L474",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_server_app_createapp",
@@ -16568,7 +18369,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/server/app.ts",
-      "source_location": "L385",
+      "source_location": "L386",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_server_app_createapp",
@@ -16580,7 +18381,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/server/app.ts",
-      "source_location": "L138",
+      "source_location": "L139",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_server_app_createapp",
@@ -16592,7 +18393,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/server/app.ts",
-      "source_location": "L124",
+      "source_location": "L125",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_server_app_createapp",
@@ -16604,7 +18405,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/server/app.ts",
-      "source_location": "L288",
+      "source_location": "L289",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_server_app_createapp",
@@ -16616,7 +18417,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/server/app.ts",
-      "source_location": "L386",
+      "source_location": "L387",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_server_app_createapp",
@@ -16628,7 +18429,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/server/app.ts",
-      "source_location": "L338",
+      "source_location": "L339",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_server_app_createapp",
@@ -16662,6 +18463,18 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "tests/integration/proxy.test.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_integration_proxy_test",
+      "target": "src_server_app_createapp",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "tests/integration/room.test.ts",
       "source_location": "L5",
       "weight": 1.0,
@@ -16686,7 +18499,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/server/config.ts",
-      "source_location": "L26",
+      "source_location": "L27",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_server_config",
@@ -16749,6 +18562,18 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_server_video",
+      "target": "src_server_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/integration/proxy.test.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_integration_proxy_test",
       "target": "src_server_config",
       "confidence_score": 1.0
     },
@@ -16895,6 +18720,18 @@
       "_origin": "ast",
       "source": "src_server_preflight_preflight",
       "target": "src_server_config_readconfig"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/integration/proxy.test.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_integration_proxy_test",
+      "target": "src_server_config_readconfig",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -20624,6 +22461,30 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "tests/integration/proxy.test.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_integration_proxy_test",
+      "target": "tests_support_fixture",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/integration/proxy.test.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "tests_integration_proxy_test",
+      "target": "tests_support_fixture_fixture",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "tests/integration/room.test.ts",
       "source_location": "L6",
       "weight": 1.0,
@@ -21694,6 +23555,17 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "readme",
+      "target": "docs_publicacao_aws",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
       "source_location": "L38",
       "weight": 1.0,
       "_origin": "ast",
@@ -21760,11 +23632,33 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "docs/DADOS_PUBLICACAO.md",
-      "source_location": "L46",
+      "source_location": "L51",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_dados_publicacao",
+      "target": "docs_dns_email",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/DADOS_PUBLICACAO.md",
+      "source_location": "L53",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_dados_publicacao",
       "target": "docs_dominio_hostinger",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/DADOS_PUBLICACAO.md",
+      "source_location": "L28",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_dados_publicacao",
+      "target": "docs_publicacao_aws",
       "confidence_score": 1.0
     },
     {
@@ -21782,7 +23676,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/DADOS_PUBLICACAO.md",
-      "source_location": "L29",
+      "source_location": "L30",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_dados_publicacao_dados_fornecidos_para_a_publica\u00e7\u00e3o",
@@ -21793,11 +23687,44 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/DADOS_PUBLICACAO.md",
-      "source_location": "L19",
+      "source_location": "L21",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_dados_publicacao_dados_fornecidos_para_a_publica\u00e7\u00e3o",
       "target": "docs_dados_publicacao_pend\u00eancias_de_defini\u00e7\u00e3o_e_acesso",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/DNS_EMAIL.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_dns_email",
+      "target": "docs_dns_email_valida\u00e7\u00e3o_do_e_mail_talke_club_11_10_2026",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/DOMINIO_HOSTINGER.md",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_dominio_hostinger",
+      "target": "docs_dns_email",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/DNS_EMAIL.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_dns_email_valida\u00e7\u00e3o_do_e_mail_talke_club_11_10_2026",
+      "target": "docs_dns_email_resultado",
       "confidence_score": 1.0
     },
     {
@@ -21812,6 +23739,28 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/DOMINIO_HOSTINGER.md",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_dominio_hostinger",
+      "target": "docs_publicacao_aws",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PUBLICACAO.md",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_publicacao",
+      "target": "docs_dominio_hostinger",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/DOMINIO_HOSTINGER.md",
@@ -21819,14 +23768,25 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_dominio_hostinger_conectar_talke_club",
-      "target": "docs_dominio_hostinger_ativa\u00e7\u00e3o",
+      "target": "docs_dominio_hostinger_alternativa_google_cloud_n\u00e3o_selecionada",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/DOMINIO_HOSTINGER.md",
-      "source_location": "L26",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_dominio_hostinger_conectar_talke_club",
+      "target": "docs_dominio_hostinger_ativa\u00e7\u00e3o_da_alternativa_google_cloud",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/DOMINIO_HOSTINGER.md",
+      "source_location": "L34",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_dominio_hostinger_conectar_talke_club",
@@ -21841,7 +23801,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_dominio_hostinger_conectar_talke_club",
-      "target": "docs_dominio_hostinger_rota_preparada",
+      "target": "docs_dominio_hostinger_rota_aws_escolhida",
       "confidence_score": 1.0
     },
     {
@@ -21881,7 +23841,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "docs/VALIDACAO.md",
-      "source_location": "L43",
+      "source_location": "L45",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_validacao",
@@ -21969,7 +23929,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "docs/VALIDACAO.md",
-      "source_location": "L45",
+      "source_location": "L47",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_validacao",
@@ -22028,7 +23988,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_publicacao",
-      "target": "docs_publicacao_automatica",
+      "target": "docs_publicacao_aws",
       "confidence_score": 1.0
     },
     {
@@ -22046,7 +24006,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "docs/VALIDACAO.md",
-      "source_location": "L37",
+      "source_location": "L39",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_validacao",
@@ -22133,8 +24093,19 @@
     {
       "relation": "references",
       "confidence": "EXTRACTED",
+      "source_file": "docs/PUBLICACAO_AUTOMATICA.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_publicacao_automatica",
+      "target": "docs_publicacao_aws",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
       "source_file": "docs/VALIDACAO.md",
-      "source_location": "L39",
+      "source_location": "L41",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_validacao",
@@ -22145,7 +24116,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PUBLICACAO_AUTOMATICA.md",
-      "source_location": "L5",
+      "source_location": "L7",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_publicacao_automatica_publica\u00e7\u00e3o_autom\u00e1tica_e_revers\u00e3o",
@@ -22156,7 +24127,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PUBLICACAO_AUTOMATICA.md",
-      "source_location": "L50",
+      "source_location": "L52",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_publicacao_automatica_publica\u00e7\u00e3o_autom\u00e1tica_e_revers\u00e3o",
@@ -22167,7 +24138,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PUBLICACAO_AUTOMATICA.md",
-      "source_location": "L60",
+      "source_location": "L62",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_publicacao_automatica_publica\u00e7\u00e3o_autom\u00e1tica_e_revers\u00e3o",
@@ -22178,11 +24149,88 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/PUBLICACAO_AUTOMATICA.md",
-      "source_location": "L32",
+      "source_location": "L34",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_publicacao_automatica_publica\u00e7\u00e3o_autom\u00e1tica_e_revers\u00e3o",
       "target": "docs_publicacao_automatica_identidade_da_publica\u00e7\u00e3o",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PUBLICACAO_AWS.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_publicacao_aws",
+      "target": "docs_publicacao_aws_hospedagem_aws_da_talk\u00ea",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PUBLICACAO_AWS.md",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_publicacao_aws_hospedagem_aws_da_talk\u00ea",
+      "target": "docs_publicacao_aws_custos_e_aprova\u00e7\u00e3o_antes_de_ativar",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PUBLICACAO_AWS.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_publicacao_aws_hospedagem_aws_da_talk\u00ea",
+      "target": "docs_publicacao_aws_estrutura_preparada",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PUBLICACAO_AWS.md",
+      "source_location": "L44",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_publicacao_aws_hospedagem_aws_da_talk\u00ea",
+      "target": "docs_publicacao_aws_formato_do_segredo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PUBLICACAO_AWS.md",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_publicacao_aws_hospedagem_aws_da_talk\u00ea",
+      "target": "docs_publicacao_aws_prepara\u00e7\u00e3o_das_contas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PUBLICACAO_AWS.md",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_publicacao_aws_hospedagem_aws_da_talk\u00ea",
+      "target": "docs_publicacao_aws_provisionamento_revis\u00e1vel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PUBLICACAO_AWS.md",
+      "source_location": "L70",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_publicacao_aws_hospedagem_aws_da_talk\u00ea",
+      "target": "docs_publicacao_aws_publica\u00e7\u00e3o_e_recupera\u00e7\u00e3o",
       "confidence_score": 1.0
     },
     {
@@ -22200,7 +24248,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/VALIDACAO.md",
-      "source_location": "L35",
+      "source_location": "L37",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_validacao_valida\u00e7\u00e3o_das_corre\u00e7\u00f5es_11_de_outubro_de_2026",
@@ -22211,7 +24259,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/VALIDACAO.md",
-      "source_location": "L18",
+      "source_location": "L20",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_validacao_valida\u00e7\u00e3o_das_corre\u00e7\u00f5es_11_de_outubro_de_2026",
@@ -22407,5 +24455,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "54b85184aef3ddf8e186afc42094e4da12152c3a"
+  "built_at_commit": "92d8b9b9681161f04f6fa705361022ca6f737562"
 }

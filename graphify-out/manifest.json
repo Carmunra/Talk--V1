@@ -5,7 +5,7 @@
     "semantic_hash": ""
   },
   "cypress/e2e/readiness.cy.ts": {
-    "mtime": 1791743635.4411857,
+    "mtime": 1791744298.674364,
     "ast_hash": "30c8d4083df3524cc4458549718f7d5d",
     "semantic_hash": ""
   },
@@ -40,7 +40,7 @@
     "semantic_hash": ""
   },
   "scripts/set-admin.ts": {
-    "mtime": 1791743641.0152998,
+    "mtime": 1791744298.692361,
     "ast_hash": "4065a42291c9227249060ea009e99a26",
     "semantic_hash": ""
   },
@@ -55,7 +55,7 @@
     "semantic_hash": ""
   },
   "src/App.tsx": {
-    "mtime": 1791743579.197801,
+    "mtime": 1791744298.6933613,
     "ast_hash": "3e21002a0c93f6bd68c38a23ae1338f3",
     "semantic_hash": ""
   },
@@ -95,7 +95,7 @@
     "semantic_hash": ""
   },
   "src/components/PrivacyNotice.tsx": {
-    "mtime": 1791743578.8941195,
+    "mtime": 1791744298.695362,
     "ast_hash": "1de6b4bc721afc08defc092778fe7d15",
     "semantic_hash": ""
   },
@@ -275,13 +275,13 @@
     "semantic_hash": ""
   },
   "src/server/app.ts": {
-    "mtime": 1791743578.254295,
-    "ast_hash": "0e6b1476a598cc3957ffbf3532d5017d",
+    "mtime": 1791746882.3939607,
+    "ast_hash": "05afc8fefac7c6a76a89dbe55e3d56d8",
     "semantic_hash": ""
   },
   "src/server/config.ts": {
-    "mtime": 1791743640.7204554,
-    "ast_hash": "f2d908dc3484aff1de48ec425a0e72bc",
+    "mtime": 1791746877.8704123,
+    "ast_hash": "991c751605e66d6f6ae40a728990940b",
     "semantic_hash": ""
   },
   "src/server/marketplace.ts": {
@@ -330,7 +330,7 @@
     "semantic_hash": ""
   },
   "tests/integration/api.test.ts": {
-    "mtime": 1791743635.1671588,
+    "mtime": 1791744298.7043629,
     "ast_hash": "06fbb53a80c5732fa1cc48465abf86ba",
     "semantic_hash": ""
   },
@@ -355,7 +355,7 @@
     "semantic_hash": ""
   },
   "tests/support/fixture.ts": {
-    "mtime": 1791743634.849745,
+    "mtime": 1791744298.7063622,
     "ast_hash": "4a06fe4aac27fb2f941bd3937b74d06b",
     "semantic_hash": ""
   },
@@ -405,7 +405,7 @@
     "semantic_hash": ""
   },
   "tests/unit/security.test.ts": {
-    "mtime": 1791743641.0527093,
+    "mtime": 1791744298.710363,
     "ast_hash": "05082bf78e7a836ff0631889d872bd86",
     "semantic_hash": ""
   },
@@ -425,13 +425,13 @@
     "semantic_hash": ""
   },
   ".github/workflows/ci.yml": {
-    "mtime": 1791742772.5541255,
-    "ast_hash": "30edeaaedfcb16d1d753c4a198e8f898",
+    "mtime": 1791747931.9240887,
+    "ast_hash": "3ac837d5ed9fd4a349b2b79b4d77ae2f",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1791742772.5579298,
-    "ast_hash": "bdaf3743b0ccc2300981894d3530321d",
+    "mtime": 1791748200.5480926,
+    "ast_hash": "0f768ab97e971aec533b2988e89ec210",
     "semantic_hash": ""
   },
   "docs/PRIVACIDADE_OPERACAO.md": {
@@ -440,8 +440,8 @@
     "semantic_hash": ""
   },
   "docs/PUBLICACAO.md": {
-    "mtime": 1791743581.1002367,
-    "ast_hash": "f393ea8fe9fb9514bafa6e42bfe2c3ae",
+    "mtime": 1791748201.358231,
+    "ast_hash": "018c2d1eb951d101fa078768d7a52a8f",
     "semantic_hash": ""
   },
   "docs/categorizacao-backlog.md": {
@@ -480,8 +480,8 @@
     "semantic_hash": ""
   },
   "docs/VALIDACAO.md": {
-    "mtime": 1791743908.3132753,
-    "ast_hash": "2c52b5242ea891bad8c47645836fc5d3",
+    "mtime": 1791748271.8199065,
+    "ast_hash": "2bbc6f8076da66e0f1b798cf24b32144",
     "semantic_hash": ""
   },
   "scripts/verify-lockfile.mjs": {
@@ -580,43 +580,118 @@
     "semantic_hash": ""
   },
   ".github/workflows/deploy.yml": {
-    "mtime": 1791742772.5555515,
-    "ast_hash": "ee572519493e317779562c068e17cbdd",
+    "mtime": 1791747337.7402725,
+    "ast_hash": "73dbea686bac09a083dcc6042f5acc35",
     "semantic_hash": ""
   },
   "docs/PUBLICACAO_AUTOMATICA.md": {
-    "mtime": 1791742772.5622358,
-    "ast_hash": "4b606a100672bbbe07a099b58d2997b9",
+    "mtime": 1791748203.2931435,
+    "ast_hash": "1f478637163f96411131fe203fabe065",
     "semantic_hash": ""
   },
   "scripts/admin-permissions.ts": {
-    "mtime": 1791743641.0032947,
+    "mtime": 1791744298.6913612,
     "ast_hash": "3f41e18aeace3fb47e6777563127470e",
     "semantic_hash": ""
   },
   "src/components/SupportContacts.tsx": {
-    "mtime": 1791743578.586644,
+    "mtime": 1791744298.6973615,
     "ast_hash": "6578a06a6f028755332e99cfd584294e",
     "semantic_hash": ""
   },
   "tests/unit/admin-permissions.test.ts": {
-    "mtime": 1791743641.0336752,
+    "mtime": 1791744298.7083623,
     "ast_hash": "2107c1ef10d5fc979684dc212b9a732a",
     "semantic_hash": ""
   },
   "docs/DADOS_PUBLICACAO.md": {
-    "mtime": 1791743864.425178,
-    "ast_hash": "e1967c30592e7eedbe462226bbb1697b",
+    "mtime": 1791748280.0845497,
+    "ast_hash": "d260261022deb5648c46b63352be24e7",
     "semantic_hash": ""
   },
   "firebase.hosting.json": {
-    "mtime": 1791743865.086455,
+    "mtime": 1791744298.6793609,
     "ast_hash": "f772da63c63d17014c0edf779edc3579",
     "semantic_hash": ""
   },
   "docs/DOMINIO_HOSTINGER.md": {
-    "mtime": 1791743908.015277,
-    "ast_hash": "44d741be8a8855f3cac87d60fe882222",
+    "mtime": 1791748271.3731873,
+    "ast_hash": "d2428d19165de9a251b8cd65c4aa4f50",
+    "semantic_hash": ""
+  },
+  "infra/aws/.terraform.lock.hcl": {
+    "mtime": 1791747497.3930287,
+    "ast_hash": "0244676b38f7291dea57c1bc0e4f2ee6",
+    "semantic_hash": ""
+  },
+  "infra/aws/main.tf": {
+    "mtime": 1791748282.1567209,
+    "ast_hash": "f58068e3473052e57f33c0a120bd3b17",
+    "semantic_hash": ""
+  },
+  "infra/aws/outputs.tf": {
+    "mtime": 1791747030.6335323,
+    "ast_hash": "595d613e70fb7559ac495e850da68e51",
+    "semantic_hash": ""
+  },
+  "infra/aws/runtime.py": {
+    "mtime": 1791747996.2616887,
+    "ast_hash": "ee4e5c15f8448242e28d081234eb1b49",
+    "semantic_hash": ""
+  },
+  "infra/aws/tests/safety.tftest.hcl": {
+    "mtime": 1791748103.752372,
+    "ast_hash": "6550c94112fdba70ea75ff98609bce1c",
+    "semantic_hash": ""
+  },
+  "infra/aws/tests/test_runtime.py": {
+    "mtime": 1791747996.7904415,
+    "ast_hash": "0f7504af63b52d302036fa6eb070cef1",
+    "semantic_hash": ""
+  },
+  "infra/aws/variables.tf": {
+    "mtime": 1791747136.3175704,
+    "ast_hash": "77449a1c10fc63252390f2de4935da2c",
+    "semantic_hash": ""
+  },
+  "infra/aws/versions.tf": {
+    "mtime": 1791747029.241486,
+    "ast_hash": "d7b5462c6439132d00721429b015184f",
+    "semantic_hash": ""
+  },
+  "scripts/aws/release.mjs": {
+    "mtime": 1791747941.4149776,
+    "ast_hash": "e40a18b6da598b45ded46eae01beb908",
+    "semantic_hash": ""
+  },
+  "scripts/aws/smoke-proxy.py": {
+    "mtime": 1791747931.4332058,
+    "ast_hash": "69e3314ab66e7c32a51c9a5ac2c3411f",
+    "semantic_hash": ""
+  },
+  "scripts/aws/tests/release.test.mjs": {
+    "mtime": 1791747941.4689803,
+    "ast_hash": "a804e90ab999af8c7f0729817ca9fa7f",
+    "semantic_hash": ""
+  },
+  "tests/integration/proxy.test.ts": {
+    "mtime": 1791747941.6190715,
+    "ast_hash": "b807f53596b33f79c112f70a66a3827a",
+    "semantic_hash": ""
+  },
+  ".github/workflows/deploy-aws.yml": {
+    "mtime": 1791747337.3708398,
+    "ast_hash": "d3e2e1b73c9f153c910ba93e734f922f",
+    "semantic_hash": ""
+  },
+  "docs/DNS_EMAIL.md": {
+    "mtime": 1791746379.1277893,
+    "ast_hash": "000ffcdd7b7aef18926cef271c45004c",
+    "semantic_hash": ""
+  },
+  "docs/PUBLICACAO_AWS.md": {
+    "mtime": 1791748104.2365444,
+    "ast_hash": "fea0bfc8a471ae06033643d22c78438f",
     "semantic_hash": ""
   }
 }

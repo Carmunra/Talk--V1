@@ -1,0 +1,88 @@
+name: Publish AWS platform
+run-name: Publish AWS ${{ inputs.environment }} from main
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Ambiente AWS de destino
+        required: true
+        type: choice
+        options: [staging, production]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: deploy-${{ inputs.environment }}
+  cancel-in-progress: false
+jobs:
+  release:
+    if: github.ref == 'refs/heads/main' && vars.HOSTING_PROVIDER == 'aws'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
+    env:
+      HOSTING_PROVIDER: ${{ vars.HOSTING_PROVIDER }}
+      RELEASE_ENVIRONMENT: ${{ inputs.environment }}
+      AWS_RELEASE_APPROVED: ${{ vars[format('{0}_AWS_RELEASE_APPROVED', inputs.environment == 'staging' && 'STAGING' || 'PRODUCTION')] }}
+      STAGING_VALIDATED_SHA: ${{ vars.PRODUCTION_STAGING_VALIDATED_SHA }}
+      AWS_ACCOUNT_ID: ${{ vars[format('{0}_AWS_ACCOUNT_ID', inputs.environment == 'staging' && 'STAGING' || 'PRODUCTION')] }}
+      AWS_REGION: sa-east-1
+      AWS_DEPLOY_ROLE: ${{ vars[format('{0}_AWS_DEPLOY_ROLE', inputs.environment == 'staging' && 'STAGING' || 'PRODUCTION')] }}
+      AWS_INSTANCE_ID: ${{ vars[format('{0}_AWS_INSTANCE_ID', inputs.environment == 'staging' && 'STAGING' || 'PRODUCTION')] }}
+      PEER_INSTANCE_ID: ${{ vars[format('{0}_AWS_INSTANCE_ID', inputs.environment == 'staging' && 'PRODUCTION' || 'STAGING')] }}
+      AWS_ECR_REPOSITORY: ${{ vars[format('{0}_AWS_ECR_REPOSITORY', inputs.environment == 'staging' && 'STAGING' || 'PRODUCTION')] }}
+      AWS_SECRET_VERSION_ID: ${{ vars[format('{0}_AWS_SECRET_VERSION_ID', inputs.environment == 'staging' && 'STAGING' || 'PRODUCTION')] }}
+      PEER_FIREBASE_PROJECT_ID: ${{ vars[format('{0}_VITE_FIREBASE_PROJECT_ID', inputs.environment == 'staging' && 'PRODUCTION' || 'STAGING')] }}
+      APP_ORIGIN: ${{ vars[format('{0}_APP_ORIGIN', inputs.environment == 'staging' && 'STAGING' || 'PRODUCTION')] }}
+      VITE_FIREBASE_API_KEY: ${{ vars[format('{0}_VITE_FIREBASE_API_KEY', inputs.environment == 'staging' && 'STAGING' || 'PRODUCTION')] }}
+      VITE_FIREBASE_PROJECT_ID: ${{ vars[format('{0}_VITE_FIREBASE_PROJECT_ID', inputs.environment == 'staging' && 'STAGING' || 'PRODUCTION')] }}
+      VITE_FIREBASE_AUTH_DOMAIN: ${{ vars[format('{0}_VITE_FIREBASE_AUTH_DOMAIN', inputs.environment == 'staging' && 'STAGING' || 'PRODUCTION')] }}
+      VITE_FIREBASE_APP_ID: ${{ vars[format('{0}_VITE_FIREBASE_APP_ID', inputs.environment == 'staging' && 'STAGING' || 'PRODUCTION')] }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Require CI for this exact main commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run list --repo "$GITHUB_REPOSITORY" --workflow ci.yml --commit "$GITHUB_SHA" --event push --json headSha,headBranch,status,conclusion > /tmp/talke-ci.json
+          node -e "const r=require('/tmp/talke-ci.json'); if(!r.some(x=>x.headSha===process.env.GITHUB_SHA && x.headBranch==='main' && x.status==='completed' && x.conclusion==='success')) process.exit(1)"
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '22.17.0'
+      - run: node scripts/aws/release.mjs check
+      - name: Build real Firebase configuration
+        run: >-
+          docker build --tag talke-release:local
+          --build-arg VITE_FIREBASE_API_KEY
+          --build-arg VITE_FIREBASE_PROJECT_ID
+          --build-arg VITE_FIREBASE_AUTH_DOMAIN
+          --build-arg VITE_FIREBASE_APP_ID .
+      - run: node scripts/smoke-container.mjs talke-release:local
+      - uses: aws-actions/configure-aws-credentials@c9e2a2f463f6142c28674a8bc0f20b5ae9f8e83e
+        with:
+          role-to-assume: ${{ env.AWS_DEPLOY_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+          allowed-account-ids: ${{ env.AWS_ACCOUNT_ID }}
+          role-session-name: talke-${{ github.run_id }}
+      - name: Push immutable commit image
+        run: |
+          aws ecr get-login-password | docker login --username AWS --password-stdin "${AWS_ECR_REPOSITORY%%/*}"
+          docker tag talke-release:local "$AWS_ECR_REPOSITORY:$GITHUB_SHA"
+          if ! aws ecr describe-images --repository-name "${AWS_ECR_REPOSITORY#*/}" --image-ids "imageTag=$GITHUB_SHA" > /dev/null 2>&1; then
+            docker push "$AWS_ECR_REPOSITORY:$GITHUB_SHA"
+          fi
+          aws ecr wait image-scan-complete --repository-name "${AWS_ECR_REPOSITORY#*/}" --image-id "imageTag=$GITHUB_SHA"
+      - run: node scripts/aws/release.mjs
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: aws-release-receipt-${{ inputs.environment }}-${{ github.run_id }}
+          path: .release/aws-receipt.json
+          if-no-files-found: ignore
+          retention-days: 30

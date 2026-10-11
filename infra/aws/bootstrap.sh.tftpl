@@ -1,0 +1,64 @@
+#!/bin/bash
+set -euo pipefail
+umask 077
+# No credentials, secret values or application environment in user data.
+dnf install -y docker python3 awscli-2
+systemctl enable --now docker amazon-ssm-agent
+systemctl disable --now sshd
+install -d -m 700 /opt/talke /var/lib/talke /run/talke
+printf '%s' '${config_b64}' | base64 -d > /opt/talke/config.json
+printf '%s' '${runtime_b64}' | base64 -d | gzip -d > /opt/talke/runtime.py
+chmod 700 /opt/talke/runtime.py
+# Defense in depth: application bridge containers cannot access EC2 metadata.
+iptables -I DOCKER-USER -d 169.254.169.254/32 -j REJECT
+cat > /etc/systemd/system/talke.service <<'UNIT'
+[Unit]
+Description=Talkê restore immutable release after boot
+After=network-online.target docker.service
+Wants=network-online.target
+Requires=docker.service
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/python3 /opt/talke/runtime.py restore
+TimeoutStartSec=300
+[Install]
+WantedBy=multi-user.target
+UNIT
+cat > /etc/systemd/system/talke-maintenance.service <<'UNIT'
+[Unit]
+Description=Talkê payment and video reconciliation
+After=talke.service
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /opt/talke/runtime.py maintenance
+TimeoutStartSec=1900
+UNIT
+cat > /etc/systemd/system/talke-maintenance.timer <<'UNIT'
+[Unit]
+Description=Talkê maintenance every five minutes
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=5min
+Persistent=true
+[Install]
+WantedBy=timers.target
+UNIT
+cat > /etc/systemd/system/talke-health.service <<'UNIT'
+[Unit]
+Description=Talkê readiness and maintenance heartbeat
+After=talke.service
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /opt/talke/runtime.py health
+TimeoutStartSec=45
+UNIT
+cat > /etc/systemd/system/talke-health.timer <<'UNIT'
+[Timer]
+OnBootSec=1min
+OnUnitActiveSec=1min
+[Install]
+WantedBy=timers.target
+UNIT
+systemctl daemon-reload
+systemctl enable --now talke.service talke-maintenance.timer talke-health.timer
