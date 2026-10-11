@@ -1,11 +1,16 @@
 import React from 'react';
-import { X, Star, CheckCircle, Award, Globe, DollarSign, Calendar, MessageSquare } from 'lucide-react';
+import { useDialog } from '../lib/useDialog';
 import {
-  Teacher,
-  ProficiencyLevelLabels,
-  LearningGoalLabels,
-  Review,
-} from '../domain/types';
+  X,
+  Star,
+  CheckCircle,
+  Award,
+  Globe,
+  DollarSign,
+  Calendar,
+  MessageSquare,
+} from 'lucide-react';
+import { Teacher, ProficiencyLevelLabels, LearningGoalLabels, Review } from '../domain/types';
 
 interface TeacherProfileModalProps {
   teacher: Teacher;
@@ -21,15 +26,23 @@ export const TeacherProfileModal: React.FC<TeacherProfileModalProps> = ({
   onBookClick,
 }) => {
   const teacherReviews = reviews.filter((r) => r.teacherId === teacher.id);
+  const dialog = useDialog(onClose);
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-neutral-200 animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
+      <div
+        ref={dialog}
+        role="dialog"
+        aria-modal="true"
+        aria-label={'Perfil de ' + teacher.name}
+        tabIndex={-1}
+        className="bg-white rounded-2xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-neutral-200 animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto"
+      >
         {/* Modal Header */}
         <div className="flex items-start justify-between pb-4 border-b border-neutral-100">
           <div className="flex items-center gap-4">
             <img
-              src={teacher.avatarUrl}
+              src={teacher.avatarUrl || '/avatar.svg'}
               alt={teacher.name}
               className="w-16 h-16 rounded-2xl object-cover border-2 border-blue-500 shadow-xs"
             />
@@ -48,7 +61,9 @@ export const TeacherProfileModal: React.FC<TeacherProfileModalProps> = ({
                 <div className="flex items-center gap-1 text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md">
                   <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-500" />
                   <span>{teacher.rating.toFixed(2)}</span>
-                  <span className="text-neutral-400 font-normal">({teacher.totalReviews} avaliações)</span>
+                  <span className="text-neutral-400 font-normal">
+                    ({teacher.totalReviews} avaliações)
+                  </span>
                 </div>
                 <div className="text-neutral-500 font-normal">
                   {teacher.totalLessonsCompleted} aulas ministradas
@@ -57,7 +72,12 @@ export const TeacherProfileModal: React.FC<TeacherProfileModalProps> = ({
             </div>
           </div>
 
-          <button onClick={onClose} className="text-neutral-400 hover:text-neutral-600 p-1">
+          <button
+            type="button"
+            aria-label="Fechar perfil do professor"
+            onClick={onClose}
+            className="text-neutral-400 hover:text-neutral-600 p-1"
+          >
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -115,7 +135,9 @@ export const TeacherProfileModal: React.FC<TeacherProfileModalProps> = ({
               <Award className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
               <div>
                 <span className="font-bold text-neutral-900 block">Certificações</span>
-                <span className="text-neutral-600 text-[11px]">{teacher.certifications.join(', ')}</span>
+                <span className="text-neutral-600 text-[11px]">
+                  {teacher.certifications.join(', ')}
+                </span>
               </div>
             </div>
 

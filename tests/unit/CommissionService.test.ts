@@ -13,11 +13,11 @@ describe('CommissionService Domain Service', () => {
   });
 
   test('handles fractional cents with correct rounding', () => {
-    const split = CommissionService.calculateCommission(85.50);
+    const split = CommissionService.calculateCommission(85.5);
     // 85.50 * 0.15 = 12.825 -> rounded to 12.83
     assert.strictEqual(split.platformFeeBrl, 12.83);
     assert.strictEqual(split.teacherNetBrl, 72.67);
-    assert.strictEqual(Math.round((split.platformFeeBrl + split.teacherNetBrl) * 100) / 100, 85.50);
+    assert.strictEqual(Math.round((split.platformFeeBrl + split.teacherNetBrl) * 100) / 100, 85.5);
   });
 
   test('throws ValidationError when gross amount is zero or negative', () => {
@@ -30,10 +30,8 @@ describe('CommissionService Domain Service', () => {
     }, ValidationError);
   });
 
-  test('generates valid simulated PIX copy & paste and payload', () => {
-    const pix = CommissionService.generatePixData(120.0, 'tx-test-123');
-    assert.ok(pix.pixCopyPaste.startsWith('00020126580014br.gov.bcb.pix'));
-    assert.ok(pix.pixCopyPaste.includes('120.00'));
-    assert.ok(pix.pixQrCode.length > 10);
+  test('rejects invalid commission rates', () => {
+    for (const rate of [NaN, Infinity, -0.1, 1.1])
+      assert.throws(() => CommissionService.calculateCommission(100, rate), ValidationError);
   });
 });

@@ -21,6 +21,7 @@ export class CommissionService {
       throw new ValidationError('O valor bruto da aula deve ser maior que zero.');
     }
 
+    if (!Number.isFinite(platformRate) || platformRate < 0 || platformRate > 1) throw new ValidationError('Taxa de comissão inválida.');
     const platformFeeBrl = Math.round(grossAmountBrl * platformRate * 100) / 100;
     const teacherNetBrl = Math.round((grossAmountBrl - platformFeeBrl) * 100) / 100;
 
@@ -32,15 +33,4 @@ export class CommissionService {
     };
   }
 
-  /**
-   * Generates a realistic mock PIX payload and QR code link
-   */
-  public static generatePixData(amountBrl: number, orderId: string) {
-    const code = `00020126580014br.gov.bcb.pix0136talke-${orderId}-pix-key520400005303986540${amountBrl.toFixed(2)}5802BR5910TALKE-LTDA6009SAO-PAULO62070503***6304E8A2`;
-    const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(code)}`;
-    return {
-      pixCopyPaste: code,
-      pixQrCode: qrCodeUrl,
-    };
-  }
 }

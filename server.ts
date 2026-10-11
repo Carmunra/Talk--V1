@@ -1,73 +1,49 @@
-import express, { Request, Response } from 'express';
-import path from 'path';
-import cors from 'cors';
-import { createServer as createViteServer } from 'vite';
-import { UserRole } from './src/domain/types';
-import { ServerFirestoreRepo } from './src/server/db';
-import { apiRouter } from './src/presentation/routes/apiRouter';
+import express from 'express';
+import path from 'node:path';
+import { applicationDefault, initializeApp } from 'firebase-admin/app';
+import { getAuth } from 'firebase-admin/auth';
+import { getFirestore } from 'firebase-admin/firestore';
+import { createApp } from './src/server/app';
+import { readConfig } from './src/server/config';
+import { FirestoreStore } from './src/server/store';
+import { Platform } from './src/server/platform';
+import { MercadoPagoGateway } from './src/server/marketplace';
 
-interface AuthenticatedRequest extends Request {
-  userId?: string;
-  userRole?: UserRole;
-  userEmail?: string;
-  isAdmin?: boolean;
+const config = readConfig();
+if (!config.projectId) throw new Error('Configure FIREBASE_PROJECT_ID antes de iniciar');
+const firebase = initializeApp({ credential: applicationDefault(), projectId: config.projectId });
+const auth = getAuth(firebase);
+const store = new FirestoreStore(getFirestore(firebase, config.databaseId));
+const platform = new Platform(store, config, new MercadoPagoGateway(store, config));
+const app = createApp({
+  platform,
+  verifyToken: async (token) => {
+    const decoded = await auth.verifyIdToken(token, true);
+    return {
+      uid: decoded.uid,
+      email: decoded.email || '',
+      emailVerified: decoded.email_verified === true,
+      admin: decoded.admin === true,
+    };
+  },
+  revokeSessions: async (uid) => {
+    await auth.revokeRefreshTokens(uid);
+    await auth.updateUser(uid, { disabled: true });
+  },
+});
+
+if (!config.production) {
+  const { createServer } = await import('vite');
+  const vite = await createServer({ server: { middlewareMode: true }, appType: 'spa' });
+  app.use(vite.middlewares);
+} else {
+  const assets = path.resolve('dist/client');
+  app.use(express.static(assets, { dotfiles: 'deny', index: false }));
+  app.get('*', (_req, res) => res.sendFile(path.join(assets, 'index.html')));
 }
-
-// Admin email list
-const ADMIN_EMAILS = [
-  'jonathan.oliveira.da@gmail.com',
-  'admin@talke.com',
-];
-
-async function startServer() {
-  const app = express();
-  // Dynamic port for Render & Cloud Run compatibility
-  const PORT = Number(process.env.PORT) || 3000;
-
-  app.use(cors());
-  app.use(express.json());
-
-  // Seed Firestore on startup if empty
-  await ServerFirestoreRepo.seedIfEmpty();
-
-  // Authentication & Authorization middleware
-  app.use((req: AuthenticatedRequest, _res: Response, next: () => void) => {
-    const userId = req.header('x-user-id');
-    const userRole = req.header('x-user-role') as UserRole;
-    const userEmail = req.header('x-user-email')?.toLowerCase();
-    const isAdminHeader = req.header('x-is-admin') === 'true';
-
-    req.userId = userId;
-    req.userRole = userRole;
-    req.userEmail = userEmail;
-    req.isAdmin =
-      isAdminHeader ||
-      (userEmail ? ADMIN_EMAILS.includes(userEmail) : false);
-
-    next();
-  });
-
-  // Mount Clean Architecture Presentation API router
-  app.use('/api', apiRouter);
-
-  // Vite Middleware & Static Production Serving
-  if (process.env.NODE_ENV !== 'production') {
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: 'spa',
-    });
-    app.use(vite.middlewares);
-  } else {
-    const distPath = path.join(process.cwd(), 'dist');
-    app.use(express.static(distPath));
-    app.get('*', (_req: Request, res: Response) => {
-      res.sendFile(path.join(distPath, 'index.html'));
-    });
-  }
-
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`[Talkê Clean Architecture] Server running at http://0.0.0.0:${PORT}`);
-  });
-}
-
-startServer();
+const server = app.listen(Number(process.env.PORT) || 3000, '0.0.0.0', () =>
+  console.log('Talkê iniciado'),
+);
+const shutdown = () => server.close(() => process.exit(0));
+process.on('SIGTERM', shutdown);
+process.on('SIGINT', shutdown);

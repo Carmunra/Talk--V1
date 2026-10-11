@@ -5,7 +5,7 @@ import { ValidationError } from '../../src/domain/errors/DomainError';
 
 describe('Money Value Object', () => {
   test('creates money from BRL amount accurately converting to cents', () => {
-    const m = Money.fromBrl(150.50);
+    const m = Money.fromBrl(150.5);
     assert.strictEqual(m.cents, 15050);
     assert.strictEqual(m.amountBrl, 150.5);
   });

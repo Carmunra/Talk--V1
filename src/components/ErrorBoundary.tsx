@@ -21,7 +21,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('[ErrorBoundary caught error]:', error, errorInfo);
+    if (import.meta.env.DEV) console.error('[ErrorBoundary caught error]:', error, errorInfo);
   }
 
   public handleReset = () => {
@@ -38,11 +38,9 @@ export class ErrorBoundary extends Component<Props, State> {
               <AlertCircle className="w-8 h-8" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-slate-900">
-                Algo inesperado aconteceu
-              </h2>
+              <h2 className="text-lg font-bold text-slate-900">Algo inesperado aconteceu</h2>
               <p className="text-xs text-slate-500 mt-1">
-                {this.state.error?.message || 'Erro durante a renderização do componente.'}
+                Não foi possível exibir esta página. Recarregue a plataforma e tente novamente.
               </p>
             </div>
 

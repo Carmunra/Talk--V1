@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { X, Calendar, Clock, BookOpen, AlertCircle, ArrowRight } from 'lucide-react';
 import { Teacher, Student } from '../domain/types';
+import { bookingDates } from '../lib/bookingDates';
+import { useDialog } from '../lib/useDialog';
 
 interface BookingModalProps {
   teacher: Teacher;
@@ -11,6 +13,7 @@ interface BookingModalProps {
     scheduledDate: string;
     startTime: string;
     topic: string;
+    requestKey: string;
   }) => Promise<void>;
 }
 
@@ -20,47 +23,49 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   onClose,
   onConfirmBooking,
 }) => {
-  // Dates: today + 1 to today + 7
-  const availableDates: { dateStr: string; label: string; dayOfWeek: number }[] = [];
-  for (let i = 1; i <= 7; i++) {
-    const d = new Date();
-    d.setDate(d.getDate() + i);
-    const dateStr = d.toISOString().split('T')[0];
-    const dayOfWeek = d.getDay();
-    const dayName = d.toLocaleDateString('pt-BR', { weekday: 'short' });
-    const dayMonth = d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
-    availableDates.push({
-      dateStr,
-      label: `${dayName}, ${dayMonth}`,
-      dayOfWeek,
-    });
-  }
+  const availableDates = bookingDates();
 
   const [selectedDate, setSelectedDate] = useState(availableDates[0].dateStr);
-  const [selectedTime, setSelectedTime] = useState<string>('14:00');
+  const [selectedTime, setSelectedTime] = useState<string>('');
+  const reservationKeys = useRef(new Map<string, string>());
   const [topic, setTopic] = useState<string>(
     currentStudent.goalDescription
       ? `Foco: ${currentStudent.goalDescription}`
-      : 'Conversação prática e alinhamento de pronúncia'
+      : 'Conversação prática e alinhamento de pronúncia',
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const dialog = useDialog(onClose, !isSubmitting);
   const [error, setError] = useState<string | null>(null);
 
   // Filter slots for the selected day of week
   const selectedDayOfWeek = availableDates.find((d) => d.dateStr === selectedDate)?.dayOfWeek ?? 1;
   const daySlots = teacher.availability.filter(
-    (s) => s.dayOfWeek === selectedDayOfWeek && s.isAvailable
+    (s) => s.dayOfWeek === selectedDayOfWeek && s.isAvailable,
   );
 
-  // Fallback hours covering morning, afternoon, and evening if none configured
-  const timeOptions = daySlots.length > 0
-    ? daySlots.map((s) => s.startTime)
-    : [
-        '08:00', '09:00', '10:00', '11:00', '14:00', '15:00',
-        '16:00', '17:00', '18:00', '19:00', '20:00', '21:00'
-      ];
+  const toMinutes = (value: string) => Number(value.slice(0, 2)) * 60 + Number(value.slice(3));
+  const timeOptions = [
+    ...new Set(
+      daySlots.flatMap((slot) => {
+        const result: string[] = [];
+        for (
+          let minute = toMinutes(slot.startTime);
+          minute + 50 <= toMinutes(slot.endTime);
+          minute += 60
+        )
+          result.push(
+            String(Math.floor(minute / 60)).padStart(2, '0') +
+              ':' +
+              String(minute % 60).padStart(2, '0'),
+          );
+        return result;
+      }),
+    ),
+  ].sort();
 
-  const [bookingPeriodFilter, setBookingPeriodFilter] = useState<'all' | 'morning' | 'afternoon' | 'evening'>('all');
+  const [bookingPeriodFilter, setBookingPeriodFilter] = useState<
+    'all' | 'morning' | 'afternoon' | 'evening'
+  >('all');
 
   const filteredTimeOptions = timeOptions.filter((time) => {
     const h = Number(time.split(':')[0]);
@@ -72,7 +77,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedDate || !selectedTime) {
+    if (!selectedDate || !timeOptions.includes(selectedTime)) {
       setError('Selecione uma data e um horário.');
       return;
     }
@@ -80,11 +85,20 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     setIsSubmitting(true);
     setError(null);
     try {
+      const payload = JSON.stringify({
+        teacherId: teacher.id,
+        scheduledDate: selectedDate,
+        startTime: selectedTime,
+        topic,
+      });
+      if (!reservationKeys.current.has(payload))
+        reservationKeys.current.set(payload, crypto.randomUUID());
       await onConfirmBooking({
         teacherId: teacher.id,
         scheduledDate: selectedDate,
         startTime: selectedTime,
         topic,
+        requestKey: reservationKeys.current.get(payload)!,
       });
       onClose();
     } catch (err: any) {
@@ -96,19 +110,37 @@ export const BookingModal: React.FC<BookingModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-neutral-200 animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
+      <div
+        ref={dialog}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="booking-title"
+        tabIndex={-1}
+        className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-neutral-200 animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto"
+      >
         <div className="flex items-center justify-between pb-3 border-b border-neutral-100">
           <div>
-            <h3 className="text-base font-bold text-neutral-900">Escolher Horário & Reservar</h3>
+            <h3 id="booking-title" className="text-base font-bold text-neutral-900">
+              Escolher Horário & Reservar
+            </h3>
             <p className="text-xs text-neutral-500">Aula particular de 50 min com {teacher.name}</p>
           </div>
-          <button onClick={onClose} className="text-neutral-400 hover:text-neutral-600 p-1">
+          <button
+            type="button"
+            aria-label="Fechar reserva"
+            disabled={isSubmitting}
+            onClick={onClose}
+            className="text-neutral-400 hover:text-neutral-600 p-1"
+          >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {error && (
-          <div className="mt-3 p-3 bg-rose-50 border border-rose-200 text-rose-800 text-xs rounded-xl flex items-center gap-2">
+          <div
+            role="alert"
+            className="mt-3 p-3 bg-rose-50 border border-rose-200 text-rose-800 text-xs rounded-xl flex items-center gap-2"
+          >
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{error}</span>
           </div>
@@ -206,6 +238,8 @@ export const BookingModal: React.FC<BookingModalProps> = ({
               3. O que você gostaria de praticar nessa aula?
             </label>
             <textarea
+              aria-label="Tema da aula"
+              maxLength={500}
               rows={2}
               placeholder="Ex: Treino de conversação para viagem, tirar dúvidas de gramática ou entrevista de emprego..."
               value={topic}
@@ -225,6 +259,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
           <div className="pt-2 border-t border-neutral-100 flex items-center justify-end gap-2">
             <button
               type="button"
+              disabled={isSubmitting}
               onClick={onClose}
               className="px-4 py-2 text-xs font-semibold text-neutral-600 hover:bg-neutral-100 rounded-xl transition-colors"
             >

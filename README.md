@@ -1,49 +1,40 @@
-# Talkê 🗣️
+# Talkê
 
-Plataforma inteligente de ensino de idiomas conectando alunos e professores com diagnóstico automatizado de proficiência (CEFR), agendamento flexível de aulas particulares e carteira de créditos.
+Aplicação de aulas de inglês com React/TypeScript, Express, Firebase Admin, Mercado Pago Checkout Pro com split e salas privadas Daily.
 
-## 🚀 Arquitetura e Migração
+Esta versão substitui os fluxos demonstrativos por autenticação no servidor, autorização por titular, reservas atômicas, confirmação de pagamento pelo provedor e atendimento de privacidade. O catálogo, reservas, diagnóstico, materiais, registros pedagógicos e administração usam o novo fluxo. Carteira pré-paga e saques internos não fazem parte deste lançamento.
 
-O projeto foi migrado com sucesso para **Node.js 22 + TypeScript + Express + React (Vite)** mantendo os princípios de **Clean Architecture**:
+Antes de publicar, consulte [Publicação](docs/PUBLICACAO.md) e [LGPD e proteção de menores](docs/PRIVACIDADE_OPERACAO.md). Credenciais, habilitação de split, identidade jurídica, homologação externa, matriz de retenção e procedimentos de aferição de idade permanecem requisitos do operador. Os indicadores de aprovação não substituem esses procedimentos.
 
-- **Talke.Domain**: Entidades `Student`, `Teacher`, `Lesson`, `CreditWallet`, `CreditPackage`, `TeacherRecommendation` e enums de proficiência e estilos de aprendizagem.
-- **Talke.Application**: Lógica de diagnóstico avaliativo de proficiência (A1 a C2), matching de professores e regras de dedução e estorno de créditos.
-- **Talke.Infrastructure**: Datastore em memória inicializado com dados realistas, com suporte a extensões futuras (PostgreSQL / Cloud SQL).
-- **Talke.Api**: Servidor Express rodando na porta 3000 com roteamento unificado, middleware Vite e documentação OpenAPI interativa.
+O fluxo de [publicação automática e reversão](docs/PUBLICACAO_AUTOMATICA.md) testa a imagem, valida a revisão candidata e atualiza site/manutenção com recibo de recuperação. Depende da configuração dos projetos reais e da identidade temporária do GitHub.
 
----
+## Desenvolvimento
 
-## 💻 Como Rodar
+Requisitos: Node 22.17+, npm 10 e Java 21 para o emulador Firestore.
 
-```bash
-# Instalar dependências
-npm install
+Copie .env.example e preencha o projeto Firebase e sua configuração pública web. Use um projeto de desenvolvimento separado, com Application Default Credentials. Instale com npm ci e execute npm run dev. O servidor não cria dados de demonstração, não usa banco em memória e falha quando o banco está indisponível.
 
-# Iniciar servidor de desenvolvimento (porta 3000)
-npm run dev
+## Verificação
 
-# Build para produção
-npm run build
+- npm run lint inclui aplicação, testes e scripts.
+- npm run test:coverage executa unitários/integrados com cobertura mínima de 80% de linhas, 70% de ramos e 75% de funções nos módulos do servidor.
+- npm run test:rules valida negação de acesso direto, rollback e concorrência de reservas no Firestore emulado.
+- npm run test:e2e usa Auth emulator e Cypress; pagamentos são controlados por um adaptador exclusivo de testes.
+- npm run build requer configuração pública VITE_FIREBASE_* e gera dist/client, dist/server e dist/scripts.
+- npm run verify:artifacts impede exposição de servidor, mapas de código, segredos e helpers de teste no cliente.
+- npm audit identifica alertas conhecidos de dependências. O lockfile é npm; as versões transitivas corrigidas estão registradas em overrides.
+- npm run verify:lockfile verifica os binários nativos de Windows/Linux/macOS antes da instalação. Se uma instalação local do npm remover dependências opcionais de outro sistema, regenere o lockfile em uma pasta limpa sem node_modules e revise as alterações antes de enviá-lo.
 
-# Iniciar servidor em produção
-npm start
-```
+O fluxo CI não publica nem executa cobranças reais. Os testes de navegador não substituem homologação de Mercado Pago/Daily ou revisão de LGPD/ECA Digital.
 
----
+## API e identidade
 
-## 📡 Endpoints da API
+Bearer Firebase ID token é obrigatório nas rotas privadas. Não há autorização por x-user-id, e-mail hardcoded ou seletor de demonstração. Cadastro e termos são ligados ao UID. Com menores habilitados, adultos aguardam aferição de idade e dependentes aguardam validação do vínculo.
 
-- `GET /weatherforecast` — Endpoint de compatibilidade do template .NET WebAPI original
-- `GET /api/health` — Status e metadados das camadas arquiteturais
-- `GET /api/students` — Listagem e detalhes dos alunos
-- `POST /api/students` — Cadastro de novo aluno
-- `GET /api/teachers` — Listagem de professores aprovados (filtros por nível e estilo)
-- `POST /api/teachers` — Cadastro de professor
-- `GET /api/diagnostics/questions` — Perguntas do questionário de diagnóstico
-- `POST /api/diagnostics/evaluate` — Avaliação e cálculo de nível (CEFR) e estilo
-- `GET /api/recommendations/:studentId` — Recomendações personalizadas de professores
-- `GET /api/lessons` — Listagem de aulas agendadas e histórico
-- `POST /api/lessons` — Agendamento de aula (com validação e débito de créditos)
-- `PATCH /api/lessons/:id/status` — Conclusão ou cancelamento (com estorno de créditos)
-- `GET /api/credits/packages` — Pacotes de créditos disponíveis
-- `POST /api/credits/buy` — Compra de créditos para carteira do aluno
+As regras Firestore/Storage negam acesso pelo navegador. Firebase Admin depende de IAM e dos controles da API. Regras remotas precisam ser implantadas explicitamente; nenhuma implantação é feita automaticamente ao iniciar a aplicação.
+
+Os detalhes operacionais e critérios de liberação comercial estão em docs/PUBLICACAO.md.
+
+Os resultados executados e seus limites estão em [Validação](docs/VALIDACAO.md).
+
+A infraestrutura preparada e os procedimentos de ativação, restauração e incidentes estão em [Operação](docs/OPERACAO.md). A configuração Terraform é validada com provedor simulado; a ativação requer projeto, imagem, contatos, segredos e aprovações reais.

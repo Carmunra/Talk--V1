@@ -39,7 +39,7 @@ export class LessonEntity implements Lesson {
     this.teacherName = data.teacherName;
     this.scheduledDate = data.scheduledDate;
     this.startTime = data.startTime;
-    this.durationMinutes = data.durationMinutes || 60;
+    this.durationMinutes = data.durationMinutes || 50;
     this.status = data.status || LessonStatus.Requested;
     this.priceBrl = Number(data.priceBrl) || 0;
 
@@ -75,6 +75,7 @@ export class LessonEntity implements Lesson {
   }
 
   public markPaid(method: PaymentMethod): void {
+    if (this.status !== LessonStatus.Requested) throw new InvalidLessonStateError('Somente reservas pendentes podem receber pagamento.');
     if (this.isPaid) {
       throw new InvalidLessonStateError('Esta aula já possui pagamento confirmado.');
     }
@@ -86,15 +87,15 @@ export class LessonEntity implements Lesson {
   }
 
   public start(): void {
-    if (this.status === LessonStatus.Cancelled) {
-      throw new InvalidLessonStateError('Não é possível iniciar uma aula cancelada.');
+    if (!this.isPaid || this.status !== LessonStatus.Confirmed) {
+      throw new InvalidLessonStateError('Somente aulas pagas e confirmadas podem iniciar.');
     }
     this.status = LessonStatus.InProgress;
   }
 
   public complete(whiteboardNotes?: string): void {
-    if (this.status === LessonStatus.Cancelled) {
-      throw new InvalidLessonStateError('Não é possível concluir uma aula cancelada.');
+    if (!this.isPaid || ![LessonStatus.Confirmed,LessonStatus.InProgress].includes(this.status)) {
+      throw new InvalidLessonStateError('Somente aulas pagas em andamento ou confirmadas podem concluir.');
     }
     this.status = LessonStatus.Completed;
     if (whiteboardNotes !== undefined) {

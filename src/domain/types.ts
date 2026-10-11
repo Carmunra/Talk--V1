@@ -57,6 +57,7 @@ export const LessonStatusLabels: Record<LessonStatus, string> = {
 };
 
 export enum PaymentMethod {
+  MercadoPago = 'MERCADO_PAGO',
   Pix = 'PIX',
   CreditCard = 'CREDIT_CARD',
   Wallet = 'WALLET',

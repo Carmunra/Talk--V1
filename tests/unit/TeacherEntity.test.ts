@@ -14,7 +14,7 @@ describe('TeacherEntity Domain Entity', () => {
       bio: 'Especialista em destravar a fala',
       hourlyPriceBrl: 90,
       levelsTaught: [ProficiencyLevel.A1_Beginner, ProficiencyLevel.A2_Elementary],
-      specialties: [LearningGoal.Speaking],
+      specialties: [LearningGoal.Conversation],
       languages: ['Português', 'Inglês'],
       certifications: ['TESOL'],
       availability: [],

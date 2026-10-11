@@ -16,5 +16,13 @@
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "server.ts"]
+  "include": [
+    "src",
+    "server.ts",
+    "tests",
+    "cypress",
+    "cypress.config.ts",
+    "vite.config.ts",
+    "scripts"
+  ]
 }

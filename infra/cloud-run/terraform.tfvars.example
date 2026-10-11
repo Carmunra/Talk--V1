@@ -1,0 +1,32 @@
+# Copiar para terraform.tfvars (ignorado pelo Git) e preencher dados aprovados.
+project_id = ""
+region = "southamerica-east1"
+database_id = "(default)"
+service_name = "talke"
+image_digest = ""
+alert_email = ""
+backup_retention_days = 0 # Preencher prazo de backup aprovado; 0 bloqueia o plano.
+deployment_confirmed = false
+runtime_env = {
+  APP_ORIGIN = ""
+  LEGAL_NAME = ""
+  LEGAL_CNPJ = ""
+  PRIVACY_EMAIL = ""
+  SUPPORT_EMAIL = ""
+  LEGAL_APPROVED = "false"
+  MINIMUM_AGE = "18"
+  MINORS_ENABLED = "false"
+  MINORS_SAFEGUARDS_APPROVED = "false"
+  PAYMENTS_ENABLED = "false"
+  PAYMENTS_HOMOLOGATED = "false"
+  MP_ENVIRONMENT = "sandbox"
+  MP_CLIENT_ID = ""
+  DAILY_DOMAIN = ""
+  TERMS_VERSION = "2026-10-08"
+}
+secret_versions = {
+  DAILY_API_KEY = { secret_id = "talke-daily-api-key", version = "1" }
+  MP_CLIENT_SECRET = { secret_id = "talke-mp-client-secret", version = "1" }
+  MP_WEBHOOK_SECRET = { secret_id = "talke-mp-webhook-secret", version = "1" }
+  TOKEN_ENCRYPTION_KEY = { secret_id = "talke-token-encryption-key", version = "1" }
+}
