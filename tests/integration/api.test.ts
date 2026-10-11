@@ -18,6 +18,38 @@ async function setup() {
     }),
   };
 }
+test('public monthly catalog has approved BRL prices and cannot activate recurring purchases', async () => {
+  const f = await setup();
+  const response = await request(f.app).get('/api/config').expect(200);
+  assert.equal(response.headers['cache-control'], 'no-store');
+  assert.equal(response.body.subscriptionsEnabled, false);
+  assert.deepEqual(
+    response.body.monthlyPlans.map((plan: any) => [plan.lessonsPerMonth, plan.amountCents]),
+    [
+      [4, 43900],
+      [6, 56900],
+      [8, 70900],
+      [12, 96900],
+      [16, 123900],
+    ],
+  );
+  assert(
+    response.body.monthlyPlans.every(
+      (plan: any) =>
+        plan.currency === 'BRL' &&
+        plan.interval === 'month' &&
+        plan.automaticRenewal === true &&
+        plan.multipleTeachers === true,
+    ),
+  );
+  await request(f.app)
+    .post('/api/subscriptions')
+    .set('Authorization', 'Bearer student')
+    .send({ planId: 'monthly-16', amountCents: 1, paid: true })
+    .expect(404);
+  assert.equal((await f.store.get('students', 'student'))?.walletBalanceBrl, 0);
+});
+
 test('forged client identity and admin headers cannot authorize any private route', async () => {
   const f = await setup();
   for (const path of ['/api/me', '/api/lessons', '/api/payments', '/api/admin/queue']) {

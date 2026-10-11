@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "cypress/e2e/readiness.cy.ts": {
-    "mtime": 1791751472.8167694,
-    "ast_hash": "3b709cb6fb2a33b9a20bcf9935848f4e",
+    "mtime": 1791751561.8383777,
+    "ast_hash": "fba5dbe0d6968ad3e3fea1688d9a5a56",
     "semantic_hash": ""
   },
   "firebase-applet-config.json": {
@@ -55,8 +55,8 @@
     "semantic_hash": ""
   },
   "src/App.tsx": {
-    "mtime": 1791751422.9207928,
-    "ast_hash": "3e21002a0c93f6bd68c38a23ae1338f3",
+    "mtime": 1791751561.8623724,
+    "ast_hash": "528c100ab8b8c96e7dd98410d61be8d5",
     "semantic_hash": ""
   },
   "src/components/AccountForms.tsx": {
@@ -275,8 +275,8 @@
     "semantic_hash": ""
   },
   "src/server/app.ts": {
-    "mtime": 1791751422.925768,
-    "ast_hash": "05afc8fefac7c6a76a89dbe55e3d56d8",
+    "mtime": 1791751561.8743758,
+    "ast_hash": "c06aca960ae132e7c8e89cd65967e54e",
     "semantic_hash": ""
   },
   "src/server/config.ts": {
@@ -330,8 +330,8 @@
     "semantic_hash": ""
   },
   "tests/integration/api.test.ts": {
-    "mtime": 1791751422.9307692,
-    "ast_hash": "06fbb53a80c5732fa1cc48465abf86ba",
+    "mtime": 1791751561.8763723,
+    "ast_hash": "8c466a462ad3178cc26f9a0d065df7ae",
     "semantic_hash": ""
   },
   "tests/integration/platform.test.ts": {
@@ -440,8 +440,8 @@
     "semantic_hash": ""
   },
   "docs/PUBLICACAO.md": {
-    "mtime": 1791751422.8887792,
-    "ast_hash": "018c2d1eb951d101fa078768d7a52a8f",
+    "mtime": 1791751561.845375,
+    "ast_hash": "ec5af05445dc40b50ac8e55fdb3bb774",
     "semantic_hash": ""
   },
   "docs/categorizacao-backlog.md": {
@@ -605,8 +605,8 @@
     "semantic_hash": ""
   },
   "docs/DADOS_PUBLICACAO.md": {
-    "mtime": 1791751422.882769,
-    "ast_hash": "d260261022deb5648c46b63352be24e7",
+    "mtime": 1791751561.8413785,
+    "ast_hash": "f0eea9309c7832e72b036be13a05720b",
     "semantic_hash": ""
   },
   "firebase.hosting.json": {
@@ -692,6 +692,21 @@
   "docs/PUBLICACAO_AWS.md": {
     "mtime": 1791751473.8548162,
     "ast_hash": "b00c89323fb25b2e788dca6038381477",
+    "semantic_hash": ""
+  },
+  "src/components/MonthlyPlans.tsx": {
+    "mtime": 1791751561.865373,
+    "ast_hash": "65211bc2669618db0949feb87d102d9b",
+    "semantic_hash": ""
+  },
+  "src/domain/monthlyPlans.ts": {
+    "mtime": 1791751561.8713772,
+    "ast_hash": "f17e16397e8d399edd3469ce169b60d1",
+    "semantic_hash": ""
+  },
+  "docs/PLANOS_MENSAIS.md": {
+    "mtime": 1791751561.844373,
+    "ast_hash": "931798a84b03c914ce1b6774719e4656",
     "semantic_hash": ""
   }
 }
