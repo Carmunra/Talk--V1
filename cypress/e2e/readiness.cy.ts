@@ -26,6 +26,28 @@ describe('Fluxos comerciais protegidos com Auth emulator e gateway de teste', ()
   beforeEach(() => {
     cy.request({ method: 'POST', url: '/_test/reset', headers: { 'x-test-key': 'local-e2e' } });
   });
+  it('exibe os cinco planos públicos com preços mensais e contratação indisponível', () => {
+    cy.visit('/planos');
+    cy.get('h1').should('have.text', 'Planos mensais');
+    const plans = [
+      [4, '439'],
+      [6, '569'],
+      [8, '709'],
+      [12, '969'],
+      [16, '1.239'],
+    ];
+    for (const [lessons, amount] of plans) {
+      cy.get(`article[aria-label="${lessons} aulas por mês"]`)
+        .should('contain.text', `${lessons} aulas`)
+        .and('contain.text', `R$\u00a0${amount}`);
+    }
+    cy.contains('A contratação dos planos ainda não está disponível.').should('be.visible');
+    cy.contains('button', /assinar|contratar|comprar/i).should('not.exist');
+    cy.contains('button', 'Professores').click();
+    cy.get('section[aria-label="Planos mensais"] article').should('have.length', 5);
+    cy.contains('button', 'Planos').click();
+    cy.get('h1').should('have.text', 'Planos mensais');
+  });
   it('exibe privacidade e termos e exige login para reservar', () => {
     cy.visit('/');
     cy.contains('a', 'Aviso de privacidade').click();

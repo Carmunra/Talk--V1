@@ -8,6 +8,7 @@ import { ApiError, requireCondition, verifyWebhook } from './security';
 import { id, text } from './validation';
 import { PrivacyService } from './privacy';
 import { VideoService } from './video';
+import { MONTHLY_PLANS } from '../domain/monthlyPlans';
 
 export interface AppDependencies {
   platform: Platform;
@@ -112,6 +113,9 @@ export function createApp({ platform, verifyToken, revokeSessions }: AppDependen
       supportEmails: config.supportEmails,
       termsVersion: config.termsVersion,
       legalApproved: config.legalApproved,
+      monthlyPlans: MONTHLY_PLANS,
+      // Recurring multi-teacher settlement needs a compatible gateway and approved rules.
+      subscriptionsEnabled: false,
     }),
   );
   app.get(

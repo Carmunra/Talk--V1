@@ -4,6 +4,8 @@ Adaptação AWS: 106 testes unitários/integrados da aplicação passaram localm
 
 Verificação local da versão preparada para revisão. Dados de teste são fictícios; nenhuma cobrança real ou implantação remota foi executada.
 
+Catálogo dos planos mensais, em 11/10/2026: **107 testes unitários/integrados aprovados**, cobertura de **91,15% de linhas, 87,22% de ramos e 93,05% de funções**, tipagem aprovada e **9 cenários Cypress aprovados**. O novo cenário verifica os cinco preços em /planos, a navegação e o aviso de contratação indisponível; o teste da API confirma valores em centavos e recusa criação de assinatura não implementada. O teste de dependentes passou a aguardar a opção efetivamente carregada, preservando a expectativa de bloqueio 403. A página foi inspecionada visualmente com dados fictícios. Homologação de assinatura/repasse automático permanece pendente; não foi realizada cobrança real.
+
 | Verificação                                            | Resultado                                                                    |
 | ------------------------------------------------------ | ---------------------------------------------------------------------------- |
 | Unitários e integração, `npm run test:coverage`        | 97 testes aprovados; nenhuma falha ou teste ignorado                         |

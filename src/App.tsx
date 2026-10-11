@@ -9,6 +9,7 @@ import { BookingModal } from './components/BookingModal';
 import { DiagnosticAndGoalView } from './components/DiagnosticAndGoalView';
 import { PrivacyNotice } from './components/PrivacyNotice';
 import { SupportContacts } from './components/SupportContacts';
+import { MonthlyPlans } from './components/MonthlyPlans';
 import { Registration, FamilyForm, TeacherEditor, PrivacyPanel } from './components/AccountForms';
 import { AdminPanel } from './components/AdminPanel';
 import { Teacher, Student, UserRole } from './domain/types';
@@ -35,7 +36,9 @@ export default function App() {
         ? 'privacy'
         : location.pathname === '/termos'
           ? 'terms'
-          : 'teachers',
+          : location.pathname === '/planos'
+            ? 'plans'
+            : 'teachers',
     ),
     [teachers, setTeachers] = useState<Teacher[]>([]);
   const [lessons, setLessons] = useState<any[]>([]),
@@ -202,6 +205,7 @@ export default function App() {
         <nav aria-label="Navegação" className="flex gap-2 mb-6 flex-wrap">
           {[
             ['teachers', 'Professores'],
+            ['plans', 'Planos'],
             ...(active
               ? [
                   ['lessons', 'Minhas aulas'],
@@ -254,6 +258,8 @@ export default function App() {
           <PrivacyNotice config={config} />
         ) : tab === 'terms' ? (
           <PrivacyNotice config={config} terms />
+        ) : tab === 'plans' ? (
+          <MonthlyPlans plans={config.monthlyPlans} />
         ) : tab === 'privacy-panel' && subjectId ? (
           <PrivacyPanel subjectId={subjectId} />
         ) : tab === 'admin' && session?.isAdmin ? (
@@ -280,6 +286,7 @@ export default function App() {
                 <p>Escolha seu objetivo, reserve uma aula e pague pelo Mercado Pago.</p>
               </section>
             )}
+            {!firebaseUser && <MonthlyPlans plans={config.monthlyPlans} compact />}
             <TeacherDirectory
               teachers={teachers}
               currentStudent={student}
@@ -560,7 +567,8 @@ export default function App() {
         )}
       </div>
       <footer className="border-t p-6 text-center text-sm">
-        <a href="/privacidade">Aviso de privacidade</a> · <a href="/termos">Termos de uso</a>
+        <a href="/planos">Planos mensais</a> · <a href="/privacidade">Aviso de privacidade</a> ·{' '}
+        <a href="/termos">Termos de uso</a>
         <p>
           {config.legalName || 'Talkê em preparação'} · <SupportContacts config={config} />
         </p>

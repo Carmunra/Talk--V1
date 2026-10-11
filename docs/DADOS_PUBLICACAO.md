@@ -24,6 +24,7 @@ Canal de privacidade/LGPD confirmado pelo operador: contato@talke.club. Esse end
 - Projeto Firebase/Google Cloud de produção, faturamento e projeto separado para homologação.
 - Cadastro e verificação dos dois administradores no projeto Firebase correto.
 - Credenciais dos provedores em cofre, homologação real de pagamento/split e vídeo, documentos e procedimentos aprovados para menores.
+- Assinaturas mensais: 4/6/8/12/16 aulas por R$ 439/569/709/969/1.239. Renovação automática, professores diferentes e repasses automáticos confirmados; solução financeira compatível, remuneração por aula e destino das aulas não usadas ainda pendentes. Consultar [Planos mensais](PLANOS_MENSAIS.md).
 
 O operador escolheu AWS para a hospedagem, mantendo Firebase para login e banco. Seguir [Publicação AWS](PUBLICACAO_AWS.md). Não há recursos AWS criados ou plano aplicado; estimativa, orçamento e permissões precisam de revisão e aprovação. O crédito AWS não cobre Firebase/Google Cloud, Daily ou tarifas Mercado Pago. A lista Activate inclui os componentes AWS previstos.
 
