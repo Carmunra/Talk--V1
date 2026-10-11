@@ -44,7 +44,9 @@ try {
   const user = await fetch(origin + '/api/me');
   assert.equal(user.status, 401);
   const unknown = await fetch(origin + '/api/does-not-exist');
-  assert.equal(unknown.status, 404);
+  // Authentication runs before private API routing, including unknown paths.
+  assert.equal(unknown.status, 401);
+  assert(unknown.headers.get('content-type').includes('application/json'));
   const page = await fetch(origin + '/');
   assert.equal(page.status, 200);
   assert(page.headers.get('content-security-policy').includes("frame-ancestors 'none'"));
