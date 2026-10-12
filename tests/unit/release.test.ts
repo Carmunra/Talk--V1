@@ -174,6 +174,8 @@ test('runtime mismatch or plaintext secret is refused before building remote res
   for (const change of [
     { name: 'APP_ORIGIN', value: 'https://wrong.example.test' },
     { name: 'DAILY_API_KEY', value: 'do-not-log-me' },
+    { name: 'ASAAS_API_KEY', value: 'do-not-log-me' },
+    { name: 'ASAAS_SANDBOX_WEBHOOK_TOKEN', value: 'do-not-log-me' },
   ]) {
     const s = setup();
     s.service.spec.template.spec.containers[0].env.push(change);

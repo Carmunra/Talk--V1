@@ -1,6 +1,6 @@
 import express, { type Request, type Response, type NextFunction } from 'express';
 import helmet from 'helmet';
-import rateLimit from 'express-rate-limit';
+import rateLimit, { type Store as RateLimitStore } from 'express-rate-limit';
 import { z } from 'zod';
 import { randomUUID } from 'node:crypto';
 import type { Platform, Identity } from './platform';
@@ -13,6 +13,7 @@ import { verifyAsaasWebhook } from './asaas';
 import type { MonthlySubscriptions } from './subscriptions';
 
 export interface AppDependencies {
+  rateLimitStores?: { public: RateLimitStore; private: RateLimitStore };
   subscriptions?: MonthlySubscriptions;
   platform: Platform;
   verifyToken: (token: string) => Promise<Identity>;
@@ -24,6 +25,7 @@ export function createApp({
   verifyToken,
   revokeSessions,
   subscriptions,
+  rateLimitStores,
 }: AppDependencies) {
   const app = express();
   const config = platform.config;
@@ -65,6 +67,7 @@ export function createApp({
   app.use(
     '/api',
     rateLimit({
+      ...(rateLimitStores ? { store: rateLimitStores.public } : {}),
       windowMs: 60_000,
       limit: 180,
       standardHeaders: 'draft-7',
@@ -133,7 +136,9 @@ export function createApp({
       legalApproved: config.legalApproved,
       monthlyPlans: MONTHLY_PLANS,
       // Recurring multi-teacher settlement needs a compatible gateway and approved rules.
-      subscriptionsEnabled: false,
+      subscriptionsEnabled: Boolean(subscriptions) && config.subscriptionsEnabled,
+      subscriptionsSandbox: config.asaasEnvironment !== 'live',
+      subscriptionCancelCredits: config.subscriptionCancelCredits,
     }),
   );
   app.get(
@@ -180,6 +185,7 @@ export function createApp({
   privateApi.use(verify);
   privateApi.use(
     rateLimit({
+      ...(rateLimitStores ? { store: rateLimitStores.private } : {}),
       windowMs: 60_000,
       limit: 90,
       keyGenerator: (req: AuthRequest) => actor(req).uid,
@@ -194,11 +200,62 @@ export function createApp({
   );
   if (subscriptions) {
     privateApi.get(
+      '/subscriptions/checkouts',
+      wrap(async (req, res) => res.json(await subscriptions.checkouts(actor(req)))),
+    );
+    privateApi.get(
+      '/admin/subscriptions/status',
+      wrap(async (req, res) => {
+        await platform.ready(actor(req));
+        requireCondition(actor(req).admin, 403, 'Acesso restrito à administração');
+        const teachers = await platform.store.find('profiles', 'accountType', 'TEACHER');
+        const recipients = await Promise.all(
+          teachers.slice(0, 100).map(async (teacher) => {
+            const recipient = await platform.store.get('asaas_recipients', teacher.id);
+            return {
+              id: teacher.id,
+              name: teacher.name,
+              status: teacher.status,
+              recipientVerified:
+                recipient?.verified === true && recipient.accountId === config.asaasAccountId,
+            };
+          }),
+        );
+        const statuses = ['QUEUED', 'PENDING', 'UNKNOWN', 'SUBMITTING', 'REVIEW'];
+        const payouts = (
+          await Promise.all(
+            statuses.map((status) => platform.store.find('subscription_payouts', 'status', status)),
+          )
+        )
+          .flat()
+          .slice(0, 100)
+          .map((p) => ({
+            id: p.id,
+            lessonId: p.lessonId,
+            teacherId: p.teacherId,
+            amountCents: p.amountCents,
+            status: p.status,
+            reviewRequired: Boolean(p.reviewRequired),
+          }));
+        const checkouts = (
+          await Promise.all(
+            ['UNKNOWN', 'SUBMITTING'].map((status) =>
+              platform.store.find('asaas_checkouts', 'status', status),
+            ),
+          )
+        )
+          .flat()
+          .slice(0, 100)
+          .map((c) => ({ id: c.id, studentId: c.studentId, planId: c.planId, status: c.status }));
+        res.json({ recipients, payouts, checkouts });
+      }),
+    );
+    privateApi.get(
       '/subscriptions',
       wrap(async (req, res) => res.json(await subscriptions.summary(actor(req)))),
     );
     privateApi.post(
-      '/subscriptions/sandbox/checkout',
+      '/subscriptions/checkout',
       wrap(async (req, res) => {
         const input = z.object({ planId: id, studentId: id }).strict().parse(req.body);
         res.json(
@@ -209,14 +266,12 @@ export function createApp({
     privateApi.post(
       '/subscriptions/:id/bookings',
       wrap(async (req, res) => {
-        res
-          .status(201)
-          .json(
-            await platform.booking(actor(req), req.body, req.header('Idempotency-Key') || '', {
-              subscriptions,
-              subscriptionId: subject(req),
-            }),
-          );
+        res.status(201).json(
+          await platform.booking(actor(req), req.body, req.header('Idempotency-Key') || '', {
+            subscriptions,
+            subscriptionId: subject(req),
+          }),
+        );
       }),
     );
     privateApi.post(
@@ -283,7 +338,7 @@ export function createApp({
           tx.set('audit_events', {
             id: randomUUID(),
             actorId: actor(req).uid,
-            action: 'VERIFY_SANDBOX_RECIPIENT',
+            action: 'VERIFY_SUBSCRIPTION_RECIPIENT',
             subjectId: subject(req),
             evidence: input.evidence,
             createdAt: new Date(platform.now()).toISOString(),

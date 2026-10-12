@@ -1,6 +1,6 @@
 import { readConfig } from './config';
 
-export function preflight(env: NodeJS.ProcessEnv) {
+export function preflight(env: NodeJS.ProcessEnv, monthlyLaunch = false) {
   const issues: string[] = [];
   try {
     readConfig({ ...env, NODE_ENV: 'production' });
@@ -29,5 +29,21 @@ export function preflight(env: NodeJS.ProcessEnv) {
     issues.push('Projeto demo não pode ser publicado');
   if (env.DAILY_DOMAIN && !/^[a-zA-Z0-9-]+$/.test(env.DAILY_DOMAIN))
     issues.push('DAILY_DOMAIN inválido');
+  if (monthlyLaunch) {
+    for (const [name, label] of [
+      ['SUBSCRIPTIONS_ENABLED', 'Contratação mensal desabilitada'],
+      ['PAYMENTS_HOMOLOGATED', 'Homologação financeira completa pendente'],
+      ['ASAAS_PRODUCTION_APPROVED', 'Liberação comercial Asaas pendente'],
+      ['SUBSCRIPTION_RULES_APPROVED', 'Regras da assinatura pendentes'],
+      ['MINORS_ENABLED', 'Atendimento a menores desabilitado'],
+      ['MINORS_SAFEGUARDS_APPROVED', 'Procedimentos de proteção de menores pendentes'],
+    ])
+      if (env[name] !== 'true') issues.push(label);
+    if (env.ASAAS_ENVIRONMENT !== 'live') issues.push('Lançamento mensal exige Asaas live');
+    if (!env.SUBSCRIPTION_CANCEL_CREDITS)
+      issues.push('Definir destino dos créditos após cancelar a renovação');
+    for (const name of ['ASAAS_API_KEY', 'ASAAS_WEBHOOK_TOKEN', 'ASAAS_ACCOUNT_ID'])
+      if (!env[name]?.trim()) issues.push(`${name} obrigatório para planos reais`);
+  }
   return { ready: issues.length === 0, issues };
 }

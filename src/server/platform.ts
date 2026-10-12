@@ -274,16 +274,19 @@ export class Platform {
   async publicTeachers() {
     const rows = await this.store.find('teachers', 'isVerified', true);
     const eligible = await Promise.all(
-      rows
-        .filter((t) => t.paymentConnected)
-        .map(async (t) => {
-          const profile = await this.store.get('profiles', t.id);
-          return profile?.status === 'ACTIVE' &&
-            profile.accountType === 'TEACHER' &&
-            profile.termsVersion === this.config.termsVersion
-            ? t
-            : null;
-        }),
+      rows.map(async (t) => {
+        const profile = await this.store.get('profiles', t.id);
+        const recipient = this.config.subscriptionsEnabled
+          ? await this.store.get('asaas_recipients', t.id)
+          : null;
+        return profile?.status === 'ACTIVE' &&
+          (t.paymentConnected ||
+            (recipient?.verified === true && recipient.accountId === this.config.asaasAccountId)) &&
+          profile.accountType === 'TEACHER' &&
+          profile.termsVersion === this.config.termsVersion
+          ? t
+          : null;
+      }),
     );
     return eligible
       .filter((t): t is Row => !!t)
@@ -358,8 +361,9 @@ export class Platform {
   ) {
     await this.ready(actor);
     requireCondition(
-      this.config.paymentsEnabled ||
-        (funding && this.config.asaasSandboxEnabled && !this.config.production),
+      funding
+        ? this.config.asaasSandboxEnabled || this.config.subscriptionsEnabled
+        : this.config.paymentsEnabled,
       503,
       'Reservas com pagamento ainda não habilitadas',
     );

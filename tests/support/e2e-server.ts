@@ -1,4 +1,5 @@
 import express from 'express';
+import { MemoryStore as RateLimitMemoryStore } from 'express-rate-limit';
 import { initializeApp } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { createServer } from 'vite';
@@ -37,17 +38,30 @@ const subscriptionGateway = new FakeSubscriptions();
 const subscriptions = new MonthlySubscriptions(state.platform, subscriptionGateway);
 state.config.origin = 'http://127.0.0.1:3000';
 const host = express();
+const rateLimitStores = { public: new RateLimitMemoryStore(), private: new RateLimitMemoryStore() };
 // Test helpers exist only in this separately launched test executable.
 host.post('/_test/reset', async (req, res) => {
   if (req.header('x-test-key') !== 'local-e2e') return res.sendStatus(403);
+  await rateLimitStores.public.resetAll();
+  await rateLimitStores.private.resetAll();
   const fresh = await fixture();
   state.advance(Date.now() - state.platform.now());
   Object.assign(subscriptionGateway, new FakeSubscriptions());
   state.store.replaceForTest(fresh.store);
+  state.config.subscriptionsEnabled = false;
+  state.config.paymentsEnabled = true;
+  state.config.subscriptionCancelCredits = 'block_booking';
   state.gateway.payments.clear();
   state.gateway.refunds = [];
   state.gateway.checkoutCalls = 0;
   res.json({ reset: true, date: state.booking.scheduledDate });
+});
+host.post('/_test/subscriptions/enable', (req, res) => {
+  if (req.header('x-test-key') !== 'local-e2e') return res.sendStatus(403);
+  state.config.subscriptionsEnabled = true;
+  state.config.paymentsEnabled = false;
+  state.config.subscriptionCancelCredits = 'keep_until_expiry';
+  res.json({ enabled: true });
 });
 host.post('/_test/subscriptions/seed', async (req, res) => {
   if (req.header('x-test-key') !== 'local-e2e') return res.sendStatus(403);
@@ -80,6 +94,7 @@ host.post('/_test/approve/:orderId', async (req, res) => {
 });
 host.use(
   createApp({
+    rateLimitStores,
     platform: state.platform,
     subscriptions,
     verifyToken: async (token) => {

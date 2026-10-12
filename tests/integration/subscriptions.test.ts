@@ -23,6 +23,213 @@ async function appFixture(bind = true) {
     }),
   };
 }
+
+test('maintenance rotates bounded subscription pages instead of starving records after the first hundred', async () => {
+  const f = await subscriptionFixture(false);
+  const seen: string[] = [];
+  const original = f.gateway.subscription.bind(f.gateway);
+  f.gateway.subscription = async (id) => {
+    seen.push(id);
+    return original(id);
+  };
+  await f.store.transaction(async (tx) => {
+    for (let n = 0; n < 101; n++) {
+      const id = 'sub_' + String(n).padStart(3, '0');
+      f.gateway.subscriptions.set(id, {
+        id,
+        customer: 'cus_student',
+        value: 439,
+        cycle: 'MONTHLY',
+        billingType: 'CREDIT_CARD',
+        status: 'ACTIVE',
+      });
+      tx.set('subscriptions', {
+        id,
+        status: 'ACTIVE',
+        customerId: 'cus_student',
+        amountCents: 43900,
+      });
+    }
+  });
+  assert.equal((await f.subscriptions.syncSubscriptions()).failures, 0);
+  assert.equal(seen.length, 100);
+  await f.subscriptions.syncSubscriptions();
+  assert.equal(seen.at(-1), 'sub_100');
+  await f.subscriptions.syncSubscriptions();
+  assert.equal(seen.filter((id) => id === 'sub_000').length, 2);
+  assert.equal(new Set(seen).size, 101);
+});
+
+test('failed early webhook events do not prevent later events from being processed', async () => {
+  const f = await subscriptionFixture(false);
+  await f.store.transaction(async (tx) => {
+    for (let n = 0; n < 100; n++)
+      tx.set('asaas_events', {
+        id: String(n).padStart(3, '0'),
+        status: 'PENDING',
+        event: 'PAYMENT_RECEIVED',
+        paymentId: 'missing',
+      });
+    tx.set('asaas_events', { id: 'last', status: 'PENDING', event: 'SUBSCRIPTION_CREATED' });
+  });
+  assert.equal((await f.subscriptions.drainEvents()).failures, 100);
+  assert.equal((await f.subscriptions.drainEvents()).failures, 0);
+  assert.equal((await f.store.get('asaas_events', 'last'))!.status, 'PROCESSED');
+  assert.equal((await f.store.get('asaas_events', '000'))!.status, 'PENDING');
+});
+
+test('subscription catalog and checkout resume are gated and scoped to the payer', async () => {
+  const f = await appFixture(false);
+  assert.equal((await request(f.app).get('/api/config')).body.subscriptionsEnabled, false);
+  f.config.subscriptionsEnabled = true;
+  assert.equal((await request(f.app).get('/api/config')).body.subscriptionsEnabled, true);
+  const headers = { Authorization: 'Bearer student', 'Idempotency-Key': randomUUID() };
+  const result = await request(f.app)
+    .post('/api/subscriptions/checkout')
+    .set(headers)
+    .send({ studentId: 'student', planId: 'monthly-4' })
+    .expect(200);
+  assert.equal(result.body.sandbox, true);
+  await request(f.app)
+    .post('/api/subscriptions/checkout')
+    .set(headers)
+    .send({ studentId: 'student', planId: 'monthly-4' })
+    .expect(200);
+  assert.equal(f.gateway.checkoutCalls, 1);
+  const own = await request(f.app)
+    .get('/api/subscriptions/checkouts')
+    .set('Authorization', 'Bearer student')
+    .expect(200);
+  assert.equal(own.body.length, 1);
+  assert.equal(own.body[0].url, result.body.url);
+  assert.equal('payerId' in own.body[0], false);
+  assert.deepEqual(
+    (
+      await request(f.app)
+        .get('/api/subscriptions/checkouts')
+        .set('Authorization', 'Bearer other')
+        .expect(200)
+    ).body,
+    [],
+  );
+  await request(f.app).get('/api/subscriptions/checkouts').expect(401);
+});
+
+test('financial administration is restricted and exported data excludes provider credentials', async () => {
+  const f = await appFixture();
+  await request(f.app).get('/api/admin/subscriptions/status').expect(401);
+  await request(f.app)
+    .get('/api/admin/subscriptions/status')
+    .set('Authorization', 'Bearer student')
+    .set('x-is-admin', 'true')
+    .expect(403);
+  const result = await request(f.app)
+    .get('/api/admin/subscriptions/status')
+    .set('Authorization', 'Bearer admin')
+    .expect(200);
+  assert.equal(result.body.recipients[0].recipientVerified, true);
+  assert.equal(JSON.stringify(result.body).includes(wallet), false);
+  assert.equal(JSON.stringify(result.body).includes(f.config.asaasApiKey), false);
+});
+
+test('deletion preserves unresolved paid credits under the keep-until-expiry policy', async () => {
+  const f = await subscriptionFixture();
+  f.config.subscriptionCancelCredits = 'keep_until_expiry';
+  await f.subscriptions.cancel(student, 'sub_student');
+  const privacy = new PrivacyService(f.platform);
+  const pending = await privacy.request(student, student.uid, 'DELETION', 'Excluir minha conta');
+  await assert.rejects(
+    () =>
+      privacy.fulfillDeletion(
+        admin,
+        pending.id,
+        'Reter somente os registros financeiros necessários',
+      ),
+    /saldo de aulas/,
+  );
+  assert.equal((await f.store.get('profiles', student.uid))!.status, 'ACTIVE');
+});
+
+test('authenticated terminal checkout events release only unpaid, unbound purchases', async () => {
+  const f = await subscriptionFixture(false);
+  await f.subscriptions.checkout(
+    student,
+    { studentId: 'student', planId: 'monthly-4' },
+    randomUUID(),
+  );
+  const event = {
+    id: 'checkout_expiry',
+    event: 'CHECKOUT_EXPIRED',
+    account: { id: account },
+    checkout: { id: f.gateway.checkoutId },
+  };
+  await f.subscriptions.receiveEvent(event);
+  await f.subscriptions.receiveEvent(event);
+  assert.equal((await f.subscriptions.drainEvents()).failures, 0);
+  assert.deepEqual(await f.subscriptions.checkouts(student), []);
+  await f.subscriptions.checkout(
+    student,
+    { studentId: 'student', planId: 'monthly-4' },
+    randomUUID(),
+  );
+  assert.equal(f.gateway.checkoutCalls, 2);
+  f.gateway.checkoutRows = [f.payment];
+  await f.subscriptions.reconcileCheckouts();
+  await f.subscriptions.receiveEvent({
+    ...event,
+    id: 'stale_checkout_cancel',
+    event: 'CHECKOUT_CANCELED',
+  });
+  await f.subscriptions.drainEvents();
+  assert.equal((await f.subscriptions.summary(student))[0].cycles[0].remaining, 4);
+  await assert.rejects(() =>
+    f.subscriptions.receiveEvent({ ...event, id: 'no-checkout', checkout: undefined }),
+  );
+});
+
+test('cancelled plan credit policy is explicit and never extends the original expiry', async () => {
+  for (const policy of ['keep_until_expiry', 'block_booking'] as const) {
+    const f = await subscriptionFixture();
+    f.config.subscriptionCancelCredits = policy;
+    await f.subscriptions.cancel(student, 'sub_student');
+    const summary = (await f.subscriptions.summary(student))[0];
+    assert.equal(summary.cycles[0].remaining, policy === 'keep_until_expiry' ? 4 : 0);
+    assert.deepEqual(Object.keys(summary.payments[0]).sort(), [
+      'amountCents',
+      'dueDate',
+      'id',
+      'status',
+    ]);
+    if (policy === 'keep_until_expiry') {
+      await f.book();
+      assert.equal((await f.subscriptions.summary(student))[0].cycles[0].remaining, 3);
+      f.advance(100 * 86400000);
+      assert.equal((await f.subscriptions.summary(student))[0].cycles[0].remaining, 0);
+    } else await assert.rejects(() => f.book());
+  }
+});
+
+test('production-mode subscription booking does not require Mercado Pago and lists Asaas-only teachers', async () => {
+  const f = await subscriptionFixture();
+  Object.assign(f.config, {
+    production: true,
+    asaasSandboxEnabled: false,
+    subscriptionsEnabled: true,
+    asaasEnvironment: 'live',
+    paymentsEnabled: false,
+  });
+  await f.store.transaction(async (tx) => {
+    const row = await tx.get('teachers', 'teacher');
+    tx.set('teachers', { ...row!, paymentConnected: false });
+  });
+  const teachers = await f.platform.publicTeachers();
+  assert.equal(teachers.length, 1);
+  assert.equal('walletId' in teachers[0], false);
+  assert.equal((await f.book()).fundingSource, 'ASAAS_SUBSCRIPTION');
+  await assert.rejects(() =>
+    f.platform.booking(student, { ...f.booking, startTime: '11:00' }, randomUUID()),
+  );
+});
 test('monthly calendar handles leap years, month ends and preserves original day through clamped months', () => {
   assert.equal(addCalendarMonths('2026-01-31', 1), '2026-02-28');
   assert.equal(addCalendarMonths('2026-01-31', 2), '2026-03-31');
@@ -291,7 +498,7 @@ test('subscription APIs reject forged amounts, unauthenticated sessions, wrong a
   const f = await appFixture(false);
   await request(f.app).get('/api/subscriptions').expect(401);
   await request(f.app)
-    .post('/api/subscriptions/sandbox/checkout')
+    .post('/api/subscriptions/checkout')
     .set('Authorization', 'Bearer student')
     .send({ planId: 'monthly-16', studentId: 'student', amountCents: 1, creditCard: {} })
     .expect(400);

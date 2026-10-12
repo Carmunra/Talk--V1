@@ -1,5 +1,7 @@
 # Hospedagem AWS da Talkê
 
+Assinaturas Asaas: o runtime admite credenciais exclusivas Sandbox/live em Secrets Manager. Usar SUBSCRIPTIONS_ENABLED=false até concluir a homologação. Staging recusa live; produção recusa Sandbox habilitado. Live exige ASAAS_ENVIRONMENT=live, ASAAS_API_KEY, ASAAS_WEBHOOK_TOKEN separado, ASAAS_ACCOUNT_ID, PAYMENTS_HOMOLOGATED=true, ASAAS_PRODUCTION_APPROVED=true, SUBSCRIPTION_RULES_APPROVED=true e SUBSCRIPTION_CANCEL_CREDITS explicitamente escolhido. Não inserir chaves no arquivo de exemplo nem no GitHub. Consulte [Homologação Asaas](ASAAS_HOMOLOGACAO.md).
+
 Escolha confirmada pelo operador em 11/10/2026: hospedar na AWS e manter Firebase Authentication/Firestore. A consulta autorizada ao console confirmou US$ 1.100 estimados disponíveis: US$ 1.000 AWS Activate FOUNDERS até 31/10/2028 e US$ 100 AWS Free Tier até 06/10/2027, sem uso exibido. O saldo é estimado e pode levar cerca de 24 horas para refletir consumo; não equivale a um limite de gastos.
 
 A lista de serviços do crédito Activate inclui EC2, VPC, ECR, Secrets Manager, CloudWatch, Systems Manager, SNS e Budgets, componentes deste plano. As tarifas específicas devem ser confrontadas com as condições do crédito e a fatura. Firebase/Google Cloud, Daily e Mercado Pago têm contas e cobranças separadas.

@@ -34,6 +34,124 @@ describe('Fluxos comerciais protegidos com Auth emulator e gateway de teste', ()
   beforeEach(() => {
     cy.request({ method: 'POST', url: '/_test/reset', headers: { 'x-test-key': 'local-e2e' } });
   });
+  it('contrata pela interface, exige aceite e retoma apenas o checkout do próprio pagador', () => {
+    cy.request({
+      method: 'POST',
+      url: '/_test/subscriptions/enable',
+      headers: { 'x-test-key': 'local-e2e' },
+    });
+    login('student');
+    cy.contains('button', 'Planos').click();
+    cy.contains('button', 'Selecionar Essencial').click();
+    cy.get('[role="dialog"]')
+      .should('contain.text', 'R$\u00a0439,00')
+      .and('contain.text', 'renova automaticamente');
+    cy.contains('button', 'Preparar pagamento').should('be.disabled');
+    cy.get('[role="dialog"] input[type="checkbox"]').check();
+    cy.intercept('POST', '/api/subscriptions/checkout').as('monthlyPurchase');
+    cy.contains('button', 'Preparar pagamento').click();
+    cy.wait('@monthlyPurchase').its('response.statusCode').should('eq', 200);
+    cy.get('[role="dialog"] a')
+      .filter('[href^="https://sandbox.asaas.com/checkoutSession/show?id="]')
+      .should('have.length', 1);
+    cy.get('[aria-label="Fechar contratação"]').click();
+    cy.contains('button', 'Selecionar Essencial').should('be.disabled');
+    cy.get('section[aria-label="Minha assinatura"]').should(
+      'contain.text',
+      'pagamento em acompanhamento',
+    );
+    cy.contains('button', 'Sair').click();
+    cy.contains('button', 'Entrar com Google').should('be.visible');
+    cy.contains('A contratação dos planos ainda não está disponível.').should('not.exist');
+    login('other');
+    cy.contains('button', 'Planos').click();
+    cy.contains('Você ainda não tem uma assinatura para este aluno.').should('be.visible');
+    cy.contains('a', 'Continuar pagamento no Asaas').should('not.exist');
+  });
+  it('mostra saldo e cobranças e cancela a renovação com confirmação e foco acessível', () => {
+    cy.request({
+      method: 'POST',
+      url: '/_test/subscriptions/seed',
+      headers: { 'x-test-key': 'local-e2e' },
+    });
+    cy.request({
+      method: 'POST',
+      url: '/_test/subscriptions/enable',
+      headers: { 'x-test-key': 'local-e2e' },
+    });
+    login('student');
+    cy.contains('button', 'Planos').click();
+    cy.contains('4 aulas disponíveis').should('be.visible');
+    cy.contains('summary', 'Cobranças da assinatura').click();
+    cy.contains('td', 'Pagamento recebido').should('be.visible');
+    cy.contains('button', 'Cancelar renovação').click();
+    cy.get('[role="dialog"]').should('be.visible');
+    cy.focused().should('contain.text', 'Manter assinatura').trigger('keydown', { key: 'Escape' });
+    cy.get('[role="dialog"]').should('not.exist');
+    cy.contains('button', 'Cancelar renovação').should('have.focus').click();
+    cy.contains('button', 'Confirmar cancelamento da renovação').click();
+    cy.contains('Renovação cancelada').should('be.visible');
+    cy.contains('4 aulas disponíveis').should('be.visible');
+  });
+  it('reserva com saldo na interface e pede confirmação do aluno antes do repasse', () => {
+    cy.request({
+      method: 'POST',
+      url: '/_test/subscriptions/seed',
+      headers: { 'x-test-key': 'local-e2e' },
+    }).then(({ body }) => {
+      cy.wrap(body.booking.scheduledDate).as('planDate');
+    });
+    cy.request({
+      method: 'POST',
+      url: '/_test/subscriptions/enable',
+      headers: { 'x-test-key': 'local-e2e' },
+    });
+    login('student');
+    cy.contains('button', 'Agendar').first().click();
+    cy.get('@planDate').then((value) => {
+      const label = new Date(String(value) + 'T12:00:00Z').toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+      });
+      cy.contains('button', label).click();
+    });
+    cy.contains('button', '10:00').click();
+    cy.contains('1 aula do seu saldo').should('be.visible');
+    cy.contains('button', 'Reservar com meu plano').click();
+    cy.contains('Aula do plano').should('be.visible');
+    cy.contains('button', 'Pagar no Mercado Pago').should('not.exist');
+    token('student')
+      .then((bearer) =>
+        cy.request({ url: '/api/lessons', headers: { Authorization: 'Bearer ' + bearer } }),
+      )
+      .then(({ body }) => {
+        const lesson = body[0];
+        cy.request({
+          method: 'POST',
+          url: '/_test/subscriptions/finish/' + lesson.id,
+          headers: { 'x-test-key': 'local-e2e' },
+        });
+        token('teacher').then((bearer) =>
+          cy.request({
+            method: 'POST',
+            url: '/api/lessons/' + lesson.id + '/complete',
+            headers: { Authorization: 'Bearer ' + bearer },
+            body: {},
+          }),
+        );
+      });
+    cy.contains('button', 'Atualizar status').click();
+    cy.contains('button', 'Confirmar que a aula ocorreu').click();
+    cy.contains('Realização confirmada pelo aluno ou responsável.').should('be.visible');
+    cy.request({ url: '/_test/subscriptions/status', headers: { 'x-test-key': 'local-e2e' } }).then(
+      ({ body }) => {
+        expect(body.calls).to.eq(1);
+        expect(body.transfers[0].value).to.eq(40);
+      },
+    );
+    cy.contains('button', 'Planos').click();
+    cy.contains('3 aulas disponíveis').should('be.visible');
+  });
   it('exibe os cinco planos públicos com preços mensais e contratação indisponível', () => {
     cy.visit('/planos');
     cy.get('h1').should('have.text', 'Planos mensais');

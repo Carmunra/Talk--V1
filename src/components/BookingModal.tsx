@@ -8,6 +8,7 @@ interface BookingModalProps {
   teacher: Teacher;
   currentStudent: Student;
   onClose: () => void;
+  usePlan?: boolean;
   onConfirmBooking: (bookingData: {
     teacherId: string;
     scheduledDate: string;
@@ -22,6 +23,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   currentStudent,
   onClose,
   onConfirmBooking,
+  usePlan = false,
 }) => {
   const availableDates = bookingDates();
 
@@ -250,9 +252,13 @@ export const BookingModal: React.FC<BookingModalProps> = ({
 
           {/* Resumo de Preço */}
           <div className="p-3 bg-neutral-50 rounded-xl border border-neutral-200 text-xs flex items-center justify-between">
-            <span className="text-neutral-500">Valor da Aula (50 min):</span>
+            <span className="text-neutral-500">
+              {usePlan ? 'Aula do plano (50 min):' : 'Valor da Aula (50 min):'}
+            </span>
             <span className="font-extrabold text-neutral-900 text-sm">
-              R$ {teacher.hourlyPriceBrl.toFixed(2).replace('.', ',')}
+              {usePlan
+                ? '1 aula do seu saldo'
+                : `R$ ${teacher.hourlyPriceBrl.toFixed(2).replace('.', ',')}`}
             </span>
           </div>
 
@@ -270,7 +276,13 @@ export const BookingModal: React.FC<BookingModalProps> = ({
               disabled={isSubmitting}
               className="px-6 py-2.5 text-xs font-bold text-white bg-gradient-to-r from-blue-600 via-sky-500 to-cyan-500 hover:opacity-95 rounded-xl shadow-md transition-all flex items-center gap-1.5 disabled:opacity-50"
             >
-              <span>{isSubmitting ? 'Reservando...' : 'Confirmar Reserva & Pagar'}</span>
+              <span>
+                {isSubmitting
+                  ? 'Reservando...'
+                  : usePlan
+                    ? 'Reservar com meu plano'
+                    : 'Confirmar Reserva & Pagar'}
+              </span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>

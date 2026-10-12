@@ -17,6 +17,34 @@ const env = {
   DAILY_API_KEY: 'test-secret',
   DAILY_DOMAIN: 'test-domain',
 };
+test('monthly launch separately checks the approved product, minors and real billing', () => {
+  const report = preflight(env, true);
+  assert.equal(report.ready, false);
+  assert(report.issues.includes('Contratação mensal desabilitada'));
+  assert(report.issues.includes('Procedimentos de proteção de menores pendentes'));
+  const complete = {
+    ...env,
+    SUBSCRIPTIONS_ENABLED: 'true',
+    ASAAS_ENVIRONMENT: 'live',
+    ASAAS_API_KEY: '$aact_prod_fixture',
+    ASAAS_WEBHOOK_TOKEN: 's'.repeat(40),
+    ASAAS_ACCOUNT_ID: 'ce40c7b4-28d8-4125-bcd5-3c5d00406615',
+    PAYMENTS_HOMOLOGATED: 'true',
+    ASAAS_PRODUCTION_APPROVED: 'true',
+    SUBSCRIPTION_RULES_APPROVED: 'true',
+    SUBSCRIPTION_CANCEL_CREDITS: 'keep_until_expiry',
+    MINORS_ENABLED: 'true',
+    MINIMUM_AGE: '6',
+    MINORS_SAFEGUARDS_APPROVED: 'true',
+  };
+  assert.equal(preflight(complete, true).ready, true);
+  assert.equal(
+    JSON.stringify(preflight({ ...complete, LEGAL_APPROVED: 'false' }, true)).includes(
+      complete.ASAAS_API_KEY,
+    ),
+    false,
+  );
+});
 test('preflight blocks incomplete or mismatched publication without exposing secrets', () => {
   assert.equal(preflight(env).ready, true);
   assert.equal(preflight({ ...env, LEGAL_APPROVED: 'false' }).ready, false);

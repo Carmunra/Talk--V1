@@ -1,11 +1,12 @@
 import { useEffect, useRef } from 'react';
 
 // Keep keyboard navigation in the open dialog and return focus to its trigger.
-export function useDialog(onClose: () => void, canClose = true) {
+export function useDialog(onClose: () => void, canClose = true, enabled = true) {
   const ref = useRef<HTMLDivElement>(null);
   const action = useRef({ onClose, canClose });
   action.current = { onClose, canClose };
   useEffect(() => {
+    if (!enabled) return;
     const previous = document.activeElement as HTMLElement | null;
     const panel = ref.current;
     if (!panel) return;
@@ -48,6 +49,6 @@ export function useDialog(onClose: () => void, canClose = true) {
       document.removeEventListener('focusin', containFocus);
       if (previous?.isConnected) previous.focus();
     };
-  }, []);
+  }, [enabled]);
   return ref;
 }

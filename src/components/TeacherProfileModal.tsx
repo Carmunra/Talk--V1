@@ -14,6 +14,7 @@ import { Teacher, ProficiencyLevelLabels, LearningGoalLabels, Review } from '../
 
 interface TeacherProfileModalProps {
   teacher: Teacher;
+  monthlyOnly?: boolean;
   reviews: Review[];
   onClose: () => void;
   onBookClick: (teacher: Teacher) => void;
@@ -21,6 +22,7 @@ interface TeacherProfileModalProps {
 
 export const TeacherProfileModal: React.FC<TeacherProfileModalProps> = ({
   teacher,
+  monthlyOnly = false,
   reviews,
   onClose,
   onBookClick,
@@ -211,13 +213,17 @@ export const TeacherProfileModal: React.FC<TeacherProfileModalProps> = ({
         <div className="pt-4 border-t border-neutral-100 flex items-center justify-between">
           <div>
             <span className="text-[11px] text-neutral-500 block">Investimento</span>
-            <div className="flex items-baseline gap-1">
-              <span className="text-xs font-semibold text-neutral-500">R$</span>
-              <span className="text-2xl font-black text-neutral-900">
-                {teacher.hourlyPriceBrl.toFixed(2).replace('.', ',')}
-              </span>
-              <span className="text-xs text-neutral-400">/ 50 min</span>
-            </div>
+            {monthlyOnly ? (
+              <p>Aula de 50 minutos com seu plano mensal</p>
+            ) : (
+              <div className="flex items-baseline gap-1">
+                <span className="text-xs font-semibold text-neutral-500">R$</span>
+                <span className="text-2xl font-black text-neutral-900">
+                  {teacher.hourlyPriceBrl.toFixed(2).replace('.', ',')}
+                </span>
+                <span className="text-xs text-neutral-400">/ 50 min</span>
+              </div>
+            )}
           </div>
 
           <div className="flex items-center gap-2">

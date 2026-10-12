@@ -1,5 +1,7 @@
 # Validações de publicação - 12/10/2026
 
+Registro desta etapa de homologação. A implementação posterior de contratação, acompanhamento, adaptador live protegido e paginação, com os bloqueios atuais, está em [Preparação da publicação](PREPARACAO_PUBLICACAO_2026_10_12.md). As pendências de interface e Sandbox exclusivo descritas abaixo refletem o estado anterior; a homologação externa e as liberações reais continuam pendentes.
+
 ## Regras e referência comercial
 
 Referência atual: Talke_Catalogo_A4_Horizontal_v4.pdf, 11 páginas, SHA256 1d539ec1f420d07f5f4b946f2fe33b77d1c7f8c729ffad90706aae30e91cc035. O operador determinou usar esse catálogo sem substituir os preços anteriores e reconfirmou R$ 40 por aula concluída. O PDF anterior talke-organizado.pdf não autoriza aplicar automaticamente a divisão percentual ou as penalidades que deixava pendentes.

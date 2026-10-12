@@ -134,6 +134,19 @@ export class PrivacyService {
       const studentSubscriptions = await tx.find('subscriptions', 'studentId', request.subjectId);
       const payouts = await tx.find('subscription_payouts', 'teacherId', request.subjectId);
       const checkouts = await tx.find('asaas_checkouts', 'payerId', request.subjectId);
+      if (this.platform.config.subscriptionCancelCredits === 'keep_until_expiry') {
+        const today = new Intl.DateTimeFormat('sv-SE', { timeZone: 'America/Sao_Paulo' }).format(
+          this.platform.now(),
+        );
+        for (const subscription of [...subscriptions, ...studentSubscriptions]) {
+          const cycles = await tx.find('subscription_cycles', 'subscriptionId', subscription.id);
+          requireCondition(
+            !cycles.some((c) => c.status === 'FUNDED' && c.remaining > 0 && c.expiresOn > today),
+            409,
+            'Resolva o saldo de aulas já pagas antes da exclusão',
+          );
+        }
+      }
       requireCondition(
         ![...subscriptions, ...studentSubscriptions].some((s) => s.status !== 'CANCELLED') &&
           !payouts.some((p) => p.status !== 'DONE' || p.reviewRequired) &&

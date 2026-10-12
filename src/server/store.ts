@@ -1,4 +1,8 @@
-import type { Firestore, Transaction as FirebaseTransaction } from 'firebase-admin/firestore';
+import {
+  FieldPath,
+  type Firestore,
+  type Transaction as FirebaseTransaction,
+} from 'firebase-admin/firestore';
 
 export type Row = Record<string, any> & { id: string };
 export interface UnitOfWork {
@@ -11,6 +15,13 @@ export interface Store {
   transaction<T>(work: (unit: UnitOfWork) => Promise<T>): Promise<T>;
   get<T extends Row = Row>(collection: string, id: string): Promise<T | null>;
   find<T extends Row = Row>(collection: string, field: string, value: unknown): Promise<T[]>;
+  findPage<T extends Row = Row>(
+    collection: string,
+    field: string,
+    value: unknown,
+    after?: string,
+    limit?: number,
+  ): Promise<T[]>;
 }
 
 // Mutations are staged so every Firestore transaction performs reads before writes.
@@ -23,6 +34,23 @@ export class FirestoreStore implements Store {
   }
   async find<T extends Row>(collection: string, field: string, value: unknown): Promise<T[]> {
     const snap = await this.db.collection(collection).where(field, '==', value).get();
+    return snap.docs.map((doc) => ({ ...doc.data(), id: doc.id }) as T);
+  }
+  async findPage<T extends Row>(
+    collection: string,
+    field: string,
+    value: unknown,
+    after?: string,
+    limit = 100,
+  ): Promise<T[]> {
+    if (!Number.isInteger(limit) || limit < 1 || limit > 100) throw new Error('Page limit invalid');
+    let query = this.db
+      .collection(collection)
+      .where(field, '==', value)
+      .orderBy(FieldPath.documentId())
+      .limit(limit);
+    if (after) query = query.startAfter(after);
+    const snap = await query.get();
     return snap.docs.map((doc) => ({ ...doc.data(), id: doc.id }) as T);
   }
   transaction<T>(work: (unit: UnitOfWork) => Promise<T>): Promise<T> {

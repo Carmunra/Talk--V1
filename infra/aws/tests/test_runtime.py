@@ -120,6 +120,8 @@ class ReleaseTests(unittest.TestCase):
                       "token_uri": "https://oauth2.googleapis.com/token", "private_key": "-----BEGIN PRIVATE KEY-----\nfixture"}
         env = {"APP_ORIGIN": self.cfg["origin"], "FIREBASE_PROJECT_ID": "talke-staging"}
         variants = [
+            {"environment": {**env, "ASAAS_ENVIRONMENT": "live"}, "firebaseServiceAccount": credential},
+            {"environment": {**env, "MP_ENVIRONMENT": "live"}, "firebaseServiceAccount": credential},
             {"environment": {**env, "NODE_OPTIONS": "--import evil"}, "firebaseServiceAccount": credential},
             {"environment": {**env, "LEGAL_NAME": "fixture\nINJECTION=true"}, "firebaseServiceAccount": credential},
             {"environment": {**env, "APP_ORIGIN": "https://other.example.test"}, "firebaseServiceAccount": credential},
@@ -127,6 +129,11 @@ class ReleaseTests(unittest.TestCase):
             {"environment": env, "firebaseServiceAccount": {**credential, "token_uri": "https://evil.example.test"}},
         ]
         for value in variants:
+            with patch.object(runtime, "aws", return_value=json.dumps(value)), self.assertRaises(ValueError):
+                runtime.secret_files(self.prior)
+        self.cfg["environment"] = "production"
+        for flags in ({"ASAAS_SANDBOX_ENABLED": "true"}, {"SUBSCRIPTIONS_ENABLED": "true", "ASAAS_ENVIRONMENT": "sandbox"}):
+            value = {"environment": {**env, **flags}, "firebaseServiceAccount": credential}
             with patch.object(runtime, "aws", return_value=json.dumps(value)), self.assertRaises(ValueError):
                 runtime.secret_files(self.prior)
 

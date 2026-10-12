@@ -60,10 +60,24 @@ export class MonthlySubscriptions {
   }
   private enabled() {
     requireCondition(
-      this.platform.config.asaasSandboxEnabled && !this.platform.config.production,
+      this.platform.config.asaasSandboxEnabled || this.platform.config.subscriptionsEnabled,
       503,
-      'Assinaturas disponíveis apenas para homologação',
+      'Assinaturas ainda não habilitadas',
     );
+  }
+  private async nextBatch(collection: string, status: string) {
+    const id = `monthly-cursor-${collection}-${status}`;
+    const cursor = await this.store.get('system', id);
+    let rows = await this.store.findPage(collection, 'status', status, cursor?.afterId, 100);
+    if (!rows.length && cursor?.afterId)
+      rows = await this.store.findPage(collection, 'status', status, undefined, 100);
+    // Move past failed/unsettled records too; the next sweep revisits them without starving new rows.
+    // A crash may delay a batch until wraparound. Financial mutations remain independently journaled.
+    if (rows.length || cursor?.afterId)
+      await this.store.transaction(async (tx) =>
+        tx.set('system', { id, afterId: rows.at(-1)?.id || '', checkedAt: this.stamp() }),
+      );
+    return rows;
   }
   async bind(
     actor: Identity,
@@ -171,7 +185,7 @@ export class MonthlySubscriptions {
       tx.set('audit_events', {
         id: `asaas-bind-${key(subscription.id)}`,
         actorId,
-        action: 'BIND_SANDBOX_SUBSCRIPTION',
+        action: 'BIND_SUBSCRIPTION',
         subjectId: input.studentId,
         createdAt: this.stamp(),
       });
@@ -239,7 +253,8 @@ export class MonthlySubscriptions {
       tx.set('asaas_checkouts', row);
       return row;
     });
-    if (request.checkoutId) return { id: request.checkoutId, url: request.url, sandbox: true };
+    const sandbox = this.platform.config.asaasEnvironment !== 'live';
+    if (request.checkoutId) return { id: request.checkoutId, url: request.url, sandbox };
     try {
       const result = await this.gateway.checkout(
         plan.id,
@@ -257,7 +272,7 @@ export class MonthlySubscriptions {
           url: result.url,
         });
       });
-      return { ...result, sandbox: true };
+      return { ...result, sandbox };
     } catch {
       await this.store.transaction(async (tx) => {
         const fresh = await tx.get('asaas_checkouts', reference);
@@ -269,9 +284,9 @@ export class MonthlySubscriptions {
   }
   async reconcileCheckouts() {
     this.enabled();
-    const rows = await this.store.find('asaas_checkouts', 'status', 'CREATED');
+    const rows = await this.nextBatch('asaas_checkouts', 'CREATED');
     let failures = 0;
-    for (const row of rows.slice(0, 100)) {
+    for (const row of rows) {
       try {
         const payments = await this.gateway.checkoutPayments(row.checkoutId, row.firstDueDate);
         if (!payments.length) continue;
@@ -312,30 +327,59 @@ export class MonthlySubscriptions {
     return Promise.all(
       rows.map(async (row) => {
         const batches = await this.store.find('subscription_cycles', 'subscriptionId', row.id);
+        const payments = await this.store.find('asaas_payments', 'subscriptionId', row.id);
         const today = localDate(this.now());
         return {
           id: row.id,
           studentId: row.studentId,
           planId: row.planId,
           status: row.status,
+          amountCents: row.amountCents,
+          cancellationCreditPolicy: this.platform.config.subscriptionCancelCredits,
+          payments: payments.map((p) => ({
+            id: p.id,
+            dueDate: p.dueDate,
+            amountCents: p.amountCents,
+            status: p.status,
+          })),
           cycles: batches.map((b) => ({
             id: b.id,
             startsOn: b.startsOn,
             expiresOn: b.expiresOn,
             remaining:
-              b.status === 'FUNDED' && b.startsOn <= today && today < b.expiresOn ? b.remaining : 0,
+              (row.status === 'ACTIVE' ||
+                (row.status === 'CANCELLED' &&
+                  this.platform.config.subscriptionCancelCredits === 'keep_until_expiry')) &&
+              b.status === 'FUNDED' &&
+              b.startsOn <= today &&
+              today < b.expiresOn
+                ? b.remaining
+                : 0,
             status: b.status,
           })),
         };
       }),
     );
   }
+  async checkouts(actor: Identity) {
+    await this.platform.ready(actor);
+    const rows = await this.store.find('asaas_checkouts', 'payerId', actor.uid);
+    return rows
+      .filter((row) => ['CREATED', 'SUBMITTING', 'UNKNOWN'].includes(row.status))
+      .map((row) => ({
+        id: row.id,
+        studentId: row.studentId,
+        planId: row.planId,
+        status: row.status,
+        ...(row.status === 'CREATED' ? { url: row.url } : {}),
+      }));
+  }
   async syncSubscriptions() {
     this.enabled();
     let failures = 0;
     for (const status of ['ACTIVE', 'REVIEW', 'CANCELLED']) {
-      const rows = await this.store.find('subscriptions', 'status', status);
-      for (const row of rows.slice(0, 100)) {
+      const rows = await this.nextBatch('subscriptions', status);
+      for (const row of rows) {
         try {
           const remote = await this.gateway.subscription(row.id);
           requireCondition(
@@ -480,7 +524,9 @@ export class MonthlySubscriptions {
     const recipient = await tx.get('asaas_recipients', lesson.teacherId);
     requireCondition(
       subscription &&
-        subscription.status === 'ACTIVE' &&
+        (subscription.status === 'ACTIVE' ||
+          (subscription.status === 'CANCELLED' &&
+            this.platform.config.subscriptionCancelCredits === 'keep_until_expiry')) &&
         subscription.payerId === actor.uid &&
         subscription.studentId === lesson.studentId,
       403,
@@ -597,6 +643,7 @@ export class MonthlySubscriptions {
           .object({ id: z.string().regex(/^[a-zA-Z0-9_-]{1,100}$/) })
           .passthrough()
           .optional(),
+        checkout: z.object({ id: z.string().uuid() }).passthrough().optional(),
       })
       .passthrough()
       .parse(body);
@@ -606,6 +653,11 @@ export class MonthlySubscriptions {
       'Conta Asaas divergente',
     );
     requireCondition(!event.event.startsWith('PAYMENT_') || event.payment, 400, 'Cobrança ausente');
+    requireCondition(
+      !event.event.startsWith('CHECKOUT_') || event.checkout,
+      400,
+      'Checkout ausente',
+    );
     requireCondition(
       !event.event.startsWith('TRANSFER_') || event.transfer,
       400,
@@ -620,6 +672,7 @@ export class MonthlySubscriptions {
           event: event.event,
           paymentId: event.payment?.id || '',
           transferId: event.transfer?.id || '',
+          checkoutId: event.checkout?.id || '',
           status: 'PENDING',
           createdAt: this.stamp(),
         });
@@ -628,13 +681,29 @@ export class MonthlySubscriptions {
   async drainEvents() {
     this.enabled();
     const checkouts = await this.reconcileCheckouts();
-    const events = await this.store.find('asaas_events', 'status', 'PENDING');
+    const events = await this.nextBatch('asaas_events', 'PENDING');
     let failures = checkouts.failures + (await this.syncSubscriptions()).failures;
-    for (const event of events.slice(0, 100)) {
+    for (const event of events) {
       try {
         if (event.event.startsWith('PAYMENT_')) await this.reconcilePayment(event.paymentId);
         else if (event.event.startsWith('TRANSFER_')) {
           await this.reconcileTransfer(event.transferId);
+        } else if (['CHECKOUT_EXPIRED', 'CHECKOUT_CANCELED'].includes(event.event)) {
+          const pending = await this.store.find('asaas_checkouts', 'checkoutId', event.checkoutId);
+          for (const row of pending) {
+            if (row.status !== 'CREATED') continue;
+            const payments = await this.gateway.checkoutPayments(row.checkoutId, row.firstDueDate);
+            requireCondition(payments.length === 0, 409, 'Checkout com cobrança exige conciliação');
+            await this.store.transaction(async (tx) => {
+              const fresh = await tx.get('asaas_checkouts', row.id);
+              if (fresh?.status === 'CREATED')
+                tx.set('asaas_checkouts', {
+                  ...fresh,
+                  status: 'CANCELLED',
+                  closedAt: this.stamp(),
+                });
+            });
+          }
         }
         await this.store.transaction(async (tx) => {
           const fresh = await tx.get('asaas_events', event.id);
@@ -785,8 +854,8 @@ export class MonthlySubscriptions {
     this.enabled();
     let failures = 0;
     for (const status of ['QUEUED', 'PENDING']) {
-      const rows = await this.store.find('subscription_payouts', 'status', status);
-      for (const row of rows.slice(0, 100)) {
+      const rows = await this.nextBatch('subscription_payouts', status);
+      for (const row of rows) {
         try {
           await this.processPayout(row.id);
         } catch {

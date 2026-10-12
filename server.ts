@@ -8,7 +8,7 @@ import { readConfig } from './src/server/config';
 import { FirestoreStore } from './src/server/store';
 import { Platform } from './src/server/platform';
 import { MercadoPagoGateway } from './src/server/marketplace';
-import { AsaasSandboxGateway } from './src/server/asaas';
+import { AsaasGateway } from './src/server/asaas';
 import { MonthlySubscriptions } from './src/server/subscriptions';
 
 const config = readConfig();
@@ -19,11 +19,11 @@ const store = new FirestoreStore(getFirestore(firebase, config.databaseId));
 const platform = new Platform(store, config, new MercadoPagoGateway(store, config));
 const app = createApp({
   platform,
-  ...(config.asaasSandboxEnabled
+  ...(config.asaasSandboxEnabled || config.subscriptionsEnabled
     ? {
         subscriptions: new MonthlySubscriptions(
           platform,
-          new AsaasSandboxGateway(config.asaasApiKey, true),
+          new AsaasGateway(config.asaasApiKey, true, fetch, config.asaasEnvironment),
         ),
       }
     : {}),

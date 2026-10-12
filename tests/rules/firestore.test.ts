@@ -1,4 +1,5 @@
 import { after, before, test } from 'node:test';
+import nodeAssert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import {
   initializeTestEnvironment,
@@ -174,6 +175,20 @@ test('Admin Firestore adapter stages all writes and serializes competing interva
       .catch(() => {});
     if (await store.get('rollback_probe', 'probe'))
       throw new Error('Aborted transaction committed');
+    await store.transaction(async (tx) => {
+      for (const id of ['a', 'b', 'c']) tx.set('page_probe', { id, status: 'PENDING' });
+      tx.set('page_probe', { id: 'd', status: 'DONE' });
+    });
+    const first = await store.findPage('page_probe', 'status', 'PENDING', undefined, 2);
+    if (first.map((row) => row.id).join(',') !== 'a,b') throw new Error('Wrong first page');
+    const next = await store.findPage('page_probe', 'status', 'PENDING', first.at(-1)!.id, 2);
+    if (next.map((row) => row.id).join(',') !== 'c') throw new Error('Wrong continuation page');
+    await store.transaction(async (tx) => tx.remove('page_probe', 'b'));
+    if ((await store.findPage('page_probe', 'status', 'PENDING', 'b', 2))[0].id !== 'c')
+      throw new Error('Deleted cursor document broke pagination');
+    await nodeAssert.rejects(() =>
+      store.findPage('page_probe', 'status', 'PENDING', undefined, 101),
+    );
   } finally {
     await deleteApp(firebase);
   }

@@ -24,6 +24,7 @@ import { MatchingService } from '../domain/services/matchingService';
 interface TeacherDirectoryProps {
   teachers: Teacher[];
   currentStudent: Student | null;
+  monthlyOnly?: boolean;
   onSelectTeacher: (teacher: Teacher) => void;
   onBookTeacher: (teacher: Teacher) => void;
   onGoToDiagnostic: () => void;
@@ -32,6 +33,7 @@ interface TeacherDirectoryProps {
 export const TeacherDirectory: React.FC<TeacherDirectoryProps> = ({
   teachers,
   currentStudent,
+  monthlyOnly = false,
   onSelectTeacher,
   onBookTeacher,
   onGoToDiagnostic,
@@ -77,7 +79,7 @@ export const TeacherDirectory: React.FC<TeacherDirectoryProps> = ({
     }
 
     // Max Price
-    if (teacher.hourlyPriceBrl > maxPrice) return false;
+    if (!monthlyOnly && teacher.hourlyPriceBrl > maxPrice) return false;
 
     return true;
   });
@@ -180,22 +182,24 @@ export const TeacherDirectory: React.FC<TeacherDirectoryProps> = ({
           </div>
 
           {/* Preço Máximo */}
-          <div>
-            <div className="flex justify-between items-center mb-1 font-semibold text-neutral-600">
-              <span>Preço Máximo</span>
-              <span className="text-blue-600 font-bold">Até R$ {maxPrice} / aula</span>
+          {!monthlyOnly && (
+            <div>
+              <div className="flex justify-between items-center mb-1 font-semibold text-neutral-600">
+                <span>Preço Máximo</span>
+                <span className="text-blue-600 font-bold">Até R$ {maxPrice} / aula</span>
+              </div>
+              <input
+                type="range"
+                aria-label="Preço máximo por aula"
+                min="50"
+                max="200"
+                step="10"
+                value={maxPrice}
+                onChange={(e) => setMaxPrice(Number(e.target.value))}
+                className="w-full accent-blue-600"
+              />
             </div>
-            <input
-              type="range"
-              aria-label="Preço máximo por aula"
-              min="50"
-              max="200"
-              step="10"
-              value={maxPrice}
-              onChange={(e) => setMaxPrice(Number(e.target.value))}
-              className="w-full accent-blue-600"
-            />
-          </div>
+          )}
         </div>
       </div>
 
@@ -279,16 +283,20 @@ export const TeacherDirectory: React.FC<TeacherDirectoryProps> = ({
 
             {/* Bottom: Price and Buttons */}
             <div className="mt-5 pt-4 border-t border-neutral-100">
-              <div className="flex items-baseline justify-between mb-3">
-                <span className="text-[11px] text-neutral-400">Aula particular:</span>
-                <div>
-                  <span className="text-xs font-semibold text-neutral-500">R$ </span>
-                  <span className="text-lg font-black text-neutral-900">
-                    {teacher.hourlyPriceBrl.toFixed(2).replace('.', ',')}
-                  </span>
-                  <span className="text-[11px] text-neutral-400"> / 50 min</span>
+              {monthlyOnly ? (
+                <p className="text-sm mb-3">Aula de 50 minutos com seu plano mensal</p>
+              ) : (
+                <div className="flex items-baseline justify-between mb-3">
+                  <span className="text-[11px] text-neutral-400">Aula particular:</span>
+                  <div>
+                    <span className="text-xs font-semibold text-neutral-500">R$ </span>
+                    <span className="text-lg font-black text-neutral-900">
+                      {teacher.hourlyPriceBrl.toFixed(2).replace('.', ',')}
+                    </span>
+                    <span className="text-[11px] text-neutral-400"> / 50 min</span>
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div className="grid grid-cols-2 gap-2">
                 <button

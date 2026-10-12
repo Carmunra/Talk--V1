@@ -11,8 +11,16 @@ import { PrivacyNotice } from './components/PrivacyNotice';
 import { SupportContacts } from './components/SupportContacts';
 import { MonthlyPlans } from './components/MonthlyPlans';
 import { SchoolOverview } from './components/SchoolOverview';
+import {
+  SubscriptionPanel,
+  SubscriptionPurchase,
+  type SubscriptionSummary,
+  type PendingCheckout,
+} from './components/SubscriptionPanel';
+import type { MonthlyPlan } from './domain/monthlyPlans';
 import { Registration, FamilyForm, TeacherEditor, PrivacyPanel } from './components/AccountForms';
 import { AdminPanel } from './components/AdminPanel';
+import { AdminSubscriptions } from './components/AdminSubscriptions';
 import { Teacher, Student, UserRole } from './domain/types';
 import { TALKE_CURRICULUM_MATERIALS } from './data/talkeMaterials';
 const VirtualClassroomModal = lazy(() =>
@@ -43,6 +51,9 @@ export default function App() {
     ),
     [teachers, setTeachers] = useState<Teacher[]>([]);
   const [lessons, setLessons] = useState<any[]>([]),
+    [subscriptions, setSubscriptions] = useState<SubscriptionSummary[]>([]),
+    [checkouts, setCheckouts] = useState<PendingCheckout[]>([]),
+    [purchase, setPurchase] = useState<MonthlyPlan | null>(null),
     [payments, setPayments] = useState<any[]>([]),
     [notes, setNotes] = useState<any[]>([]);
   const [childId, setChildId] = useState(''),
@@ -65,13 +76,21 @@ export default function App() {
       auth.currentUser?.uid === expectedUid &&
       currentIdentity.current.subjectId === expectedSubject;
     if (!firebaseUser || !active || !same()) return;
-    const [freshLessons, freshPayments] = await Promise.all([
+    const [freshLessons, freshPayments, freshSubscriptions, freshCheckouts] = await Promise.all([
       api<any[]>('/api/lessons'),
       api<any[]>('/api/payments'),
+      config?.subscriptionsEnabled
+        ? api<SubscriptionSummary[]>('/api/subscriptions')
+        : Promise.resolve([]),
+      config?.subscriptionsEnabled
+        ? api<PendingCheckout[]>('/api/subscriptions/checkouts')
+        : Promise.resolve([]),
     ]);
     if (!same()) return;
     setLessons(freshLessons);
     setPayments(freshPayments);
+    setSubscriptions(freshSubscriptions);
+    setCheckouts(freshCheckouts);
     if (role === 'STUDENT' || childId) {
       const [freshStudent, freshNotes] = await Promise.all([
         api<Student>('/api/students/' + subjectId),
@@ -97,6 +116,9 @@ export default function App() {
     setPayments([]);
     setStudent(null);
     setNotes([]);
+    setSubscriptions([]);
+    setCheckouts([]);
+    setPurchase(null);
     setRoom(null);
     setBooking(null);
     (async () => {
@@ -105,13 +127,21 @@ export default function App() {
         if (cancelled) return;
         setTeachers(catalog);
         if (!firebaseUser || !active) return;
-        const [ls, ps] = await Promise.all([
+        const [ls, ps, ss, cs] = await Promise.all([
           api<any[]>('/api/lessons'),
           api<any[]>('/api/payments'),
+          config?.subscriptionsEnabled
+            ? api<SubscriptionSummary[]>('/api/subscriptions')
+            : Promise.resolve([]),
+          config?.subscriptionsEnabled
+            ? api<PendingCheckout[]>('/api/subscriptions/checkouts')
+            : Promise.resolve([]),
         ]);
         if (cancelled) return;
         setLessons(ls);
         setPayments(ps);
+        setSubscriptions(ss);
+        setCheckouts(cs);
         if (role === 'STUDENT' || childId) {
           const st = await api<Student>('/api/students/' + subjectId),
             ns = await api<any[]>('/api/progress?studentId=' + subjectId);
@@ -130,7 +160,7 @@ export default function App() {
     return () => {
       cancelled = true;
     };
-  }, [firebaseUser?.uid, session, childId]);
+  }, [firebaseUser?.uid, session, childId, config?.subscriptionsEnabled]);
   useEffect(() => {
     setChildId('');
     setMessage('');
@@ -142,11 +172,33 @@ export default function App() {
       await work();
       setMessage(success);
       await refresh();
+      return true;
     } catch (e) {
       setMessage((e as Error).message);
+      return false;
     } finally {
       setBusy(false);
     }
+  };
+  const selectedSubscriptions = subscriptions.filter((s) => s.studentId === subjectId);
+  const selectedCheckouts = checkouts.filter((s) => s.studentId === subjectId);
+  const bookingSubscription = selectedSubscriptions.find(
+    (s) =>
+      (s.status === 'ACTIVE' ||
+        (s.status === 'CANCELLED' && s.cancellationCreditPolicy === 'keep_until_expiry')) &&
+      s.cycles.some((c) => c.remaining > 0),
+  );
+  const selectPlan = (plan: MonthlyPlan) => {
+    if (
+      !active ||
+      !student ||
+      !['STUDENT', 'GUARDIAN'].includes(role || '') ||
+      session?.profile?.ageGroup !== 'ADULT'
+    )
+      setMessage(
+        'Entre como aluno adulto ou responsável e selecione um aluno liberado para contratar.',
+      );
+    else setPurchase(plan);
   };
   if (!config)
     return (
@@ -260,11 +312,39 @@ export default function App() {
         ) : tab === 'terms' ? (
           <PrivacyNotice config={config} terms />
         ) : tab === 'plans' ? (
-          <MonthlyPlans plans={config.monthlyPlans} />
+          <>
+            {active && config.subscriptionsEnabled && (
+              <SubscriptionPanel
+                rows={selectedSubscriptions}
+                checkouts={selectedCheckouts}
+                plans={config.monthlyPlans}
+                sandbox={config.subscriptionsSandbox}
+                busy={busy}
+                onRefresh={() => void action(refresh, 'Assinatura atualizada')}
+                onCancel={async (id) => {
+                  return action(
+                    () => post('/api/subscriptions/' + id + '/cancel', {}),
+                    'Cancelamento registrado',
+                  );
+                }}
+              />
+            )}
+            <MonthlyPlans
+              plans={config.monthlyPlans}
+              onSelect={config.subscriptionsEnabled ? selectPlan : undefined}
+              unavailable={
+                selectedSubscriptions.some((s) => s.status !== 'CANCELLED') ||
+                selectedCheckouts.length > 0
+              }
+            />
+          </>
         ) : tab === 'privacy-panel' && subjectId ? (
           <PrivacyPanel subjectId={subjectId} />
         ) : tab === 'admin' && session?.isAdmin ? (
-          <AdminPanel />
+          <>
+            <AdminPanel />
+            {config.subscriptionsEnabled && <AdminSubscriptions />}
+          </>
         ) : firebaseUser &&
           session &&
           (!session.profile || session.profile.termsVersion !== config.termsVersion) ? (
@@ -282,15 +362,29 @@ export default function App() {
         ) : tab === 'teachers' ? (
           <>
             {!firebaseUser && <SchoolOverview minorsEnabled={config.minorsEnabled} />}
-            {!firebaseUser && <MonthlyPlans plans={config.monthlyPlans} compact />}
+            {!firebaseUser && (
+              <MonthlyPlans
+                plans={config.monthlyPlans}
+                compact
+                onSelect={config.subscriptionsEnabled ? selectPlan : undefined}
+              />
+            )}
             <TeacherDirectory
+              monthlyOnly={config.subscriptionsEnabled && !config.paymentsEnabled}
               teachers={teachers}
               currentStudent={student}
               onSelectTeacher={setProfileTeacher}
               onBookTeacher={(teacher) => {
                 if (!active || !student)
                   setMessage('Entre como aluno ou selecione um dependente liberado para reservar.');
-                else setBooking(teacher);
+                else if (
+                  config.subscriptionsEnabled &&
+                  !config.paymentsEnabled &&
+                  !bookingSubscription
+                ) {
+                  setMessage('Selecione um plano com aulas disponíveis antes de reservar.');
+                  setTab('plans');
+                } else setBooking(teacher);
               }}
               onGoToDiagnostic={() => setTab('diagnostic')}
             />
@@ -333,7 +427,10 @@ export default function App() {
                     {l.scheduledDate} · {l.startTime} (Brasília) · {l.durationMinutes} min
                   </p>
                   <p>
-                    R$ {l.priceBrl.toFixed(2)} ·{' '}
+                    {l.fundingSource === 'ASAAS_SUBSCRIPTION'
+                      ? 'Aula do plano'
+                      : `R$ ${l.priceBrl.toFixed(2)}`}{' '}
+                    ·{' '}
                     {(
                       {
                         CONFIRMED: 'Confirmada',
@@ -361,19 +458,46 @@ export default function App() {
                     {l.isPaid && l.status === 'CONFIRMED' && (
                       <button onClick={() => setRoom(l)}>Entrar na sala</button>
                     )}
-                    {['REQUESTED', 'CONFIRMED'].includes(l.status) && (
-                      <button
-                        disabled={busy}
-                        onClick={() =>
-                          void action(
-                            () => post('/api/lessons/' + l.id + '/cancel', {}),
-                            'Cancelamento registrado. Reembolsos ficam em acompanhamento.',
-                          )
-                        }
-                      >
-                        Cancelar aula
-                      </button>
+                    {['REQUESTED', 'CONFIRMED'].includes(l.status) &&
+                      l.fundingSource !== 'ASAAS_SUBSCRIPTION' && (
+                        <button
+                          disabled={busy}
+                          onClick={() =>
+                            void action(
+                              () => post('/api/lessons/' + l.id + '/cancel', {}),
+                              'Cancelamento registrado. Reembolsos ficam em acompanhamento.',
+                            )
+                          }
+                        >
+                          Cancelar aula
+                        </button>
+                      )}
+                    {l.fundingSource === 'ASAAS_SUBSCRIPTION' &&
+                      l.status === 'COMPLETED' &&
+                      l.payerId === firebaseUser?.uid &&
+                      !l.payerConfirmedAt && (
+                        <button
+                          disabled={busy}
+                          onClick={() =>
+                            void action(
+                              () => post('/api/lessons/' + l.id + '/confirm-completion', {}),
+                              'Realização da aula confirmada',
+                            )
+                          }
+                        >
+                          Confirmar que a aula ocorreu
+                        </button>
+                      )}
+                    {l.fundingSource === 'ASAAS_SUBSCRIPTION' && l.payerConfirmedAt && (
+                      <p>Realização confirmada pelo aluno ou responsável.</p>
                     )}
+                    {l.fundingSource === 'ASAAS_SUBSCRIPTION' &&
+                      ['CONFIRMED', 'COMPLETED'].includes(l.status) && (
+                        <p>
+                          Para cancelamento ou contestação desta aula, use “Relatar problema” ou
+                          procure o suporte.
+                        </p>
+                      )}
                     {l.teacherId === firebaseUser?.uid && l.status === 'CONFIRMED' && (
                       <button
                         disabled={busy}
@@ -573,30 +697,52 @@ export default function App() {
         <BookingModal
           teacher={booking}
           currentStudent={student}
+          usePlan={Boolean(bookingSubscription)}
           onClose={() => setBooking(null)}
           onConfirmBooking={async (data) => {
             const { requestKey, ...payload } = data;
             await post(
-              '/api/lessons',
+              bookingSubscription
+                ? '/api/subscriptions/' + bookingSubscription.id + '/bookings'
+                : '/api/lessons',
               { studentId: student.id, ...payload },
               { 'Idempotency-Key': requestKey },
             );
             await refresh();
             setBooking(null);
             setTab('lessons');
-            setMessage('Reserva criada. Pague antes de expirar o prazo de 30 minutos.');
+            setMessage(
+              bookingSubscription
+                ? 'Aula reservada com seu plano.'
+                : 'Reserva criada. Pague antes de expirar o prazo de 30 minutos.',
+            );
           }}
+        />
+      )}
+      {purchase && student && (
+        <SubscriptionPurchase
+          plan={purchase}
+          studentId={student.id}
+          studentName={student.name}
+          email={firebaseUser?.email || ''}
+          sandbox={config.subscriptionsSandbox}
+          onClose={() => setPurchase(null)}
+          onSaved={refresh}
         />
       )}
       {profileTeacher && (
         <TeacherProfileModal
+          monthlyOnly={config.subscriptionsEnabled && !config.paymentsEnabled}
           teacher={profileTeacher}
           reviews={[]}
           onClose={() => setProfileTeacher(null)}
           onBookClick={(teacher) => {
             setProfileTeacher(null);
-            if (student) setBooking(teacher);
-            else setMessage('Entre e conclua o cadastro para reservar.');
+            if (student && (config.paymentsEnabled || bookingSubscription)) setBooking(teacher);
+            else if (student) {
+              setMessage('Selecione um plano com aulas disponíveis antes de reservar.');
+              setTab('plans');
+            } else setMessage('Entre e conclua o cadastro para reservar.');
           }}
         />
       )}
