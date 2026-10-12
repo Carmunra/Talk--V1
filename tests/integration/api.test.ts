@@ -24,6 +24,10 @@ test('public monthly catalog has approved BRL prices and cannot activate recurri
   assert.equal(response.headers['cache-control'], 'no-store');
   assert.equal(response.body.subscriptionsEnabled, false);
   assert.deepEqual(
+    response.body.monthlyPlans.map((plan: any) => plan.name),
+    ['Essencial', 'Evolução', 'Constância', 'Intensivo', 'Intensivo Conversação'],
+  );
+  assert.deepEqual(
     response.body.monthlyPlans.map((plan: any) => [plan.lessonsPerMonth, plan.amountCents]),
     [
       [4, 43900],

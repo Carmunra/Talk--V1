@@ -10,12 +10,20 @@ function token(uid: string) {
     .then((response) => response.body.idToken as string);
 }
 function login(uid: string) {
+  cy.intercept('POST', '**/accounts:signInWithPassword*').as('signIn');
+  cy.intercept('GET', '/api/me').as('sessionProfile');
   if (uid === 'student' || uid === 'other')
     cy.intercept('GET', '/api/students/' + uid).as('currentStudent');
   cy.visit('/');
   cy.get('[aria-label="E-mail de teste"]').type(uid + '@example.test');
   cy.get('[aria-label="Senha de teste"]').type(password, { log: false });
   cy.contains('button', 'Entrar no emulador').click();
+  cy.wait('@signIn', { requestTimeout: 30000, responseTimeout: 30000 })
+    .its('response.statusCode')
+    .should('eq', 200);
+  cy.wait('@sessionProfile', { requestTimeout: 30000, responseTimeout: 30000 })
+    .its('response.body.profile.id')
+    .should('eq', uid);
   cy.contains('button', 'Minhas aulas').should('be.visible');
   if (uid === 'student' || uid === 'other') {
     cy.wait('@currentStudent');
@@ -45,6 +53,16 @@ describe('Fluxos comerciais protegidos com Auth emulator e gateway de teste', ()
     cy.contains('As aulas não usadas acumulam por mais um ciclo mensal.').should('be.visible');
     cy.contains('button', /assinar|contratar|comprar/i).should('not.exist');
     cy.contains('button', 'Professores').click();
+    cy.get('section[aria-label="Conheça a Talkê"]').should(
+      'contain.text',
+      'Aula experimental gratuita',
+    );
+    cy.get('a[href="https://wa.me/5511965802237"]').should(
+      'have.attr',
+      'rel',
+      'noopener noreferrer',
+    );
+    cy.get('article[aria-label="4 aulas por mês"]').should('contain.text', 'Essencial');
     cy.get('section[aria-label="Planos mensais"] article').should('have.length', 5);
     cy.contains('button', 'Planos').click();
     cy.get('h1').should('have.text', 'Planos mensais');

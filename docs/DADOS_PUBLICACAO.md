@@ -1,6 +1,8 @@
 # Dados fornecidos para a publicação
 
-Atualizado em 11/10/2026. Este registro prepara a configuração; não comprova implantação, autorização jurídica ou criação de contas.
+Atualizado em 12/10/2026. Este registro prepara a configuração; não comprova implantação ou autorização jurídica.
+
+O operador informou ter criado as contas Asaas empresarial e Sandbox. Autenticação, CNPJ e cadastro aprovado foram verificados apenas no Sandbox. Uma subconta fictícia foi criada para a homologação com autorização específica; produção continua sem liberação. O novo catálogo Talke_Catalogo_A4_Horizontal_v4.pdf orienta apresentação, nomes e atendimento, preservando os preços existentes e R$ 40 por aula concluída. Consultar [resultados e pendências atuais](VALIDACAO_2026_10_12.md).
 
 Razão social informada: 68.199.377 MARESSA SOARES LOPES. Domínio confirmado: talke.club; origem HTTPS https://talke.club.
 
@@ -24,7 +26,7 @@ Canal de privacidade/LGPD confirmado pelo operador: contato@talke.club. Esse end
 - Projeto Firebase/Google Cloud de produção, faturamento e projeto separado para homologação.
 - Cadastro e verificação dos dois administradores no projeto Firebase correto.
 - Credenciais dos provedores em cofre, homologação real de pagamento/split e vídeo, documentos e procedimentos aprovados para menores.
-- Assinaturas mensais: 4/6/8/12/16 aulas por R$ 439/569/709/969/1.239. Renovação automática, professores diferentes e repasses automáticos confirmados. R$ 40 por aula concluída em todos os planos; aulas não utilizadas acumulam por mais um ciclo. Para o repasse, professor conclui e aluno adulto/pagador ou responsável confirma a realização, conforme aprovação do operador. Asaas autorizado para preparação do código; o operador informou não ter conta ainda. Cadastro, credenciais, aprovação comercial, cancelamentos/contestação e liquidação ainda pendentes. Consultar [Planos mensais](PLANOS_MENSAIS.md) e [Homologação Asaas](ASAAS_HOMOLOGACAO.md).
+- Assinaturas mensais: 4/6/8/12/16 aulas por R$ 439/569/709/969/1.239. Renovação automática, professores diferentes e repasses automáticos confirmados. R$ 40 por aula concluída em todos os planos; aulas não utilizadas acumulam por mais um ciclo. Para o repasse, professor conclui e aluno adulto/pagador ou responsável confirma a realização, conforme aprovação do operador. As contas foram criadas pelo operador e a conexão Sandbox foi verificada. Liberação de produção, aprovação comercial, cancelamentos/contestação, liquidação e homologação completa continuam pendentes. Consultar [Planos mensais](PLANOS_MENSAIS.md) e [Homologação Asaas](ASAAS_HOMOLOGACAO.md).
 
 O operador escolheu AWS para a hospedagem, mantendo Firebase para login e banco. Seguir [Publicação AWS](PUBLICACAO_AWS.md). Não há recursos AWS criados ou plano aplicado; estimativa, orçamento e permissões precisam de revisão e aprovação. O crédito AWS não cobre Firebase/Google Cloud, Daily ou tarifas Mercado Pago. A lista Activate inclui os componentes AWS previstos.
 

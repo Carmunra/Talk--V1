@@ -273,7 +273,7 @@ export class MonthlySubscriptions {
     let failures = 0;
     for (const row of rows.slice(0, 100)) {
       try {
-        const payments = await this.gateway.checkoutPayments(row.checkoutId);
+        const payments = await this.gateway.checkoutPayments(row.checkoutId, row.firstDueDate);
         if (!payments.length) continue;
         requireCondition(
           new Set(payments.map((p) => p.subscription)).size === 1,

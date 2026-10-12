@@ -15,6 +15,7 @@ export const asaasPaymentSchema = z
     dueDate: z.string(),
     status: z.string(),
     deleted: z.boolean().optional(),
+    checkoutSession: z.string().uuid().nullable().optional(),
   })
   .strip();
 export type AsaasPayment = z.infer<typeof asaasPaymentSchema>;
@@ -48,7 +49,7 @@ export interface SubscriptionGateway {
     origin: string,
     firstDueDate: string,
   ): Promise<{ id: string; url: string }>;
-  checkoutPayments(id: string): Promise<AsaasPayment[]>;
+  checkoutPayments(id: string, firstDueDate?: string): Promise<AsaasPayment[]>;
   subscriptionPayments(id: string): Promise<AsaasPayment[]>;
   subscription(id: string): Promise<AsaasSubscription>;
   customer(id: string): Promise<{ id: string; email: string }>;
@@ -211,20 +212,45 @@ export class AsaasSandboxGateway implements SubscriptionGateway {
       );
     return { id: row.id, url: `https://sandbox.asaas.com/checkoutSession/show?id=${row.id}` };
   }
-  async checkoutPayments(id: string) {
+  async checkoutPayments(id: string, firstDueDate?: string) {
     z.string().uuid().parse(id);
-    return this.paymentPages(`/payments?checkoutSession=${id}&`);
+    let range: URLSearchParams | undefined;
+    if (firstDueDate !== undefined) {
+      z.string()
+        .regex(/^\d{4}-\d{2}-\d{2}$/)
+        .parse(firstDueDate);
+      const start = new Date(`${firstDueDate}T12:00:00Z`);
+      requireCondition(
+        Number.isFinite(start.getTime()) && start.toISOString().slice(0, 10) === firstDueDate,
+        400,
+        'Data de checkout inválida',
+      );
+      const end = new Date(start);
+      end.setUTCDate(end.getUTCDate() + 1);
+      range = new URLSearchParams({
+        'dateCreated[ge]': firstDueDate,
+        'dateCreated[le]': end.toISOString().slice(0, 10),
+      });
+    }
+    const filtered = await this.paymentPages(`/payments?checkoutSession=${id}&`, id);
+    if (filtered.length || !range) return filtered;
+    // Sandbox may return an empty session filter despite a confirmed checkout.
+    // Scan only its creation window and accept an exact provider-returned UUID.
+    return this.paymentPages(`/payments?${range.toString()}&`, id);
   }
   async subscriptionPayments(id: string) {
     return this.paymentPages(`/subscriptions/${identifier.parse(id)}/payments?`);
   }
-  private async paymentPages(path: string) {
+  private async paymentPages(path: string, checkoutId?: string) {
     const all: AsaasPayment[] = [];
     for (let offset = 0; offset < 500; offset += 100) {
       const page = z
-        .object({ data: z.array(asaasPaymentSchema), hasMore: z.boolean() })
+        .object({ data: z.array(z.unknown()), hasMore: z.boolean() })
         .parse(await this.request(`${path}limit=100&offset=${offset}`));
-      all.push(...page.data);
+      const matching = checkoutId
+        ? page.data.filter((row: any) => row && row.checkoutSession === checkoutId)
+        : page.data;
+      all.push(...matching.map((row) => asaasPaymentSchema.parse(row)));
       if (!page.hasMore) return all;
     }
     throw new ApiError(502, 'Conciliação de checkout excedeu o limite; requer análise');
