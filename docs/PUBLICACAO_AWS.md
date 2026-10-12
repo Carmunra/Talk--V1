@@ -86,6 +86,8 @@ Configurar HOSTING_PROVIDER=aws nas variáveis do repositório apenas após prov
 
 Para cada prefixo STAGING_ ou PRODUCTION_, configurar AWS_ACCOUNT_ID, AWS_DEPLOY_ROLE, AWS_INSTANCE_ID, AWS_ECR_REPOSITORY, AWS_SECRET_VERSION_ID, APP_ORIGIN e as quatro VITE_FIREBASE_* públicas reais. AWS_RELEASE_APPROVED=true depende da aprovação concreta do ambiente. A função AWS assumida deve ter exatamente o nome talke-staging-github-deploy ou talke-production-github-deploy, na conta indicada.
 
+A primeira publicação de staging pode ocorrer antes de existir produção: os identificadores do ambiente oposto podem ficar ausentes somente nessa etapa. Se informados, precisam ser válidos e distintos. Produção exige os identificadores reais de staging, além da validação do mesmo commit. O controle de tags, conta, região, função, projeto real e fronteira Sandbox/live continua obrigatório; não preencher identificadores fictícios para satisfazer a configuração.
+
 Executar Publish AWS platform em staging depois do CI aprovado no mesmo commit main. O fluxo exige scan ECR completo sem achados HIGH/CRITICAL, imagem testada e recibo do host correspondente. Homologar login, reserva, provedores e recuperação no domínio de staging. Registrar PRODUCTION_STAGING_VALIDATED_SHA somente após validar esse commit; produção exige o mesmo SHA.
 
 O primeiro certificado depende do DNS correto e do desafio ACME nas portas 80/443. Uma implantação sem HTTPS ou Firestore acessível falha sem ser anunciada como publicada. Falha no candidato mantém a versão anterior; falha após troca tenta restaurar o proxy e a versão anterior. Se a recuperação falhar, pending.json permanece e a manutenção fica bloqueada para impedir execução com configuração incerta.

@@ -1646,7 +1646,7 @@
       "label": "aws()",
       "file_type": "code",
       "source_file": "scripts/aws/release.mjs",
-      "source_location": "L53",
+      "source_location": "L62",
       "_callable": true,
       "_origin": "ast",
       "id": "scripts_aws_release_aws",
@@ -1658,7 +1658,7 @@
       "label": "publish()",
       "file_type": "code",
       "source_file": "scripts/aws/release.mjs",
-      "source_location": "L63",
+      "source_location": "L72",
       "_callable": true,
       "_origin": "ast",
       "id": "scripts_aws_release_publish",
@@ -1741,8 +1741,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scripts_preflight",
-      "community": 20,
-      "community_name": "asaas.ts",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": "scripts/preflight.ts"
     },
     {
@@ -1752,8 +1752,8 @@
       "source_location": "L2",
       "_origin": "ast",
       "id": "scripts_preflight_report",
-      "community": 20,
-      "community_name": "asaas.ts",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": "report"
     },
     {
@@ -1763,7 +1763,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scripts_reconcile",
-      "community": 19,
+      "community": 30,
       "community_name": "Row",
       "norm_label": "reconcile.ts"
     },
@@ -1775,7 +1775,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "scripts_reconcile_pages",
-      "community": 19,
+      "community": 30,
       "community_name": "Row",
       "norm_label": "pages()"
     },
@@ -2257,8 +2257,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_bookingmodal",
-      "community": 1,
-      "community_name": "App.tsx",
+      "community": 13,
+      "community_name": "useDialog",
       "norm_label": "bookingmodal.tsx"
     },
     {
@@ -2270,8 +2270,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_bookingmodal_bookingmodalprops",
-      "community": 1,
-      "community_name": "App.tsx",
+      "community": 13,
+      "community_name": "useDialog",
       "norm_label": "bookingmodalprops"
     },
     {
@@ -2282,8 +2282,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_bookingmodal_bookingmodal",
-      "community": 1,
-      "community_name": "App.tsx",
+      "community": 13,
+      "community_name": "useDialog",
       "norm_label": "bookingmodal()"
     },
     {
@@ -2293,7 +2293,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_diagnosticandgoalview",
-      "community": 35,
+      "community": 0,
       "community_name": "ProficiencyLevel",
       "norm_label": "diagnosticandgoalview.tsx"
     },
@@ -2306,7 +2306,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_diagnosticandgoalview_diagnosticandgoalviewprops",
-      "community": 35,
+      "community": 0,
       "community_name": "ProficiencyLevel",
       "norm_label": "diagnosticandgoalviewprops"
     },
@@ -2319,7 +2319,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_diagnosticandgoalview_question",
-      "community": 35,
+      "community": 0,
       "community_name": "ProficiencyLevel",
       "norm_label": "question"
     },
@@ -2331,8 +2331,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_diagnosticandgoalview_diagnosticandgoalview",
-      "community": 35,
-      "community_name": "ProficiencyLevel",
+      "community": 1,
+      "community_name": "App.tsx",
       "norm_label": "diagnosticandgoalview()"
     },
     {
@@ -2569,8 +2569,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_reviewmodal",
-      "community": 1,
-      "community_name": "App.tsx",
+      "community": 13,
+      "community_name": "useDialog",
       "norm_label": "reviewmodal.tsx"
     },
     {
@@ -2582,8 +2582,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_reviewmodal_reviewmodalprops",
-      "community": 1,
-      "community_name": "App.tsx",
+      "community": 13,
+      "community_name": "useDialog",
       "norm_label": "reviewmodalprops"
     },
     {
@@ -2594,8 +2594,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_reviewmodal_reviewmodal",
-      "community": 1,
-      "community_name": "App.tsx",
+      "community": 13,
+      "community_name": "useDialog",
       "norm_label": "reviewmodal()"
     },
     {
@@ -2628,7 +2628,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_studentinteractivehub",
-      "community": 35,
+      "community": 0,
       "community_name": "ProficiencyLevel",
       "norm_label": "studentinteractivehub.tsx"
     },
@@ -2642,7 +2642,7 @@
       "_origin": "ast",
       "id": "src_components_studentinteractivehub_studentinteractivehubprops",
       "community": 0,
-      "community_name": "Student",
+      "community_name": "ProficiencyLevel",
       "norm_label": "studentinteractivehubprops"
     },
     {
@@ -2653,7 +2653,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_studentinteractivehub_studentinteractivehub",
-      "community": 35,
+      "community": 0,
       "community_name": "ProficiencyLevel",
       "norm_label": "studentinteractivehub()"
     },
@@ -2809,7 +2809,7 @@
       "_origin": "ast",
       "id": "src_components_teacherdirectory",
       "community": 29,
-      "community_name": "domain/types.ts",
+      "community_name": "Student",
       "norm_label": "teacherdirectory.tsx"
     },
     {
@@ -2822,7 +2822,7 @@
       "_origin": "ast",
       "id": "src_components_teacherdirectory_teacherdirectoryprops",
       "community": 29,
-      "community_name": "domain/types.ts",
+      "community_name": "Student",
       "norm_label": "teacherdirectoryprops"
     },
     {
@@ -2834,7 +2834,7 @@
       "_origin": "ast",
       "id": "src_components_teacherdirectory_teacherdirectory",
       "community": 29,
-      "community_name": "domain/types.ts",
+      "community_name": "Student",
       "norm_label": "teacherdirectory()"
     },
     {
@@ -2844,8 +2844,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_teacherprofilemodal",
-      "community": 1,
-      "community_name": "App.tsx",
+      "community": 13,
+      "community_name": "useDialog",
       "norm_label": "teacherprofilemodal.tsx"
     },
     {
@@ -2857,8 +2857,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_teacherprofilemodal_teacherprofilemodalprops",
-      "community": 55,
-      "community_name": "Review",
+      "community": 13,
+      "community_name": "useDialog",
       "norm_label": "teacherprofilemodalprops"
     },
     {
@@ -2869,8 +2869,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_teacherprofilemodal_teacherprofilemodal",
-      "community": 1,
-      "community_name": "App.tsx",
+      "community": 13,
+      "community_name": "useDialog",
       "norm_label": "teacherprofilemodal()"
     },
     {
@@ -2880,8 +2880,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_virtualclassroommodal",
-      "community": 1,
-      "community_name": "App.tsx",
+      "community": 13,
+      "community_name": "useDialog",
       "norm_label": "virtualclassroommodal.tsx"
     },
     {
@@ -2893,8 +2893,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_components_virtualclassroommodal_props",
-      "community": 1,
-      "community_name": "App.tsx",
+      "community": 13,
+      "community_name": "useDialog",
       "norm_label": "props"
     },
     {
@@ -2905,8 +2905,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_components_virtualclassroommodal_virtualclassroommodal",
-      "community": 1,
-      "community_name": "App.tsx",
+      "community": 13,
+      "community_name": "useDialog",
       "norm_label": "virtualclassroommodal()"
     },
     {
@@ -3083,8 +3083,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_domain_entities_lessonentity_lessonentity",
-      "community": 12,
-      "community_name": "Lesson",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": "lessonentity"
     },
     {
@@ -3095,8 +3095,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_entities_lessonentity_lessonentity_constructor",
-      "community": 12,
-      "community_name": "Lesson",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": ".constructor()"
     },
     {
@@ -3143,8 +3143,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_entities_lessonentity_lessonentity_markpaid",
-      "community": 12,
-      "community_name": "Lesson",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": ".markpaid()"
     },
     {
@@ -3155,8 +3155,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_entities_lessonentity_lessonentity_start",
-      "community": 12,
-      "community_name": "Lesson",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": ".start()"
     },
     {
@@ -3167,8 +3167,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_entities_lessonentity_lessonentity_complete",
-      "community": 12,
-      "community_name": "Lesson",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": ".complete()"
     },
     {
@@ -3179,8 +3179,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_entities_lessonentity_lessonentity_cancel",
-      "community": 12,
-      "community_name": "Lesson",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": ".cancel()"
     },
     {
@@ -3191,8 +3191,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_entities_lessonentity_lessonentity_markreviewed",
-      "community": 12,
-      "community_name": "Lesson",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": ".markreviewed()"
     },
     {
@@ -3203,8 +3203,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_entities_lessonentity_lessonentity_tojson",
-      "community": 12,
-      "community_name": "Lesson",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": ".tojson()"
     },
     {
@@ -3227,8 +3227,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_domain_entities_paymenttransactionentity_paymenttransactionentity",
-      "community": 62,
-      "community_name": "PaymentTransaction",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": "paymenttransactionentity"
     },
     {
@@ -3239,8 +3239,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_entities_paymenttransactionentity_paymenttransactionentity_constructor",
-      "community": 62,
-      "community_name": "PaymentTransaction",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": ".constructor()"
     },
     {
@@ -3251,8 +3251,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_entities_paymenttransactionentity_paymenttransactionentity_amountmoney",
-      "community": 62,
-      "community_name": "PaymentTransaction",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": ".amountmoney()"
     },
     {
@@ -3263,8 +3263,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_entities_paymenttransactionentity_paymenttransactionentity_markpaid",
-      "community": 62,
-      "community_name": "PaymentTransaction",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": ".markpaid()"
     },
     {
@@ -3275,8 +3275,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_entities_paymenttransactionentity_paymenttransactionentity_markrefunded",
-      "community": 62,
-      "community_name": "PaymentTransaction",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": ".markrefunded()"
     },
     {
@@ -3287,8 +3287,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_entities_paymenttransactionentity_paymenttransactionentity_tojson",
-      "community": 62,
-      "community_name": "PaymentTransaction",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": ".tojson()"
     },
     {
@@ -3346,8 +3346,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_domain_entities_studententity",
-      "community": 34,
-      "community_name": "DomainError.ts",
+      "community": 0,
+      "community_name": "ProficiencyLevel",
       "norm_label": "studententity.ts"
     },
     {
@@ -3360,7 +3360,7 @@
       "_origin": "ast",
       "id": "src_domain_entities_studententity_studententity",
       "community": 0,
-      "community_name": "Student",
+      "community_name": "ProficiencyLevel",
       "norm_label": "studententity"
     },
     {
@@ -3371,7 +3371,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_entities_studententity_studententity_constructor",
-      "community": 0,
+      "community": 29,
       "community_name": "Student",
       "norm_label": ".constructor()"
     },
@@ -3395,8 +3395,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_entities_studententity_studententity_canafford",
-      "community": 0,
-      "community_name": "Student",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": ".canafford()"
     },
     {
@@ -3407,8 +3407,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_entities_studententity_studententity_debitwallet",
-      "community": 0,
-      "community_name": "Student",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": ".debitwallet()"
     },
     {
@@ -3419,8 +3419,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_entities_studententity_studententity_creditwallet",
-      "community": 0,
-      "community_name": "Student",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": ".creditwallet()"
     },
     {
@@ -3432,7 +3432,7 @@
       "_origin": "ast",
       "id": "src_domain_entities_studententity_studententity_completelesson",
       "community": 0,
-      "community_name": "Student",
+      "community_name": "ProficiencyLevel",
       "norm_label": ".completelesson()"
     },
     {
@@ -3443,7 +3443,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_entities_studententity_studententity_updatediagnostic",
-      "community": 35,
+      "community": 0,
       "community_name": "ProficiencyLevel",
       "norm_label": ".updatediagnostic()"
     },
@@ -3455,7 +3455,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_entities_studententity_studententity_tojson",
-      "community": 0,
+      "community": 29,
       "community_name": "Student",
       "norm_label": ".tojson()"
     },
@@ -3467,7 +3467,7 @@
       "_origin": "ast",
       "id": "src_domain_entities_teacherentity",
       "community": 35,
-      "community_name": "ProficiencyLevel",
+      "community_name": "Teacher",
       "norm_label": "teacherentity.ts"
     },
     {
@@ -3480,7 +3480,7 @@
       "_origin": "ast",
       "id": "src_domain_entities_teacherentity_teacherentity",
       "community": 35,
-      "community_name": "ProficiencyLevel",
+      "community_name": "Teacher",
       "norm_label": "teacherentity"
     },
     {
@@ -3492,7 +3492,7 @@
       "_origin": "ast",
       "id": "src_domain_entities_teacherentity_teacherentity_constructor",
       "community": 35,
-      "community_name": "ProficiencyLevel",
+      "community_name": "Teacher",
       "norm_label": ".constructor()"
     },
     {
@@ -3516,7 +3516,7 @@
       "_origin": "ast",
       "id": "src_domain_entities_teacherentity_teacherentity_isavailable",
       "community": 35,
-      "community_name": "ProficiencyLevel",
+      "community_name": "Teacher",
       "norm_label": ".isavailable()"
     },
     {
@@ -3528,7 +3528,7 @@
       "_origin": "ast",
       "id": "src_domain_entities_teacherentity_teacherentity_recordlessoncompleted",
       "community": 35,
-      "community_name": "ProficiencyLevel",
+      "community_name": "Teacher",
       "norm_label": ".recordlessoncompleted()"
     },
     {
@@ -3540,7 +3540,7 @@
       "_origin": "ast",
       "id": "src_domain_entities_teacherentity_teacherentity_applyreview",
       "community": 35,
-      "community_name": "ProficiencyLevel",
+      "community_name": "Teacher",
       "norm_label": ".applyreview()"
     },
     {
@@ -3552,7 +3552,7 @@
       "_origin": "ast",
       "id": "src_domain_entities_teacherentity_teacherentity_setavailability",
       "community": 35,
-      "community_name": "ProficiencyLevel",
+      "community_name": "Teacher",
       "norm_label": ".setavailability()"
     },
     {
@@ -3564,7 +3564,7 @@
       "_origin": "ast",
       "id": "src_domain_entities_teacherentity_teacherentity_tojson",
       "community": 35,
-      "community_name": "ProficiencyLevel",
+      "community_name": "Teacher",
       "norm_label": ".tojson()"
     },
     {
@@ -3623,8 +3623,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_domain_errors_domainerror_insufficientfundserror",
-      "community": 34,
-      "community_name": "DomainError.ts",
+      "community": 0,
+      "community_name": "ProficiencyLevel",
       "norm_label": "insufficientfundserror"
     },
     {
@@ -3635,8 +3635,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_errors_domainerror_insufficientfundserror_constructor",
-      "community": 34,
-      "community_name": "DomainError.ts",
+      "community": 0,
+      "community_name": "ProficiencyLevel",
       "norm_label": ".constructor()"
     },
     {
@@ -3648,8 +3648,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_domain_errors_domainerror_scheduleconflicterror",
-      "community": 34,
-      "community_name": "DomainError.ts",
+      "community": 12,
+      "community_name": "Lesson",
       "norm_label": "scheduleconflicterror"
     },
     {
@@ -3660,8 +3660,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_errors_domainerror_scheduleconflicterror_constructor",
-      "community": 34,
-      "community_name": "DomainError.ts",
+      "community": 12,
+      "community_name": "Lesson",
       "norm_label": ".constructor()"
     },
     {
@@ -3746,7 +3746,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_domain_errors_index",
-      "community": 29,
+      "community": 20,
       "community_name": "domain/types.ts",
       "norm_label": "errors/index.ts"
     },
@@ -3757,8 +3757,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_domain_monthlyplans",
-      "community": 1,
-      "community_name": "App.tsx",
+      "community": 4,
+      "community_name": "requireCondition",
       "norm_label": "monthlyplans.ts"
     },
     {
@@ -3912,8 +3912,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_domain_repositories_inotificationrepository",
-      "community": 39,
-      "community_name": "AppNotification",
+      "community": 20,
+      "community_name": "domain/types.ts",
       "norm_label": "inotificationrepository.ts"
     },
     {
@@ -3984,8 +3984,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_domain_repositories_ipaymentrepository",
-      "community": 62,
-      "community_name": "PaymentTransaction",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": "ipaymentrepository.ts"
     },
     {
@@ -3997,8 +3997,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_domain_repositories_ipaymentrepository_ipaymentrepository",
-      "community": 62,
-      "community_name": "PaymentTransaction",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": "ipaymentrepository"
     },
     {
@@ -4009,8 +4009,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_repositories_ipaymentrepository_ipaymentrepository_findbyid",
-      "community": 62,
-      "community_name": "PaymentTransaction",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": ".findbyid()"
     },
     {
@@ -4021,8 +4021,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_repositories_ipaymentrepository_ipaymentrepository_findall",
-      "community": 62,
-      "community_name": "PaymentTransaction",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": ".findall()"
     },
     {
@@ -4033,8 +4033,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_repositories_ipaymentrepository_ipaymentrepository_findbystudentid",
-      "community": 62,
-      "community_name": "PaymentTransaction",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": ".findbystudentid()"
     },
     {
@@ -4045,8 +4045,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_repositories_ipaymentrepository_ipaymentrepository_save",
-      "community": 62,
-      "community_name": "PaymentTransaction",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": ".save()"
     },
     {
@@ -4128,7 +4128,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_domain_repositories_istudentrepository",
-      "community": 0,
+      "community": 29,
       "community_name": "Student",
       "norm_label": "istudentrepository.ts"
     },
@@ -4141,7 +4141,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_domain_repositories_istudentrepository_istudentrepository",
-      "community": 0,
+      "community": 29,
       "community_name": "Student",
       "norm_label": "istudentrepository"
     },
@@ -4153,7 +4153,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_repositories_istudentrepository_istudentrepository_findbyid",
-      "community": 0,
+      "community": 29,
       "community_name": "Student",
       "norm_label": ".findbyid()"
     },
@@ -4165,7 +4165,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_repositories_istudentrepository_istudentrepository_findbyemail",
-      "community": 0,
+      "community": 29,
       "community_name": "Student",
       "norm_label": ".findbyemail()"
     },
@@ -4177,7 +4177,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_repositories_istudentrepository_istudentrepository_findall",
-      "community": 0,
+      "community": 29,
       "community_name": "Student",
       "norm_label": ".findall()"
     },
@@ -4189,7 +4189,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_repositories_istudentrepository_istudentrepository_save",
-      "community": 0,
+      "community": 29,
       "community_name": "Student",
       "norm_label": ".save()"
     },
@@ -4201,7 +4201,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_repositories_istudentrepository_istudentrepository_updatewalletbalance",
-      "community": 0,
+      "community": 29,
       "community_name": "Student",
       "norm_label": ".updatewalletbalance()"
     },
@@ -4212,8 +4212,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_domain_repositories_iteacherrepository",
-      "community": 29,
-      "community_name": "domain/types.ts",
+      "community": 35,
+      "community_name": "Teacher",
       "norm_label": "iteacherrepository.ts"
     },
     {
@@ -4225,8 +4225,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_domain_repositories_iteacherrepository_iteacherrepository",
-      "community": 29,
-      "community_name": "domain/types.ts",
+      "community": 35,
+      "community_name": "Teacher",
       "norm_label": "iteacherrepository"
     },
     {
@@ -4237,8 +4237,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_repositories_iteacherrepository_iteacherrepository_findbyid",
-      "community": 29,
-      "community_name": "domain/types.ts",
+      "community": 35,
+      "community_name": "Teacher",
       "norm_label": ".findbyid()"
     },
     {
@@ -4249,8 +4249,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_repositories_iteacherrepository_iteacherrepository_findbyemail",
-      "community": 29,
-      "community_name": "domain/types.ts",
+      "community": 35,
+      "community_name": "Teacher",
       "norm_label": ".findbyemail()"
     },
     {
@@ -4261,8 +4261,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_repositories_iteacherrepository_iteacherrepository_findall",
-      "community": 29,
-      "community_name": "domain/types.ts",
+      "community": 35,
+      "community_name": "Teacher",
       "norm_label": ".findall()"
     },
     {
@@ -4273,8 +4273,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_repositories_iteacherrepository_iteacherrepository_save",
-      "community": 29,
-      "community_name": "domain/types.ts",
+      "community": 35,
+      "community_name": "Teacher",
       "norm_label": ".save()"
     },
     {
@@ -4286,7 +4286,7 @@
       "_origin": "ast",
       "id": "src_domain_repositories_iteacherrepository_iteacherrepository_updateavailability",
       "community": 35,
-      "community_name": "ProficiencyLevel",
+      "community_name": "Teacher",
       "norm_label": ".updateavailability()"
     },
     {
@@ -4297,8 +4297,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_repositories_iteacherrepository_iteacherrepository_updaterating",
-      "community": 29,
-      "community_name": "domain/types.ts",
+      "community": 35,
+      "community_name": "Teacher",
       "norm_label": ".updaterating()"
     },
     {
@@ -4309,8 +4309,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_repositories_iteacherrepository_iteacherrepository_incrementcompletedlessons",
-      "community": 29,
-      "community_name": "domain/types.ts",
+      "community": 35,
+      "community_name": "Teacher",
       "norm_label": ".incrementcompletedlessons()"
     },
     {
@@ -4320,8 +4320,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_domain_repositories_index",
-      "community": 12,
-      "community_name": "Lesson",
+      "community": 20,
+      "community_name": "domain/types.ts",
       "norm_label": "repositories/index.ts"
     },
     {
@@ -4405,8 +4405,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_domain_services_commissionservice_commissionservice_calculatecommission",
-      "community": 12,
-      "community_name": "Lesson",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": ".calculatecommission()"
     },
     {
@@ -4416,8 +4416,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_domain_services_index",
-      "community": 12,
-      "community_name": "Lesson",
+      "community": 29,
+      "community_name": "Student",
       "norm_label": "services/index.ts"
     },
     {
@@ -4428,7 +4428,7 @@
       "_origin": "ast",
       "id": "src_domain_services_matchingservice",
       "community": 29,
-      "community_name": "domain/types.ts",
+      "community_name": "Student",
       "norm_label": "matchingservice.ts"
     },
     {
@@ -4441,7 +4441,7 @@
       "_origin": "ast",
       "id": "src_domain_services_matchingservice_matchingservice",
       "community": 29,
-      "community_name": "domain/types.ts",
+      "community_name": "Student",
       "norm_label": "matchingservice"
     },
     {
@@ -4453,7 +4453,7 @@
       "_origin": "ast",
       "id": "src_domain_services_matchingservice_matchingservice_calculatematch",
       "community": 29,
-      "community_name": "domain/types.ts",
+      "community_name": "Student",
       "norm_label": ".calculatematch()"
     },
     {
@@ -4465,7 +4465,7 @@
       "_origin": "ast",
       "id": "src_domain_services_matchingservice_matchingservice_rankteachers",
       "community": 29,
-      "community_name": "domain/types.ts",
+      "community_name": "Student",
       "norm_label": ".rankteachers()"
     },
     {
@@ -4475,7 +4475,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_domain_types",
-      "community": 29,
+      "community": 20,
       "community_name": "domain/types.ts",
       "norm_label": "domain/types.ts"
     },
@@ -4488,8 +4488,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_domain_types_userrole",
-      "community": 1,
-      "community_name": "App.tsx",
+      "community": 13,
+      "community_name": "useDialog",
       "norm_label": "userrole"
     },
     {
@@ -4501,7 +4501,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_domain_types_proficiencylevel",
-      "community": 35,
+      "community": 0,
       "community_name": "ProficiencyLevel",
       "norm_label": "proficiencylevel"
     },
@@ -4512,8 +4512,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "src_domain_types_proficiencylevellabels",
-      "community": 29,
-      "community_name": "domain/types.ts",
+      "community": 0,
+      "community_name": "ProficiencyLevel",
       "norm_label": "proficiencylevellabels"
     },
     {
@@ -4525,7 +4525,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_domain_types_learninggoal",
-      "community": 35,
+      "community": 0,
       "community_name": "ProficiencyLevel",
       "norm_label": "learninggoal"
     },
@@ -4536,8 +4536,8 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "src_domain_types_learninggoallabels",
-      "community": 29,
-      "community_name": "domain/types.ts",
+      "community": 0,
+      "community_name": "ProficiencyLevel",
       "norm_label": "learninggoallabels"
     },
     {
@@ -4560,7 +4560,7 @@
       "source_location": "L51",
       "_origin": "ast",
       "id": "src_domain_types_lessonstatuslabels",
-      "community": 29,
+      "community": 20,
       "community_name": "domain/types.ts",
       "norm_label": "lessonstatuslabels"
     },
@@ -4586,7 +4586,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_domain_types_paymentstatus",
-      "community": 29,
+      "community": 20,
       "community_name": "domain/types.ts",
       "norm_label": "paymentstatus"
     },
@@ -4600,7 +4600,7 @@
       "_origin": "ast",
       "id": "src_domain_types_availabilityslot",
       "community": 35,
-      "community_name": "ProficiencyLevel",
+      "community_name": "Teacher",
       "norm_label": "availabilityslot"
     },
     {
@@ -4612,7 +4612,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_domain_types_student",
-      "community": 0,
+      "community": 29,
       "community_name": "Student",
       "norm_label": "student"
     },
@@ -4625,8 +4625,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_domain_types_teacher",
-      "community": 29,
-      "community_name": "domain/types.ts",
+      "community": 35,
+      "community_name": "Teacher",
       "norm_label": "teacher"
     },
     {
@@ -4664,8 +4664,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_domain_types_paymenttransaction",
-      "community": 62,
-      "community_name": "PaymentTransaction",
+      "community": 2,
+      "community_name": "Money",
       "norm_label": "paymenttransaction"
     },
     {
@@ -4691,7 +4691,7 @@
       "_origin": "ast",
       "id": "src_domain_types_matchrecommendation",
       "community": 29,
-      "community_name": "domain/types.ts",
+      "community_name": "Student",
       "norm_label": "matchrecommendation"
     },
     {
@@ -4703,7 +4703,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_domain_types_talkemoduletier",
-      "community": 29,
+      "community": 20,
       "community_name": "domain/types.ts",
       "norm_label": "talkemoduletier"
     },
@@ -4716,7 +4716,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_domain_types_talkeslidepage",
-      "community": 29,
+      "community": 20,
       "community_name": "domain/types.ts",
       "norm_label": "talkeslidepage"
     },
@@ -4742,7 +4742,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_domain_types_studentdevelopmentrecord",
-      "community": 29,
+      "community": 20,
       "community_name": "domain/types.ts",
       "norm_label": "studentdevelopmentrecord"
     },
@@ -5111,8 +5111,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_lib_bookingdates",
-      "community": 1,
-      "community_name": "App.tsx",
+      "community": 13,
+      "community_name": "useDialog",
       "norm_label": "bookingdates.ts"
     },
     {
@@ -5123,8 +5123,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_lib_bookingdates_bookingdates",
-      "community": 1,
-      "community_name": "App.tsx",
+      "community": 13,
+      "community_name": "useDialog",
       "norm_label": "bookingdates()"
     },
     {
@@ -5212,8 +5212,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_lib_usedialog",
-      "community": 1,
-      "community_name": "App.tsx",
+      "community": 13,
+      "community_name": "useDialog",
       "norm_label": "usedialog.ts"
     },
     {
@@ -5224,8 +5224,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_lib_usedialog_usedialog",
-      "community": 1,
-      "community_name": "App.tsx",
+      "community": 13,
+      "community_name": "useDialog",
       "norm_label": "usedialog()"
     },
     {
@@ -5246,8 +5246,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_server_app",
-      "community": 36,
-      "community_name": "platform.ts",
+      "community": 4,
+      "community_name": "requireCondition",
       "norm_label": "app.ts"
     },
     {
@@ -5259,8 +5259,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_server_app_appdependencies",
-      "community": 36,
-      "community_name": "platform.ts",
+      "community": 4,
+      "community_name": "requireCondition",
       "norm_label": "appdependencies"
     },
     {
@@ -5272,8 +5272,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_server_app_authrequest",
-      "community": 36,
-      "community_name": "platform.ts",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": "authrequest"
     },
     {
@@ -5284,8 +5284,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_app_createapp",
-      "community": 36,
-      "community_name": "platform.ts",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": "createapp()"
     },
     {
@@ -5295,8 +5295,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_server_asaas",
-      "community": 20,
-      "community_name": "asaas.ts",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": "asaas.ts"
     },
     {
@@ -5306,8 +5306,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "src_server_asaas_identifier",
-      "community": 20,
-      "community_name": "asaas.ts",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": "identifier"
     },
     {
@@ -5317,8 +5317,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_server_asaas_value",
-      "community": 20,
-      "community_name": "asaas.ts",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": "value"
     },
     {
@@ -5328,8 +5328,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "src_server_asaas_asaaspaymentschema",
-      "community": 20,
-      "community_name": "asaas.ts",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": "asaaspaymentschema"
     },
     {
@@ -5341,8 +5341,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_server_asaas_asaaspayment",
-      "community": 13,
-      "community_name": "SubscriptionGateway",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": "asaaspayment"
     },
     {
@@ -5352,8 +5352,8 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_server_asaas_asaassubscriptionschema",
-      "community": 20,
-      "community_name": "asaas.ts",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": "asaassubscriptionschema"
     },
     {
@@ -5365,8 +5365,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_server_asaas_asaassubscription",
-      "community": 20,
-      "community_name": "asaas.ts",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": "asaassubscription"
     },
     {
@@ -5376,8 +5376,8 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "src_server_asaas_asaastransferschema",
-      "community": 20,
-      "community_name": "asaas.ts",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": "asaastransferschema"
     },
     {
@@ -5402,8 +5402,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_server_asaas_subscriptiongateway",
-      "community": 13,
-      "community_name": "SubscriptionGateway",
+      "community": 17,
+      "community_name": "AsaasGateway",
       "norm_label": "subscriptiongateway"
     },
     {
@@ -5414,8 +5414,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_asaas_subscriptiongateway_checkout",
-      "community": 13,
-      "community_name": "SubscriptionGateway",
+      "community": 17,
+      "community_name": "AsaasGateway",
       "norm_label": ".checkout()"
     },
     {
@@ -5426,8 +5426,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_asaas_subscriptiongateway_checkoutpayments",
-      "community": 13,
-      "community_name": "SubscriptionGateway",
+      "community": 17,
+      "community_name": "AsaasGateway",
       "norm_label": ".checkoutpayments()"
     },
     {
@@ -5438,8 +5438,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_asaas_subscriptiongateway_subscriptionpayments",
-      "community": 13,
-      "community_name": "SubscriptionGateway",
+      "community": 17,
+      "community_name": "AsaasGateway",
       "norm_label": ".subscriptionpayments()"
     },
     {
@@ -5450,8 +5450,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_asaas_subscriptiongateway_subscription",
-      "community": 13,
-      "community_name": "SubscriptionGateway",
+      "community": 17,
+      "community_name": "AsaasGateway",
       "norm_label": ".subscription()"
     },
     {
@@ -5462,8 +5462,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_asaas_subscriptiongateway_customer",
-      "community": 13,
-      "community_name": "SubscriptionGateway",
+      "community": 17,
+      "community_name": "AsaasGateway",
       "norm_label": ".customer()"
     },
     {
@@ -5474,8 +5474,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_asaas_subscriptiongateway_payment",
-      "community": 13,
-      "community_name": "SubscriptionGateway",
+      "community": 17,
+      "community_name": "AsaasGateway",
       "norm_label": ".payment()"
     },
     {
@@ -5486,8 +5486,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_asaas_subscriptiongateway_balance",
-      "community": 13,
-      "community_name": "SubscriptionGateway",
+      "community": 17,
+      "community_name": "AsaasGateway",
       "norm_label": ".balance()"
     },
     {
@@ -5498,8 +5498,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_asaas_subscriptiongateway_transfer",
-      "community": 13,
-      "community_name": "SubscriptionGateway",
+      "community": 17,
+      "community_name": "AsaasGateway",
       "norm_label": ".transfer()"
     },
     {
@@ -5510,8 +5510,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_asaas_subscriptiongateway_sendtransfer",
-      "community": 13,
-      "community_name": "SubscriptionGateway",
+      "community": 17,
+      "community_name": "AsaasGateway",
       "norm_label": ".sendtransfer()"
     },
     {
@@ -5522,8 +5522,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_asaas_subscriptiongateway_cancelsubscription",
-      "community": 13,
-      "community_name": "SubscriptionGateway",
+      "community": 17,
+      "community_name": "AsaasGateway",
       "norm_label": ".cancelsubscription()"
     },
     {
@@ -5534,8 +5534,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_asaas_verifyasaaswebhook",
-      "community": 20,
-      "community_name": "asaas.ts",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": "verifyasaaswebhook()"
     },
     {
@@ -5728,8 +5728,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_server_asaas_asaassandboxgateway",
-      "community": 20,
-      "community_name": "asaas.ts",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": "asaassandboxgateway"
     },
     {
@@ -5739,8 +5739,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_server_config",
-      "community": 20,
-      "community_name": "asaas.ts",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": "config.ts"
     },
     {
@@ -5753,7 +5753,7 @@
       "_origin": "ast",
       "id": "src_server_config_runtimeconfig",
       "community": 30,
-      "community_name": "Store",
+      "community_name": "Row",
       "norm_label": "runtimeconfig"
     },
     {
@@ -5764,8 +5764,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_config_readconfig",
-      "community": 20,
-      "community_name": "asaas.ts",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": "readconfig()"
     },
     {
@@ -5775,7 +5775,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_server_maintenance",
-      "community": 19,
+      "community": 30,
       "community_name": "Row",
       "norm_label": "maintenance.ts"
     },
@@ -5788,7 +5788,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_server_maintenance_maintenancedependencies",
-      "community": 19,
+      "community": 30,
       "community_name": "Row",
       "norm_label": "maintenancedependencies"
     },
@@ -5800,7 +5800,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_maintenance_runmaintenance",
-      "community": 19,
+      "community": 30,
       "community_name": "Row",
       "norm_label": "runmaintenance()"
     },
@@ -5825,7 +5825,7 @@
       "_origin": "ast",
       "id": "src_server_marketplace_providerpayment",
       "community": 19,
-      "community_name": "Row",
+      "community_name": "PaymentGateway",
       "norm_label": "providerpayment"
     },
     {
@@ -5838,7 +5838,7 @@
       "_origin": "ast",
       "id": "src_server_marketplace_paymentgateway",
       "community": 19,
-      "community_name": "Row",
+      "community_name": "PaymentGateway",
       "norm_label": "paymentgateway"
     },
     {
@@ -5850,7 +5850,7 @@
       "_origin": "ast",
       "id": "src_server_marketplace_paymentgateway_search",
       "community": 19,
-      "community_name": "Row",
+      "community_name": "PaymentGateway",
       "norm_label": ".search()"
     },
     {
@@ -5862,7 +5862,7 @@
       "_origin": "ast",
       "id": "src_server_marketplace_paymentgateway_connect",
       "community": 19,
-      "community_name": "Row",
+      "community_name": "PaymentGateway",
       "norm_label": ".connect()"
     },
     {
@@ -5874,7 +5874,7 @@
       "_origin": "ast",
       "id": "src_server_marketplace_paymentgateway_callback",
       "community": 19,
-      "community_name": "Row",
+      "community_name": "PaymentGateway",
       "norm_label": ".callback()"
     },
     {
@@ -5886,7 +5886,7 @@
       "_origin": "ast",
       "id": "src_server_marketplace_paymentgateway_checkout",
       "community": 19,
-      "community_name": "Row",
+      "community_name": "PaymentGateway",
       "norm_label": ".checkout()"
     },
     {
@@ -5898,7 +5898,7 @@
       "_origin": "ast",
       "id": "src_server_marketplace_paymentgateway_payment",
       "community": 19,
-      "community_name": "Row",
+      "community_name": "PaymentGateway",
       "norm_label": ".payment()"
     },
     {
@@ -5910,7 +5910,7 @@
       "_origin": "ast",
       "id": "src_server_marketplace_paymentgateway_refund",
       "community": 19,
-      "community_name": "Row",
+      "community_name": "PaymentGateway",
       "norm_label": ".refund()"
     },
     {
@@ -5935,8 +5935,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_server_marketplace_mercadopagogateway",
-      "community": 15,
-      "community_name": "marketplace.ts",
+      "community": 33,
+      "community_name": "MercadoPagoGateway",
       "norm_label": "mercadopagogateway"
     },
     {
@@ -5948,7 +5948,7 @@
       "_origin": "ast",
       "id": "src_server_marketplace_mercadopagogateway_constructor",
       "community": 30,
-      "community_name": "Store",
+      "community_name": "Row",
       "norm_label": ".constructor()"
     },
     {
@@ -5959,8 +5959,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_marketplace_mercadopagogateway_request",
-      "community": 15,
-      "community_name": "marketplace.ts",
+      "community": 33,
+      "community_name": "MercadoPagoGateway",
       "norm_label": ".request()"
     },
     {
@@ -5971,8 +5971,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_marketplace_mercadopagogateway_connect",
-      "community": 15,
-      "community_name": "marketplace.ts",
+      "community": 33,
+      "community_name": "MercadoPagoGateway",
       "norm_label": ".connect()"
     },
     {
@@ -5995,8 +5995,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_marketplace_mercadopagogateway_credentials",
-      "community": 15,
-      "community_name": "marketplace.ts",
+      "community": 33,
+      "community_name": "MercadoPagoGateway",
       "norm_label": ".credentials()"
     },
     {
@@ -6007,8 +6007,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_marketplace_mercadopagogateway_checkout",
-      "community": 15,
-      "community_name": "marketplace.ts",
+      "community": 33,
+      "community_name": "MercadoPagoGateway",
       "norm_label": ".checkout()"
     },
     {
@@ -6019,8 +6019,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_marketplace_mercadopagogateway_payment",
-      "community": 15,
-      "community_name": "marketplace.ts",
+      "community": 33,
+      "community_name": "MercadoPagoGateway",
       "norm_label": ".payment()"
     },
     {
@@ -6031,8 +6031,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_marketplace_mercadopagogateway_refund",
-      "community": 15,
-      "community_name": "marketplace.ts",
+      "community": 33,
+      "community_name": "MercadoPagoGateway",
       "norm_label": ".refund()"
     },
     {
@@ -6043,8 +6043,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_marketplace_mercadopagogateway_search",
-      "community": 15,
-      "community_name": "marketplace.ts",
+      "community": 33,
+      "community_name": "MercadoPagoGateway",
       "norm_label": ".search()"
     },
     {
@@ -6067,8 +6067,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_server_platform_identity",
-      "community": 36,
-      "community_name": "platform.ts",
+      "community": 4,
+      "community_name": "requireCondition",
       "norm_label": "identity"
     },
     {
@@ -6093,7 +6093,7 @@
       "_origin": "ast",
       "id": "src_server_platform_platform_constructor",
       "community": 30,
-      "community_name": "Store",
+      "community_name": "Row",
       "norm_label": ".constructor()"
     },
     {
@@ -6379,8 +6379,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_server_preflight",
-      "community": 20,
-      "community_name": "asaas.ts",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": "server/preflight.ts"
     },
     {
@@ -6391,8 +6391,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_preflight_preflight",
-      "community": 20,
-      "community_name": "asaas.ts",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": "preflight()"
     },
     {
@@ -6402,8 +6402,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_server_privacy",
-      "community": 36,
-      "community_name": "platform.ts",
+      "community": 4,
+      "community_name": "requireCondition",
       "norm_label": "privacy.ts"
     },
     {
@@ -6415,8 +6415,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_server_privacy_privacyservice",
-      "community": 36,
-      "community_name": "platform.ts",
+      "community": 4,
+      "community_name": "requireCondition",
       "norm_label": "privacyservice"
     },
     {
@@ -6427,8 +6427,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_privacy_privacyservice_constructor",
-      "community": 36,
-      "community_name": "platform.ts",
+      "community": 4,
+      "community_name": "requireCondition",
       "norm_label": ".constructor()"
     },
     {
@@ -6439,8 +6439,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_privacy_privacyservice_export",
-      "community": 36,
-      "community_name": "platform.ts",
+      "community": 4,
+      "community_name": "requireCondition",
       "norm_label": ".export()"
     },
     {
@@ -6451,8 +6451,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_privacy_privacyservice_request",
-      "community": 36,
-      "community_name": "platform.ts",
+      "community": 4,
+      "community_name": "requireCondition",
       "norm_label": ".request()"
     },
     {
@@ -6463,8 +6463,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_privacy_privacyservice_fulfilldeletion",
-      "community": 36,
-      "community_name": "platform.ts",
+      "community": 4,
+      "community_name": "requireCondition",
       "norm_label": ".fulfilldeletion()"
     },
     {
@@ -6558,7 +6558,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_server_store",
-      "community": 19,
+      "community": 30,
       "community_name": "Row",
       "norm_label": "store.ts"
     },
@@ -6571,7 +6571,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_server_store_row",
-      "community": 19,
+      "community": 30,
       "community_name": "Row",
       "norm_label": "row"
     },
@@ -6646,7 +6646,7 @@
       "_origin": "ast",
       "id": "src_server_store_store",
       "community": 30,
-      "community_name": "Store",
+      "community_name": "Row",
       "norm_label": "store"
     },
     {
@@ -6658,7 +6658,7 @@
       "_origin": "ast",
       "id": "src_server_store_store_transaction",
       "community": 30,
-      "community_name": "Store",
+      "community_name": "Row",
       "norm_label": ".transaction()"
     },
     {
@@ -6670,7 +6670,7 @@
       "_origin": "ast",
       "id": "src_server_store_store_get",
       "community": 30,
-      "community_name": "Store",
+      "community_name": "Row",
       "norm_label": ".get()"
     },
     {
@@ -6682,7 +6682,7 @@
       "_origin": "ast",
       "id": "src_server_store_store_find",
       "community": 30,
-      "community_name": "Store",
+      "community_name": "Row",
       "norm_label": ".find()"
     },
     {
@@ -6694,7 +6694,7 @@
       "_origin": "ast",
       "id": "src_server_store_store_findpage",
       "community": 30,
-      "community_name": "Store",
+      "community_name": "Row",
       "norm_label": ".findpage()"
     },
     {
@@ -6706,8 +6706,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_server_store_firestorestore",
-      "community": 32,
-      "community_name": "server.ts",
+      "community": 57,
+      "community_name": "FirestoreStore",
       "norm_label": "firestorestore"
     },
     {
@@ -6718,8 +6718,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_store_firestorestore_constructor",
-      "community": 32,
-      "community_name": "server.ts",
+      "community": 57,
+      "community_name": "FirestoreStore",
       "norm_label": ".constructor()"
     },
     {
@@ -6730,8 +6730,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_store_firestorestore_get",
-      "community": 32,
-      "community_name": "server.ts",
+      "community": 57,
+      "community_name": "FirestoreStore",
       "norm_label": ".get()"
     },
     {
@@ -6742,8 +6742,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_store_firestorestore_find",
-      "community": 32,
-      "community_name": "server.ts",
+      "community": 57,
+      "community_name": "FirestoreStore",
       "norm_label": ".find()"
     },
     {
@@ -6754,8 +6754,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_store_firestorestore_findpage",
-      "community": 32,
-      "community_name": "server.ts",
+      "community": 57,
+      "community_name": "FirestoreStore",
       "norm_label": ".findpage()"
     },
     {
@@ -6766,8 +6766,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_store_firestorestore_transaction",
-      "community": 32,
-      "community_name": "server.ts",
+      "community": 57,
+      "community_name": "FirestoreStore",
       "norm_label": ".transaction()"
     },
     {
@@ -6861,8 +6861,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_subscriptions_monthlysubscriptions_constructor",
-      "community": 13,
-      "community_name": "SubscriptionGateway",
+      "community": 17,
+      "community_name": "AsaasGateway",
       "norm_label": ".constructor()"
     },
     {
@@ -6993,8 +6993,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_subscriptions_monthlysubscriptions_checkouts",
-      "community": 36,
-      "community_name": "platform.ts",
+      "community": 4,
+      "community_name": "requireCondition",
       "norm_label": ".checkouts()"
     },
     {
@@ -7273,7 +7273,7 @@
       "_origin": "ast",
       "id": "src_server_video",
       "community": 30,
-      "community_name": "Store",
+      "community_name": "Row",
       "norm_label": "video.ts"
     },
     {
@@ -7284,8 +7284,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_video_roomname",
-      "community": 30,
-      "community_name": "Store",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": "roomname()"
     },
     {
@@ -7297,8 +7297,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "src_server_video_videoservice",
-      "community": 30,
-      "community_name": "Store",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": "videoservice"
     },
     {
@@ -7310,7 +7310,7 @@
       "_origin": "ast",
       "id": "src_server_video_videoservice_constructor",
       "community": 30,
-      "community_name": "Store",
+      "community_name": "Row",
       "norm_label": ".constructor()"
     },
     {
@@ -7321,8 +7321,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_video_videoservice_request",
-      "community": 30,
-      "community_name": "Store",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": ".request()"
     },
     {
@@ -7333,8 +7333,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_video_videoservice_room",
-      "community": 30,
-      "community_name": "Store",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": ".room()"
     },
     {
@@ -7345,8 +7345,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_video_videoservice_close",
-      "community": 30,
-      "community_name": "Store",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": ".close()"
     },
     {
@@ -7357,8 +7357,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_video_videoservice_closesubject",
-      "community": 30,
-      "community_name": "Store",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": ".closesubject()"
     },
     {
@@ -7369,8 +7369,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "src_server_video_videoservice_retryclosures",
-      "community": 30,
-      "community_name": "Store",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": ".retryclosures()"
     },
     {
@@ -7380,8 +7380,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_types",
-      "community": 34,
-      "community_name": "DomainError.ts",
+      "community": 29,
+      "community_name": "Student",
       "norm_label": "src/types.ts"
     },
     {
@@ -7436,8 +7436,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_integration_proxy_test",
-      "community": 20,
-      "community_name": "asaas.ts",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": "proxy.test.ts"
     },
     {
@@ -7649,7 +7649,7 @@
       "_origin": "ast",
       "id": "tests_support_fixture_fakegateway",
       "community": 19,
-      "community_name": "Row",
+      "community_name": "PaymentGateway",
       "norm_label": "fakegateway"
     },
     {
@@ -7661,7 +7661,7 @@
       "_origin": "ast",
       "id": "tests_support_fixture_fakegateway_search",
       "community": 19,
-      "community_name": "Row",
+      "community_name": "PaymentGateway",
       "norm_label": ".search()"
     },
     {
@@ -7673,7 +7673,7 @@
       "_origin": "ast",
       "id": "tests_support_fixture_fakegateway_connect",
       "community": 19,
-      "community_name": "Row",
+      "community_name": "PaymentGateway",
       "norm_label": ".connect()"
     },
     {
@@ -7685,7 +7685,7 @@
       "_origin": "ast",
       "id": "tests_support_fixture_fakegateway_callback",
       "community": 19,
-      "community_name": "Row",
+      "community_name": "PaymentGateway",
       "norm_label": ".callback()"
     },
     {
@@ -7697,7 +7697,7 @@
       "_origin": "ast",
       "id": "tests_support_fixture_fakegateway_checkout",
       "community": 19,
-      "community_name": "Row",
+      "community_name": "PaymentGateway",
       "norm_label": ".checkout()"
     },
     {
@@ -7709,7 +7709,7 @@
       "_origin": "ast",
       "id": "tests_support_fixture_fakegateway_payment",
       "community": 19,
-      "community_name": "Row",
+      "community_name": "PaymentGateway",
       "norm_label": ".payment()"
     },
     {
@@ -7721,7 +7721,7 @@
       "_origin": "ast",
       "id": "tests_support_fixture_fakegateway_refund",
       "community": 19,
-      "community_name": "Row",
+      "community_name": "PaymentGateway",
       "norm_label": ".refund()"
     },
     {
@@ -7733,7 +7733,7 @@
       "_origin": "ast",
       "id": "tests_support_fixture_fakegateway_approve",
       "community": 19,
-      "community_name": "Row",
+      "community_name": "PaymentGateway",
       "norm_label": ".approve()"
     },
     {
@@ -7755,7 +7755,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_support_memory_store",
-      "community": 19,
+      "community": 30,
       "community_name": "Row",
       "norm_label": "memory-store.ts"
     },
@@ -7886,8 +7886,8 @@
       "_callable_class": true,
       "_origin": "ast",
       "id": "tests_support_subscription_fixture_fakesubscriptions",
-      "community": 13,
-      "community_name": "SubscriptionGateway",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": "fakesubscriptions"
     },
     {
@@ -7898,8 +7898,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "tests_support_subscription_fixture_fakesubscriptions_checkout",
-      "community": 13,
-      "community_name": "SubscriptionGateway",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": ".checkout()"
     },
     {
@@ -7910,8 +7910,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "tests_support_subscription_fixture_fakesubscriptions_checkoutpayments",
-      "community": 13,
-      "community_name": "SubscriptionGateway",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": ".checkoutpayments()"
     },
     {
@@ -7922,8 +7922,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "tests_support_subscription_fixture_fakesubscriptions_subscriptionpayments",
-      "community": 13,
-      "community_name": "SubscriptionGateway",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": ".subscriptionpayments()"
     },
     {
@@ -7934,8 +7934,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "tests_support_subscription_fixture_fakesubscriptions_subscription",
-      "community": 13,
-      "community_name": "SubscriptionGateway",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": ".subscription()"
     },
     {
@@ -7946,8 +7946,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "tests_support_subscription_fixture_fakesubscriptions_customer",
-      "community": 13,
-      "community_name": "SubscriptionGateway",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": ".customer()"
     },
     {
@@ -7958,8 +7958,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "tests_support_subscription_fixture_fakesubscriptions_payment",
-      "community": 13,
-      "community_name": "SubscriptionGateway",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": ".payment()"
     },
     {
@@ -7970,8 +7970,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "tests_support_subscription_fixture_fakesubscriptions_transfer",
-      "community": 13,
-      "community_name": "SubscriptionGateway",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": ".transfer()"
     },
     {
@@ -7982,8 +7982,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "tests_support_subscription_fixture_fakesubscriptions_balance",
-      "community": 13,
-      "community_name": "SubscriptionGateway",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": ".balance()"
     },
     {
@@ -7994,8 +7994,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "tests_support_subscription_fixture_fakesubscriptions_sendtransfer",
-      "community": 13,
-      "community_name": "SubscriptionGateway",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": ".sendtransfer()"
     },
     {
@@ -8006,8 +8006,8 @@
       "_callable": true,
       "_origin": "ast",
       "id": "tests_support_subscription_fixture_fakesubscriptions_cancelsubscription",
-      "community": 13,
-      "community_name": "SubscriptionGateway",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": ".cancelsubscription()"
     },
     {
@@ -8063,7 +8063,7 @@
       "_origin": "ast",
       "id": "tests_unit_matchingservice_test",
       "community": 29,
-      "community_name": "domain/types.ts",
+      "community_name": "Student",
       "norm_label": "matchingservice.test.ts"
     },
     {
@@ -8074,7 +8074,7 @@
       "_origin": "ast",
       "id": "tests_unit_matchingservice_test_mockteachers",
       "community": 29,
-      "community_name": "domain/types.ts",
+      "community_name": "Student",
       "norm_label": "mockteachers"
     },
     {
@@ -8085,7 +8085,7 @@
       "_origin": "ast",
       "id": "tests_unit_matchingservice_test_mockstudent",
       "community": 29,
-      "community_name": "domain/types.ts",
+      "community_name": "Student",
       "norm_label": "mockstudent"
     },
     {
@@ -8106,8 +8106,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_unit_studententity_test",
-      "community": 34,
-      "community_name": "DomainError.ts",
+      "community": 0,
+      "community_name": "ProficiencyLevel",
       "norm_label": "studententity.test.ts"
     },
     {
@@ -8118,7 +8118,7 @@
       "_origin": "ast",
       "id": "tests_unit_teacherentity_test",
       "community": 35,
-      "community_name": "ProficiencyLevel",
+      "community_name": "Teacher",
       "norm_label": "teacherentity.test.ts"
     },
     {
@@ -8162,8 +8162,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_unit_asaas_test",
-      "community": 20,
-      "community_name": "asaas.ts",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": "asaas.test.ts"
     },
     {
@@ -8173,8 +8173,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_unit_bookingdates_test",
-      "community": 1,
-      "community_name": "App.tsx",
+      "community": 13,
+      "community_name": "useDialog",
       "norm_label": "bookingdates.test.ts"
     },
     {
@@ -8195,7 +8195,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_unit_maintenance_test",
-      "community": 19,
+      "community": 30,
       "community_name": "Row",
       "norm_label": "maintenance.test.ts"
     },
@@ -8206,7 +8206,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "tests_unit_maintenance_test_now",
-      "community": 19,
+      "community": 30,
       "community_name": "Row",
       "norm_label": "now"
     },
@@ -8218,7 +8218,7 @@
       "_callable": true,
       "_origin": "ast",
       "id": "tests_unit_maintenance_test_deps",
-      "community": 19,
+      "community": 30,
       "community_name": "Row",
       "norm_label": "deps()"
     },
@@ -8240,8 +8240,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_unit_preflight_test",
-      "community": 20,
-      "community_name": "asaas.ts",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": "preflight.test.ts"
     },
     {
@@ -8251,8 +8251,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "tests_unit_preflight_test_env",
-      "community": 20,
-      "community_name": "asaas.ts",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": "env"
     },
     {
@@ -8352,8 +8352,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_unit_video_test",
-      "community": 30,
-      "community_name": "Store",
+      "community": 14,
+      "community_name": "fixture.ts",
       "norm_label": "video.test.ts"
     },
     {
@@ -8682,8 +8682,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "readme",
-      "community": 52,
-      "community_name": "VALIDACAO.md",
+      "community": 10,
+      "community_name": "DADOS_PUBLICACAO.md",
       "norm_label": "readme.md"
     },
     {
@@ -8694,7 +8694,7 @@
       "_origin": "ast",
       "id": "readme_talk\u00ea",
       "community": 52,
-      "community_name": "VALIDACAO.md",
+      "community_name": "Talk\u00ea",
       "norm_label": "talke"
     },
     {
@@ -8705,7 +8705,7 @@
       "_origin": "ast",
       "id": "readme_desenvolvimento",
       "community": 52,
-      "community_name": "VALIDACAO.md",
+      "community_name": "Talk\u00ea",
       "norm_label": "desenvolvimento"
     },
     {
@@ -8716,7 +8716,7 @@
       "_origin": "ast",
       "id": "readme_verifica\u00e7\u00e3o",
       "community": 52,
-      "community_name": "VALIDACAO.md",
+      "community_name": "Talk\u00ea",
       "norm_label": "verificacao"
     },
     {
@@ -8727,7 +8727,7 @@
       "_origin": "ast",
       "id": "readme_api_e_identidade",
       "community": 52,
-      "community_name": "VALIDACAO.md",
+      "community_name": "Talk\u00ea",
       "norm_label": "api e identidade"
     },
     {
@@ -8814,8 +8814,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_continuidade_publicacao_2026_10_12",
-      "community": 58,
-      "community_name": "Continuidade da publica\u00e7\u00e3o \u2014 12/10/2026",
+      "community": 10,
+      "community_name": "DADOS_PUBLICACAO.md",
       "norm_label": "continuidade_publicacao_2026_10_12.md"
     },
     {
@@ -8855,7 +8855,7 @@
       "label": "AWS e bloqueios de lan\u00e7amento",
       "file_type": "document",
       "source_file": "docs/CONTINUIDADE_PUBLICACAO_2026_10_12.md",
-      "source_location": "L32",
+      "source_location": "L34",
       "_origin": "ast",
       "id": "docs_continuidade_publicacao_2026_10_12_aws_e_bloqueios_de_lan\u00e7amento",
       "community": 58,
@@ -8866,7 +8866,7 @@
       "label": "Valida\u00e7\u00e3o desta altera\u00e7\u00e3o",
       "file_type": "document",
       "source_file": "docs/CONTINUIDADE_PUBLICACAO_2026_10_12.md",
-      "source_location": "L40",
+      "source_location": "L42",
       "_origin": "ast",
       "id": "docs_continuidade_publicacao_2026_10_12_valida\u00e7\u00e3o_desta_altera\u00e7\u00e3o",
       "community": 58,
@@ -8877,7 +8877,7 @@
       "label": "Refer\u00eancias de integra\u00e7\u00e3o",
       "file_type": "document",
       "source_file": "docs/CONTINUIDADE_PUBLICACAO_2026_10_12.md",
-      "source_location": "L44",
+      "source_location": "L46",
       "_origin": "ast",
       "id": "docs_continuidade_publicacao_2026_10_12_refer\u00eancias_de_integra\u00e7\u00e3o",
       "community": 58,
@@ -8935,8 +8935,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_dns_email",
-      "community": 10,
-      "community_name": "DADOS_PUBLICACAO.md",
+      "community": 61,
+      "community_name": "DNS_EMAIL.md",
       "norm_label": "dns_email.md"
     },
     {
@@ -8946,8 +8946,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_dns_email_valida\u00e7\u00e3o_do_e_mail_talke_club_11_10_2026",
-      "community": 10,
-      "community_name": "DADOS_PUBLICACAO.md",
+      "community": 61,
+      "community_name": "DNS_EMAIL.md",
       "norm_label": "validacao do e-mail talke.club \u2014 11/10/2026"
     },
     {
@@ -8957,8 +8957,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "docs_dns_email_resultado",
-      "community": 10,
-      "community_name": "DADOS_PUBLICACAO.md",
+      "community": 61,
+      "community_name": "DNS_EMAIL.md",
       "norm_label": "resultado"
     },
     {
@@ -9034,8 +9034,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_operacao",
-      "community": 52,
-      "community_name": "VALIDACAO.md",
+      "community": 10,
+      "community_name": "DADOS_PUBLICACAO.md",
       "norm_label": "operacao.md"
     },
     {
@@ -9193,14 +9193,69 @@
       "norm_label": "asaas selecionado para preparacao"
     },
     {
+      "label": "PLANO_AWS_HOMOLOGACAO_2026_10_12.md",
+      "file_type": "document",
+      "source_file": "docs/PLANO_AWS_HOMOLOGACAO_2026_10_12.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_plano_aws_homologacao_2026_10_12",
+      "community": 60,
+      "community_name": "Plano de homologa\u00e7\u00e3o AWS \u2014 12/10/2026",
+      "norm_label": "plano_aws_homologacao_2026_10_12.md"
+    },
+    {
+      "label": "Plano de homologa\u00e7\u00e3o AWS \u2014 12/10/2026",
+      "file_type": "document",
+      "source_file": "docs/PLANO_AWS_HOMOLOGACAO_2026_10_12.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_plano_aws_homologacao_2026_10_12_plano_de_homologa\u00e7\u00e3o_aws_12_10_2026",
+      "community": 60,
+      "community_name": "Plano de homologa\u00e7\u00e3o AWS \u2014 12/10/2026",
+      "norm_label": "plano de homologacao aws \u2014 12/10/2026"
+    },
+    {
+      "label": "Recursos previstos",
+      "file_type": "document",
+      "source_file": "docs/PLANO_AWS_HOMOLOGACAO_2026_10_12.md",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "docs_plano_aws_homologacao_2026_10_12_recursos_previstos",
+      "community": 60,
+      "community_name": "Plano de homologa\u00e7\u00e3o AWS \u2014 12/10/2026",
+      "norm_label": "recursos previstos"
+    },
+    {
+      "label": "Custo e limites",
+      "file_type": "document",
+      "source_file": "docs/PLANO_AWS_HOMOLOGACAO_2026_10_12.md",
+      "source_location": "L19",
+      "_origin": "ast",
+      "id": "docs_plano_aws_homologacao_2026_10_12_custo_e_limites",
+      "community": 60,
+      "community_name": "Plano de homologa\u00e7\u00e3o AWS \u2014 12/10/2026",
+      "norm_label": "custo e limites"
+    },
+    {
+      "label": "Integridade e revis\u00e3o",
+      "file_type": "document",
+      "source_file": "docs/PLANO_AWS_HOMOLOGACAO_2026_10_12.md",
+      "source_location": "L25",
+      "_origin": "ast",
+      "id": "docs_plano_aws_homologacao_2026_10_12_integridade_e_revis\u00e3o",
+      "community": 60,
+      "community_name": "Plano de homologa\u00e7\u00e3o AWS \u2014 12/10/2026",
+      "norm_label": "integridade e revisao"
+    },
+    {
       "label": "PREPARACAO_PUBLICACAO_2026_10_12.md",
       "file_type": "document",
       "source_file": "docs/PREPARACAO_PUBLICACAO_2026_10_12.md",
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_preparacao_publicacao_2026_10_12",
-      "community": 58,
-      "community_name": "Continuidade da publica\u00e7\u00e3o \u2014 12/10/2026",
+      "community": 10,
+      "community_name": "DADOS_PUBLICACAO.md",
       "norm_label": "preparacao_publicacao_2026_10_12.md"
     },
     {
@@ -9210,8 +9265,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_preparacao_publicacao_2026_10_12_prepara\u00e7\u00e3o_da_contrata\u00e7\u00e3o_e_publica\u00e7\u00e3o_12_10_2026",
-      "community": 58,
-      "community_name": "Continuidade da publica\u00e7\u00e3o \u2014 12/10/2026",
+      "community": 56,
+      "community_name": "Prepara\u00e7\u00e3o da contrata\u00e7\u00e3o e publica\u00e7\u00e3o \u2014 12/10/2026",
       "norm_label": "preparacao da contratacao e publicacao \u2014 12/10/2026"
     },
     {
@@ -9221,8 +9276,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "docs_preparacao_publicacao_2026_10_12_implementa\u00e7\u00e3o_conclu\u00edda_nesta_etapa",
-      "community": 58,
-      "community_name": "Continuidade da publica\u00e7\u00e3o \u2014 12/10/2026",
+      "community": 56,
+      "community_name": "Prepara\u00e7\u00e3o da contrata\u00e7\u00e3o e publica\u00e7\u00e3o \u2014 12/10/2026",
       "norm_label": "implementacao concluida nesta etapa"
     },
     {
@@ -9232,8 +9287,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "docs_preparacao_publicacao_2026_10_12_configura\u00e7\u00e3o_segura",
-      "community": 58,
-      "community_name": "Continuidade da publica\u00e7\u00e3o \u2014 12/10/2026",
+      "community": 56,
+      "community_name": "Prepara\u00e7\u00e3o da contrata\u00e7\u00e3o e publica\u00e7\u00e3o \u2014 12/10/2026",
       "norm_label": "configuracao segura"
     },
     {
@@ -9243,8 +9298,8 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "docs_preparacao_publicacao_2026_10_12_valida\u00e7\u00e3o",
-      "community": 58,
-      "community_name": "Continuidade da publica\u00e7\u00e3o \u2014 12/10/2026",
+      "community": 56,
+      "community_name": "Prepara\u00e7\u00e3o da contrata\u00e7\u00e3o e publica\u00e7\u00e3o \u2014 12/10/2026",
       "norm_label": "validacao"
     },
     {
@@ -9254,8 +9309,8 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "docs_preparacao_publicacao_2026_10_12_o_que_exige_o_operador_fornecedores",
-      "community": 58,
-      "community_name": "Continuidade da publica\u00e7\u00e3o \u2014 12/10/2026",
+      "community": 56,
+      "community_name": "Prepara\u00e7\u00e3o da contrata\u00e7\u00e3o e publica\u00e7\u00e3o \u2014 12/10/2026",
       "norm_label": "o que exige o operador/fornecedores"
     },
     {
@@ -9265,8 +9320,8 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "docs_preparacao_publicacao_2026_10_12_refer\u00eancias_prim\u00e1rias_de_integra\u00e7\u00e3o",
-      "community": 58,
-      "community_name": "Continuidade da publica\u00e7\u00e3o \u2014 12/10/2026",
+      "community": 56,
+      "community_name": "Prepara\u00e7\u00e3o da contrata\u00e7\u00e3o e publica\u00e7\u00e3o \u2014 12/10/2026",
       "norm_label": "referencias primarias de integracao"
     },
     {
@@ -9276,8 +9331,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_privacidade_operacao",
-      "community": 52,
-      "community_name": "VALIDACAO.md",
+      "community": 10,
+      "community_name": "DADOS_PUBLICACAO.md",
       "norm_label": "privacidade_operacao.md"
     },
     {
@@ -9430,8 +9485,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_publicacao_automatica",
-      "community": 52,
-      "community_name": "VALIDACAO.md",
+      "community": 10,
+      "community_name": "DADOS_PUBLICACAO.md",
       "norm_label": "publicacao_automatica.md"
     },
     {
@@ -9584,8 +9639,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_validacao",
-      "community": 52,
-      "community_name": "VALIDACAO.md",
+      "community": 10,
+      "community_name": "DADOS_PUBLICACAO.md",
       "norm_label": "validacao.md"
     },
     {
@@ -9595,8 +9650,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_validacao_valida\u00e7\u00e3o_das_corre\u00e7\u00f5es_11_de_outubro_de_2026",
-      "community": 52,
-      "community_name": "VALIDACAO.md",
+      "community": 62,
+      "community_name": "Valida\u00e7\u00e3o das corre\u00e7\u00f5es \u2014 11 de outubro de 2026",
       "norm_label": "validacao das correcoes \u2014 11 de outubro de 2026"
     },
     {
@@ -9606,8 +9661,8 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "docs_validacao_o_que_os_testes_demonstram",
-      "community": 52,
-      "community_name": "VALIDACAO.md",
+      "community": 62,
+      "community_name": "Valida\u00e7\u00e3o das corre\u00e7\u00f5es \u2014 11 de outubro de 2026",
       "norm_label": "o que os testes demonstram"
     },
     {
@@ -9617,8 +9672,8 @@
       "source_location": "L45",
       "_origin": "ast",
       "id": "docs_validacao_limites_da_evid\u00eancia_e_pr\u00f3xima_libera\u00e7\u00e3o",
-      "community": 52,
-      "community_name": "VALIDACAO.md",
+      "community": 62,
+      "community_name": "Valida\u00e7\u00e3o das corre\u00e7\u00f5es \u2014 11 de outubro de 2026",
       "norm_label": "limites da evidencia e proxima liberacao"
     },
     {
@@ -12195,7 +12250,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "scripts/aws/release.mjs",
-      "source_location": "L53",
+      "source_location": "L62",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_aws_release",
@@ -12206,7 +12261,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "scripts/aws/release.mjs",
-      "source_location": "L63",
+      "source_location": "L72",
       "weight": 1.0,
       "_origin": "ast",
       "source": "scripts_aws_release",
@@ -29912,6 +29967,17 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "docs/ASAAS_HOMOLOGACAO.md",
+      "source_location": "L43",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_asaas_homologacao",
+      "target": "docs_continuidade_publicacao_2026_10_12",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/ASAAS_HOMOLOGACAO.md",
       "source_location": "L3",
       "weight": 1.0,
       "_origin": "ast",
@@ -30044,6 +30110,17 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "docs/CONTINUIDADE_PUBLICACAO_2026_10_12.md",
+      "source_location": "L38",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_continuidade_publicacao_2026_10_12",
+      "target": "docs_plano_aws_homologacao_2026_10_12",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/CONTINUIDADE_PUBLICACAO_2026_10_12.md",
       "source_location": "L3",
       "weight": 1.0,
       "_origin": "ast",
@@ -30055,7 +30132,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/CONTINUIDADE_PUBLICACAO_2026_10_12.md",
-      "source_location": "L32",
+      "source_location": "L34",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_continuidade_publicacao_2026_10_12_continuidade_da_publica\u00e7\u00e3o_12_10_2026",
@@ -30066,7 +30143,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/CONTINUIDADE_PUBLICACAO_2026_10_12.md",
-      "source_location": "L44",
+      "source_location": "L46",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_continuidade_publicacao_2026_10_12_continuidade_da_publica\u00e7\u00e3o_12_10_2026",
@@ -30099,7 +30176,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "docs/CONTINUIDADE_PUBLICACAO_2026_10_12.md",
-      "source_location": "L40",
+      "source_location": "L42",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_continuidade_publicacao_2026_10_12_continuidade_da_publica\u00e7\u00e3o_12_10_2026",
@@ -30522,6 +30599,61 @@
       "_origin": "ast",
       "source": "docs_planos_mensais_planos_mensais_da_talk\u00ea",
       "target": "docs_planos_mensais_validade_das_aulas_confirmada",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PLANO_AWS_HOMOLOGACAO_2026_10_12.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_plano_aws_homologacao_2026_10_12",
+      "target": "docs_plano_aws_homologacao_2026_10_12_plano_de_homologa\u00e7\u00e3o_aws_12_10_2026",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PLANO_AWS_HOMOLOGACAO_2026_10_12.md",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_plano_aws_homologacao_2026_10_12",
+      "target": "docs_publicacao_aws",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PLANO_AWS_HOMOLOGACAO_2026_10_12.md",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_plano_aws_homologacao_2026_10_12_plano_de_homologa\u00e7\u00e3o_aws_12_10_2026",
+      "target": "docs_plano_aws_homologacao_2026_10_12_custo_e_limites",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PLANO_AWS_HOMOLOGACAO_2026_10_12.md",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_plano_aws_homologacao_2026_10_12_plano_de_homologa\u00e7\u00e3o_aws_12_10_2026",
+      "target": "docs_plano_aws_homologacao_2026_10_12_integridade_e_revis\u00e3o",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PLANO_AWS_HOMOLOGACAO_2026_10_12.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_plano_aws_homologacao_2026_10_12_plano_de_homologa\u00e7\u00e3o_aws_12_10_2026",
+      "target": "docs_plano_aws_homologacao_2026_10_12_recursos_previstos",
       "confidence_score": 1.0
     },
     {
@@ -31219,5 +31351,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "e898db609df11926fde57588a0fff836f47f2f06"
+  "built_at_commit": "ba0558feddf951ace1d846d9d65afffa6db66209"
 }
