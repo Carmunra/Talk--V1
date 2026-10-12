@@ -60,7 +60,7 @@ host.post('/_test/subscriptions/enable', (req, res) => {
   if (req.header('x-test-key') !== 'local-e2e') return res.sendStatus(403);
   state.config.subscriptionsEnabled = true;
   state.config.paymentsEnabled = false;
-  state.config.subscriptionCancelCredits = 'keep_until_expiry';
+  state.config.subscriptionCancelCredits = '60_days_after_cancel';
   res.json({ enabled: true });
 });
 host.post('/_test/subscriptions/seed', async (req, res) => {

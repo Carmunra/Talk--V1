@@ -86,12 +86,15 @@ describe('Fluxos comerciais protegidos com Auth emulator e gateway de teste', ()
     cy.contains('td', 'Pagamento recebido').should('be.visible');
     cy.contains('button', 'Cancelar renovação').click();
     cy.get('[role="dialog"]').should('be.visible');
+    cy.get('[role="dialog"]').should('contain.text', '60 dias após o cancelamento');
     cy.focused().should('contain.text', 'Manter assinatura').trigger('keydown', { key: 'Escape' });
     cy.get('[role="dialog"]').should('not.exist');
     cy.contains('button', 'Cancelar renovação').should('have.focus').click();
     cy.contains('button', 'Confirmar cancelamento da renovação').click();
     cy.contains('Renovação cancelada').should('be.visible');
     cy.contains('4 aulas disponíveis').should('be.visible');
+    cy.contains('Você tem 60 dias desde o cancelamento').should('be.visible');
+    cy.contains('Realize-as antes de').should('be.visible');
   });
   it('reserva com saldo na interface e pede confirmação do aluno antes do repasse', () => {
     cy.request({

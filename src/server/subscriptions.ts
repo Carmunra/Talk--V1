@@ -335,7 +335,9 @@ export class MonthlySubscriptions {
           planId: row.planId,
           status: row.status,
           amountCents: row.amountCents,
-          cancellationCreditPolicy: this.platform.config.subscriptionCancelCredits,
+          cancellationCreditPolicy:
+            row.cancellationCreditPolicy || this.platform.config.subscriptionCancelCredits,
+          creditsExpireOn: row.creditsExpireOn,
           payments: payments.map((p) => ({
             id: p.id,
             dueDate: p.dueDate,
@@ -349,7 +351,8 @@ export class MonthlySubscriptions {
             remaining:
               (row.status === 'ACTIVE' ||
                 (row.status === 'CANCELLED' &&
-                  this.platform.config.subscriptionCancelCredits === 'keep_until_expiry')) &&
+                  (row.cancellationCreditPolicy ||
+                    this.platform.config.subscriptionCancelCredits) !== 'block_booking')) &&
               b.status === 'FUNDED' &&
               b.startsOn <= today &&
               today < b.expiresOn
@@ -390,12 +393,7 @@ export class MonthlySubscriptions {
             409,
             'Assinatura alterada requer análise',
           );
-          if (remote.deleted || remote.status !== 'ACTIVE')
-            await this.store.transaction(async (tx) => {
-              const fresh = await tx.get('subscriptions', row.id);
-              if (fresh?.status === 'ACTIVE')
-                tx.set('subscriptions', { ...fresh, status: 'CANCELLED' });
-            });
+          if (remote.deleted || remote.status !== 'ACTIVE') await this.recordCancellation(row.id);
           const payments = await this.gateway.subscriptionPayments(row.id);
           for (const payment of payments) await this.reconcilePayment(payment.id);
         } catch {
@@ -526,7 +524,8 @@ export class MonthlySubscriptions {
       subscription &&
         (subscription.status === 'ACTIVE' ||
           (subscription.status === 'CANCELLED' &&
-            this.platform.config.subscriptionCancelCredits === 'keep_until_expiry')) &&
+            (subscription.cancellationCreditPolicy ||
+              this.platform.config.subscriptionCancelCredits) !== 'block_booking')) &&
         subscription.payerId === actor.uid &&
         subscription.studentId === lesson.studentId,
       403,
@@ -865,6 +864,36 @@ export class MonthlySubscriptions {
     }
     return { failures };
   }
+  private async recordCancellation(subscriptionId: string) {
+    const cancelledAt = this.stamp();
+    const today = localDate(this.now());
+    const end = new Date(`${today}T12:00:00Z`);
+    end.setUTCDate(end.getUTCDate() + 60);
+    const creditsExpireOn = end.toISOString().slice(0, 10);
+    await this.store.transaction(async (tx) => {
+      const fresh = await tx.get('subscriptions', subscriptionId);
+      const cycles = await tx.find('subscription_cycles', 'subscriptionId', subscriptionId);
+      requireCondition(fresh, 404, 'Assinatura não encontrada');
+      // Freeze the first cancellation. Reconciliation and repeated requests never extend it.
+      if (fresh.status === 'CANCELLED') return;
+      const policy = this.platform.config.subscriptionCancelCredits;
+      if (policy === '60_days_after_cancel')
+        for (const cycle of cycles)
+          if (cycle.status === 'FUNDED' && cycle.expiresOn > today)
+            tx.set('subscription_cycles', {
+              ...cycle,
+              originalExpiresOn: cycle.originalExpiresOn || cycle.expiresOn,
+              expiresOn: creditsExpireOn,
+            });
+      tx.set('subscriptions', {
+        ...fresh,
+        status: 'CANCELLED',
+        cancelledAt,
+        cancellationCreditPolicy: policy,
+        ...(policy === '60_days_after_cancel' ? { creditsExpireOn } : {}),
+      });
+    });
+  }
   async cancel(actor: Identity, subscriptionId: string) {
     this.enabled();
     await this.platform.ready(actor);
@@ -872,11 +901,7 @@ export class MonthlySubscriptions {
     requireCondition(row && row.payerId === actor.uid, 403, 'Assinatura não permitida');
     if (row.status === 'CANCELLED') return { status: 'CANCELLED' };
     await this.gateway.cancelSubscription(subscriptionId);
-    await this.store.transaction(async (tx) => {
-      const fresh = await tx.get('subscriptions', subscriptionId);
-      requireCondition(fresh, 404, 'Assinatura não encontrada');
-      tx.set('subscriptions', { ...fresh, status: 'CANCELLED', cancelledAt: this.stamp() });
-    });
+    await this.recordCancellation(subscriptionId);
     return { status: 'CANCELLED' };
   }
 }

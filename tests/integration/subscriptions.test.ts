@@ -187,7 +187,7 @@ test('authenticated terminal checkout events release only unpaid, unbound purcha
   );
 });
 
-test('cancelled plan credit policy is explicit and never extends the original expiry', async () => {
+test('legacy cancelled plan credit policies preserve original expiry or block booking', async () => {
   for (const policy of ['keep_until_expiry', 'block_booking'] as const) {
     const f = await subscriptionFixture();
     f.config.subscriptionCancelCredits = policy;
@@ -207,6 +207,121 @@ test('cancelled plan credit policy is explicit and never extends the original ex
       assert.equal((await f.subscriptions.summary(student))[0].cycles[0].remaining, 0);
     } else await assert.rejects(() => f.book());
   }
+});
+
+test('cancellation gives valid paid lessons sixty calendar days and freezes the deadline', async () => {
+  const f = await subscriptionFixture();
+  f.config.subscriptionCancelCredits = '60_days_after_cancel';
+  f.advance(20 * 86400000);
+  const cancelledOn = new Intl.DateTimeFormat('sv-SE', { timeZone: 'America/Sao_Paulo' }).format(
+    f.platform.now(),
+  );
+  const end = new Date(cancelledOn + 'T12:00:00Z');
+  end.setUTCDate(end.getUTCDate() + 60);
+  const deadline = end.toISOString().slice(0, 10);
+  const original = (await f.subscriptions.summary(student))[0].cycles[0].expiresOn;
+  await f.store.transaction(async (tx) => {
+    const future = new Date(cancelledOn + 'T12:00:00Z');
+    future.setUTCDate(future.getUTCDate() + 1);
+    tx.set('subscription_cycles', {
+      id: 'paid-future',
+      subscriptionId: 'sub_student',
+      startsOn: future.toISOString().slice(0, 10),
+      expiresOn: '2099-01-01',
+      status: 'FUNDED',
+      remaining: 1,
+    });
+    tx.set('subscription_cycles', {
+      id: 'expired',
+      subscriptionId: 'sub_student',
+      startsOn: '2020-01-01',
+      expiresOn: '2020-03-01',
+      status: 'FUNDED',
+      remaining: 2,
+    });
+    tx.set('subscription_cycles', {
+      id: 'refunded',
+      subscriptionId: 'sub_student',
+      startsOn: cancelledOn,
+      expiresOn: '2099-01-01',
+      status: 'REVIEW',
+      remaining: 0,
+    });
+  });
+  await f.subscriptions.cancel(student, 'sub_student');
+  const row = (await f.subscriptions.summary(student))[0];
+  const cycle = row.cycles.find((c) => c.id === 'sub_student_' + f.dueDate)!;
+  assert.equal(row.creditsExpireOn, deadline);
+  assert.equal(cycle.expiresOn, deadline);
+  assert.equal(cycle.remaining, 4);
+  assert.equal((await f.store.get('subscription_cycles', cycle.id))!.originalExpiresOn, original);
+  assert.equal(row.cycles.find((c) => c.id === 'expired')!.remaining, 0);
+  assert.equal(row.cycles.find((c) => c.id === 'refunded')!.status, 'REVIEW');
+  assert.equal(row.cycles.find((c) => c.id === 'paid-future')!.expiresOn, deadline);
+  assert.equal(row.cycles.find((c) => c.id === 'paid-future')!.remaining, 0);
+  const dayBefore = new Date(end);
+  dayBefore.setUTCDate(dayBefore.getUTCDate() - 1);
+  await f.store.transaction((tx) =>
+    f.subscriptions.reserve(tx, student, 'sub_student', {
+      id: 'allowed',
+      teacherId: 'teacher',
+      studentId: 'student',
+      scheduledDate: dayBefore.toISOString().slice(0, 10),
+    }),
+  );
+  await assert.rejects(
+    () =>
+      f.store.transaction((tx) =>
+        f.subscriptions.reserve(tx, student, 'sub_student', {
+          id: 'late',
+          teacherId: 'teacher',
+          studentId: 'student',
+          scheduledDate: deadline,
+        }),
+      ),
+    /Sem aulas válidas/,
+  );
+  f.advance(86400000);
+  f.config.subscriptionCancelCredits = 'block_booking';
+  await f.subscriptions.cancel(student, 'sub_student');
+  await f.subscriptions.syncSubscriptions();
+  const repeated = (await f.subscriptions.summary(student))[0];
+  assert.equal(repeated.creditsExpireOn, deadline);
+  assert.equal(repeated.cancellationCreditPolicy, '60_days_after_cancel');
+  assert.equal(repeated.cycles.find((c) => c.id === cycle.id)!.remaining, 3);
+  f.advance(60 * 86400000);
+  assert.ok((await f.subscriptions.summary(student))[0].cycles.every((c) => c.remaining === 0));
+});
+
+test('provider-side cancellation applies the same sixty-day rule and refund never revives credits', async () => {
+  const f = await subscriptionFixture();
+  f.config.subscriptionCancelCredits = '60_days_after_cancel';
+  f.advance(10 * 86400000);
+  f.gateway.subscriptions.get('sub_student')!.status = 'INACTIVE';
+  assert.equal((await f.subscriptions.syncSubscriptions()).failures, 0);
+  const row = (await f.subscriptions.summary(student))[0];
+  assert.equal(row.status, 'CANCELLED');
+  assert.equal(row.cancellationCreditPolicy, '60_days_after_cancel');
+  assert.equal(row.cycles[0].remaining, 4);
+  f.gateway.payments.get(f.payment.id)!.status = 'REFUNDED';
+  await f.subscriptions.reconcilePayment(f.payment.id);
+  assert.equal((await f.subscriptions.summary(student))[0].cycles[0].remaining, 0);
+  f.gateway.payments.get(f.payment.id)!.status = 'RECEIVED';
+  await f.subscriptions.reconcilePayment(f.payment.id);
+  assert.equal((await f.subscriptions.summary(student))[0].cycles[0].remaining, 0);
+});
+
+test('sixty-day cancellation balance must be resolved before privacy deletion even if configuration changes', async () => {
+  const f = await subscriptionFixture();
+  f.config.subscriptionCancelCredits = '60_days_after_cancel';
+  await f.subscriptions.cancel(student, 'sub_student');
+  f.config.subscriptionCancelCredits = 'block_booking';
+  const privacy = new PrivacyService(f.platform);
+  const pending = await privacy.request(student, student.uid, 'DELETION', 'Excluir minha conta');
+  await assert.rejects(
+    () => privacy.fulfillDeletion(admin, pending.id, 'Reter registros financeiros necessários'),
+    /saldo de aulas/,
+  );
 });
 
 test('production-mode subscription booking does not require Mercado Pago and lists Asaas-only teachers', async () => {

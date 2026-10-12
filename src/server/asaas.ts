@@ -37,8 +37,8 @@ export const asaasTransferSchema = z
     value,
     status: z.string(),
     externalReference: z.string(),
-    walletId: z.string().optional(),
-    account: z.object({ walletId: z.string() }).strip().optional(),
+    walletId: z.string().nullable().optional(),
+    account: z.object({ walletId: z.string().optional() }).strip().nullable().optional(),
   })
   .strip();
 export type AsaasTransfer = z.infer<typeof asaasTransferSchema>;

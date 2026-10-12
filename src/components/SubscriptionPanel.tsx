@@ -10,7 +10,8 @@ export interface SubscriptionSummary {
   planId: string;
   status: string;
   amountCents: number;
-  cancellationCreditPolicy: 'keep_until_expiry' | 'block_booking';
+  creditsExpireOn?: string;
+  cancellationCreditPolicy: 'keep_until_expiry' | 'block_booking' | '60_days_after_cancel';
   cycles: { id: string; startsOn: string; expiresOn: string; remaining: number; status: string }[];
   payments: { id: string; dueDate: string; amountCents: number; status: string }[];
 }
@@ -258,9 +259,11 @@ export function SubscriptionPanel({
           )}
           {row.status === 'CANCELLED' && (
             <p>
-              {row.cancellationCreditPolicy === 'keep_until_expiry'
-                ? 'As aulas já pagas continuam disponíveis até sua validade.'
-                : 'Novas reservas com esta assinatura estão bloqueadas. Procure o suporte sobre o saldo de aulas.'}
+              {row.cancellationCreditPolicy === '60_days_after_cancel'
+                ? `Você tem 60 dias desde o cancelamento para realizar suas aulas já pagas e válidas. Realize-as antes de ${row.creditsExpireOn?.split('-').reverse().join('/')}.`
+                : row.cancellationCreditPolicy === 'keep_until_expiry'
+                  ? 'As aulas já pagas continuam disponíveis até sua validade.'
+                  : 'Novas reservas com esta assinatura estão bloqueadas. Procure o suporte sobre o saldo de aulas.'}
             </p>
           )}
         </article>
@@ -283,9 +286,11 @@ export function SubscriptionPanel({
               emitidas e pedidos de reembolso precisam de acompanhamento.
             </p>
             <p>
-              {cancelling.cancellationCreditPolicy === 'keep_until_expiry'
-                ? 'As aulas já pagas poderão ser reservadas até sua validade.'
-                : 'Após cancelar, novas reservas com esta assinatura ficarão bloqueadas. O suporte acompanhará seu saldo de aulas.'}
+              {cancelling.cancellationCreditPolicy === '60_days_after_cancel'
+                ? 'Você terá 60 dias após o cancelamento para realizar as aulas já pagas e ainda válidas. Aulas vencidas ou estornadas não são recuperadas.'
+                : cancelling.cancellationCreditPolicy === 'keep_until_expiry'
+                  ? 'As aulas já pagas poderão ser reservadas até sua validade.'
+                  : 'Após cancelar, novas reservas com esta assinatura ficarão bloqueadas. O suporte acompanhará seu saldo de aulas.'}
             </p>
             <button disabled={busy} onClick={() => setCancelId('')}>
               Manter assinatura
