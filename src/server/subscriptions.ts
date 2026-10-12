@@ -65,6 +65,20 @@ export class MonthlySubscriptions {
       'Assinaturas ainda não habilitadas',
     );
   }
+  private async nextBatch(collection: string, status: string) {
+    const id = `monthly-cursor-${collection}-${status}`;
+    const cursor = await this.store.get('system', id);
+    let rows = await this.store.findPage(collection, 'status', status, cursor?.afterId, 100);
+    if (!rows.length && cursor?.afterId)
+      rows = await this.store.findPage(collection, 'status', status, undefined, 100);
+    // Move past failed/unsettled records too; the next sweep revisits them without starving new rows.
+    // A crash may delay a batch until wraparound. Financial mutations remain independently journaled.
+    if (rows.length || cursor?.afterId)
+      await this.store.transaction(async (tx) =>
+        tx.set('system', { id, afterId: rows.at(-1)?.id || '', checkedAt: this.stamp() }),
+      );
+    return rows;
+  }
   async bind(
     actor: Identity,
     input: {
@@ -270,9 +284,9 @@ export class MonthlySubscriptions {
   }
   async reconcileCheckouts() {
     this.enabled();
-    const rows = await this.store.find('asaas_checkouts', 'status', 'CREATED');
+    const rows = await this.nextBatch('asaas_checkouts', 'CREATED');
     let failures = 0;
-    for (const row of rows.slice(0, 100)) {
+    for (const row of rows) {
       try {
         const payments = await this.gateway.checkoutPayments(row.checkoutId, row.firstDueDate);
         if (!payments.length) continue;
@@ -364,8 +378,8 @@ export class MonthlySubscriptions {
     this.enabled();
     let failures = 0;
     for (const status of ['ACTIVE', 'REVIEW', 'CANCELLED']) {
-      const rows = await this.store.find('subscriptions', 'status', status);
-      for (const row of rows.slice(0, 100)) {
+      const rows = await this.nextBatch('subscriptions', status);
+      for (const row of rows) {
         try {
           const remote = await this.gateway.subscription(row.id);
           requireCondition(
@@ -667,9 +681,9 @@ export class MonthlySubscriptions {
   async drainEvents() {
     this.enabled();
     const checkouts = await this.reconcileCheckouts();
-    const events = await this.store.find('asaas_events', 'status', 'PENDING');
+    const events = await this.nextBatch('asaas_events', 'PENDING');
     let failures = checkouts.failures + (await this.syncSubscriptions()).failures;
-    for (const event of events.slice(0, 100)) {
+    for (const event of events) {
       try {
         if (event.event.startsWith('PAYMENT_')) await this.reconcilePayment(event.paymentId);
         else if (event.event.startsWith('TRANSFER_')) {
@@ -840,8 +854,8 @@ export class MonthlySubscriptions {
     this.enabled();
     let failures = 0;
     for (const status of ['QUEUED', 'PENDING']) {
-      const rows = await this.store.find('subscription_payouts', 'status', status);
-      for (const row of rows.slice(0, 100)) {
+      const rows = await this.nextBatch('subscription_payouts', status);
+      for (const row of rows) {
         try {
           await this.processPayout(row.id);
         } catch {

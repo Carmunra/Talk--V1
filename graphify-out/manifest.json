@@ -305,8 +305,8 @@
     "semantic_hash": ""
   },
   "src/server/store.ts": {
-    "mtime": 1791742772.592232,
-    "ast_hash": "41ca4cf7f3e3b10dbb7f17fb459d6372",
+    "mtime": 1791815972.537571,
+    "ast_hash": "0d693e6b10751f1dcbf1018dd51e11b4",
     "semantic_hash": ""
   },
   "src/server/validation.ts": {
@@ -345,8 +345,8 @@
     "semantic_hash": ""
   },
   "tests/rules/firestore.test.ts": {
-    "mtime": 1791755361.9693534,
-    "ast_hash": "62d38ade7ede6e5300c2882eb3ae84ad",
+    "mtime": 1791816146.488837,
+    "ast_hash": "a86bda697b575ed45e4d0f4adab9a492",
     "semantic_hash": ""
   },
   "tests/support/e2e-server.ts": {
@@ -360,8 +360,8 @@
     "semantic_hash": ""
   },
   "tests/support/memory-store.ts": {
-    "mtime": 1791742772.5982313,
-    "ast_hash": "8cade2f1d0bc740a461dad768d9a8742",
+    "mtime": 1791815972.836135,
+    "ast_hash": "3a139c3c8be1975548baddd4d416247d",
     "semantic_hash": ""
   },
   "tests/unit/BookingDomainService.test.ts": {
@@ -715,13 +715,13 @@
     "semantic_hash": ""
   },
   "src/server/subscriptions.ts": {
-    "mtime": 1791812333.5978727,
-    "ast_hash": "eae240957cb78f6b64351e9a6aba52da",
+    "mtime": 1791816146.392628,
+    "ast_hash": "af349732acf2e4b2e0d5f555ed456f40",
     "semantic_hash": ""
   },
   "tests/integration/subscriptions.test.ts": {
-    "mtime": 1791814110.815403,
-    "ast_hash": "56dc680cefdf421a5c0f6e3feb5d2225",
+    "mtime": 1791815973.1438987,
+    "ast_hash": "1ca6baa53eb39b7e0de8783dcfc74bd8",
     "semantic_hash": ""
   },
   "tests/support/subscription-fixture.ts": {
@@ -735,8 +735,8 @@
     "semantic_hash": ""
   },
   "docs/ASAAS_HOMOLOGACAO.md": {
-    "mtime": 1791813967.3385293,
-    "ast_hash": "acf822f4ed0c04e0133b1d548c0b0a65",
+    "mtime": 1791816089.6255414,
+    "ast_hash": "8d809fcbb6c16a56b52ae708e4fc04b5",
     "semantic_hash": ""
   },
   "src/components/SchoolOverview.tsx": {
@@ -770,8 +770,8 @@
     "semantic_hash": ""
   },
   "docs/PREPARACAO_PUBLICACAO_2026_10_12.md": {
-    "mtime": 1791814705.6946099,
-    "ast_hash": "fb5f2dad94c06498a1511ac1812a01fd",
+    "mtime": 1791816135.6496208,
+    "ast_hash": "dbb3026bb4637cd8220a6fee9e4fc7fe",
     "semantic_hash": ""
   }
 }

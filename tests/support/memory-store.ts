@@ -47,4 +47,17 @@ export class MemoryStore implements Store {
       release();
     }
   }
+  async findPage<T extends Row = Row>(
+    collection: string,
+    field: string,
+    value: unknown,
+    after?: string,
+    limit = 100,
+  ): Promise<T[]> {
+    if (!Number.isInteger(limit) || limit < 1 || limit > 100) throw new Error('Page limit invalid');
+    return (await this.find<T>(collection, field, value))
+      .filter((row) => !after || row.id > after)
+      .sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))
+      .slice(0, limit);
+  }
 }

@@ -24,6 +24,60 @@ async function appFixture(bind = true) {
   };
 }
 
+test('maintenance rotates bounded subscription pages instead of starving records after the first hundred', async () => {
+  const f = await subscriptionFixture(false);
+  const seen: string[] = [];
+  const original = f.gateway.subscription.bind(f.gateway);
+  f.gateway.subscription = async (id) => {
+    seen.push(id);
+    return original(id);
+  };
+  await f.store.transaction(async (tx) => {
+    for (let n = 0; n < 101; n++) {
+      const id = 'sub_' + String(n).padStart(3, '0');
+      f.gateway.subscriptions.set(id, {
+        id,
+        customer: 'cus_student',
+        value: 439,
+        cycle: 'MONTHLY',
+        billingType: 'CREDIT_CARD',
+        status: 'ACTIVE',
+      });
+      tx.set('subscriptions', {
+        id,
+        status: 'ACTIVE',
+        customerId: 'cus_student',
+        amountCents: 43900,
+      });
+    }
+  });
+  assert.equal((await f.subscriptions.syncSubscriptions()).failures, 0);
+  assert.equal(seen.length, 100);
+  await f.subscriptions.syncSubscriptions();
+  assert.equal(seen.at(-1), 'sub_100');
+  await f.subscriptions.syncSubscriptions();
+  assert.equal(seen.filter((id) => id === 'sub_000').length, 2);
+  assert.equal(new Set(seen).size, 101);
+});
+
+test('failed early webhook events do not prevent later events from being processed', async () => {
+  const f = await subscriptionFixture(false);
+  await f.store.transaction(async (tx) => {
+    for (let n = 0; n < 100; n++)
+      tx.set('asaas_events', {
+        id: String(n).padStart(3, '0'),
+        status: 'PENDING',
+        event: 'PAYMENT_RECEIVED',
+        paymentId: 'missing',
+      });
+    tx.set('asaas_events', { id: 'last', status: 'PENDING', event: 'SUBSCRIPTION_CREATED' });
+  });
+  assert.equal((await f.subscriptions.drainEvents()).failures, 100);
+  assert.equal((await f.subscriptions.drainEvents()).failures, 0);
+  assert.equal((await f.store.get('asaas_events', 'last'))!.status, 'PROCESSED');
+  assert.equal((await f.store.get('asaas_events', '000'))!.status, 'PENDING');
+});
+
 test('subscription catalog and checkout resume are gated and scoped to the payer', async () => {
   const f = await appFixture(false);
   assert.equal((await request(f.app).get('/api/config')).body.subscriptionsEnabled, false);
