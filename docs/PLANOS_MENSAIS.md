@@ -1,5 +1,7 @@
 # Planos mensais da Talkê
 
+Atualização em 12/10/2026: o operador adotou Talke_Catalogo_A4_Horizontal_v4.pdf como referência comercial, exceto pelos preços, e reconfirmou R$ 40 por aula concluída. Os nomes são Essencial, Evolução, Constância, Intensivo e Intensivo Conversação, na ordem dos cinco planos. A apresentação e o contato para aula experimental manual pelo WhatsApp foram alinhados ao catálogo. A conta Sandbox agora está conectada; consultar [a validação atual](VALIDACAO_2026_10_12.md), que distingue autenticação, pagamento confirmado e repasse efetivamente executado. Contratação real continua bloqueada.
+
 Valores definidos pelo operador em 11/10/2026:
 
 | Aulas de 50 minutos por mês | Mensalidade |
@@ -10,7 +12,7 @@ Valores definidos pelo operador em 11/10/2026:
 | 12                          |      R$ 969 |
 | 16                          |    R$ 1.239 |
 
-O operador escolheu renovação automática, professores diferentes, repasses automáticos pelo gateway e acúmulo das aulas não usadas por mais um ciclo mensal. O catálogo está centralizado em src/domain/monthlyPlans.ts, publicado pelo servidor em /api/config e exibido na página inicial e em /planos. Valores são inteiros em centavos. O backend de homologação Asaas foi preparado, sem conta ou credenciais reais. subscriptionsEnabled permanece false; a interface informa que a contratação ainda não está disponível.
+O operador escolheu renovação automática, professores diferentes, repasses automáticos pelo gateway e acúmulo das aulas não usadas por mais um ciclo mensal. O catálogo está centralizado em src/domain/monthlyPlans.ts, publicado pelo servidor em /api/config e exibido na página inicial e em /planos. Valores são inteiros em centavos. O backend de homologação Asaas foi preparado e está conectado à conta Sandbox com dados fictícios. subscriptionsEnabled permanece false; a interface informa que a contratação ainda não está disponível.
 
 ## Repasse dos planos confirmado
 

@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "cypress/e2e/readiness.cy.ts": {
-    "mtime": 1791754368.6530917,
-    "ast_hash": "7d812a2f4ad17f9e26c665d6aa4465c2",
+    "mtime": 1791808680.586245,
+    "ast_hash": "c1565960a6449b7ed6f0bb08d2bfe1bb",
     "semantic_hash": ""
   },
   "firebase-applet-config.json": {
@@ -35,7 +35,7 @@
     "semantic_hash": ""
   },
   "scripts/reconcile.ts": {
-    "mtime": 1791754368.1090705,
+    "mtime": 1791755361.9533453,
     "ast_hash": "691b513f59b2efd25d10e1669a3a0242",
     "semantic_hash": ""
   },
@@ -45,18 +45,18 @@
     "semantic_hash": ""
   },
   "scripts/verify-artifacts.mjs": {
-    "mtime": 1791754368.1410885,
+    "mtime": 1791755361.954345,
     "ast_hash": "ed74fc511635103ad0696d365c81feaa",
     "semantic_hash": ""
   },
   "server.ts": {
-    "mtime": 1791754368.0898216,
+    "mtime": 1791755361.9553454,
     "ast_hash": "3b0d2e56d9a742f7b0632841cd6faff9",
     "semantic_hash": ""
   },
   "src/App.tsx": {
-    "mtime": 1791752184.8452084,
-    "ast_hash": "528c100ab8b8c96e7dd98410d61be8d5",
+    "mtime": 1791807059.1663644,
+    "ast_hash": "cde1fa1a63b1e48c9ee29a99a2ee58ca",
     "semantic_hash": ""
   },
   "src/components/AccountForms.tsx": {
@@ -275,12 +275,12 @@
     "semantic_hash": ""
   },
   "src/server/app.ts": {
-    "mtime": 1791754367.9115064,
+    "mtime": 1791755361.9583452,
     "ast_hash": "50f6160edbde5de6b8d98fca3a9d9c63",
     "semantic_hash": ""
   },
   "src/server/config.ts": {
-    "mtime": 1791754367.8123953,
+    "mtime": 1791755361.959345,
     "ast_hash": "de38e76906fa0fab442e1ed832ea0bf9",
     "semantic_hash": ""
   },
@@ -290,12 +290,12 @@
     "semantic_hash": ""
   },
   "src/server/platform.ts": {
-    "mtime": 1791754367.9946074,
+    "mtime": 1791755361.961345,
     "ast_hash": "aef0fbb0ff00d355284ad76ce007e6fa",
     "semantic_hash": ""
   },
   "src/server/privacy.ts": {
-    "mtime": 1791754897.7449248,
+    "mtime": 1791755361.9633477,
     "ast_hash": "23d0742f740b976653d7d3a66c561e61",
     "semantic_hash": ""
   },
@@ -330,8 +330,8 @@
     "semantic_hash": ""
   },
   "tests/integration/api.test.ts": {
-    "mtime": 1791753817.5599084,
-    "ast_hash": "8a9a653f3aaf24c96b508a63fb81bb99",
+    "mtime": 1791807077.2348068,
+    "ast_hash": "966c2f25ae7431ac03a877c54df132da",
     "semantic_hash": ""
   },
   "tests/integration/platform.test.ts": {
@@ -345,12 +345,12 @@
     "semantic_hash": ""
   },
   "tests/rules/firestore.test.ts": {
-    "mtime": 1791754368.525106,
+    "mtime": 1791755361.9693534,
     "ast_hash": "62d38ade7ede6e5300c2882eb3ae84ad",
     "semantic_hash": ""
   },
   "tests/support/e2e-server.ts": {
-    "mtime": 1791754368.470141,
+    "mtime": 1791755361.9713626,
     "ast_hash": "902d62a5191ba8d8fd0634a26d51d79d",
     "semantic_hash": ""
   },
@@ -440,7 +440,7 @@
     "semantic_hash": ""
   },
   "docs/PUBLICACAO.md": {
-    "mtime": 1791754910.0313196,
+    "mtime": 1791755361.9411595,
     "ast_hash": "adbe3f13dcc02a0ac528db42b4efaf83",
     "semantic_hash": ""
   },
@@ -480,8 +480,8 @@
     "semantic_hash": ""
   },
   "docs/VALIDACAO.md": {
-    "mtime": 1791754910.0283194,
-    "ast_hash": "cb327fa1b57978a61ce7d84c22bff56d",
+    "mtime": 1791809209.1905699,
+    "ast_hash": "f812d0be5a1e7c4dfda507b4ea36853d",
     "semantic_hash": ""
   },
   "scripts/verify-lockfile.mjs": {
@@ -530,7 +530,7 @@
     "semantic_hash": ""
   },
   "src/server/maintenance.ts": {
-    "mtime": 1791754368.0496123,
+    "mtime": 1791755361.9603472,
     "ast_hash": "24007cb385fd17218bec842ac4b84945",
     "semantic_hash": ""
   },
@@ -540,7 +540,7 @@
     "semantic_hash": ""
   },
   "tests/unit/maintenance.test.ts": {
-    "mtime": 1791754368.1910884,
+    "mtime": 1791755361.9743464,
     "ast_hash": "de69fd125f325e9cbabfdb8c96837dd5",
     "semantic_hash": ""
   },
@@ -605,8 +605,8 @@
     "semantic_hash": ""
   },
   "docs/DADOS_PUBLICACAO.md": {
-    "mtime": 1791754669.840557,
-    "ast_hash": "6aa1275e88d8c3c4430612775557cf06",
+    "mtime": 1791809217.8235407,
+    "ast_hash": "283e3dfa08440be911ebf9329ee788a2",
     "semantic_hash": ""
   },
   "firebase.hosting.json": {
@@ -695,48 +695,58 @@
     "semantic_hash": ""
   },
   "src/components/MonthlyPlans.tsx": {
-    "mtime": 1791753472.3775089,
-    "ast_hash": "3b271060a989044181499d4b4b412011",
+    "mtime": 1791807076.7912805,
+    "ast_hash": "6e98acd0287114f85e4b095c217989fa",
     "semantic_hash": ""
   },
   "src/domain/monthlyPlans.ts": {
-    "mtime": 1791753406.6027255,
-    "ast_hash": "cddeaf31fb18e9c578b4242dbe5cc3bd",
+    "mtime": 1791807057.1745503,
+    "ast_hash": "791e60be7237a61fdc7d4814ce121912",
     "semantic_hash": ""
   },
   "docs/PLANOS_MENSAIS.md": {
-    "mtime": 1791754369.0095432,
-    "ast_hash": "7dd7c37ca0d7a6969198a4a829f26aa9",
+    "mtime": 1791809217.8308468,
+    "ast_hash": "1003d3129bbe9890f4fdec58eaedf1ff",
     "semantic_hash": ""
   },
   "src/server/asaas.ts": {
-    "mtime": 1791754367.643338,
-    "ast_hash": "a648193e4c82b254597a5fd8f41e12c8",
+    "mtime": 1791806644.6508124,
+    "ast_hash": "fb69856f693f2ffe7c63e5f04265a6a9",
     "semantic_hash": ""
   },
   "src/server/subscriptions.ts": {
-    "mtime": 1791754896.7536273,
-    "ast_hash": "ade27eb66cf95437a01282e2d1a5c09a",
+    "mtime": 1791806590.92926,
+    "ast_hash": "fde559696aebde854b9540c4a7ae8621",
     "semantic_hash": ""
   },
   "tests/integration/subscriptions.test.ts": {
-    "mtime": 1791754912.4998703,
+    "mtime": 1791755361.967348,
     "ast_hash": "16d445f83eff96aab9dc80985077f958",
     "semantic_hash": ""
   },
   "tests/support/subscription-fixture.ts": {
-    "mtime": 1791754368.410173,
+    "mtime": 1791755361.9723465,
     "ast_hash": "d2ecb09bd17939c5693ddeda1d7b87c3",
     "semantic_hash": ""
   },
   "tests/unit/asaas.test.ts": {
-    "mtime": 1791754368.1741514,
-    "ast_hash": "e0661d6141e7ff4d847a410c4ab75caf",
+    "mtime": 1791806645.0161567,
+    "ast_hash": "853eee985c9f0bf7e981bfb6b6fe6e1e",
     "semantic_hash": ""
   },
   "docs/ASAAS_HOMOLOGACAO.md": {
-    "mtime": 1791754669.5198138,
-    "ast_hash": "af405f249a35393667cd4fc242ca10fa",
+    "mtime": 1791809217.8378484,
+    "ast_hash": "bd6de84f5472a953ccc904d3d28ebd20",
+    "semantic_hash": ""
+  },
+  "src/components/SchoolOverview.tsx": {
+    "mtime": 1791807076.833918,
+    "ast_hash": "8a28fc4b795b2cda1db17fb0dbf25162",
+    "semantic_hash": ""
+  },
+  "docs/VALIDACAO_2026_10_12.md": {
+    "mtime": 1791809227.9565673,
+    "ast_hash": "4be52507539f3c8ef1ad3fe5fbc57c94",
     "semantic_hash": ""
   }
 }

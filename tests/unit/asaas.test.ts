@@ -84,6 +84,7 @@ test('Asaas sandbox reads validate identifiers, strip sensitive fields, paginate
       netValue: null,
       status: 'PENDING',
       dueDate: '2026-10-11',
+      checkoutSession: account,
       creditCard: { number: 'sensitive' },
     };
     const row = path.endsWith('/balance')
@@ -129,6 +130,63 @@ test('Asaas sandbox reads validate identifiers, strip sensitive fields, paginate
   await assert.rejects(() => gateway.payment('../steal'));
   assert.equal(seen.length, before);
 });
+test('checkout reconciliation falls back to the creation window and rejects payments from another checkout', async () => {
+  const seen: URL[] = [];
+  const payment = {
+    id: 'pay_1',
+    subscription: 'sub_1',
+    customer: 'cus_1',
+    value: 439,
+    netValue: 429.78,
+    status: 'CONFIRMED',
+    dueDate: '2026-10-12',
+    checkoutSession: account,
+  };
+  const gateway = new AsaasSandboxGateway('key', true, async (url) => {
+    const request = new URL(String(url));
+    seen.push(request);
+    if (request.searchParams.has('checkoutSession'))
+      return new Response(
+        JSON.stringify({
+          data: [{ ...payment, id: 'pay_other', checkoutSession: wallet }],
+          hasMore: false,
+        }),
+      );
+    assert.equal(request.searchParams.get('dateCreated[ge]'), '2026-10-12');
+    assert.equal(request.searchParams.get('dateCreated[le]'), '2026-10-13');
+    const first = request.searchParams.get('offset') === '0';
+    return new Response(
+      JSON.stringify({
+        data: first
+          ? [{ id: 'unrelated', subscription: null }, payment]
+          : [{ ...payment, id: 'pay_later', checkoutSession: wallet }],
+        hasMore: first,
+      }),
+    );
+  });
+  const rows = await gateway.checkoutPayments(account, '2026-10-12');
+  assert.deepEqual(
+    rows.map((p) => p.id),
+    ['pay_1'],
+  );
+  assert.equal(seen.length, 3);
+  assert.equal(JSON.stringify(rows).includes('unrelated'), false);
+  const before = seen.length;
+  await assert.rejects(() => gateway.checkoutPayments(account, '2026-02-30'));
+  assert.equal(seen.length, before);
+});
+
+test('checkout fallback refuses unbounded pagination instead of silently binding a partial result', async () => {
+  let calls = 0;
+  const gateway = new AsaasSandboxGateway('key', true, async (url) => {
+    calls++;
+    const query = new URL(String(url)).searchParams;
+    return new Response(JSON.stringify({ data: [], hasMore: !query.has('checkoutSession') }));
+  });
+  await assert.rejects(() => gateway.checkoutPayments(account, '2026-10-12'), /excedeu o limite/);
+  assert.equal(calls, 6);
+});
+
 test('provider failures are redacted, redirects forbidden and POST operations never automatically retried', async () => {
   let calls = 0;
   const gateway = new AsaasSandboxGateway('sensitive-key', true, async () => {

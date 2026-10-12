@@ -1,5 +1,7 @@
 # Planos mensais — homologação Asaas
 
+Atualização em 12/10/2026: contas empresarial e Sandbox informadas como criadas pelo operador; autenticação e cadastro verificados no Sandbox, com pagador e um recebedor inteiramente fictícios. Checkout recusado/aprovado e conciliação pela API testados. O filtro de checkout vazio exige consulta pela janela de criação e correspondência exata do UUID retornado pelo provedor; foi corrigido no adaptador. Aprovação, saldo, repasse, renovação, estorno e entrega de webhook têm limites ou pendências detalhados em [Validação de 12/10/2026](VALIDACAO_2026_10_12.md). Nenhuma conta de produção foi criada por automação e nenhum dinheiro real foi movimentado.
+
 Preparação autorizada pelo operador em 11/10/2026. Código disponível para testes controlados; nenhuma conta, chave, cobrança ou transferência real foi criada. Não é aprovação comercial ou jurídica do modelo de negócio.
 
 ## Configuração e limites
@@ -34,7 +36,7 @@ Exportação de privacidade inclui assinaturas e cobranças próprias e repasses
 
 ## Antes de qualquer liberação real
 
-O operador informou ainda não ter conta Asaas. Precisa criar a conta empresarial, concluir a aprovação, preparar Sandbox com credenciais em cofre, verificar recebedores/subcontas e confirmar comercialmente o modelo: mensalidade da plataforma seguida de transferências por aulas realizadas, inclusive MEI/CNPJ, retenção, tarifas, prazo de crédito, estornos e risco de saldo. A documentação de endpoints não certifica essa aprovação.
+O operador informou ter criado a conta empresarial e a conta Sandbox. A conexão Sandbox foi verificada, mas ainda precisa concluir a aprovação comercial de produção, guardar suas credenciais em cofre e verificar recebedores reais/subcontas. Confirmar comercialmente o modelo: mensalidade da plataforma seguida de transferências por aulas realizadas, inclusive MEI/CNPJ, retenção, tarifas, prazo de crédito, estornos e risco de saldo. A documentação de endpoints não certifica essa aprovação.
 
 Homologar o link Sandbox do checkout e seu vínculo com assinatura/cliente/cobrança usando respostas reais do Sandbox. Verificar os payloads reais de account, netValue e wallet da transferência, tentativas atrasadas/duplicadas, recusa da renovação, último crédito concorrente, cancelamento, estorno e operação de resposta incerta. Não relaxar uma validação divergente para fazer o teste passar: atualizar o contrato de integração com evidência do Asaas.
 

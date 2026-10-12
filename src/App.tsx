@@ -10,6 +10,7 @@ import { DiagnosticAndGoalView } from './components/DiagnosticAndGoalView';
 import { PrivacyNotice } from './components/PrivacyNotice';
 import { SupportContacts } from './components/SupportContacts';
 import { MonthlyPlans } from './components/MonthlyPlans';
+import { SchoolOverview } from './components/SchoolOverview';
 import { Registration, FamilyForm, TeacherEditor, PrivacyPanel } from './components/AccountForms';
 import { AdminPanel } from './components/AdminPanel';
 import { Teacher, Student, UserRole } from './domain/types';
@@ -280,12 +281,7 @@ export default function App() {
           </section>
         ) : tab === 'teachers' ? (
           <>
-            {!firebaseUser && (
-              <section className="card mb-6">
-                <h1 className="text-3xl font-bold">Encontre seu professor de inglês</h1>
-                <p>Escolha seu objetivo, reserve uma aula e pague pelo Mercado Pago.</p>
-              </section>
-            )}
+            {!firebaseUser && <SchoolOverview minorsEnabled={config.minorsEnabled} />}
             {!firebaseUser && <MonthlyPlans plans={config.monthlyPlans} compact />}
             <TeacherDirectory
               teachers={teachers}
