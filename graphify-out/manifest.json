@@ -5,7 +5,7 @@
     "semantic_hash": ""
   },
   "cypress/e2e/readiness.cy.ts": {
-    "mtime": 1791836585.497366,
+    "mtime": 1791838518.8664384,
     "ast_hash": "be99beb057f5a57d14737b3f13bd55c6",
     "semantic_hash": ""
   },
@@ -55,7 +55,7 @@
     "semantic_hash": ""
   },
   "src/App.tsx": {
-    "mtime": 1791836500.1334379,
+    "mtime": 1791838518.9093955,
     "ast_hash": "f70577c016274c1f8a966216f521fb89",
     "semantic_hash": ""
   },
@@ -95,7 +95,7 @@
     "semantic_hash": ""
   },
   "src/components/PrivacyNotice.tsx": {
-    "mtime": 1791836500.3263772,
+    "mtime": 1791838518.9119205,
     "ast_hash": "2ab5ad20e00814468b90cf0a09d1df20",
     "semantic_hash": ""
   },
@@ -280,7 +280,7 @@
     "semantic_hash": ""
   },
   "src/server/config.ts": {
-    "mtime": 1791836499.7401347,
+    "mtime": 1791838518.9227004,
     "ast_hash": "acea40f5d459c1a38282e6ab0cbe93a3",
     "semantic_hash": ""
   },
@@ -295,7 +295,7 @@
     "semantic_hash": ""
   },
   "src/server/privacy.ts": {
-    "mtime": 1791836499.8338723,
+    "mtime": 1791838518.924703,
     "ast_hash": "3ceadf07005907a8fcbdc7296e59295d",
     "semantic_hash": ""
   },
@@ -350,7 +350,7 @@
     "semantic_hash": ""
   },
   "tests/support/e2e-server.ts": {
-    "mtime": 1791836501.003668,
+    "mtime": 1791838518.9347956,
     "ast_hash": "35be37eee97469bc5fb2680f0d21db6e",
     "semantic_hash": ""
   },
@@ -660,18 +660,18 @@
     "semantic_hash": ""
   },
   "scripts/aws/release.mjs": {
-    "mtime": 1791752184.8322127,
-    "ast_hash": "e40a18b6da598b45ded46eae01beb908",
+    "mtime": 1791839794.7249477,
+    "ast_hash": "3c7622635a99127289493f9f9cdf95de",
     "semantic_hash": ""
   },
   "scripts/aws/smoke-proxy.py": {
-    "mtime": 1791837314.6040213,
+    "mtime": 1791838518.9068685,
     "ast_hash": "5d10b448c389c8c63dd2620bd132b32e",
     "semantic_hash": ""
   },
   "scripts/aws/tests/release.test.mjs": {
-    "mtime": 1791752184.84121,
-    "ast_hash": "a804e90ab999af8c7f0729817ca9fa7f",
+    "mtime": 1791839794.778947,
+    "ast_hash": "37bb0e25be91be3a3dc0a359ccfa9640",
     "semantic_hash": ""
   },
   "tests/integration/proxy.test.ts": {
@@ -690,8 +690,8 @@
     "semantic_hash": ""
   },
   "docs/PUBLICACAO_AWS.md": {
-    "mtime": 1791816618.2054713,
-    "ast_hash": "ada9eef843b4a620ca063efc85c4d181",
+    "mtime": 1791839788.5193577,
+    "ast_hash": "23d15de770865c92e25f458295115ce1",
     "semantic_hash": ""
   },
   "src/components/MonthlyPlans.tsx": {
@@ -705,22 +705,22 @@
     "semantic_hash": ""
   },
   "docs/PLANOS_MENSAIS.md": {
-    "mtime": 1791836718.763338,
+    "mtime": 1791838518.8744006,
     "ast_hash": "5046fb1d04ab7a0ee0dbc6a0f97e6cbd",
     "semantic_hash": ""
   },
   "src/server/asaas.ts": {
-    "mtime": 1791817286.2026825,
+    "mtime": 1791838518.9174552,
     "ast_hash": "b5522e95a025912466f6c0f2dc93a063",
     "semantic_hash": ""
   },
   "src/server/subscriptions.ts": {
-    "mtime": 1791837609.4942224,
+    "mtime": 1791838518.928212,
     "ast_hash": "8ef95462ee9d0736052525c78fd32052",
     "semantic_hash": ""
   },
   "tests/integration/subscriptions.test.ts": {
-    "mtime": 1791837741.5703356,
+    "mtime": 1791838518.9322696,
     "ast_hash": "4bf6593e580b4065dc5fd1026950057e",
     "semantic_hash": ""
   },
@@ -730,13 +730,13 @@
     "semantic_hash": ""
   },
   "tests/unit/asaas.test.ts": {
-    "mtime": 1791837741.6463368,
+    "mtime": 1791838518.9367948,
     "ast_hash": "662a9273a09a744b4afe39c44f5747ec",
     "semantic_hash": ""
   },
   "docs/ASAAS_HOMOLOGACAO.md": {
-    "mtime": 1791816618.1934707,
-    "ast_hash": "8d809fcbb6c16a56b52ae708e4fc04b5",
+    "mtime": 1791838518.8698466,
+    "ast_hash": "11f3a2c17537358d26ad40a51c687a25",
     "semantic_hash": ""
   },
   "src/components/SchoolOverview.tsx": {
@@ -755,7 +755,7 @@
     "semantic_hash": ""
   },
   "src/components/SubscriptionPanel.tsx": {
-    "mtime": 1791836500.266285,
+    "mtime": 1791838518.914452,
     "ast_hash": "19154d56638f926291def4b3d3b69b60",
     "semantic_hash": ""
   },
@@ -770,13 +770,18 @@
     "semantic_hash": ""
   },
   "docs/PREPARACAO_PUBLICACAO_2026_10_12.md": {
-    "mtime": 1791836718.217213,
+    "mtime": 1791838518.883628,
     "ast_hash": "9cf5ee4190d56c2e61a28f7588918fc5",
     "semantic_hash": ""
   },
   "docs/CONTINUIDADE_PUBLICACAO_2026_10_12.md": {
-    "mtime": 1791836717.453102,
-    "ast_hash": "4fbf5fc3d6905232f51becc5d26952b7",
+    "mtime": 1791838518.871349,
+    "ast_hash": "177dad9c686f70d9b88f2f5b28e483d3",
+    "semantic_hash": ""
+  },
+  "docs/PLANO_AWS_HOMOLOGACAO_2026_10_12.md": {
+    "mtime": 1791838518.877415,
+    "ast_hash": "e5b524107e8d71ece9bc64100a0875c3",
     "semantic_hash": ""
   }
 }

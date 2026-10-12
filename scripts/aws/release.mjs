@@ -22,7 +22,11 @@ export function settings(env = process.env) {
   );
   const region = requireValue('AWS_REGION', /^sa-east-1$/);
   const instance = requireValue('AWS_INSTANCE_ID', /^i-[a-f0-9]{17}$/);
-  if (!/^i-[a-f0-9]{17}$/.test(env.PEER_INSTANCE_ID || '') || env.PEER_INSTANCE_ID === instance)
+  const peerInstance = env.PEER_INSTANCE_ID || '';
+  if (
+    (environment === 'production' && !peerInstance) ||
+    (peerInstance && (!/^i-[a-f0-9]{17}$/.test(peerInstance) || peerInstance === instance))
+  )
     throw new Error('Separate staging and production instances');
   const repository = requireValue(
     'AWS_ECR_REPOSITORY',
@@ -31,11 +35,16 @@ export function settings(env = process.env) {
     ),
   );
   const version = requireValue('AWS_SECRET_VERSION_ID', /^[a-fA-F0-9-]{32,64}$/);
-  const project = requireValue('VITE_FIREBASE_PROJECT_ID', /^[a-z][a-z0-9-]{4,28}[a-z0-9]$/);
+  const projectPattern = /^[a-z][a-z0-9-]{4,28}[a-z0-9]$/;
+  const project = requireValue('VITE_FIREBASE_PROJECT_ID', projectPattern);
+  const peerProject = env.PEER_FIREBASE_PROJECT_ID || '';
   if (
     project.startsWith('demo-') ||
-    !env.PEER_FIREBASE_PROJECT_ID ||
-    env.PEER_FIREBASE_PROJECT_ID === project
+    (environment === 'production' && !peerProject) ||
+    (peerProject &&
+      (!projectPattern.test(peerProject) ||
+        peerProject.startsWith('demo-') ||
+        peerProject === project))
   )
     throw new Error('Separate real Firebase projects required');
   for (const key of [

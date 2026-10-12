@@ -98,6 +98,36 @@ test('publishes only inspected immutable image and pinned secret to the verified
   assert.equal(params.executionTimeout[0], '600');
   assert.equal(JSON.stringify(receipt).includes('private_key'), false);
 });
+
+test('first staging release works before production exists while production requires distinct existing targets', () => {
+  const firstStaging = { ...env, PEER_INSTANCE_ID: '', PEER_FIREBASE_PROJECT_ID: '' };
+  assert.equal(settings(firstStaging).environment, 'staging');
+  for (const override of [
+    { PEER_INSTANCE_ID: env.AWS_INSTANCE_ID },
+    { PEER_INSTANCE_ID: 'invalid' },
+    { PEER_FIREBASE_PROJECT_ID: env.VITE_FIREBASE_PROJECT_ID },
+    { PEER_FIREBASE_PROJECT_ID: 'demo-other' },
+    { PEER_FIREBASE_PROJECT_ID: 'invalid/id' },
+  ])
+    assert.throws(() => settings({ ...firstStaging, ...override }));
+  const production = {
+    ...env,
+    RELEASE_ENVIRONMENT: 'production',
+    STAGING_VALIDATED_SHA: sha,
+    AWS_DEPLOY_ROLE: 'arn:aws:iam::123456789012:role/talke-production-github-deploy',
+    AWS_ECR_REPOSITORY: '123456789012.dkr.ecr.sa-east-1.amazonaws.com/talke-production',
+    VITE_FIREBASE_PROJECT_ID: 'talke-production',
+    PEER_FIREBASE_PROJECT_ID: 'talke-staging',
+  };
+  assert.equal(settings(production).environment, 'production');
+  for (const override of [
+    { PEER_INSTANCE_ID: '' },
+    { PEER_FIREBASE_PROJECT_ID: '' },
+    { PEER_INSTANCE_ID: production.AWS_INSTANCE_ID },
+    { PEER_FIREBASE_PROJECT_ID: production.VITE_FIREBASE_PROJECT_ID },
+  ])
+    assert.throws(() => settings({ ...production, ...override }));
+});
 test('wrong account, unsafe instance or unresolved image scan never sends a command', async () => {
   for (const overrides of [
     { 'get-caller-identity': { Account: '999999999999' } },
