@@ -7,7 +7,7 @@ import { Platform } from '../src/server/platform';
 import { VideoService } from '../src/server/video';
 import { runMaintenance } from '../src/server/maintenance';
 import { requireCondition } from '../src/server/security';
-import { AsaasSandboxGateway } from '../src/server/asaas';
+import { AsaasGateway } from '../src/server/asaas';
 import { MonthlySubscriptions } from '../src/server/subscriptions';
 
 try {
@@ -35,12 +35,12 @@ try {
   const result = await runMaintenance(
     {
       store,
-      ...(config.asaasSandboxEnabled
+      ...(config.asaasSandboxEnabled || config.subscriptionsEnabled
         ? {
             reconcileSubscriptions: () =>
               new MonthlySubscriptions(
                 platform,
-                new AsaasSandboxGateway(config.asaasApiKey, true),
+                new AsaasGateway(config.asaasApiKey, true, fetch, config.asaasEnvironment),
               ).drainEvents(),
           }
         : {}),

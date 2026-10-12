@@ -1,21 +1,21 @@
 # Graph Report - talk-v1-production  (2026-10-12)
 
 ## Corpus Check
-- 143 files · ~73,386 words
+- 148 files · ~78,995 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 817 nodes · 1754 edges · 60 communities (53 shown, 7 thin omitted)
+- 839 nodes · 1813 edges · 61 communities (50 shown, 11 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 3 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `cfbc7d0a`
+- Built from commit: `bee0d8fb`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- domain/types.ts
+- AsaasGateway
 - App.tsx
 - Money
 - devDependencies
@@ -25,25 +25,24 @@
 - release.ts
 - dependencies
 - smoke-container.mjs
-- PUBLICACAO.md
 - .prettierrc.json
-- Lesson
+- domain/types.ts
 - SubscriptionGateway
 - fixture.ts
-- marketplace.ts
-- Store
+- security.ts
+- MemoryStore
 - createApp
 - Refinamento — Sprint 1: primeiras 3 tarefas de código
-- PaymentGateway
+- FakeGateway
 - server.ts
 - Categorização do backlog Talkê (TLK-1 a TLK-29)
 - runtime.py
 - set-admin.ts
 - TalkeLogo.tsx
-- BookingModal.tsx
-- subscriptions.ts
+- matchingService.ts
+- Row
 - TimeSlot
-- VALIDACAO.md
+- Validação das correções — 11 de outubro de 2026
 - Student
 - DomainError.ts
 - Teacher
@@ -67,14 +66,15 @@
 - Planos mensais da Talkê
 - Review
 - config.ts
-- ProficiencyLevel
-- asaas.ts
+- LessonEntity
+- Preparação da contratação e publicação — 12/10/2026
 - Validações de publicação - 12/10/2026
+- DNS_EMAIL.md
 
 ## God Nodes (most connected - your core abstractions)
-1. `requireCondition()` - 66 edges
+1. `requireCondition()` - 67 edges
 2. `Platform` - 35 edges
-3. `MonthlySubscriptions` - 34 edges
+3. `MonthlySubscriptions` - 35 edges
 4. `Money` - 32 edges
 5. `Teacher` - 26 edges
 6. `Student` - 23 edges
@@ -92,44 +92,40 @@
   tests/integration/subscriptions.test.ts → src/server/app.ts
 - `fixture()` --calls--> `readConfig()`  [EXTRACTED]
   tests/support/fixture.ts → src/server/config.ts
-- `ReviewModalProps` --references--> `Lesson`  [EXTRACTED]
-  src/components/ReviewModal.tsx → src/domain/types.ts
+- `FakeGateway` --implements--> `PaymentGateway`  [EXTRACTED]
+  tests/support/fixture.ts → src/server/marketplace.ts
 
 ## Import Cycles
-- 3-file cycle: `src/domain/repositories/IStudentRepository.ts -> src/domain/types.ts -> src/domain/repositories/index.ts -> src/domain/repositories/IStudentRepository.ts`
-- 3-file cycle: `src/domain/entities/AppNotificationEntity.ts -> src/domain/types.ts -> src/domain/entities/index.ts -> src/domain/entities/AppNotificationEntity.ts`
 - 3-file cycle: `src/domain/entities/LessonEntity.ts -> src/domain/types.ts -> src/domain/entities/index.ts -> src/domain/entities/LessonEntity.ts`
-- 3-file cycle: `src/domain/entities/PaymentTransactionEntity.ts -> src/domain/types.ts -> src/domain/entities/index.ts -> src/domain/entities/PaymentTransactionEntity.ts`
-- 3-file cycle: `src/domain/entities/ReviewEntity.ts -> src/domain/types.ts -> src/domain/entities/index.ts -> src/domain/entities/ReviewEntity.ts`
-- 3-file cycle: `src/domain/entities/StudentEntity.ts -> src/domain/types.ts -> src/domain/entities/index.ts -> src/domain/entities/StudentEntity.ts`
-- 3-file cycle: `src/domain/entities/TeacherEntity.ts -> src/domain/types.ts -> src/domain/entities/index.ts -> src/domain/entities/TeacherEntity.ts`
 - 3-file cycle: `src/domain/repositories/ILessonRepository.ts -> src/domain/types.ts -> src/domain/repositories/index.ts -> src/domain/repositories/ILessonRepository.ts`
 - 3-file cycle: `src/domain/repositories/INotificationRepository.ts -> src/domain/types.ts -> src/domain/repositories/index.ts -> src/domain/repositories/INotificationRepository.ts`
 - 3-file cycle: `src/domain/repositories/IPaymentRepository.ts -> src/domain/types.ts -> src/domain/repositories/index.ts -> src/domain/repositories/IPaymentRepository.ts`
 - 3-file cycle: `src/domain/repositories/IReviewRepository.ts -> src/domain/types.ts -> src/domain/repositories/index.ts -> src/domain/repositories/IReviewRepository.ts`
+- 3-file cycle: `src/domain/repositories/IStudentRepository.ts -> src/domain/types.ts -> src/domain/repositories/index.ts -> src/domain/repositories/IStudentRepository.ts`
 - 3-file cycle: `src/domain/repositories/ITeacherRepository.ts -> src/domain/types.ts -> src/domain/repositories/index.ts -> src/domain/repositories/ITeacherRepository.ts`
+- 3-file cycle: `src/domain/entities/PaymentTransactionEntity.ts -> src/domain/types.ts -> src/domain/entities/index.ts -> src/domain/entities/PaymentTransactionEntity.ts`
+- 3-file cycle: `src/domain/entities/AppNotificationEntity.ts -> src/domain/types.ts -> src/domain/entities/index.ts -> src/domain/entities/AppNotificationEntity.ts`
+- 3-file cycle: `src/domain/entities/StudentEntity.ts -> src/domain/types.ts -> src/domain/entities/index.ts -> src/domain/entities/StudentEntity.ts`
+- 3-file cycle: `src/domain/entities/ReviewEntity.ts -> src/domain/types.ts -> src/domain/entities/index.ts -> src/domain/entities/ReviewEntity.ts`
+- 3-file cycle: `src/domain/entities/TeacherEntity.ts -> src/domain/types.ts -> src/domain/entities/index.ts -> src/domain/entities/TeacherEntity.ts`
 
-## Communities (60 total, 7 thin omitted)
-
-### Community 0 - "domain/types.ts"
-Cohesion: 0.25
-Nodes (5): LessonStatusLabels, PaymentStatus, StudentDevelopmentRecord, TalkeModuleTier, TalkeSlidePage
+## Communities (61 total, 11 thin omitted)
 
 ### Community 1 - "App.tsx"
-Cohesion: 0.08
-Nodes (30): App(), VirtualClassroomModal, FamilyForm(), PrivacyPanel(), Registration(), TeacherEditor(), AdminPanel(), DiagnosticAndGoalView() (+22 more)
+Cohesion: 0.06
+Nodes (47): App(), VirtualClassroomModal, FamilyForm(), PrivacyPanel(), Registration(), TeacherEditor(), AdminPanel(), AdminSubscriptions() (+39 more)
 
 ### Community 2 - "Money"
-Cohesion: 0.06
-Nodes (5): LessonEntity, PaymentTransactionEntity, IPaymentRepository, PaymentTransaction, Money
+Cohesion: 0.07
+Nodes (4): PaymentTransactionEntity, IPaymentRepository, PaymentTransaction, Money
 
 ### Community 3 - "devDependencies"
 Cohesion: 0.05
 Nodes (39): c8, cypress, esbuild, @firebase/rules-unit-testing, firebase-tools, devDependencies, c8, cypress (+31 more)
 
 ### Community 4 - "requireCondition"
-Cohesion: 0.10
-Nodes (9): MONTHLY_PLANS, AsaasSandboxGateway, cents(), Platform, requireCondition(), addCalendarMonths(), key(), localDate() (+1 more)
+Cohesion: 0.11
+Nodes (11): AppDependencies, cents(), Identity, Platform, PrivacyService, requireCondition(), UnitOfWork, addCalendarMonths() (+3 more)
 
 ### Community 5 - "scripts"
 Cohesion: 0.12
@@ -151,37 +147,29 @@ Nodes (19): @daily-co/daily-js, express, express-rate-limit, firebase, firebase-
 Cohesion: 0.50
 Nodes (3): printWidth, singleQuote, trailingComma
 
-### Community 12 - "Lesson"
-Cohesion: 0.15
-Nodes (8): MyLessonsViewProps, ScheduleConflictError, ILessonRepository, BookingDomainService, Lesson, LessonStatus, PaymentMethod, mockTeacher
+### Community 12 - "domain/types.ts"
+Cohesion: 0.12
+Nodes (12): MyLessonsViewProps, ScheduleConflictError, ILessonRepository, BookingDomainService, Lesson, LessonStatus, LessonStatusLabels, PaymentStatus (+4 more)
 
 ### Community 13 - "SubscriptionGateway"
 Cohesion: 0.08
 Nodes (3): AsaasPayment, SubscriptionGateway, FakeSubscriptions
 
 ### Community 14 - "fixture.ts"
-Cohesion: 0.21
-Nodes (17): setup(), appFixture(), auth, firebase, host, server, subscriptionGateway, subscriptions (+9 more)
-
-### Community 15 - "marketplace.ts"
-Cohesion: 0.22
-Nodes (6): MercadoPagoGateway, SellerTokens, ApiError, seal(), unseal(), verifyWebhook()
-
-### Community 16 - "Store"
 Cohesion: 0.20
-Nodes (3): RuntimeConfig, Store, MemoryStore
+Nodes (18): setup(), appFixture(), auth, firebase, host, rateLimitStores, server, subscriptionGateway (+10 more)
+
+### Community 15 - "security.ts"
+Cohesion: 0.27
+Nodes (4): MercadoPagoGateway, seal(), unseal(), verifyWebhook()
 
 ### Community 17 - "createApp"
-Cohesion: 0.42
-Nodes (3): createApp(), roomName(), VideoService
+Cohesion: 0.36
+Nodes (4): AuthRequest, createApp(), roomName(), VideoService
 
 ### Community 18 - "Refinamento — Sprint 1: primeiras 3 tarefas de código"
 Cohesion: 0.17
 Nodes (11): 5 erros comuns nessa fase (e como evitar), As 3 primeiras tarefas (ordem obrigatória, não escolha livre), Boas práticas aplicadas nesse refinamento, Diagnóstico do estado atual (feito lendo o repo, não suposição), Exercício antes de codarmos juntos, O que fica para depois (e por quê), Refinamento — Sprint 1: primeiras 3 tarefas de código, Subtasks refinadas (como um Tech Lead faria no planning) (+3 more)
-
-### Community 19 - "PaymentGateway"
-Cohesion: 0.12
-Nodes (3): PaymentGateway, ProviderPayment, FakeGateway
 
 ### Community 20 - "server.ts"
 Cohesion: 0.16
@@ -199,36 +187,36 @@ Nodes (21): await_ready(), aws(), command(), config(), docker(), health(), login
 Cohesion: 0.33
 Nodes (6): AdminAuth, parseAdminArguments(), setAdminPermission(), args, auth, firebase
 
-### Community 29 - "BookingModal.tsx"
-Cohesion: 0.18
-Nodes (12): BookingModal(), BookingModalProps, ReviewModal(), ReviewModalProps, TeacherProfileModal(), TeacherProfileModalProps, Props, VirtualClassroomModal() (+4 more)
+### Community 29 - "matchingService.ts"
+Cohesion: 0.25
+Nodes (5): TeacherDirectory(), MatchingService, MatchRecommendation, mockStudent, mockTeachers
 
-### Community 30 - "subscriptions.ts"
-Cohesion: 0.20
-Nodes (8): AsaasTransfer, MaintenanceDependencies, runMaintenance(), Row, UnitOfWork, adverse(), MONTHLY_TEACHER_PAYOUT_CENTS, now
+### Community 30 - "Row"
+Cohesion: 0.13
+Nodes (8): RuntimeConfig, MaintenanceDependencies, runMaintenance(), PaymentGateway, SellerTokens, Row, Store, now
 
-### Community 32 - "VALIDACAO.md"
-Cohesion: 0.39
+### Community 32 - "Validação das correções — 11 de outubro de 2026"
+Cohesion: 0.67
 Nodes (3): Limites da evidência e próxima liberação, O que os testes demonstram, Validação das correções — 11 de outubro de 2026
 
 ### Community 33 - "Student"
-Cohesion: 0.16
-Nodes (9): TeacherDirectory(), TeacherDirectoryProps, IStudentRepository, MatchingService, MatchRecommendation, ProficiencyLevelLabels, Student, mockStudent (+1 more)
+Cohesion: 0.13
+Nodes (13): BookingModalProps, DiagnosticAndGoalViewProps, Question, StudentInteractiveHubProps, TeacherDirectoryProps, TeacherProfileModalProps, StudentEntity, IStudentRepository (+5 more)
 
 ### Community 34 - "DomainError.ts"
 Cohesion: 0.17
 Nodes (7): DomainError, EntityNotFoundError, InsufficientFundsError, InvalidLessonStateError, ValidationError, CommissionBreakdown, CommissionService
 
 ### Community 35 - "Teacher"
-Cohesion: 0.22
-Nodes (3): StudentInteractiveHubProps, ITeacherRepository, Teacher
+Cohesion: 0.17
+Nodes (4): TeacherEntity, ITeacherRepository, AvailabilitySlot, Teacher
 
 ### Community 36 - "platform.ts"
-Cohesion: 0.18
-Nodes (13): AppDependencies, AuthRequest, Identity, PrivacyService, appointment(), bookingSchema, diagnosticSchema, id (+5 more)
+Cohesion: 0.12
+Nodes (22): MONTHLY_PLANS, asaasPaymentSchema, AsaasSandboxGateway, AsaasSubscription, asaasSubscriptionSchema, AsaasTransfer, asaasTransferSchema, identifier (+14 more)
 
 ### Community 39 - "AppNotification"
-Cohesion: 0.22
+Cohesion: 0.21
 Nodes (4): NotificationsPopoverProps, AppNotificationEntity, INotificationRepository, AppNotification
 
 ### Community 40 - "package.json"
@@ -291,37 +279,33 @@ Nodes (3): ReviewEntity, IReviewRepository, Review
 Cohesion: 0.42
 Nodes (4): report, readConfig(), preflight(), env
 
-### Community 57 - "ProficiencyLevel"
-Cohesion: 0.16
-Nodes (7): DiagnosticAndGoalViewProps, Question, StudentEntity, TeacherEntity, AvailabilitySlot, LearningGoal, ProficiencyLevel
-
-### Community 58 - "asaas.ts"
-Cohesion: 0.25
-Nodes (7): asaasPaymentSchema, AsaasSubscription, asaasSubscriptionSchema, asaasTransferSchema, identifier, value, verifyAsaasWebhook()
+### Community 58 - "Preparação da contratação e publicação — 12/10/2026"
+Cohesion: 0.33
+Nodes (6): Configuração segura, Implementação concluída nesta etapa, O que exige o operador/fornecedores, Preparação da contratação e publicação — 12/10/2026, Referências primárias de integração, Validação
 
 ### Community 59 - "Validações de publicação - 12/10/2026"
 Cohesion: 0.40
 Nodes (5): Asaas Sandbox: o que foi efetivamente validado, Bloqueios para publicação, Evidências técnicas, Regras e referência comercial, Validações de publicação - 12/10/2026
 
 ## Knowledge Gaps
-- **205 isolated node(s):** `singleQuote`, `trailingComma`, `printWidth`, `name`, `private` (+200 more)
+- **211 isolated node(s):** `singleQuote`, `trailingComma`, `printWidth`, `name`, `private` (+206 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **7 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **11 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `requireCondition()` connect `requireCondition` to `platform.ts`, `marketplace.ts`, `createApp`, `asaas.ts`, `subscriptions.ts`?**
+- **Why does `requireCondition()` connect `requireCondition` to `AsaasGateway`, `platform.ts`, `security.ts`, `createApp`, `Row`?**
   _High betweenness centrality (0.044) - this node is a cross-community bridge._
-- **Why does `Teacher` connect `Teacher` to `domain/types.ts`, `App.tsx`, `Student`, `Lesson`, `ProficiencyLevel`, `BookingModal.tsx`?**
-  _High betweenness centrality (0.034) - this node is a cross-community bridge._
-- **Why does `Money` connect `Money` to `ProficiencyLevel`, `DomainError.ts`?**
-  _High betweenness centrality (0.030) - this node is a cross-community bridge._
+- **Why does `Teacher` connect `Teacher` to `App.tsx`, `DomainError.ts`, `Student`, `domain/types.ts`, `matchingService.ts`?**
+  _High betweenness centrality (0.033) - this node is a cross-community bridge._
+- **Why does `Money` connect `Money` to `DomainError.ts`?**
+  _High betweenness centrality (0.029) - this node is a cross-community bridge._
 - **What connects `singleQuote`, `trailingComma`, `printWidth` to the rest of the system?**
-  _205 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _211 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `App.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.08333333333333333 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05997778600518327 - nodes in this community are weakly interconnected._
 - **Should `Money` be split into smaller, more focused modules?**
-  _Cohesion score 0.057971014492753624 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07112375533428165 - nodes in this community are weakly interconnected._
 - **Should `devDependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.05128205128205128 - nodes in this community are weakly interconnected._

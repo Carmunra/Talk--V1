@@ -19,6 +19,8 @@ for (const content of client) {
     !content.includes('MP_CLIENT_SECRET') &&
       !content.includes('TOKEN_ENCRYPTION_KEY') &&
       !content.includes('ASAAS_SANDBOX_API_KEY') &&
+      !content.includes('ASAAS_API_KEY') &&
+      !content.includes('ASAAS_WEBHOOK_TOKEN') &&
       !content.includes('ASAAS_SANDBOX_WEBHOOK_TOKEN'),
     'Server secrets/config included in browser code',
   );

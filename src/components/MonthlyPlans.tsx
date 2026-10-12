@@ -10,9 +10,13 @@ const money = new Intl.NumberFormat('pt-BR', {
 export function MonthlyPlans({
   plans,
   compact = false,
+  onSelect,
+  unavailable = false,
 }: {
   plans: MonthlyPlan[];
   compact?: boolean;
+  onSelect?: (plan: MonthlyPlan) => void;
+  unavailable?: boolean;
 }) {
   const Heading = compact ? 'h2' : 'h1';
   const PlanHeading = compact ? 'h3' : 'h2';
@@ -38,6 +42,11 @@ export function MonthlyPlans({
               {money.format(plan.amountCents / 100)}
               <span className="block mt-1 text-sm font-normal text-slate-600">/ mês</span>
             </p>
+            {onSelect && (
+              <button disabled={unavailable} onClick={() => onSelect(plan)}>
+                Selecionar {plan.name}
+              </button>
+            )}
           </article>
         ))}
       </div>
@@ -45,8 +54,8 @@ export function MonthlyPlans({
         As aulas não usadas acumulam por mais um ciclo mensal.
       </p>
       <p className="text-sm text-slate-600">
-        Assinatura mensal com renovação automática. A contratação dos planos ainda não está
-        disponível.
+        Assinatura mensal com renovação automática.{' '}
+        {!onSelect && 'A contratação dos planos ainda não está disponível.'}
       </p>
     </section>
   );

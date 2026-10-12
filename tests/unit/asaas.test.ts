@@ -1,14 +1,19 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { AsaasSandboxGateway, cents, verifyAsaasWebhook } from '../../src/server/asaas';
+import {
+  AsaasGateway,
+  AsaasSandboxGateway,
+  cents,
+  verifyAsaasWebhook,
+} from '../../src/server/asaas';
 import { readConfig } from '../../src/server/config';
 import { account, wallet } from '../support/subscription-fixture';
 
-test('Asaas has an explicit sandbox gate, distinct webhook token and no production switch', () => {
+test('Asaas requires environment-matched credentials and a distinct webhook token', () => {
   assert.equal(readConfig({}).asaasSandboxEnabled, false);
   const env = {
     ASAAS_SANDBOX_ENABLED: 'true',
-    ASAAS_SANDBOX_API_KEY: 'key',
+    ASAAS_SANDBOX_API_KEY: '$aact_hmlg_test-key',
     ASAAS_SANDBOX_WEBHOOK_TOKEN: 't'.repeat(40),
     ASAAS_SANDBOX_ACCOUNT_ID: account,
   };
@@ -22,6 +27,81 @@ test('Asaas has an explicit sandbox gate, distinct webhook token and no producti
     { ASAAS_SANDBOX_ACCOUNT_ID: 'invalid' },
   ])
     assert.throws(() => readConfig({ ...env, ...invalid }));
+});
+
+test('live subscriptions fail closed unless all approvals and an explicit credit policy are supplied', () => {
+  const env = {
+    APP_ORIGIN: 'https://talke.example',
+    FIREBASE_PROJECT_ID: 'talke-production',
+    LEGAL_APPROVED: 'true',
+    SUBSCRIPTIONS_ENABLED: 'true',
+    ASAAS_ENVIRONMENT: 'live',
+    ASAAS_API_KEY: '$aact_prod_test-key',
+    ASAAS_WEBHOOK_TOKEN: 't'.repeat(40),
+    ASAAS_ACCOUNT_ID: account,
+    PAYMENTS_HOMOLOGATED: 'true',
+    ASAAS_PRODUCTION_APPROVED: 'true',
+    SUBSCRIPTION_RULES_APPROVED: 'true',
+    SUBSCRIPTION_CANCEL_CREDITS: 'keep_until_expiry',
+  };
+  assert.equal(readConfig(env).asaasEnvironment, 'live');
+  for (const invalid of [
+    { PAYMENTS_HOMOLOGATED: 'false' },
+    { ASAAS_PRODUCTION_APPROVED: 'false' },
+    { SUBSCRIPTION_RULES_APPROVED: 'false' },
+    { SUBSCRIPTION_CANCEL_CREDITS: '' },
+    { SUBSCRIPTION_CANCEL_CREDITS: 'invented' },
+    { ASAAS_ENVIRONMENT: 'wrong' },
+    { ASAAS_API_KEY: '$aact_hmlg_test-key' },
+    { ASAAS_SANDBOX_ENABLED: 'true' },
+    { LEGAL_APPROVED: 'false' },
+    { APP_ORIGIN: 'http://localhost:3000' },
+    { FIREBASE_AUTH_EMULATOR_HOST: 'localhost:9099' },
+    { FIRESTORE_EMULATOR_HOST: 'localhost:8080' },
+    { FIREBASE_PROJECT_ID: 'demo-talke' },
+    { SUBSCRIPTIONS_ENABLED: 'tru' },
+  ])
+    assert.throws(() => readConfig({ ...env, ...invalid }));
+  const production = {
+    ...env,
+    NODE_ENV: 'production',
+    LEGAL_NAME: 'Fixture',
+    LEGAL_CNPJ: '12345678000190',
+    PRIVACY_EMAIL: 'privacy@example.test',
+    SUPPORT_EMAIL: 'support@example.test',
+  };
+  assert.doesNotThrow(() => readConfig(production));
+  // Production-mode container can run Sandbox in isolated staging; hosting enforces the environment boundary.
+  assert.doesNotThrow(() =>
+    readConfig({
+      ...production,
+      ASAAS_ENVIRONMENT: 'sandbox',
+      ASAAS_SANDBOX_API_KEY: '$aact_hmlg_test-key',
+      ASAAS_SANDBOX_WEBHOOK_TOKEN: 's'.repeat(40),
+      ASAAS_SANDBOX_ACCOUNT_ID: account,
+    }),
+  );
+});
+
+test('live adapter uses only fixed production origins and keeps card collection hosted', async () => {
+  const gateway = new AsaasGateway(
+    'private-test-key',
+    true,
+    async (url, options) => {
+      assert.equal(String(url), 'https://api.asaas.com/v3/checkouts');
+      assert.equal(options!.redirect, 'error');
+      assert.equal(JSON.stringify(options!.body).includes('creditCard'), false);
+      return new Response(JSON.stringify({ id: account }));
+    },
+    'live',
+  );
+  const result = await gateway.checkout(
+    'monthly-4',
+    'request_reference',
+    'https://talke.example',
+    '2026-10-12',
+  );
+  assert.equal(new URL(result.url).origin, 'https://asaas.com');
 });
 test('webhook comparison rejects empty, missing, short and forged tokens', () => {
   const secret = 't'.repeat(40);

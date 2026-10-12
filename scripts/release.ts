@@ -111,6 +111,10 @@ function validateRuntime(template: any, config: Config, identity: string) {
     'MP_CLIENT_SECRET',
     'MP_WEBHOOK_SECRET',
     'TOKEN_ENCRYPTION_KEY',
+    'ASAAS_API_KEY',
+    'ASAAS_WEBHOOK_TOKEN',
+    'ASAAS_SANDBOX_API_KEY',
+    'ASAAS_SANDBOX_WEBHOOK_TOKEN',
   ];
   requireRelease(!secretNames.some((name) => name in values), 'Segredos devem usar Secret Manager');
   const references = Object.fromEntries(
@@ -118,7 +122,15 @@ function validateRuntime(template: any, config: Config, identity: string) {
       .filter((entry) => entry.valueFrom?.secretKeyRef)
       .map((entry) => [entry.name, entry.valueFrom.secretKeyRef]),
   );
-  const needed = values.PAYMENTS_ENABLED === 'true' ? secretNames : ['DAILY_API_KEY'];
+  const needed = ['DAILY_API_KEY'];
+  if (values.PAYMENTS_ENABLED === 'true')
+    needed.push('MP_CLIENT_SECRET', 'MP_WEBHOOK_SECRET', 'TOKEN_ENCRYPTION_KEY');
+  if (values.SUBSCRIPTIONS_ENABLED === 'true' || values.ASAAS_SANDBOX_ENABLED === 'true')
+    needed.push(
+      ...(values.ASAAS_ENVIRONMENT === 'live'
+        ? ['ASAAS_API_KEY', 'ASAAS_WEBHOOK_TOKEN']
+        : ['ASAAS_SANDBOX_API_KEY', 'ASAAS_SANDBOX_WEBHOOK_TOKEN']),
+    );
   for (const name of needed) {
     requireRelease(
       references[name]?.name && /^[1-9][0-9]*$/.test(references[name].key),
@@ -138,11 +150,22 @@ function validateRuntime(template: any, config: Config, identity: string) {
     MP_CLIENT_SECRET: 'secret-reference',
     MP_WEBHOOK_SECRET: 'secret-reference',
     TOKEN_ENCRYPTION_KEY: Buffer.alloc(32).toString('base64'),
+    ASAAS_API_KEY: '$aact_prod_secret-reference',
+    ASAAS_WEBHOOK_TOKEN: 'w'.repeat(40),
+    ASAAS_SANDBOX_API_KEY: '$aact_hmlg_secret-reference',
+    ASAAS_SANDBOX_WEBHOOK_TOKEN: 'w'.repeat(40),
   });
   requireRelease(/^[a-zA-Z0-9-]+$/.test(values.DAILY_DOMAIN || ''), 'Domínio Daily obrigatório');
   requireRelease(
-    config.environment !== 'staging' || values.MP_ENVIRONMENT !== 'live',
+    config.environment !== 'staging' ||
+      (values.MP_ENVIRONMENT !== 'live' && values.ASAAS_ENVIRONMENT !== 'live'),
     'Homologação deve usar Mercado Pago sandbox',
+  );
+  requireRelease(
+    config.environment !== 'production' ||
+      (values.ASAAS_SANDBOX_ENABLED !== 'true' &&
+        (values.SUBSCRIPTIONS_ENABLED !== 'true' || values.ASAAS_ENVIRONMENT === 'live')),
+    'Produção não permite assinaturas Sandbox',
   );
   return { values, references };
 }
@@ -172,6 +195,14 @@ export async function executeRelease(config: Config, deps: ReleaseDependencies) 
     'PAYMENTS_ENABLED',
     'MP_ENVIRONMENT',
     'MP_CLIENT_ID',
+    'SUBSCRIPTIONS_ENABLED',
+    'ASAAS_ENVIRONMENT',
+    'ASAAS_ACCOUNT_ID',
+    'ASAAS_SANDBOX_ACCOUNT_ID',
+    'SUBSCRIPTION_CANCEL_CREDITS',
+    'SUBSCRIPTION_RULES_APPROVED',
+    'ASAAS_PRODUCTION_APPROVED',
+    'ASAAS_SANDBOX_ENABLED',
   ])
     requireRelease(
       webRuntime.values[name] === jobRuntime.values[name],

@@ -84,12 +84,13 @@ export function cents(amount: number) {
   return result;
 }
 
-// Deliberately sandbox-only. No live URL, card number, CVV or automatic POST retry.
-export class AsaasSandboxGateway implements SubscriptionGateway {
+// Fixed provider origins; no card data and no automatic POST retry.
+export class AsaasGateway implements SubscriptionGateway {
   constructor(
     private readonly apiKey: string,
     private readonly enabled: boolean,
     private readonly requestFetch: typeof fetch = fetch,
+    private readonly environment: 'sandbox' | 'live' = 'sandbox',
   ) {}
   private async request(path: string, method = 'GET', body?: unknown): Promise<unknown> {
     requireCondition(
@@ -98,7 +99,11 @@ export class AsaasSandboxGateway implements SubscriptionGateway {
       'Homologação Asaas não configurada',
     );
     try {
-      const response = await this.requestFetch(`https://api-sandbox.asaas.com/v3${path}`, {
+      const base =
+        this.environment === 'live'
+          ? 'https://api.asaas.com/v3'
+          : 'https://api-sandbox.asaas.com/v3';
+      const response = await this.requestFetch(`${base}${path}`, {
         method,
         redirect: 'error',
         signal: AbortSignal.timeout(15_000),
@@ -210,7 +215,8 @@ export class AsaasSandboxGateway implements SubscriptionGateway {
           subscription: { cycle: 'MONTHLY', nextDueDate: due },
         }),
       );
-    return { id: row.id, url: `https://sandbox.asaas.com/checkoutSession/show?id=${row.id}` };
+    const host = this.environment === 'live' ? 'asaas.com' : 'sandbox.asaas.com';
+    return { id: row.id, url: `https://${host}/checkoutSession/show?id=${row.id}` };
   }
   async checkoutPayments(id: string, firstDueDate?: string) {
     z.string().uuid().parse(id);
@@ -256,3 +262,5 @@ export class AsaasSandboxGateway implements SubscriptionGateway {
     throw new ApiError(502, 'Conciliação de checkout excedeu o limite; requer análise');
   }
 }
+
+export class AsaasSandboxGateway extends AsaasGateway {}

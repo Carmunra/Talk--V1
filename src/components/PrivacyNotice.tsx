@@ -18,26 +18,56 @@ export function PrivacyNotice({ config, terms = false }: { config: any; terms?: 
         <>
           <p>
             A Talkê oferece reservas e aulas de inglês de 50 minutos, no horário de Brasília. O
-            preço informado vale para uma aula.
+            catálogo de planos informa o preço mensal e a quantidade de aulas.
           </p>
           <p>
-            A reserva aguarda pagamento por até 30 minutos. O servidor confirma o pagamento após
-            consultar o Mercado Pago. O retorno do checkout não confirma pagamento.
+            Os planos mensais permitem professores diferentes e renovam automaticamente no cartão
+            todo mês até cancelar a renovação. Aulas não usadas acumulam por mais um ciclo mensal,
+            respeitando a validade mostrada na conta.
           </p>
           <p>
-            O Checkout Pro é operado pelo Mercado Pago. A comissão Talkê é de 15% do preço da aula.
-            As tarifas do Mercado Pago são adicionais e descontadas da parcela do professor.
-            Disponibilidade e retiradas dependem das condições do provedor.
+            O pagamento da assinatura ocorre na página hospedada do Asaas. As aulas são liberadas
+            após confirmação consultada pelo servidor. O retorno da página de pagamento não comprova
+            a cobrança.
           </p>
           <p>
-            Você pode cancelar antes de iniciar a aula. Quando houver pagamento, o reembolso é
-            solicitado e acompanhado até a confirmação. Problemas durante ou após a aula exigem
-            atendimento. Seus direitos previstos no Código de Defesa do Consumidor permanecem
-            aplicáveis, inclusive o arrependimento quando cabível.
+            Você pode solicitar o cancelamento da renovação na área Planos. Cobranças já emitidas,
+            reembolsos e problemas com aulas exigem acompanhamento pelo atendimento.
           </p>
+          {config.subscriptionsEnabled && (
+            <p>
+              {config.subscriptionCancelCredits === 'keep_until_expiry'
+                ? 'Após cancelar a renovação, as aulas já pagas continuam disponíveis até sua validade.'
+                : 'Após cancelar a renovação, novas reservas com o plano ficam bloqueadas. O suporte acompanha o saldo de aulas.'}
+            </p>
+          )}
+          <p>
+            O professor conclui a aula e o aluno adulto ou responsável confirma que ela ocorreu.
+            Havendo discordância, use “Relatar problema” e procure o suporte antes de confirmar.
+          </p>
+          {config.paymentsEnabled && (
+            <>
+              <p>
+                A reserva aguarda pagamento por até 30 minutos. O servidor confirma o pagamento após
+                consultar o Mercado Pago. O retorno do checkout não confirma pagamento.
+              </p>
+              <p>
+                O Checkout Pro é operado pelo Mercado Pago. A comissão Talkê é de 15% do preço da
+                aula. As tarifas do Mercado Pago são adicionais e descontadas da parcela do
+                professor. Disponibilidade e retiradas dependem das condições do provedor.
+              </p>
+              <p>
+                Você pode cancelar antes de iniciar a aula. Quando houver pagamento, o reembolso é
+                solicitado e acompanhado até a confirmação. Problemas durante ou após a aula exigem
+                atendimento. Seus direitos previstos no Código de Defesa do Consumidor permanecem
+                aplicáveis, inclusive o arrependimento quando cabível.
+              </p>
+            </>
+          )}
           <p>
             Menores são cadastrados pelo responsável adulto e só podem reservar após aprovação do
-            vínculo. Professores precisam de aprovação administrativa e conexão Mercado Pago.
+            vínculo. Professores precisam de aprovação administrativa e cadastro financeiro
+            verificado para a modalidade de pagamento.
           </p>
           <p>
             Assédio, discriminação, exposição de dados e contato inadequado com menores são
@@ -55,7 +85,7 @@ export function PrivacyNotice({ config, terms = false }: { config: any; terms?: 
             Coletamos nome, e-mail verificado, nascimento, tipo de conta, vínculo com responsável,
             objetivos de aprendizagem, reservas, avaliações e registros pedagógicos. Professores
             fornecem perfil profissional, disponibilidade, preço e autorização de conexão Mercado
-            Pago.
+            Pago quando houver aulas avulsas, além do vínculo financeiro com Asaas para os planos.
           </p>
           <p>
             Usamos os dados para autenticar, prestar aulas, gerir pagamentos, prevenir fraude,
@@ -65,9 +95,10 @@ export function PrivacyNotice({ config, terms = false }: { config: any; terms?: 
             do menor.
           </p>
           <p>
-            O Firebase processa autenticação e armazenamento, o Mercado Pago processa pagamentos, e
-            o Daily fornece vídeo. A Talkê não solicita número completo de cartão ou código de
-            segurança.
+            O Firebase processa autenticação e armazenamento; o Asaas processa as assinaturas e
+            repasses; o Mercado Pago atende aulas avulsas quando habilitadas; a AWS hospeda a
+            aplicação e o Daily fornece vídeo. A Talkê não solicita número completo de cartão ou
+            código de segurança.
           </p>
           <p>
             O catálogo publica apenas o perfil profissional aprovado. Dados de alunos e responsáveis

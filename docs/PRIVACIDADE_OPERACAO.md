@@ -32,7 +32,7 @@ Não foi implementado um prazo único de expurgo: o controlador deve aprovar pra
 
 ## Operadores, transferências e incidentes
 
-Contratar e revisar Firebase/Google, Mercado Pago, Daily e a hospedagem, com papéis, regiões, suboperadores, mecanismos de transferência e condições de exclusão. Avaliar [Resolução ANPD 19/2024](https://www.gov.br/anpd/pt-br/acesso-a-informacao/institucional/atos-normativos/regulamentacoes_anpd/resolucao-cd-anpd-no-19-de-23-de-agosto-de-2024) quando houver transferência internacional.
+Contratar e revisar Firebase/Google, Asaas (assinaturas, subcontas e repasses), Mercado Pago quando avulsas habilitadas, Daily e AWS, com papéis, regiões, suboperadores, mecanismos de transferência e condições de exclusão. O e-mail do pagador verificado vincula o checkout à conta; CPF/cartão coletados na página hospedada não são copiados para a Talkê. Confirmar os papéis próprios do provedor financeiro e a informação a titulares/recebedores. Avaliar [Resolução ANPD 19/2024](https://www.gov.br/anpd/pt-br/acesso-a-informacao/institucional/atos-normativos/regulamentacoes_anpd/resolucao-cd-anpd-no-19-de-23-de-agosto-de-2024) quando houver transferência internacional.
 
 Definir responsáveis, canal de emergência, preservação de evidências, contenção, revogação de credenciais, avaliação de impacto e comunicação. A [Resolução ANPD 15/2024](https://www.gov.br/anpd/pt-br/assuntos/noticias/anpd-aprova-o-regulamento-de-comunicacao-de-incidente-de-seguranca) regula incidentes relevantes; o prazo geral indicado no regulamento é de três dias úteis, sujeito à análise das condições aplicáveis. Registrar incidentes e decisões mesmo quando não houver comunicação externa.
 

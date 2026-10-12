@@ -12,7 +12,7 @@ Valores definidos pelo operador em 11/10/2026:
 | 12                          |      R$ 969 |
 | 16                          |    R$ 1.239 |
 
-O operador escolheu renovação automática, professores diferentes, repasses automáticos pelo gateway e acúmulo das aulas não usadas por mais um ciclo mensal. O catálogo está centralizado em src/domain/monthlyPlans.ts, publicado pelo servidor em /api/config e exibido na página inicial e em /planos. Valores são inteiros em centavos. O backend de homologação Asaas foi preparado e está conectado à conta Sandbox com dados fictícios. subscriptionsEnabled permanece false; a interface informa que a contratação ainda não está disponível.
+O operador escolheu renovação automática, professores diferentes, repasses automáticos pelo gateway e acúmulo das aulas não usadas por mais um ciclo mensal. O catálogo está centralizado em src/domain/monthlyPlans.ts, publicado pelo servidor em /api/config e exibido na página inicial e em /planos. Valores são inteiros em centavos. A interface de compra, saldo, cobranças, cancelamento da renovação, reserva com crédito e confirmação da aula está preparada. SUBSCRIPTIONS_ENABLED permanece false na configuração de publicação; habilitar somente no ambiente aprovado. O adaptador separa Sandbox/live com credenciais próprias e exige aprovações para cobrança real.
 
 ## Repasse dos planos confirmado
 
@@ -28,7 +28,7 @@ Em 11/10/2026, o operador confirmou R$ 40 por aula concluída de 50 minutos para
 
 O restante não é lucro: ainda inclui tarifas do gateway, tributos, infraestrutura e demais despesas. O exemplo enviado pelo operador para quatro aulas estima R$ 100 de outras despesas e, sob essa hipótese, R$ 179 de resultado (40,8% da mensalidade). A estimativa não foi validada como custo real nem estendida aos outros planos.
 
-Repasse de aulas canceladas, ausências, prazo de liquidação e responsabilidade pelas tarifas continuam pendentes. A regra de 4.000 centavos foi implementada no backend exclusivo de homologação; nenhum repasse ou obrigação financeira foi criado em conta ou banco reais. A cobrança avulsa existente mantém sua configuração própria de 15% para a plataforma e não foi alterada por esta confirmação dos planos.
+Repasse de aulas canceladas, ausências, prazo de liquidação e responsabilidade pelas tarifas continuam pendentes. A regra de 4.000 centavos foi implementada no backend; nenhum repasse ou obrigação financeira foi criado em conta ou banco reais. A cobrança avulsa existente mantém sua configuração própria de 15% para a plataforma e não foi alterada por esta confirmação dos planos.
 
 ## Validade das aulas confirmada
 

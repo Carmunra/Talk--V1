@@ -2,7 +2,7 @@
 
 Atualizado em 12/10/2026. Este registro prepara a configuração; não comprova implantação ou autorização jurídica.
 
-O operador informou ter criado as contas Asaas empresarial e Sandbox. Autenticação, CNPJ e cadastro aprovado foram verificados apenas no Sandbox. Uma subconta fictícia foi criada para a homologação com autorização específica; produção continua sem liberação. O novo catálogo Talke_Catalogo_A4_Horizontal_v4.pdf orienta apresentação, nomes e atendimento, preservando os preços existentes e R$ 40 por aula concluída. Consultar [resultados e pendências atuais](VALIDACAO_2026_10_12.md).
+O operador informou ter criado as contas Asaas empresarial e Sandbox. Autenticação, CNPJ e cadastro aprovado foram verificados apenas no Sandbox. Uma subconta fictícia foi criada para a homologação com autorização específica; produção continua sem liberação. O novo catálogo Talke_Catalogo_A4_Horizontal_v4.pdf orienta apresentação, nomes e atendimento, preservando os preços existentes e R$ 40 por aula concluída. Consultar [validação financeira anterior](VALIDACAO_2026_10_12.md) e [preparação da compra/publicação e pendências atuais](PREPARACAO_PUBLICACAO_2026_10_12.md).
 
 Razão social informada: 68.199.377 MARESSA SOARES LOPES. Domínio confirmado: talke.club; origem HTTPS https://talke.club.
 

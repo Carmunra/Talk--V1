@@ -27,6 +27,9 @@ export interface RuntimeConfig {
   asaasApiKey: string;
   asaasWebhookToken: string;
   asaasAccountId: string;
+  subscriptionsEnabled: boolean;
+  asaasEnvironment: 'sandbox' | 'live';
+  subscriptionCancelCredits: 'keep_until_expiry' | 'block_booking';
 }
 export function readConfig(env: NodeJS.ProcessEnv = process.env): RuntimeConfig {
   for (const flag of [
@@ -36,6 +39,9 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): RuntimeConfig 
     'PAYMENTS_ENABLED',
     'PAYMENTS_HOMOLOGATED',
     'ASAAS_SANDBOX_ENABLED',
+    'SUBSCRIPTIONS_ENABLED',
+    'SUBSCRIPTION_RULES_APPROVED',
+    'ASAAS_PRODUCTION_APPROVED',
   ]) {
     if (env[flag] !== undefined && !['true', 'false'].includes(env[flag]!))
       throw new Error(`${flag} deve ser true ou false`);
@@ -43,6 +49,14 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): RuntimeConfig 
   if (env.MP_ENVIRONMENT !== undefined && !['sandbox', 'live'].includes(env.MP_ENVIRONMENT))
     throw new Error('MP_ENVIRONMENT deve ser sandbox ou live');
   const production = env.NODE_ENV === 'production';
+  const asaasEnvironment = env.ASAAS_ENVIRONMENT || 'sandbox';
+  if (!['sandbox', 'live'].includes(asaasEnvironment))
+    throw new Error('ASAAS_ENVIRONMENT deve ser sandbox ou live');
+  if (env.ASAAS_SANDBOX_ENABLED === 'true' && asaasEnvironment === 'live')
+    throw new Error('Não misture a habilitação Sandbox com Asaas live');
+  const subscriptionCancelCredits = env.SUBSCRIPTION_CANCEL_CREDITS || 'block_booking';
+  if (!['keep_until_expiry', 'block_booking'].includes(subscriptionCancelCredits))
+    throw new Error('Política de créditos após cancelamento inválida');
   if (env.TRUST_PROXY_HOPS !== undefined && !['0', '1'].includes(env.TRUST_PROXY_HOPS))
     throw new Error('TRUST_PROXY_HOPS deve ser 0 ou 1; habilite somente atrás de um proxy isolado');
   const origin = env.APP_ORIGIN || 'http://localhost:3000';
@@ -74,23 +88,49 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): RuntimeConfig 
     tokenKey: env.TOKEN_ENCRYPTION_KEY || '',
     dailyKey: env.DAILY_API_KEY || '',
     dailyDomain: env.DAILY_DOMAIN || '',
-    termsVersion: env.TERMS_VERSION || '2026-10-08',
+    termsVersion: env.TERMS_VERSION || '2026-10-12',
     asaasSandboxEnabled: env.ASAAS_SANDBOX_ENABLED === 'true',
-    asaasApiKey: env.ASAAS_SANDBOX_API_KEY || '',
-    asaasWebhookToken: env.ASAAS_SANDBOX_WEBHOOK_TOKEN || '',
-    asaasAccountId: env.ASAAS_SANDBOX_ACCOUNT_ID || '',
+    asaasApiKey:
+      (asaasEnvironment === 'live' ? env.ASAAS_API_KEY : env.ASAAS_SANDBOX_API_KEY) || '',
+    asaasWebhookToken:
+      (asaasEnvironment === 'live' ? env.ASAAS_WEBHOOK_TOKEN : env.ASAAS_SANDBOX_WEBHOOK_TOKEN) ||
+      '',
+    asaasAccountId:
+      (asaasEnvironment === 'live' ? env.ASAAS_ACCOUNT_ID : env.ASAAS_SANDBOX_ACCOUNT_ID) || '',
+    subscriptionsEnabled: env.SUBSCRIPTIONS_ENABLED === 'true',
+    asaasEnvironment: asaasEnvironment as 'sandbox' | 'live',
+    subscriptionCancelCredits: subscriptionCancelCredits as 'keep_until_expiry' | 'block_booking',
   };
   if (
-    config.asaasSandboxEnabled &&
-    (production ||
-      !config.asaasApiKey ||
+    (config.asaasSandboxEnabled || config.subscriptionsEnabled) &&
+    (!config.asaasApiKey ||
       !/^\S{32,255}$/.test(config.asaasWebhookToken) ||
       config.asaasWebhookToken === config.asaasApiKey ||
       !z.string().uuid().safeParse(config.asaasAccountId).success)
   )
-    throw new Error(
-      'Asaas exige ambiente de homologação, chave Sandbox, token separado e ID da conta',
-    );
+    throw new Error('Asaas exige chave, token separado e ID da conta do ambiente selecionado');
+  if (config.subscriptionsEnabled || config.asaasSandboxEnabled) {
+    const prefix = asaasEnvironment === 'live' ? '$aact_prod_' : '$aact_hmlg_';
+    if (!config.asaasApiKey.startsWith(prefix))
+      throw new Error('Chave Asaas não corresponde ao ambiente selecionado');
+  }
+  if (config.subscriptionsEnabled && asaasEnvironment === 'live') {
+    if (
+      new URL(origin).protocol !== 'https:' ||
+      env.PAYMENTS_HOMOLOGATED !== 'true' ||
+      env.ASAAS_PRODUCTION_APPROVED !== 'true' ||
+      env.SUBSCRIPTION_RULES_APPROVED !== 'true' ||
+      !env.SUBSCRIPTION_CANCEL_CREDITS ||
+      !config.legalApproved ||
+      env.FIREBASE_AUTH_EMULATOR_HOST ||
+      env.FIRESTORE_EMULATOR_HOST ||
+      !config.projectId ||
+      config.projectId.startsWith('demo-')
+    )
+      throw new Error(
+        'Assinaturas reais exigem HTTPS, Firebase real, homologação e aprovações comercial/jurídica das regras',
+      );
+  }
   if (!Number.isInteger(config.minimumAge) || config.minimumAge < 6 || config.minimumAge > 18)
     throw new Error('MINIMUM_AGE inválida');
   if (config.supportEmails.some((email) => !z.string().email().safeParse(email).success))

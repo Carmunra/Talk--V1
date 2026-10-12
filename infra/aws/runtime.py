@@ -18,7 +18,10 @@ CONFIG_PATH = Path("/opt/talke/config.json")
 ENV_KEYS = set("""APP_ORIGIN FIREBASE_PROJECT_ID FIRESTORE_DATABASE_ID LEGAL_NAME LEGAL_CNPJ
 PRIVACY_EMAIL SUPPORT_EMAIL SUPPORT_EMAIL_SECONDARY LEGAL_APPROVED TERMS_VERSION MINIMUM_AGE
 MINORS_ENABLED MINORS_SAFEGUARDS_APPROVED PAYMENTS_ENABLED PAYMENTS_HOMOLOGATED MP_ENVIRONMENT
-MP_CLIENT_ID MP_CLIENT_SECRET MP_WEBHOOK_SECRET TOKEN_ENCRYPTION_KEY DAILY_API_KEY DAILY_DOMAIN""".split())
+MP_CLIENT_ID MP_CLIENT_SECRET MP_WEBHOOK_SECRET TOKEN_ENCRYPTION_KEY DAILY_API_KEY DAILY_DOMAIN
+SUBSCRIPTIONS_ENABLED SUBSCRIPTION_RULES_APPROVED SUBSCRIPTION_CANCEL_CREDITS ASAAS_ENVIRONMENT
+ASAAS_PRODUCTION_APPROVED ASAAS_API_KEY ASAAS_WEBHOOK_TOKEN ASAAS_ACCOUNT_ID
+ASAAS_SANDBOX_ENABLED ASAAS_SANDBOX_API_KEY ASAAS_SANDBOX_WEBHOOK_TOKEN ASAAS_SANDBOX_ACCOUNT_ID""".split())
 
 def command(args, *, stdin=None, timeout=120):
     # Caller never forwards subprocess stderr, stdout, environment or exception details.
@@ -66,6 +69,11 @@ def secret_files(release):
         raise ValueError("Runtime values must be single-line strings")
     if env.get("APP_ORIGIN") != cfg["origin"] or not env.get("FIREBASE_PROJECT_ID"):
         raise ValueError("Wrong origin or missing Firebase project")
+    if cfg["environment"] == "staging" and (env.get("ASAAS_ENVIRONMENT") == "live" or env.get("MP_ENVIRONMENT") == "live"):
+        raise ValueError("Staging cannot use live payments")
+    if cfg["environment"] == "production" and (env.get("ASAAS_SANDBOX_ENABLED") == "true" or
+            (env.get("SUBSCRIPTIONS_ENABLED") == "true" and env.get("ASAAS_ENVIRONMENT") != "live")):
+        raise ValueError("Production cannot enable Sandbox subscriptions")
     if (credential.get("type") != "service_account"
         or credential.get("project_id") != env["FIREBASE_PROJECT_ID"]
         or credential.get("token_uri") != "https://oauth2.googleapis.com/token"
