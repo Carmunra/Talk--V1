@@ -62,6 +62,7 @@ describe('Fluxos comerciais protegidos com Auth emulator e gateway de teste', ()
     );
     cy.contains('button', 'Sair').click();
     cy.contains('button', 'Entrar com Google').should('be.visible');
+    cy.contains('A contratação dos planos ainda não está disponível.').should('not.exist');
     login('other');
     cy.contains('button', 'Planos').click();
     cy.contains('Você ainda não tem uma assinatura para este aluno.').should('be.visible');

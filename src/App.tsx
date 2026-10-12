@@ -362,7 +362,13 @@ export default function App() {
         ) : tab === 'teachers' ? (
           <>
             {!firebaseUser && <SchoolOverview minorsEnabled={config.minorsEnabled} />}
-            {!firebaseUser && <MonthlyPlans plans={config.monthlyPlans} compact />}
+            {!firebaseUser && (
+              <MonthlyPlans
+                plans={config.monthlyPlans}
+                compact
+                onSelect={config.subscriptionsEnabled ? selectPlan : undefined}
+              />
+            )}
             <TeacherDirectory
               monthlyOnly={config.subscriptionsEnabled && !config.paymentsEnabled}
               teachers={teachers}

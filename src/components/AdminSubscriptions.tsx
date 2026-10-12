@@ -85,7 +85,16 @@ export function AdminSubscriptions() {
       {!data?.payouts.length && <p>Nenhum repasse pendente registrado.</p>}
       {data?.payouts.map((p: any) => (
         <p key={p.id}>
-          {brl(p.amountCents)} · aula {p.lessonId} · {p.status}{' '}
+          {brl(p.amountCents)} · aula {p.lessonId} ·{' '}
+          {(
+            {
+              QUEUED: 'Aguardando saldo ou liquidação',
+              PENDING: 'Aguardando confirmação do Asaas',
+              UNKNOWN: 'Resposta inconclusiva',
+              SUBMITTING: 'Envio em acompanhamento',
+              REVIEW: 'Revisão necessária',
+            } as Record<string, string>
+          )[p.status] || 'Em acompanhamento'}{' '}
           {p.reviewRequired ? '· revisão necessária' : ''}
         </p>
       ))}
@@ -97,7 +106,8 @@ export function AdminSubscriptions() {
       {!data?.checkouts.length && <p>Nenhuma criação de checkout pendente de análise.</p>}
       {data?.checkouts.map((c: any) => (
         <p key={c.id}>
-          Aluno {c.studentId} · plano {c.planId} · {c.status}
+          Aluno {c.studentId} · plano {c.planId} ·{' '}
+          {c.status === 'UNKNOWN' ? 'Resposta inconclusiva' : 'Criação em acompanhamento'}
         </p>
       ))}
     </section>
