@@ -13,7 +13,7 @@ spec = importlib.util.spec_from_file_location("runtime", Path(__file__).parents[
 runtime = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(runtime)
 image = "talke-ci:local"
-proxy_image = "caddy@sha256:d8542f48d34a9cf4e4c11a478865229840e87e4c96ea3f439101f31a5d35f75f"
+proxy_image = "caddy@sha256:f2a1290d0463aad60660d4ec134943f183ee2a5f6c3eb7bf32dd984f2f020772"
 env = {
     "NODE_ENV": "production", "APP_ORIGIN": "https://staging.example.test",
     "FIREBASE_PROJECT_ID": "demo-talke", "LEGAL_NAME": "Smoke fixture",

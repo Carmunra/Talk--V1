@@ -185,7 +185,7 @@ export default function App() {
   const bookingSubscription = selectedSubscriptions.find(
     (s) =>
       (s.status === 'ACTIVE' ||
-        (s.status === 'CANCELLED' && s.cancellationCreditPolicy === 'keep_until_expiry')) &&
+        (s.status === 'CANCELLED' && s.cancellationCreditPolicy !== 'block_booking')) &&
       s.cycles.some((c) => c.remaining > 0),
   );
   const selectPlan = (plan: MonthlyPlan) => {

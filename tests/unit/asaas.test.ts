@@ -45,6 +45,11 @@ test('live subscriptions fail closed unless all approvals and an explicit credit
     SUBSCRIPTION_CANCEL_CREDITS: 'keep_until_expiry',
   };
   assert.equal(readConfig(env).asaasEnvironment, 'live');
+  assert.equal(
+    readConfig({ ...env, SUBSCRIPTION_CANCEL_CREDITS: '60_days_after_cancel' })
+      .subscriptionCancelCredits,
+    '60_days_after_cancel',
+  );
   for (const invalid of [
     { PAYMENTS_HOMOLOGATED: 'false' },
     { ASAAS_PRODUCTION_APPROVED: 'false' },
@@ -293,7 +298,38 @@ test('transfer payload is exactly R$40 to the linked wallet, with a correlation 
   const gateway = new AsaasSandboxGateway('key', true, async (_url, options) => {
     const body = JSON.parse(String(options!.body));
     assert.deepEqual(body, { value: 40, walletId: wallet, externalReference: 'talke-ref' });
-    return new Response(JSON.stringify({ id: 'transfer_1', ...body, status: 'PENDING' }));
+    return new Response(
+      JSON.stringify({
+        id: 'transfer_1',
+        ...body,
+        status: 'PENDING',
+        account: { name: 'private receiver' },
+      }),
+    );
   });
   assert.equal((await gateway.sendTransfer('talke-ref', wallet, 4000)).status, 'PENDING');
+});
+
+test('pending transfer reads support nullable account without exposing receiver information', async () => {
+  for (const accountData of [null, { name: 'private receiver' }]) {
+    const gateway = new AsaasSandboxGateway(
+      'key',
+      true,
+      async () =>
+        new Response(
+          JSON.stringify({
+            id: 'transfer_1',
+            value: 40,
+            status: 'PENDING',
+            externalReference: 'talke-ref',
+            walletId: wallet,
+            account: accountData,
+          }),
+        ),
+    );
+    const result = await gateway.transfer('transfer_1');
+    assert.equal(result.walletId, wallet);
+    assert.equal(result.status, 'PENDING');
+    assert.equal(JSON.stringify(result).includes('private receiver'), false);
+  }
 });

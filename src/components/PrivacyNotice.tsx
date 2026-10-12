@@ -36,9 +36,11 @@ export function PrivacyNotice({ config, terms = false }: { config: any; terms?: 
           </p>
           {config.subscriptionsEnabled && (
             <p>
-              {config.subscriptionCancelCredits === 'keep_until_expiry'
-                ? 'Após cancelar a renovação, as aulas já pagas continuam disponíveis até sua validade.'
-                : 'Após cancelar a renovação, novas reservas com o plano ficam bloqueadas. O suporte acompanha o saldo de aulas.'}
+              {config.subscriptionCancelCredits === '60_days_after_cancel'
+                ? 'Após cancelar a renovação, você tem 60 dias para realizar as aulas já pagas e ainda válidas. A conta mostra a data limite; aulas vencidas ou estornadas não são recuperadas.'
+                : config.subscriptionCancelCredits === 'keep_until_expiry'
+                  ? 'Após cancelar a renovação, as aulas já pagas continuam disponíveis até sua validade.'
+                  : 'Após cancelar a renovação, novas reservas com o plano ficam bloqueadas. O suporte acompanha o saldo de aulas.'}
             </p>
           )}
           <p>

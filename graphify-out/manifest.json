@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "cypress/e2e/readiness.cy.ts": {
-    "mtime": 1791815357.9305356,
-    "ast_hash": "b513e141917cebc6da2e8048473ffda7",
+    "mtime": 1791836585.497366,
+    "ast_hash": "be99beb057f5a57d14737b3f13bd55c6",
     "semantic_hash": ""
   },
   "firebase-applet-config.json": {
@@ -35,7 +35,7 @@
     "semantic_hash": ""
   },
   "scripts/reconcile.ts": {
-    "mtime": 1791811335.5993774,
+    "mtime": 1791816618.2392373,
     "ast_hash": "83b590e1d5e0098a018da920ccd93571",
     "semantic_hash": ""
   },
@@ -45,18 +45,18 @@
     "semantic_hash": ""
   },
   "scripts/verify-artifacts.mjs": {
-    "mtime": 1791811712.198362,
+    "mtime": 1791816618.243226,
     "ast_hash": "640f8f4040531f41661c227fce4053d8",
     "semantic_hash": ""
   },
   "server.ts": {
-    "mtime": 1791811335.1404316,
+    "mtime": 1791816618.2442293,
     "ast_hash": "4ed12d116081c46058f33f2bcad01464",
     "semantic_hash": ""
   },
   "src/App.tsx": {
-    "mtime": 1791815363.3776245,
-    "ast_hash": "a07efc38c202f76a5e47c75003f8d277",
+    "mtime": 1791836500.1334379,
+    "ast_hash": "f70577c016274c1f8a966216f521fb89",
     "semantic_hash": ""
   },
   "src/components/AccountForms.tsx": {
@@ -70,7 +70,7 @@
     "semantic_hash": ""
   },
   "src/components/BookingModal.tsx": {
-    "mtime": 1791812333.146873,
+    "mtime": 1791816618.252247,
     "ast_hash": "7c230cb6fa6d3715e5243abe117a1100",
     "semantic_hash": ""
   },
@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "src/components/PrivacyNotice.tsx": {
-    "mtime": 1791812333.1758747,
-    "ast_hash": "74efce6e29a1773d662af063b89c0b3c",
+    "mtime": 1791836500.3263772,
+    "ast_hash": "2ab5ad20e00814468b90cf0a09d1df20",
     "semantic_hash": ""
   },
   "src/components/ReviewModal.tsx": {
@@ -115,12 +115,12 @@
     "semantic_hash": ""
   },
   "src/components/TeacherDirectory.tsx": {
-    "mtime": 1791814494.8334577,
+    "mtime": 1791816618.258236,
     "ast_hash": "f1fd660a276acd7de91204fa3362cab8",
     "semantic_hash": ""
   },
   "src/components/TeacherProfileModal.tsx": {
-    "mtime": 1791814494.886462,
+    "mtime": 1791816618.2612243,
     "ast_hash": "1c67dd318b20c924837cbf446d175154",
     "semantic_hash": ""
   },
@@ -275,13 +275,13 @@
     "semantic_hash": ""
   },
   "src/server/app.ts": {
-    "mtime": 1791813799.956675,
+    "mtime": 1791816618.2654364,
     "ast_hash": "e5479ef17b0f28c8d733a2e2b5655145",
     "semantic_hash": ""
   },
   "src/server/config.ts": {
-    "mtime": 1791813873.8896523,
-    "ast_hash": "5bfdcfb06ccee82d6406b2e196d7da9d",
+    "mtime": 1791836499.7401347,
+    "ast_hash": "acea40f5d459c1a38282e6ab0cbe93a3",
     "semantic_hash": ""
   },
   "src/server/marketplace.ts": {
@@ -290,13 +290,13 @@
     "semantic_hash": ""
   },
   "src/server/platform.ts": {
-    "mtime": 1791812333.7643323,
+    "mtime": 1791816618.2694492,
     "ast_hash": "8e4e233291181ce6ebb103eed39c1715",
     "semantic_hash": ""
   },
   "src/server/privacy.ts": {
-    "mtime": 1791812333.8463295,
-    "ast_hash": "12fe3110f867193192d44be40085c6c3",
+    "mtime": 1791836499.8338723,
+    "ast_hash": "3ceadf07005907a8fcbdc7296e59295d",
     "semantic_hash": ""
   },
   "src/server/security.ts": {
@@ -305,7 +305,7 @@
     "semantic_hash": ""
   },
   "src/server/store.ts": {
-    "mtime": 1791815972.537571,
+    "mtime": 1791816618.2744496,
     "ast_hash": "0d693e6b10751f1dcbf1018dd51e11b4",
     "semantic_hash": ""
   },
@@ -345,13 +345,13 @@
     "semantic_hash": ""
   },
   "tests/rules/firestore.test.ts": {
-    "mtime": 1791816146.488837,
+    "mtime": 1791816618.2814498,
     "ast_hash": "a86bda697b575ed45e4d0f4adab9a492",
     "semantic_hash": ""
   },
   "tests/support/e2e-server.ts": {
-    "mtime": 1791814472.8888981,
-    "ast_hash": "c11ebad42a392a9110736770b2707f68",
+    "mtime": 1791836501.003668,
+    "ast_hash": "35be37eee97469bc5fb2680f0d21db6e",
     "semantic_hash": ""
   },
   "tests/support/fixture.ts": {
@@ -360,7 +360,7 @@
     "semantic_hash": ""
   },
   "tests/support/memory-store.ts": {
-    "mtime": 1791815972.836135,
+    "mtime": 1791816618.287455,
     "ast_hash": "3a139c3c8be1975548baddd4d416247d",
     "semantic_hash": ""
   },
@@ -435,7 +435,7 @@
     "semantic_hash": ""
   },
   "docs/PRIVACIDADE_OPERACAO.md": {
-    "mtime": 1791814224.2658067,
+    "mtime": 1791816618.2024755,
     "ast_hash": "6c925ff1e6ad84a1212204d5c990172a",
     "semantic_hash": ""
   },
@@ -480,7 +480,7 @@
     "semantic_hash": ""
   },
   "docs/VALIDACAO.md": {
-    "mtime": 1791814705.3248258,
+    "mtime": 1791816618.2105212,
     "ast_hash": "72ada85c931ab8469b95f422767477d7",
     "semantic_hash": ""
   },
@@ -520,7 +520,7 @@
     "semantic_hash": ""
   },
   "scripts/preflight.ts": {
-    "mtime": 1791812206.1909485,
+    "mtime": 1791816618.2362316,
     "ast_hash": "596f373acbfe8e387262954dc4d35d97",
     "semantic_hash": ""
   },
@@ -535,7 +535,7 @@
     "semantic_hash": ""
   },
   "src/server/preflight.ts": {
-    "mtime": 1791812333.790327,
+    "mtime": 1791816618.2704475,
     "ast_hash": "7384d598e7790f37690d0aaca9e83c23",
     "semantic_hash": ""
   },
@@ -545,7 +545,7 @@
     "semantic_hash": ""
   },
   "tests/unit/preflight.test.ts": {
-    "mtime": 1791812334.1869757,
+    "mtime": 1791816618.2954571,
     "ast_hash": "893af981f0ae689ba54272e0ee4577e9",
     "semantic_hash": ""
   },
@@ -555,7 +555,7 @@
     "semantic_hash": ""
   },
   "scripts/release.ts": {
-    "mtime": 1791812333.9557016,
+    "mtime": 1791816618.2422307,
     "ast_hash": "c45f732d329c54138c293af73c845562",
     "semantic_hash": ""
   },
@@ -565,7 +565,7 @@
     "semantic_hash": ""
   },
   "src/lib/useDialog.ts": {
-    "mtime": 1791811581.4290612,
+    "mtime": 1791816618.2643046,
     "ast_hash": "335ac3c6a83ecc2f805ffa5a5fab3c4a",
     "semantic_hash": ""
   },
@@ -575,7 +575,7 @@
     "semantic_hash": ""
   },
   "tests/unit/release.test.ts": {
-    "mtime": 1791813873.3527498,
+    "mtime": 1791816618.299449,
     "ast_hash": "91abe5ed62848abec76757249fa41913",
     "semantic_hash": ""
   },
@@ -605,7 +605,7 @@
     "semantic_hash": ""
   },
   "docs/DADOS_PUBLICACAO.md": {
-    "mtime": 1791814223.893945,
+    "mtime": 1791816618.1974757,
     "ast_hash": "e900b4e0045548c570822e6efa161fa6",
     "semantic_hash": ""
   },
@@ -635,7 +635,7 @@
     "semantic_hash": ""
   },
   "infra/aws/runtime.py": {
-    "mtime": 1791811711.738363,
+    "mtime": 1791816618.2301118,
     "ast_hash": "a7c665fae719d56c808de015b39b021d",
     "semantic_hash": ""
   },
@@ -645,7 +645,7 @@
     "semantic_hash": ""
   },
   "infra/aws/tests/test_runtime.py": {
-    "mtime": 1791812208.6659348,
+    "mtime": 1791816618.2332344,
     "ast_hash": "93d72d661079918755ec386cacd6d554",
     "semantic_hash": ""
   },
@@ -665,8 +665,8 @@
     "semantic_hash": ""
   },
   "scripts/aws/smoke-proxy.py": {
-    "mtime": 1791752184.83621,
-    "ast_hash": "8dbf5b711831644fee6d0a855e56af5b",
+    "mtime": 1791837314.6040213,
+    "ast_hash": "5d10b448c389c8c63dd2620bd132b32e",
     "semantic_hash": ""
   },
   "scripts/aws/tests/release.test.mjs": {
@@ -690,12 +690,12 @@
     "semantic_hash": ""
   },
   "docs/PUBLICACAO_AWS.md": {
-    "mtime": 1791814223.4992957,
+    "mtime": 1791816618.2054713,
     "ast_hash": "ada9eef843b4a620ca063efc85c4d181",
     "semantic_hash": ""
   },
   "src/components/MonthlyPlans.tsx": {
-    "mtime": 1791812333.083875,
+    "mtime": 1791816618.2532272,
     "ast_hash": "e14251b9299938403c53606cca5a4285",
     "semantic_hash": ""
   },
@@ -705,23 +705,23 @@
     "semantic_hash": ""
   },
   "docs/PLANOS_MENSAIS.md": {
-    "mtime": 1791814223.0050936,
-    "ast_hash": "cf4a281a86b52892ba983eb02449cdf5",
+    "mtime": 1791836718.763338,
+    "ast_hash": "5046fb1d04ab7a0ee0dbc6a0f97e6cbd",
     "semantic_hash": ""
   },
   "src/server/asaas.ts": {
-    "mtime": 1791812333.3308728,
-    "ast_hash": "fbd753286e4f5359abfc1c06d57553f2",
+    "mtime": 1791817286.2026825,
+    "ast_hash": "b5522e95a025912466f6c0f2dc93a063",
     "semantic_hash": ""
   },
   "src/server/subscriptions.ts": {
-    "mtime": 1791816146.392628,
-    "ast_hash": "af349732acf2e4b2e0d5f555ed456f40",
+    "mtime": 1791837609.4942224,
+    "ast_hash": "8ef95462ee9d0736052525c78fd32052",
     "semantic_hash": ""
   },
   "tests/integration/subscriptions.test.ts": {
-    "mtime": 1791815973.1438987,
-    "ast_hash": "1ca6baa53eb39b7e0de8783dcfc74bd8",
+    "mtime": 1791837741.5703356,
+    "ast_hash": "4bf6593e580b4065dc5fd1026950057e",
     "semantic_hash": ""
   },
   "tests/support/subscription-fixture.ts": {
@@ -730,12 +730,12 @@
     "semantic_hash": ""
   },
   "tests/unit/asaas.test.ts": {
-    "mtime": 1791812334.1227005,
-    "ast_hash": "5ac413271d6b9428f61ccf9d41701b0a",
+    "mtime": 1791837741.6463368,
+    "ast_hash": "662a9273a09a744b4afe39c44f5747ec",
     "semantic_hash": ""
   },
   "docs/ASAAS_HOMOLOGACAO.md": {
-    "mtime": 1791816089.6255414,
+    "mtime": 1791816618.1934707,
     "ast_hash": "8d809fcbb6c16a56b52ae708e4fc04b5",
     "semantic_hash": ""
   },
@@ -745,33 +745,38 @@
     "semantic_hash": ""
   },
   "docs/VALIDACAO_2026_10_12.md": {
-    "mtime": 1791810075.1589816,
-    "ast_hash": "4be52507539f3c8ef1ad3fe5fbc57c94",
+    "mtime": 1791816618.212514,
+    "ast_hash": "6b24c5b4d1cf2d36a4153bb9a306cea3",
     "semantic_hash": ""
   },
   "src/components/AdminSubscriptions.tsx": {
-    "mtime": 1791815491.6612446,
+    "mtime": 1791816618.2502267,
     "ast_hash": "4d59315e86417949f12cf11e556366a0",
     "semantic_hash": ""
   },
   "src/components/SubscriptionPanel.tsx": {
-    "mtime": 1791812333.0158725,
-    "ast_hash": "ec31970821bfef92265242fead111a4a",
+    "mtime": 1791836500.266285,
+    "ast_hash": "19154d56638f926291def4b3d3b69b60",
     "semantic_hash": ""
   },
   "src/lib/checkoutLink.ts": {
-    "mtime": 1791812333.2258728,
+    "mtime": 1791816618.2632315,
     "ast_hash": "cb4d607999ead9f985db07f20d1b5d92",
     "semantic_hash": ""
   },
   "tests/unit/checkoutLink.test.ts": {
-    "mtime": 1791812334.1648645,
+    "mtime": 1791816618.293456,
     "ast_hash": "d37ef2f244af0471bfef7e22bbf72242",
     "semantic_hash": ""
   },
   "docs/PREPARACAO_PUBLICACAO_2026_10_12.md": {
-    "mtime": 1791816135.6496208,
-    "ast_hash": "dbb3026bb4637cd8220a6fee9e4fc7fe",
+    "mtime": 1791836718.217213,
+    "ast_hash": "9cf5ee4190d56c2e61a28f7588918fc5",
+    "semantic_hash": ""
+  },
+  "docs/CONTINUIDADE_PUBLICACAO_2026_10_12.md": {
+    "mtime": 1791836717.453102,
+    "ast_hash": "4fbf5fc3d6905232f51becc5d26952b7",
     "semantic_hash": ""
   }
 }

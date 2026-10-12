@@ -1,5 +1,7 @@
 # Preparação da contratação e publicação — 12/10/2026
 
+Atualização posterior: o operador aprovou os testes adicionais Sandbox, os 60 dias após cancelar renovação e a continuidade AWS na faixa de US$ 60–100/mês. Veja o [registro de continuidade](CONTINUIDADE_PUBLICACAO_2026_10_12.md) para a regra e os resultados atuais. Os pontos abaixo descrevem a etapa anterior.
+
 Esta etapa complementa o [registro anterior](VALIDACAO_2026_10_12.md). Código preparado não equivale à liberação da plataforma ou à homologação de pagamentos reais. Nenhuma cobrança, subconta, transferência ou servidor de produção foi criado nesta etapa.
 
 ## Implementação concluída nesta etapa

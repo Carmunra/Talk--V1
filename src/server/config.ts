@@ -29,7 +29,7 @@ export interface RuntimeConfig {
   asaasAccountId: string;
   subscriptionsEnabled: boolean;
   asaasEnvironment: 'sandbox' | 'live';
-  subscriptionCancelCredits: 'keep_until_expiry' | 'block_booking';
+  subscriptionCancelCredits: 'keep_until_expiry' | 'block_booking' | '60_days_after_cancel';
 }
 export function readConfig(env: NodeJS.ProcessEnv = process.env): RuntimeConfig {
   for (const flag of [
@@ -55,7 +55,11 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): RuntimeConfig 
   if (env.ASAAS_SANDBOX_ENABLED === 'true' && asaasEnvironment === 'live')
     throw new Error('Não misture a habilitação Sandbox com Asaas live');
   const subscriptionCancelCredits = env.SUBSCRIPTION_CANCEL_CREDITS || 'block_booking';
-  if (!['keep_until_expiry', 'block_booking'].includes(subscriptionCancelCredits))
+  if (
+    !['keep_until_expiry', 'block_booking', '60_days_after_cancel'].includes(
+      subscriptionCancelCredits,
+    )
+  )
     throw new Error('Política de créditos após cancelamento inválida');
   if (env.TRUST_PROXY_HOPS !== undefined && !['0', '1'].includes(env.TRUST_PROXY_HOPS))
     throw new Error('TRUST_PROXY_HOPS deve ser 0 ou 1; habilite somente atrás de um proxy isolado');
@@ -99,7 +103,8 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): RuntimeConfig 
       (asaasEnvironment === 'live' ? env.ASAAS_ACCOUNT_ID : env.ASAAS_SANDBOX_ACCOUNT_ID) || '',
     subscriptionsEnabled: env.SUBSCRIPTIONS_ENABLED === 'true',
     asaasEnvironment: asaasEnvironment as 'sandbox' | 'live',
-    subscriptionCancelCredits: subscriptionCancelCredits as 'keep_until_expiry' | 'block_booking',
+    subscriptionCancelCredits: subscriptionCancelCredits as
+      'keep_until_expiry' | 'block_booking' | '60_days_after_cancel',
   };
   if (
     (config.asaasSandboxEnabled || config.subscriptionsEnabled) &&
