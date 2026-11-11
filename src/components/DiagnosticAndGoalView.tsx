@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Target, Award, ArrowRight, HelpCircle, Sparkles } from 'lucide-react';
+import { Target, Award, ArrowRight, Sparkles, Zap, Check } from 'lucide-react';
 import {
   Student,
   ProficiencyLevel,
@@ -63,16 +63,16 @@ export const DiagnosticAndGoalView: React.FC<DiagnosticAndGoalViewProps> = ({
     },
     {
       id: 4,
-      level: ProficiencyLevel.B2_Upper_Intermediate,
-      question: "By this time next year, Sarah _____ her MBA degree in the UK.",
-      options: ["will finish", "is finishing", "will have finished", "finishes"],
-      correctIndex: 2,
+      level: ProficiencyLevel.B2_UpperIntermediate,
+      question: "By the time the meeting ends, we _____ all the quarterly goals.",
+      options: ["will discuss", "will have discussed", "had discussed", "have been discussing"],
+      correctIndex: 1,
     },
     {
       id: 5,
       level: ProficiencyLevel.C1_Advanced,
-      question: "Hardly _____ the conference started when the power went out.",
-      options: ["did", "had", "was", "has"],
+      question: "Seldom _____ such an articulate presentation on complex macroeconomics.",
+      options: ["I have witnessed", "have I witnessed", "I had witnessed", "did I witnessed"],
       correctIndex: 1,
     },
   ];
@@ -80,42 +80,48 @@ export const DiagnosticAndGoalView: React.FC<DiagnosticAndGoalViewProps> = ({
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [calculatedLevel, setCalculatedLevel] = useState<ProficiencyLevel>(
-    currentStudent.level || ProficiencyLevel.B1_Intermediate
+    currentStudent.proficiencyLevel || ProficiencyLevel.A1_Beginner
   );
   const [isSaving, setIsSaving] = useState(false);
 
-  const handleSelectOption = (optIdx: number) => {
-    setAnswers({ ...answers, [currentQuestionIdx]: optIdx });
+  const handleSelectOption = (optionIndex: number) => {
+    setAnswers((prev) => ({
+      ...prev,
+      [currentQuestionIdx]: optionIndex,
+    }));
   };
 
   const handleNextQuestion = () => {
     if (currentQuestionIdx < questions.length - 1) {
-      setCurrentQuestionIdx(currentQuestionIdx + 1);
+      setCurrentQuestionIdx((prev) => prev + 1);
     } else {
-      // Evaluate results
+      // Calculate score & level
       let correctCount = 0;
       questions.forEach((q, idx) => {
         if (answers[idx] === q.correctIndex) {
-          correctCount += 1;
+          correctCount++;
         }
       });
 
-      let evaluatedLevel = ProficiencyLevel.A1_Beginner;
-      if (correctCount === 1) evaluatedLevel = ProficiencyLevel.A2_Elementary;
-      else if (correctCount === 2) evaluatedLevel = ProficiencyLevel.B1_Intermediate;
-      else if (correctCount === 3) evaluatedLevel = ProficiencyLevel.B2_Upper_Intermediate;
-      else if (correctCount === 4) evaluatedLevel = ProficiencyLevel.C1_Advanced;
-      else if (correctCount >= 5) evaluatedLevel = ProficiencyLevel.C2_Proficient;
+      let level = ProficiencyLevel.A1_Beginner;
+      if (correctCount === 1) level = ProficiencyLevel.A1_Beginner;
+      else if (correctCount === 2) level = ProficiencyLevel.A2_Elementary;
+      else if (correctCount === 3) level = ProficiencyLevel.B1_Intermediate;
+      else if (correctCount === 4) level = ProficiencyLevel.B2_UpperIntermediate;
+      else if (correctCount >= 5) level = ProficiencyLevel.C1_Advanced;
 
-      setCalculatedLevel(evaluatedLevel);
+      setCalculatedLevel(level);
       setStep('result');
     }
   };
 
   const handleSaveAll = async () => {
-    setIsSaving(true);
     try {
+      setIsSaving(true);
       await onSave(calculatedLevel, selectedGoal, goalDescription);
+      onGoToTeachers();
+    } catch (e) {
+      console.error(e);
     } finally {
       setIsSaving(false);
     }
@@ -124,15 +130,18 @@ export const DiagnosticAndGoalView: React.FC<DiagnosticAndGoalViewProps> = ({
   return (
     <div className="max-w-3xl mx-auto space-y-6">
       {/* Stepper Header */}
-      <div className="bg-white p-4 rounded-2xl border border-neutral-200 shadow-xs flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-500 text-white flex items-center justify-center font-bold">
-            <Sparkles className="w-5 h-5" />
+      <div className="bg-white rounded-3xl border border-slate-200/90 p-5 sm:p-6 shadow-xs flex items-center justify-between">
+        <div className="flex items-center gap-3.5">
+          <div className="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 border border-blue-100 flex items-center justify-center font-bold">
+            <Zap className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-base font-bold text-neutral-900">Diagnóstico & Objetivo Talkê</h2>
-            <p className="text-xs text-neutral-500">
-              Personalize seu aprendizado para receber os melhores professores
+            <span className="text-[11px] font-bold tracking-wider text-blue-600 uppercase block">
+              Talkê • Avaliação Diagnóstica
+            </span>
+            <h2 className="text-base sm:text-lg font-extrabold text-slate-900">Diagnóstico & Nivelamento CEFR</h2>
+            <p className="text-xs text-slate-500">
+              Personalize sua meta de conversação para receber recomendações de professores ideais
             </p>
           </div>
         </div>
@@ -140,46 +149,49 @@ export const DiagnosticAndGoalView: React.FC<DiagnosticAndGoalViewProps> = ({
         {/* Badges for Steps */}
         <div className="hidden sm:flex items-center gap-2 text-xs font-semibold">
           <span
-            className={`px-3 py-1 rounded-full ${
+            className={`px-3 py-1.5 rounded-xl transition-all ${
               step === 'goal'
-                ? 'bg-blue-600 text-white shadow-xs'
-                : 'bg-neutral-100 text-neutral-600'
+                ? 'bg-blue-600 text-white font-bold shadow-xs'
+                : 'bg-slate-100 text-slate-500'
             }`}
           >
-            1. Definir Objetivo
+            1. Objetivo
           </span>
           <span
-            className={`px-3 py-1 rounded-full ${
+            className={`px-3 py-1.5 rounded-xl transition-all ${
               step === 'quiz'
-                ? 'bg-blue-600 text-white shadow-xs'
-                : 'bg-neutral-100 text-neutral-600'
+                ? 'bg-blue-600 text-white font-bold shadow-xs'
+                : 'bg-slate-100 text-slate-500'
             }`}
           >
-            2. Teste de Nível
+            2. Teste CEFR
           </span>
           <span
-            className={`px-3 py-1 rounded-full ${
+            className={`px-3 py-1.5 rounded-xl transition-all ${
               step === 'result'
-                ? 'bg-blue-600 text-white shadow-xs'
-                : 'bg-neutral-100 text-neutral-600'
+                ? 'bg-blue-600 text-white font-bold shadow-xs'
+                : 'bg-slate-100 text-slate-500'
             }`}
           >
-            3. Resultado & Matching
+            3. Resultado
           </span>
         </div>
       </div>
 
       {/* STEP 1: DEFINIR OBJETIVO */}
       {step === 'goal' && (
-        <div className="bg-white rounded-2xl border border-neutral-200 p-6 shadow-xs space-y-6 animate-in fade-in duration-200">
+        <div className="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 space-y-6 shadow-xs">
           <div>
-            <h3 className="text-base font-bold text-neutral-900">Qual é o seu principal foco agora?</h3>
-            <p className="text-xs text-neutral-500 mt-1">
-              O algoritmo Talkê usará seu objetivo para encontrar professores com especialidade comprovada.
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-600 block mb-1">
+              Etapa 01 de 03
+            </span>
+            <h3 className="text-xl font-black text-slate-900">Qual é o seu principal foco agora?</h3>
+            <p className="text-xs sm:text-sm text-slate-500 mt-1">
+              O algoritmo do Talkê usará seu objetivo para calcular a compatibilidade com professores especialistas.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {Object.entries(LearningGoalLabels).map(([key, label]) => {
               const g = key as LearningGoal;
               const isSelected = selectedGoal === g;
@@ -188,22 +200,22 @@ export const DiagnosticAndGoalView: React.FC<DiagnosticAndGoalViewProps> = ({
                   key={key}
                   type="button"
                   onClick={() => setSelectedGoal(g)}
-                  className={`p-4 text-left rounded-xl border transition-all flex flex-col justify-between ${
+                  className={`p-4 text-left rounded-2xl border transition-all flex flex-col justify-between cursor-pointer ${
                     isSelected
                       ? 'border-blue-600 bg-blue-50/60 ring-2 ring-blue-500/20 shadow-xs'
-                      : 'border-neutral-200 hover:border-neutral-300 bg-white'
+                      : 'border-slate-200 hover:border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
                   }`}
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <Target className={`w-5 h-5 ${isSelected ? 'text-blue-600' : 'text-neutral-400'}`} />
+                  <div className="flex items-center justify-between mb-3">
+                    <Target className={`w-5 h-5 ${isSelected ? 'text-blue-600' : 'text-slate-400'}`} />
                     {isSelected && (
-                      <span className="text-[10px] font-bold uppercase bg-blue-600 text-white px-2 py-0.5 rounded-full">
+                      <span className="text-[10px] font-extrabold uppercase bg-blue-600 text-white px-2 py-0.5 rounded-full">
                         Selecionado
                       </span>
                     )}
                   </div>
                   <div>
-                    <h4 className="font-bold text-sm text-neutral-900">{label}</h4>
+                    <h4 className="font-bold text-sm text-slate-900">{label}</h4>
                   </div>
                 </button>
               );
@@ -211,24 +223,24 @@ export const DiagnosticAndGoalView: React.FC<DiagnosticAndGoalViewProps> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-neutral-700 mb-1">
-              Conte mais sobre sua necessidade (opcional)
+            <label className="block text-xs font-bold text-slate-700 mb-1.5">
+              Conte mais sobre sua necessidade específica (opcional)
             </label>
             <textarea
               rows={3}
-              placeholder="Ex: Gostaria de treinar apresentações corporativas para reuniões com times globais."
+              placeholder="Ex: Gostaria de treinar apresentações corporativas para reuniões com times globais em tecnologia."
               value={goalDescription}
               onChange={(e) => setGoalDescription(e.target.value)}
-              className="w-full p-3 text-xs border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-3.5 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
             />
           </div>
 
-          <div className="flex justify-end pt-4 border-t border-neutral-100">
+          <div className="flex justify-end pt-4 border-t border-slate-100">
             <button
               onClick={() => setStep('quiz')}
-              className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white text-xs font-bold rounded-xl shadow-xs transition-all flex items-center gap-2"
+              className="ed-btn-primary px-6 py-3 text-xs font-bold rounded-xl flex items-center gap-2 cursor-pointer"
             >
-              <span>Continuar para Diagnóstico de Nível</span>
+              <span>Continuar para o Teste CEFR</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -237,22 +249,22 @@ export const DiagnosticAndGoalView: React.FC<DiagnosticAndGoalViewProps> = ({
 
       {/* STEP 2: TESTE DE NÍVEL (QUIZ) */}
       {step === 'quiz' && (
-        <div className="bg-white rounded-2xl border border-neutral-200 p-6 shadow-xs space-y-6 animate-in fade-in duration-200">
+        <div className="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 space-y-6 shadow-xs">
           <div className="flex items-center justify-between">
             <div>
-              <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">
+              <span className="text-xs font-bold text-blue-600 uppercase tracking-wider block">
                 Questão {currentQuestionIdx + 1} de {questions.length}
               </span>
-              <h3 className="text-lg font-bold text-neutral-900 mt-1">
+              <h3 className="text-lg sm:text-xl font-black text-slate-900 mt-1">
                 {questions[currentQuestionIdx].question}
               </h3>
             </div>
-            <div className="text-xs font-bold text-neutral-400 bg-neutral-100 px-2.5 py-1 rounded-lg">
+            <div className="text-xs font-bold text-slate-600 bg-slate-100 border border-slate-200 px-3 py-1 rounded-xl">
               {ProficiencyLevelLabels[questions[currentQuestionIdx].level].split(' - ')[0]}
             </div>
           </div>
 
-          <div className="space-y-2.5">
+          <div className="space-y-3">
             {questions[currentQuestionIdx].options.map((opt, optIdx) => {
               const isSelected = answers[currentQuestionIdx] === optIdx;
               return (
@@ -260,38 +272,38 @@ export const DiagnosticAndGoalView: React.FC<DiagnosticAndGoalViewProps> = ({
                   key={optIdx}
                   type="button"
                   onClick={() => handleSelectOption(optIdx)}
-                  className={`w-full p-3.5 text-left rounded-xl border text-xs font-medium transition-all flex items-center justify-between ${
+                  className={`w-full p-4 text-left rounded-2xl border text-xs font-medium transition-all flex items-center justify-between cursor-pointer ${
                     isSelected
-                      ? 'border-blue-600 bg-blue-50 text-blue-950 font-bold ring-2 ring-blue-400/20'
-                      : 'border-neutral-200 hover:bg-neutral-50 text-neutral-800'
+                      ? 'border-blue-600 bg-blue-50/60 text-blue-900 font-bold ring-2 ring-blue-500/20'
+                      : 'border-slate-200 hover:bg-slate-50 text-slate-700'
                   }`}
                 >
-                  <span>{opt}</span>
+                  <span className="text-sm font-semibold">{opt}</span>
                   <div
-                    className={`w-4 h-4 rounded-full border flex items-center justify-center ${
-                      isSelected ? 'border-blue-600 bg-blue-600' : 'border-neutral-300'
+                    className={`w-5 h-5 rounded-full border flex items-center justify-center ${
+                      isSelected ? 'border-blue-600 bg-blue-600 text-white' : 'border-slate-300'
                     }`}
                   >
-                    {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                    {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
                   </div>
                 </button>
               );
             })}
           </div>
 
-          <div className="flex items-center justify-between pt-4 border-t border-neutral-100">
+          <div className="flex items-center justify-between pt-4 border-t border-slate-100">
             <button
               onClick={() => setStep('goal')}
-              className="text-xs font-semibold text-neutral-500 hover:text-neutral-700"
+              className="text-xs font-semibold text-slate-500 hover:text-slate-800 cursor-pointer"
             >
-              Voltar ao objetivo
+              ← Voltar ao objetivo
             </button>
             <button
               onClick={handleNextQuestion}
               disabled={answers[currentQuestionIdx] === undefined}
-              className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white text-xs font-bold rounded-xl shadow-xs transition-all flex items-center gap-2 disabled:opacity-50"
+              className="ed-btn-primary px-6 py-2.5 text-xs font-bold rounded-xl flex items-center gap-2 disabled:opacity-40 cursor-pointer"
             >
-              <span>{currentQuestionIdx === questions.length - 1 ? 'Concluir Teste' : 'Próxima'}</span>
+              <span>{currentQuestionIdx === questions.length - 1 ? 'Concluir Diagnóstico' : 'Próxima Questão'}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -300,35 +312,38 @@ export const DiagnosticAndGoalView: React.FC<DiagnosticAndGoalViewProps> = ({
 
       {/* STEP 3: RESULTADO & MATCHING */}
       {step === 'result' && (
-        <div className="bg-white rounded-2xl border border-neutral-200 p-6 sm:p-8 shadow-xs space-y-6 text-center animate-in fade-in zoom-in-95 duration-200">
-          <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-blue-600 via-sky-500 to-cyan-500 text-white flex items-center justify-center mx-auto shadow-md">
+        <div className="bg-white rounded-3xl border border-slate-200/90 p-8 sm:p-10 space-y-6 text-center shadow-xs">
+          <div className="w-16 h-16 rounded-3xl bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center mx-auto shadow-sm">
             <Award className="w-8 h-8" />
           </div>
 
           <div>
-            <h3 className="text-xl font-black text-neutral-900">Diagnóstico Concluído com Sucesso!</h3>
-            <p className="text-xs text-neutral-500 mt-1">
-              Analisamos seu perfil e encontramos o nível ideal para o seu ponto de partida.
+            <span className="text-xs font-extrabold tracking-wider uppercase text-emerald-700 block mb-1">
+              Diagnóstico Concluído com Sucesso
+            </span>
+            <h3 className="text-2xl font-black text-slate-900">Seu Nível e Rota Pedagógica</h3>
+            <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-md mx-auto">
+              Seu perfil foi processado e calculamos a pontuação de compatibilidade com os professores ativos.
             </p>
           </div>
 
-          <div className="max-w-md mx-auto p-5 bg-gradient-to-br from-slate-50 to-blue-50/50 rounded-2xl border border-blue-100 space-y-3">
-            <div className="flex items-center justify-between text-xs text-neutral-500">
-              <span>Seu Nível Estimado (CEFR):</span>
-              <span className="font-bold text-blue-700">
+          <div className="max-w-md mx-auto p-5 bg-slate-50 rounded-2xl border border-slate-200 space-y-3 text-xs text-left">
+            <div className="flex items-center justify-between">
+              <span className="text-slate-500 font-medium">Nível Estimado (CEFR):</span>
+              <span className="font-extrabold text-blue-600 text-sm">
                 {ProficiencyLevelLabels[calculatedLevel]}
               </span>
             </div>
 
-            <div className="flex items-center justify-between text-xs text-neutral-500">
-              <span>Objetivo Definido:</span>
-              <span className="font-bold text-cyan-700">
+            <div className="flex items-center justify-between">
+              <span className="text-slate-500 font-medium">Foco Selecionado:</span>
+              <span className="font-extrabold text-emerald-700">
                 {LearningGoalLabels[selectedGoal]}
               </span>
             </div>
 
             {goalDescription && (
-              <div className="text-left text-xs text-neutral-600 border-t border-neutral-200/60 pt-2 italic">
+              <div className="text-slate-600 border-t border-slate-200 pt-2 text-xs italic">
                 "{goalDescription}"
               </div>
             )}
@@ -338,16 +353,16 @@ export const DiagnosticAndGoalView: React.FC<DiagnosticAndGoalViewProps> = ({
             <button
               onClick={handleSaveAll}
               disabled={isSaving}
-              className="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white text-xs font-bold rounded-xl shadow-md transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+              className="w-full sm:w-auto ed-btn-primary px-8 py-3.5 text-xs font-bold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
             >
-              <Sparkles className="w-4 h-4" />
-              <span>{isSaving ? 'Salvando...' : 'Salvar Perfil e Ver Professores Recomendados'}</span>
+              <Zap className="w-4 h-4" />
+              <span>{isSaving ? 'Salvando...' : 'Salvar Perfil e Ver Professores'}</span>
             </button>
             <button
               onClick={() => setStep('goal')}
-              className="w-full sm:w-auto px-5 py-3 text-xs font-semibold text-neutral-600 hover:bg-neutral-100 rounded-xl transition-colors"
+              className="w-full sm:w-auto ed-btn-outline px-5 py-3.5 text-xs font-semibold rounded-xl cursor-pointer"
             >
-              Refazer
+              Refazer Diagnóstico
             </button>
           </div>
         </div>

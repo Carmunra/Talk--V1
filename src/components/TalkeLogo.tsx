@@ -35,16 +35,16 @@ export const TalkeLogo: React.FC<TalkeLogoProps> = ({
         >
           <defs>
             <linearGradient id="iconLetterEGrad" x1="358" y1="260" x2="410" y2="260" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#37A9DA" />
-              <stop offset="100%" stopColor="#36C3DF" />
+              <stop offset="0%" stopColor="#0066F6" />
+              <stop offset="100%" stopColor="#0284C7" />
             </linearGradient>
             <linearGradient id="iconSpeechGrad" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stopColor="#F85175" />
-              <stop offset="100%" stopColor="#FB8E5B" />
+              <stop offset="0%" stopColor="#F43F5E" />
+              <stop offset="100%" stopColor="#FB923C" />
             </linearGradient>
             <linearGradient id="iconChevronGrad" x1="0" y1="1" x2="0.5" y2="0">
-              <stop offset="0%" stopColor="#F76E4B" />
-              <stop offset="100%" stopColor="#FB9F68" />
+              <stop offset="0%" stopColor="#F43F5E" />
+              <stop offset="100%" stopColor="#FB923C" />
             </linearGradient>
           </defs>
 
@@ -83,11 +83,11 @@ export const TalkeLogo: React.FC<TalkeLogoProps> = ({
     );
   }
 
-  // Exact Square Card variant (reproduces the user's uploaded image.png pixel-perfect)
+  // Exact Square Card variant with crisp white background
   if (variant === 'card') {
     return (
       <div
-        className={`inline-flex items-center justify-center select-none rounded-2xl overflow-hidden shadow-xs border border-blue-100/60 ${dimensions.card} ${className}`}
+        className={`inline-flex items-center justify-center select-none rounded-2xl overflow-hidden shadow-sm border border-slate-200/80 bg-white ${dimensions.card} ${className}`}
       >
         <svg
           viewBox="0 0 500 500"
@@ -96,34 +96,24 @@ export const TalkeLogo: React.FC<TalkeLogoProps> = ({
           xmlns="http://www.w3.org/2000/svg"
         >
           <defs>
-            <radialGradient id="cardBgGlow" cx="50%" cy="48%" r="55%" fx="50%" fy="48%">
-              <stop offset="0%" stopColor="#FFFFFF" />
-              <stop offset="75%" stopColor="#F9FBFE" />
-              <stop offset="100%" stopColor="#EFF6FD" />
-            </radialGradient>
             <linearGradient id="cardTalkeGrad" x1="46" y1="260" x2="410" y2="260" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#2D5CA7" />
-              <stop offset="22%" stopColor="#3273BF" />
-              <stop offset="48%" stopColor="#368DCB" />
-              <stop offset="76%" stopColor="#37A9DA" />
-              <stop offset="100%" stopColor="#36C3DF" />
+              <stop offset="0%" stopColor="#0066F6" />
+              <stop offset="60%" stopColor="#0284C7" />
+              <stop offset="100%" stopColor="#0098DB" />
             </linearGradient>
             <linearGradient id="cardBubbleGrad" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stopColor="#F85175" />
-              <stop offset="50%" stopColor="#FA6D79" />
-              <stop offset="100%" stopColor="#FB8E5B" />
+              <stop offset="0%" stopColor="#F43F5E" />
+              <stop offset="50%" stopColor="#FB7185" />
+              <stop offset="100%" stopColor="#FB923C" />
             </linearGradient>
             <linearGradient id="cardChevronGrad" x1="0" y1="1" x2="0.5" y2="0">
-              <stop offset="0%" stopColor="#F76E4B" />
-              <stop offset="100%" stopColor="#FB9F68" />
+              <stop offset="0%" stopColor="#F43F5E" />
+              <stop offset="100%" stopColor="#FB923C" />
             </linearGradient>
-            <filter id="cardSoftShadow" x="-15%" y="-15%" width="130%" height="130%">
-              <feDropShadow dx="0" dy="3" stdDeviation="3.5" floodColor="#F96350" floodOpacity="0.25" />
-            </filter>
           </defs>
 
           {/* Background */}
-          <rect width="500" height="500" fill="url(#cardBgGlow)" />
+          <rect width="500" height="500" fill="#FFFFFF" rx="60" />
 
           {/* Letters TALKÊ */}
           <g stroke="url(#cardTalkeGrad)" strokeWidth="20" strokeLinecap="round" strokeLinejoin="round">
@@ -150,7 +140,7 @@ export const TalkeLogo: React.FC<TalkeLogoProps> = ({
           </g>
 
           {/* Speech Bubble & Roof Accent on 'E' */}
-          <g filter="url(#cardSoftShadow)">
+          <g>
             <path
               d="M 368 174 L 388 150 L 408 174"
               stroke="url(#cardChevronGrad)"
@@ -173,26 +163,26 @@ export const TalkeLogo: React.FC<TalkeLogoProps> = ({
           </g>
 
           {/* Subtitle: — English — */}
-          <line x1="112" y1="360" x2="162" y2="360" stroke="#48C3DE" strokeWidth="2.5" strokeLinecap="round" />
+          <line x1="112" y1="360" x2="162" y2="360" stroke="#0098DB" strokeWidth="2.5" strokeLinecap="round" />
           <text
             x="236"
             y="368"
             fontFamily="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif"
             fontSize="33"
-            fontWeight="500"
+            fontWeight="700"
             letterSpacing="4px"
-            fill="#20395D"
+            fill="#0C2340"
             textAnchor="middle"
           >
             English
           </text>
-          <line x1="310" y1="360" x2="360" y2="360" stroke="#FBA07B" strokeWidth="2.5" strokeLinecap="round" />
+          <line x1="310" y1="360" x2="360" y2="360" stroke="#FB923C" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
       </div>
     );
   }
 
-  // Full Horizontal Vector Logo (identical to image.png, responsive & crisp)
+  // Full Horizontal Vector Logo
   return (
     <div className={`inline-flex items-center select-none ${className}`}>
       <svg
@@ -203,32 +193,25 @@ export const TalkeLogo: React.FC<TalkeLogoProps> = ({
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
-          {/* Main TALKÊ letters gradient from royal ocean blue to turquoise cyan */}
+          {/* Main TALKÊ letters gradient */}
           <linearGradient id="talkeGradHorizontal" x1="46" y1="260" x2="410" y2="260" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#2D5CA7" />
-            <stop offset="22%" stopColor="#3273BF" />
-            <stop offset="48%" stopColor="#368DCB" />
-            <stop offset="76%" stopColor="#37A9DA" />
-            <stop offset="100%" stopColor="#36C3DF" />
+            <stop offset="0%" stopColor="#0066F6" />
+            <stop offset="60%" stopColor="#0284C7" />
+            <stop offset="100%" stopColor="#0098DB" />
           </linearGradient>
 
-          {/* Speech bubble gradient (coral-red to orange-peach) */}
+          {/* Speech bubble gradient */}
           <linearGradient id="bubbleGradHorizontal" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#F85175" />
-            <stop offset="50%" stopColor="#FA6D79" />
-            <stop offset="100%" stopColor="#FB8E5B" />
+            <stop offset="0%" stopColor="#F43F5E" />
+            <stop offset="50%" stopColor="#FB7185" />
+            <stop offset="100%" stopColor="#FB923C" />
           </linearGradient>
 
           {/* Circumflex chevron gradient */}
           <linearGradient id="chevronGradHorizontal" x1="0" y1="1" x2="0.5" y2="0">
-            <stop offset="0%" stopColor="#F76E4B" />
-            <stop offset="100%" stopColor="#FB9F68" />
+            <stop offset="0%" stopColor="#F43F5E" />
+            <stop offset="100%" stopColor="#FB923C" />
           </linearGradient>
-
-          {/* Soft shadow for speech bubble & circumflex */}
-          <filter id="softGlowHorizontal" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#F96350" floodOpacity="0.22" />
-          </filter>
         </defs>
 
         {/* ================= TALKÊ Letters ================= */}
@@ -262,7 +245,7 @@ export const TalkeLogo: React.FC<TalkeLogoProps> = ({
         </g>
 
         {/* ================= Speech Bubble & Circumflex on 'E' ================= */}
-        <g filter="url(#softGlowHorizontal)">
+        <g>
           {/* Circumflex Chevron Roof (^) */}
           <path
             d="M 368 174 L 388 150 L 408 174"
@@ -292,24 +275,24 @@ export const TalkeLogo: React.FC<TalkeLogoProps> = ({
         {showSubtitle && (
           <g>
             {/* Left cyan line */}
-            <line x1="112" y1="360" x2="162" y2="360" stroke="#48C3DE" strokeWidth="2.5" strokeLinecap="round" />
+            <line x1="112" y1="360" x2="162" y2="360" stroke="#0098DB" strokeWidth="2.5" strokeLinecap="round" />
 
-            {/* "English" word in dark indigo sans */}
+            {/* "English" word in deep navy */}
             <text
               x="236"
               y="368"
               fontFamily="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif"
               fontSize="33"
-              fontWeight="500"
+              fontWeight="700"
               letterSpacing="4px"
-              fill="#20395D"
+              fill="#0C2340"
               textAnchor="middle"
             >
               English
             </text>
 
             {/* Right coral-peach line */}
-            <line x1="310" y1="360" x2="360" y2="360" stroke="#FBA07B" strokeWidth="2.5" strokeLinecap="round" />
+            <line x1="310" y1="360" x2="360" y2="360" stroke="#FB923C" strokeWidth="2.5" strokeLinecap="round" />
           </g>
         )}
       </svg>
