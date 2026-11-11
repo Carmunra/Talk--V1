@@ -12,7 +12,7 @@ O operador escolheu hospedar na AWS e manter Firebase para login/banco. O fluxo 
 
 ## Desenvolvimento
 
-Requisitos: Node 22.17+, npm 10 e Java 21 para o emulador Firestore.
+Requisitos: Node 22.23.4+, npm 10 e Java 21 para o emulador Firestore.
 
 Copie .env.example e preencha o projeto Firebase e sua configuração pública web. Use um projeto de desenvolvimento separado, com Application Default Credentials. Instale com npm ci e execute npm run dev. O servidor não cria dados de demonstração, não usa banco em memória e falha quando o banco está indisponível.
 

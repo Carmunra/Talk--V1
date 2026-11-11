@@ -14,6 +14,8 @@ Esta etapa ajusta a experiência e o vídeo da plataforma existente. Não regist
 
 ## Evidência local
 
+A primeira execução do CI identificou 26 alertas no conjunto de dependências de outubro. A revisão atual atualiza os componentes corrigidos, eleva o Node mínimo/CI/container para 22.23.4 e fixa as correções transitivas de fast-uri, undici, glob e minimatch. Glob 14/minimatch 11 substituem versões principais anteriores nas ferramentas de cobertura/Firebase; por isso os testes completos são necessários, sem reduzir limites de cobertura ou ignorar a auditoria. O lockfile foi gerado em diretório limpo e preserva binários de Windows/Linux/macOS. A consulta npm audit de 11/11/2026 retornou zero vulnerabilidades conhecidas para o conjunto corrigido; isso não certifica ausência de falhas na aplicação ou nos serviços externos.
+
 | Verificação                                              | Resultado desta revisão                                                              |
 | -------------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | Unitários e integração                                   | 166 aprovados                                                                        |

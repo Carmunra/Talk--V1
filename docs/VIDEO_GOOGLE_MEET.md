@@ -29,3 +29,5 @@ Registrar o relato pela fila de segurança, limitar acesso às evidências, comu
 - Compatibilidade dos termos e limites efetivos da conta Google com a oferta comercial.
 
 Os testes automatizados usam endereços fictícios válidos sintaticamente; não realizam uma chamada Google e não certificam controles do provedor. Se a conta não oferecer os controles necessários, não habilitar o atendimento de menores antes de ajustar o serviço.
+
+Referências oficiais consultadas em 11/11/2026: [acesso à reunião e diferenças das contas pessoais](https://support.google.com/meet/answer/9302870?co=GENIE.Platform%3DDesktop&hl=pt-BR) e [admissão, remoção e encerramento](https://support.google.com/meet/answer/9303164?co=GENIE.Platform%3DDesktop&hl=pt-BR). O Google exige gerenciamento de organizadores para encerrar para todos, e a opção de acesso Restrito não está disponível em contas pessoais. Não prometer os mesmos controles para todas as contas; validar a conta efetivamente usada.
