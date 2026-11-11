@@ -1,0 +1,15 @@
+{
+  "hosting": {
+    "public": "infra/firebase-hosting/public",
+    "ignore": ["firebase.hosting.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "**",
+        "run": {
+          "serviceId": "talke",
+          "region": "southamerica-east1"
+        }
+      }
+    ]
+  }
+}

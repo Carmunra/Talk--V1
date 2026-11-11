@@ -1,0 +1,110 @@
+{
+  "entities": {
+    "students": {
+      "title": "Students",
+      "description": "Talkê student accounts with wallet credits and diagnostics",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "avatar": { "type": "string" },
+        "creditsBalance": { "type": "number" },
+        "cefrLevel": { "type": "string" },
+        "targetLanguage": { "type": "string" },
+        "learningGoal": { "type": "string" },
+        "preferredShifts": { "type": "array" },
+        "budgetPerHour": { "type": "number" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "name", "email", "creditsBalance"]
+    },
+    "teachers": {
+      "title": "Teachers",
+      "description": "Talkê verified language teachers with rates and schedules",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "avatar": { "type": "string" },
+        "headline": { "type": "string" },
+        "bio": { "type": "string" },
+        "hourlyRate": { "type": "number" },
+        "rating": { "type": "number" },
+        "totalReviews": { "type": "number" },
+        "languages": { "type": "array" },
+        "videoSampleUrl": { "type": "string" },
+        "availability": { "type": "array" },
+        "earnings": { "type": "number" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "name", "hourlyRate"]
+    },
+    "lessons": {
+      "title": "Lessons",
+      "description": "Scheduled or completed 1-on-1 language lessons",
+      "properties": {
+        "id": { "type": "string" },
+        "studentId": { "type": "string" },
+        "studentName": { "type": "string" },
+        "teacherId": { "type": "string" },
+        "teacherName": { "type": "string" },
+        "scheduledAt": { "type": "string" },
+        "durationMinutes": { "type": "number" },
+        "price": { "type": "number" },
+        "talkeFee": { "type": "number" },
+        "teacherNet": { "type": "number" },
+        "status": { "type": "string" },
+        "meetingUrl": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "studentId", "teacherId", "price", "status"]
+    },
+    "payments": {
+      "title": "Payments",
+      "description": "Credit card and PIX transactions for credits purchase",
+      "properties": {
+        "id": { "type": "string" },
+        "studentId": { "type": "string" },
+        "amount": { "type": "number" },
+        "method": { "type": "string" },
+        "status": { "type": "string" },
+        "cardBrand": { "type": "string" },
+        "lastFour": { "type": "string" },
+        "description": { "type": "string" },
+        "gatewayTransactionId": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "studentId", "amount", "status"]
+    },
+    "reviews": {
+      "title": "Reviews",
+      "description": "Student reviews and ratings for teachers",
+      "properties": {
+        "id": { "type": "string" },
+        "lessonId": { "type": "string" },
+        "teacherId": { "type": "string" },
+        "studentId": { "type": "string" },
+        "studentName": { "type": "string" },
+        "rating": { "type": "number" },
+        "comment": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "teacherId", "studentId", "rating"]
+    },
+    "notifications": {
+      "title": "Notifications",
+      "description": "Real-time user notifications",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "userRole": { "type": "string" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "type": { "type": "string" },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "title", "message"]
+    }
+  }
+}
