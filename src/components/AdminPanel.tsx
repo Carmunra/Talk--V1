@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { api, post } from '../lib/apiClient';
-export function AdminPanel() {
+export function AdminPanel({ subscriptionsEnabled = false }: { subscriptionsEnabled?: boolean }) {
   const [queue, setQueue] = useState<any>(null),
     [message, setMessage] = useState(''),
     [busy, setBusy] = useState(false);
-  const load = async () => setQueue(await api('/api/admin/queue'));
+  const load = async () => {
+    const [base, financial] = await Promise.all([
+      api<any>('/api/admin/queue'),
+      subscriptionsEnabled ? api<any>('/api/admin/subscriptions/status') : Promise.resolve(null),
+    ]);
+    setQueue({ ...base, financial });
+  };
   useEffect(() => {
     load().catch((e) => setMessage(e.message));
   }, []);
@@ -23,6 +29,40 @@ export function AdminPanel() {
   return (
     <section className="card space-y-4">
       <h1 className="text-2xl font-bold">Atendimento e aprovações</h1>
+      <p>
+        Comece pelos relatos de segurança e operações financeiras em análise. Depois, acompanhe os
+        cadastros e solicitações.
+      </p>
+      {queue && (
+        <section
+          className="rounded-xl bg-slate-50 p-4 space-y-2"
+          aria-label="Prioridades de atendimento"
+        >
+          <h2 className="font-bold">Fila de prioridades</h2>
+          <p className="text-sm">
+            Resumo dos registros exibidos abaixo. As listas financeiras mostram até 100 registros de
+            cada tipo por consulta.
+          </p>
+          {[
+            ['reports', 'Relatos de segurança', queue.reports?.length || 0],
+            [
+              'admin-finance',
+              'Repasses e compras em acompanhamento',
+              (queue.financial?.checkouts?.length || 0) + (queue.financial?.payouts?.length || 0),
+            ],
+            ['refunds', 'Reembolsos em acompanhamento', queue.refunds?.length || 0],
+            ['privacyRequests', 'Solicitações de privacidade', queue.privacyRequests?.length || 0],
+            ['ageReviews', 'Verificações de idade', queue.ageReviews?.length || 0],
+            ['guardians', 'Vínculos com responsáveis', queue.guardians?.length || 0],
+            ['teachers', 'Aprovações de professores', queue.teachers?.length || 0],
+            ['roomClosures', 'Acesso a salas em acompanhamento', queue.roomClosures?.length || 0],
+          ].map(([anchor, label, count]) => (
+            <p key={anchor}>
+              <a href={'#' + anchor}>{label}</a> · {count} pendência(s)
+            </p>
+          ))}
+        </section>
+      )}
       <button disabled={busy} onClick={() => void action(load)}>
         Atualizar fila
       </button>
@@ -41,7 +81,7 @@ export function AdminPanel() {
         ['teachers', 'Professores', 'teacher'],
         ['guardians', 'Vínculos com responsáveis', 'guardian'],
       ].map(([key, label, kind]) => (
-        <div key={key}>
+        <div key={key} id={key}>
           <h2 className="font-bold">{label}</h2>
           {queue?.[key]?.map((row: any) => (
             <form
@@ -81,7 +121,7 @@ export function AdminPanel() {
         ['privacyRequests', 'Solicitações de privacidade', 'privacy'],
         ['reports', 'Relatos de segurança', 'safety'],
       ].map(([key, label, kind]) => (
-        <div key={key}>
+        <div key={key} id={key}>
           <h2 className="font-bold">{label}</h2>
           {queue?.[key]?.map((row: any) => (
             <form
@@ -118,13 +158,17 @@ export function AdminPanel() {
           ))}
         </div>
       ))}
-      <h2 className="font-bold">Reembolsos que exigem atendimento</h2>
+      <h2 id="refunds" className="font-bold">
+        Reembolsos que exigem atendimento
+      </h2>
       {queue?.refunds?.map((row: any) => (
         <p key={row.id}>
           {row.id} · pedido {row.orderId} · professor {row.teacherId}
         </p>
       ))}
-      <h2 className="font-bold">Salas com encerramento pendente</h2>
+      <h2 id="roomClosures" className="font-bold">
+        Salas com encerramento pendente
+      </h2>
       {queue?.roomClosures?.map((row: any) => (
         <p key={row.id}>Aula {row.lessonId} · acionar manutenção/suporte do provedor</p>
       ))}

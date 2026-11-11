@@ -16,6 +16,8 @@ import { FakeGateway, student, teacher, other } from '../support/fixture';
 import { randomUUID } from 'node:crypto';
 import { MonthlySubscriptions } from '../../src/server/subscriptions';
 import { subscriptionFixture } from '../support/subscription-fixture';
+import { fixture } from '../support/fixture';
+import { VideoService } from '../../src/server/video';
 let env: RulesTestEnvironment;
 before(async () => {
   env = await initializeTestEnvironment({
@@ -71,6 +73,46 @@ test('Firestore transaction prevents two non-overlapping lessons from spending t
 after(async () => {
   await env.cleanup();
 });
+
+test('Firestore serializes competing Meet link claims across different paid lessons', async () => {
+  const f = await fixture();
+  f.config.videoProvider = 'google_meet';
+  const firebase = initializeApp({ projectId: 'demo-talke' }, 'meet-claim-race');
+  try {
+    const store = new FirestoreStore(getFirestore(firebase));
+    await store.transaction(async (tx) => {
+      tx.set('profiles', (await f.store.get('profiles', 'teacher'))!);
+      tx.set('teachers', (await f.store.get('teachers', 'teacher'))!);
+      for (const id of ['meet-race-first', 'meet-race-second'])
+        tx.set('lessons', {
+          id,
+          teacherId: 'teacher',
+          studentId: 'student',
+          payerId: 'student',
+          status: 'CONFIRMED',
+          isPaid: true,
+          scheduledAt: f.platform.now() + 3_600_000,
+          durationMinutes: 50,
+        });
+    });
+    const service = new VideoService(store, f.config, () => f.platform.now());
+    const results = await Promise.allSettled(
+      ['meet-race-first', 'meet-race-second'].map((id) =>
+        service.setMeetLink('teacher', id, {
+          url: 'https://meet.google.com/xyz-abcd-efg',
+          hostControlsConfirmed: true,
+        }),
+      ),
+    );
+    nodeAssert.equal(results.filter((r) => r.status === 'fulfilled').length, 1);
+    const rows = await Promise.all(
+      ['meet-race-first', 'meet-race-second'].map((id) => store.get('lesson_video_links', id)),
+    );
+    nodeAssert.equal(rows.filter(Boolean).length, 1);
+  } finally {
+    await deleteApp(firebase);
+  }
+});
 for (const identity of ['anonymous', 'student', 'teacher', 'admin']) {
   test(identity + ' cannot read or mutate private application collections directly', async () => {
     const db =
@@ -98,6 +140,8 @@ for (const identity of ['anonymous', 'student', 'teacher', 'admin']) {
       'asaas_recipients',
       'asaas_customers',
       'asaas_checkouts',
+      'lesson_video_links',
+      'meet_link_claims',
     ]) {
       await assertFails(getDoc(doc(db, name + '/student')));
       await assertFails(

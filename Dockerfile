@@ -1,4 +1,4 @@
-FROM node:22-bookworm-slim AS build
+FROM node:22.23.4-bookworm-slim AS build
 WORKDIR /app
 ENV CYPRESS_INSTALL_BINARY=0
 COPY package.json package-lock.json ./
@@ -10,7 +10,7 @@ ARG VITE_FIREBASE_PROJECT_ID
 ARG VITE_FIREBASE_APP_ID
 RUN npm run build
 
-FROM node:22-bookworm-slim AS runtime
+FROM node:22.23.4-bookworm-slim AS runtime
 ARG VITE_FIREBASE_PROJECT_ID
 LABEL com.talke.firebase.project=$VITE_FIREBASE_PROJECT_ID
 ENV NODE_ENV=production

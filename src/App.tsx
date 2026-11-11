@@ -22,6 +22,10 @@ import { Registration, FamilyForm, TeacherEditor, PrivacyPanel } from './compone
 import { AdminPanel } from './components/AdminPanel';
 import { AdminSubscriptions } from './components/AdminSubscriptions';
 import { Teacher, Student, UserRole } from './domain/types';
+import { LaunchNavigation } from './components/LaunchNavigation';
+import { LaunchHome, FirstLessonJourney } from './components/LaunchHome';
+import { MeetLinkForm } from './components/MeetLinkForm';
+import { TeacherEarnings } from './components/TeacherEarnings';
 import { TALKE_CURRICULUM_MATERIALS } from './data/talkeMaterials';
 const VirtualClassroomModal = lazy(() =>
   import('./components/VirtualClassroomModal').then((module) => ({
@@ -55,7 +59,8 @@ export default function App() {
     [checkouts, setCheckouts] = useState<PendingCheckout[]>([]),
     [purchase, setPurchase] = useState<MonthlyPlan | null>(null),
     [payments, setPayments] = useState<any[]>([]),
-    [notes, setNotes] = useState<any[]>([]);
+    [notes, setNotes] = useState<any[]>([]),
+    [earnings, setEarnings] = useState<any>(null);
   const [childId, setChildId] = useState(''),
     [student, setStudent] = useState<Student | null>(null);
   const [booking, setBooking] = useState<Teacher | null>(null),
@@ -91,6 +96,10 @@ export default function App() {
     setPayments(freshPayments);
     setSubscriptions(freshSubscriptions);
     setCheckouts(freshCheckouts);
+    if (role === 'TEACHER') {
+      const value = await api('/api/teachers/me/earnings');
+      if (same()) setEarnings(value);
+    }
     if (role === 'STUDENT' || childId) {
       const [freshStudent, freshNotes] = await Promise.all([
         api<Student>('/api/students/' + subjectId),
@@ -113,6 +122,7 @@ export default function App() {
   useEffect(() => {
     let cancelled = false;
     setLessons([]);
+    setEarnings(null);
     setPayments([]);
     setStudent(null);
     setNotes([]);
@@ -142,6 +152,10 @@ export default function App() {
         setPayments(ps);
         setSubscriptions(ss);
         setCheckouts(cs);
+        if (role === 'TEACHER') {
+          const value = await api('/api/teachers/me/earnings');
+          if (!cancelled) setEarnings(value);
+        }
         if (role === 'STUDENT' || childId) {
           const st = await api<Student>('/api/students/' + subjectId),
             ns = await api<any[]>('/api/progress?studentId=' + subjectId);
@@ -165,6 +179,9 @@ export default function App() {
     setChildId('');
     setMessage('');
   }, [firebaseUser?.uid]);
+  useEffect(() => {
+    if (active && location.pathname === '/') setTab('home');
+  }, [firebaseUser?.uid, active]);
   const action = async (work: () => Promise<unknown>, success = 'Operação concluída') => {
     setBusy(true);
     setMessage('');
@@ -255,14 +272,18 @@ export default function App() {
         </form>
       )}
       <div className="max-w-7xl mx-auto p-4 md:p-8">
-        <nav aria-label="Navegação" className="flex gap-2 mb-6 flex-wrap">
-          {[
+        <LaunchNavigation
+          items={[
+            ...(active ? [['home', 'Início']] : []),
             ['teachers', 'Professores'],
             ['plans', 'Planos'],
             ...(active
               ? [
                   ['lessons', 'Minhas aulas'],
-                  ['payments', 'Pagamentos'],
+                  [
+                    'payments',
+                    role === 'TEACHER' && !config.paymentsEnabled ? 'Repasses' : 'Pagamentos',
+                  ],
                   ['progress', 'Desenvolvimento'],
                   ['materials', 'Materiais'],
                 ]
@@ -274,16 +295,13 @@ export default function App() {
             ...(session?.isAdmin ? [['admin', 'Administração']] : []),
             ['privacy', 'Privacidade'],
             ['terms', 'Termos'],
-          ].map(([value, label]) => (
-            <button
-              className={tab === value ? 'selected' : ''}
-              key={value}
-              onClick={() => setTab(value)}
-            >
-              {label}
-            </button>
-          ))}
-        </nav>
+          ]}
+          selected={tab}
+          active={active}
+          role={role}
+          isAdmin={session?.isAdmin}
+          onNavigate={setTab}
+        />
         {(message || authError) && (
           <p role="status" className="p-4 mb-4 rounded-xl bg-blue-50">
             {message || authError}
@@ -306,6 +324,22 @@ export default function App() {
               ))}
             </select>
           </label>
+        )}
+        {firebaseUser && !loadingAuth && (
+          <FirstLessonJourney
+            session={session}
+            verifiedEmail={firebaseUser.emailVerified}
+            role={role}
+            hasPlan={selectedSubscriptions.some(
+              (s) => s.status !== 'CANCELLED' || s.cycles.some((c) => c.remaining > 0),
+            )}
+            hasLesson={lessons.some(
+              (l) => l.isPaid && (role === 'TEACHER' || l.studentId === subjectId),
+            )}
+            pendingCheckout={selectedCheckouts.length > 0}
+            config={config}
+            onNavigate={setTab}
+          />
         )}
         {tab === 'privacy' ? (
           <PrivacyNotice config={config} />
@@ -342,8 +376,12 @@ export default function App() {
           <PrivacyPanel subjectId={subjectId} />
         ) : tab === 'admin' && session?.isAdmin ? (
           <>
-            <AdminPanel />
-            {config.subscriptionsEnabled && <AdminSubscriptions />}
+            <AdminPanel subscriptionsEnabled={config.subscriptionsEnabled} />
+            {config.subscriptionsEnabled && (
+              <section id="admin-finance">
+                <AdminSubscriptions />
+              </section>
+            )}
           </>
         ) : firebaseUser &&
           session &&
@@ -359,6 +397,18 @@ export default function App() {
               Atualizar cadastro
             </button>
           </section>
+        ) : tab === 'home' && active ? (
+          <LaunchHome
+            session={session}
+            config={config}
+            lessons={lessons}
+            subscriptions={selectedSubscriptions}
+            checkouts={selectedCheckouts}
+            subjectId={subjectId}
+            earnings={earnings}
+            onNavigate={setTab}
+            onEnter={setRoom}
+          />
         ) : tab === 'teachers' ? (
           <>
             {!firebaseUser && <SchoolOverview minorsEnabled={config.minorsEnabled} />}
@@ -370,7 +420,7 @@ export default function App() {
               />
             )}
             <TeacherDirectory
-              monthlyOnly={config.subscriptionsEnabled && !config.paymentsEnabled}
+              monthlyOnly={!config.paymentsEnabled}
               teachers={teachers}
               currentStudent={student}
               onSelectTeacher={setProfileTeacher}
@@ -393,7 +443,11 @@ export default function App() {
         ) : tab === 'family' ? (
           <FamilyForm config={config} onSaved={refreshProfiles} />
         ) : tab === 'teacher-profile' && session?.teacher ? (
-          <TeacherEditor teacher={session.teacher} onSaved={refreshProfiles} />
+          <TeacherEditor
+            teacher={session.teacher}
+            monthlyOnly={!config.paymentsEnabled}
+            onSaved={refreshProfiles}
+          />
         ) : tab === 'diagnostic' && student ? (
           <DiagnosticAndGoalView
             currentStudent={student}
@@ -441,6 +495,12 @@ export default function App() {
                     )[l.status] || 'Em andamento'}{' '}
                     · {l.isPaid ? 'Pagamento confirmado' : 'Sem confirmação de pagamento'}
                   </p>
+                  {config.videoProvider === 'google_meet' &&
+                    l.isPaid &&
+                    ['CONFIRMED', 'IN_PROGRESS'].includes(l.status) &&
+                    l.teacherId === firebaseUser?.uid && (
+                      <MeetLinkForm lessonId={l.id} onSaved={refresh} />
+                    )}
                   <div className="flex flex-wrap gap-3">
                     {l.status === 'REQUESTED' && l.payerId === firebaseUser?.uid && (
                       <button
@@ -604,38 +664,49 @@ export default function App() {
             <button disabled={busy} onClick={() => void action(refresh, 'Status atualizado')}>
               Atualizar status
             </button>
-            <p>
-              Pagamentos por aula no Checkout Pro. O servidor confirma o status após consulta ao
-              Mercado Pago.
-            </p>
-            {role === 'TEACHER' && (
+            {role === 'TEACHER' && <TeacherEarnings data={earnings} />}
+            {config.paymentsEnabled && (
               <>
                 <p>
-                  A parcela estimada desconta 15% Talkê e ainda está sujeita às tarifas do Mercado
-                  Pago. Consulte disponibilidade e retiradas na sua conta.
+                  Pagamentos por aula no Checkout Pro. O servidor confirma o status após consulta ao
+                  Mercado Pago.
                 </p>
-                <a href="https://www.mercadopago.com.br/home" rel="noreferrer" target="_blank">
-                  Abrir minha conta Mercado Pago
-                </a>
+                {role === 'TEACHER' && (
+                  <>
+                    <p>
+                      A parcela estimada desconta 15% Talkê e ainda está sujeita às tarifas do
+                      Mercado Pago. Consulte disponibilidade e retiradas na sua conta.
+                    </p>
+                    <a href="https://www.mercadopago.com.br/home" rel="noreferrer" target="_blank">
+                      Abrir minha conta Mercado Pago
+                    </a>
+                  </>
+                )}
+                {payments.map((p) => (
+                  <div key={p.id} className="border-t pt-3">
+                    Aula {p.lessonId} · R$ {(p.amountCents / 100).toFixed(2)} ·{' '}
+                    {(
+                      {
+                        PENDING: 'Aguardando pagamento',
+                        PAID: 'Pago',
+                        REFUND_PENDING: 'Reembolso em acompanhamento',
+                        REFUNDED: 'Reembolsado',
+                        CANCELLED: 'Cancelado',
+                        DISPUTED: 'Contestação',
+                        PARTIAL_REFUND_REVIEW: 'Reembolso parcial em análise',
+                      } as any
+                    )[p.status] || p.status}
+                  </div>
+                ))}
+                {!payments.length && <p>Não há pagamentos avulsos nesta conta.</p>}
               </>
             )}
-            {payments.map((p) => (
-              <div key={p.id} className="border-t pt-3">
-                Aula {p.lessonId} · R$ {(p.amountCents / 100).toFixed(2)} ·{' '}
-                {(
-                  {
-                    PENDING: 'Aguardando pagamento',
-                    PAID: 'Pago',
-                    REFUND_PENDING: 'Reembolso em acompanhamento',
-                    REFUNDED: 'Reembolsado',
-                    CANCELLED: 'Cancelado',
-                    DISPUTED: 'Contestação',
-                    PARTIAL_REFUND_REVIEW: 'Reembolso parcial em análise',
-                  } as any
-                )[p.status] || p.status}
-              </div>
-            ))}
-            {!payments.length && <p>Não há pagamentos nesta conta.</p>}
+            {!config.paymentsEnabled && role !== 'TEACHER' && (
+              <>
+                <p>Consulte suas mensalidades, validades e renovação na área Meu plano.</p>
+                <button onClick={() => setTab('plans')}>Ver meu plano e cobranças</button>
+              </>
+            )}
           </section>
         ) : tab === 'privacy-panel' && subjectId ? (
           <PrivacyPanel subjectId={subjectId} />
@@ -681,7 +752,7 @@ export default function App() {
             ))}
           </section>
         ) : tab === 'admin' && session?.isAdmin ? (
-          <AdminPanel />
+          <AdminPanel subscriptionsEnabled={config.subscriptionsEnabled} />
         ) : (
           <p>Selecione uma opção disponível para sua conta.</p>
         )}
@@ -732,7 +803,7 @@ export default function App() {
       )}
       {profileTeacher && (
         <TeacherProfileModal
-          monthlyOnly={config.subscriptionsEnabled && !config.paymentsEnabled}
+          monthlyOnly={!config.paymentsEnabled}
           teacher={profileTeacher}
           reviews={[]}
           onClose={() => setProfileTeacher(null)}

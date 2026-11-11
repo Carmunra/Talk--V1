@@ -18,16 +18,21 @@ export function preflight(env: NodeJS.ProcessEnv, monthlyLaunch = false) {
     'VITE_FIREBASE_PROJECT_ID',
     'VITE_FIREBASE_AUTH_DOMAIN',
     'VITE_FIREBASE_APP_ID',
-    'DAILY_API_KEY',
-    'DAILY_DOMAIN',
   ])
     if (!env[name]?.trim()) issues.push(`${name} obrigatório`);
+  if ((env.VIDEO_PROVIDER || 'daily') === 'daily')
+    for (const name of ['DAILY_API_KEY', 'DAILY_DOMAIN'])
+      if (!env[name]?.trim()) issues.push(`${name} obrigatório`);
   if (env.LEGAL_APPROVED !== 'true') issues.push('Aprovação jurídica pendente');
   if (env.VITE_FIREBASE_PROJECT_ID && env.FIREBASE_PROJECT_ID !== env.VITE_FIREBASE_PROJECT_ID)
     issues.push('Projeto Firebase do navegador e do servidor devem corresponder');
   if (env.FIREBASE_PROJECT_ID?.startsWith('demo-'))
     issues.push('Projeto demo não pode ser publicado');
-  if (env.DAILY_DOMAIN && !/^[a-zA-Z0-9-]+$/.test(env.DAILY_DOMAIN))
+  if (
+    (env.VIDEO_PROVIDER || 'daily') === 'daily' &&
+    env.DAILY_DOMAIN &&
+    !/^[a-zA-Z0-9-]+$/.test(env.DAILY_DOMAIN)
+  )
     issues.push('DAILY_DOMAIN inválido');
   if (monthlyLaunch) {
     for (const [name, label] of [

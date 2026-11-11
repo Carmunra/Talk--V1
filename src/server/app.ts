@@ -103,7 +103,7 @@ export function createApp({
   };
   const privateApi = express.Router();
   const privacy = new PrivacyService(platform);
-  const video = new VideoService(platform.store, config);
+  const video = new VideoService(platform.store, config, () => platform.now());
   app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
   if (subscriptions) {
     app.post(
@@ -139,6 +139,7 @@ export function createApp({
       subscriptionsEnabled: Boolean(subscriptions) && config.subscriptionsEnabled,
       subscriptionsSandbox: config.asaasEnvironment !== 'live',
       subscriptionCancelCredits: config.subscriptionCancelCredits,
+      videoProvider: config.videoProvider,
     }),
   );
   app.get(
@@ -471,7 +472,18 @@ export function createApp({
   );
   privateApi.post(
     '/lessons/:id/complete',
-    wrap(async (req, res) => res.json(await platform.complete(actor(req), subject(req)))),
+    wrap(async (req, res) => {
+      const result = await platform.complete(actor(req), subject(req));
+      await video.close(subject(req));
+      res.json(result);
+    }),
+  );
+  privateApi.post(
+    '/lessons/:id/video-link',
+    wrap(async (req, res) => {
+      await platform.ready(actor(req));
+      res.json(await video.setMeetLink(actor(req).uid, subject(req), req.body));
+    }),
   );
   privateApi.post(
     '/lessons/:id/review',
@@ -501,6 +513,15 @@ export function createApp({
         'Aula não confirmada',
       );
       const studentProfile = await platform.store.get('profiles', lesson.studentId);
+      const teacherProfile = await platform.store.get('profiles', lesson.teacherId);
+      const teacherRecord = await platform.store.get('teachers', lesson.teacherId);
+      requireCondition(
+        teacherProfile?.status === 'ACTIVE' && teacherRecord?.isVerified,
+        403,
+        'Professor indisponível para esta aula',
+      );
+      if (actor(req).uid === lesson.payerId)
+        await platform.authorizedStudent(actor(req), lesson.studentId);
       requireCondition(
         studentProfile?.status === 'ACTIVE',
         403,
@@ -518,11 +539,18 @@ export function createApp({
       const current = await platform.store.get('lessons', lesson.id);
       const currentStudent = await platform.store.get('profiles', lesson.studentId);
       const currentActor = await platform.profile(actor(req));
+      const currentTeacher = await platform.store.get('profiles', lesson.teacherId);
+      const currentTeacherRecord = await platform.store.get('teachers', lesson.teacherId);
       if (
         !current?.isPaid ||
         !['CONFIRMED', 'IN_PROGRESS'].includes(current.status) ||
         currentStudent?.status !== 'ACTIVE' ||
-        currentActor?.status !== 'ACTIVE'
+        currentActor?.status !== 'ACTIVE' ||
+        currentTeacher?.status !== 'ACTIVE' ||
+        !currentTeacherRecord?.isVerified ||
+        current?.teacherId !== lesson.teacherId ||
+        current?.payerId !== lesson.payerId ||
+        current?.studentId !== lesson.studentId
       ) {
         await video.close(lesson.id);
         throw new ApiError(403, 'A autorização da aula foi alterada');
@@ -541,6 +569,43 @@ export function createApp({
         actor(req).uid,
       );
       res.json(rows.map(({ sellerId, checkoutUrl, checkoutingAt, ...row }) => row));
+    }),
+  );
+  privateApi.get(
+    '/teachers/me/earnings',
+    wrap(async (req, res) => {
+      const profile = await platform.ready(actor(req));
+      requireCondition(profile.accountType === 'TEACHER', 403, 'Área exclusiva do professor');
+      const uid = actor(req).uid;
+      const [lessons, payouts, recipient] = await Promise.all([
+        platform.store.find('lessons', 'teacherId', uid),
+        platform.store.find('subscription_payouts', 'teacherId', uid),
+        platform.store.get('asaas_recipients', uid),
+      ]);
+      const awaiting = lessons.filter(
+        (l) =>
+          l.fundingSource === 'ASAAS_SUBSCRIPTION' &&
+          l.status === 'COMPLETED' &&
+          l.isPaid &&
+          !l.payerConfirmedAt,
+      );
+      res.json({
+        payoutPerLessonCents: 4000,
+        recipientVerified:
+          recipient?.verified === true && recipient.accountId === config.asaasAccountId,
+        awaitingConfirmation: awaiting.map((l) => ({
+          lessonId: l.id,
+          scheduledDate: l.scheduledDate,
+          amountCents: 4000,
+        })),
+        payouts: payouts.map((p) => ({
+          id: p.id,
+          lessonId: p.lessonId,
+          amountCents: p.amountCents,
+          status: p.status,
+          reviewRequired: Boolean(p.reviewRequired),
+        })),
+      });
     }),
   );
   privateApi.get(

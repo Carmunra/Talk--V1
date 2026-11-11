@@ -122,7 +122,7 @@ function validateRuntime(template: any, config: Config, identity: string) {
       .filter((entry) => entry.valueFrom?.secretKeyRef)
       .map((entry) => [entry.name, entry.valueFrom.secretKeyRef]),
   );
-  const needed = ['DAILY_API_KEY'];
+  const needed = (values.VIDEO_PROVIDER || 'daily') === 'daily' ? ['DAILY_API_KEY'] : [];
   if (values.PAYMENTS_ENABLED === 'true')
     needed.push('MP_CLIENT_SECRET', 'MP_WEBHOOK_SECRET', 'TOKEN_ENCRYPTION_KEY');
   if (values.SUBSCRIPTIONS_ENABLED === 'true' || values.ASAAS_SANDBOX_ENABLED === 'true')
@@ -155,7 +155,8 @@ function validateRuntime(template: any, config: Config, identity: string) {
     ASAAS_SANDBOX_API_KEY: '$aact_hmlg_secret-reference',
     ASAAS_SANDBOX_WEBHOOK_TOKEN: 'w'.repeat(40),
   });
-  requireRelease(/^[a-zA-Z0-9-]+$/.test(values.DAILY_DOMAIN || ''), 'Domínio Daily obrigatório');
+  if ((values.VIDEO_PROVIDER || 'daily') === 'daily')
+    requireRelease(/^[a-zA-Z0-9-]+$/.test(values.DAILY_DOMAIN || ''), 'Domínio Daily obrigatório');
   requireRelease(
     config.environment !== 'staging' ||
       (values.MP_ENVIRONMENT !== 'live' && values.ASAAS_ENVIRONMENT !== 'live'),

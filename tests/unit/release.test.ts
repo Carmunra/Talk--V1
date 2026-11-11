@@ -142,6 +142,19 @@ test('failed candidate probe never updates the job or promotes traffic', async (
   );
   assert.equal(s.receipts.at(-1).status, 'FAILED_RESTORED');
 });
+
+test('Google Meet release accepts no Daily secret while keeping service and maintenance configuration aligned', async () => {
+  const s = setup();
+  for (const template of [s.service.spec.template.spec, s.job.spec.template.spec.template.spec]) {
+    template.containers[0].env = template.containers[0].env.filter(
+      (entry: any) => !entry.name.startsWith('DAILY_'),
+    );
+    template.containers[0].env.push({ name: 'VIDEO_PROVIDER', value: 'google_meet' } as any);
+  }
+  const result = await executeRelease(config, s.deps);
+  assert.equal(result.revision, 'talke-new');
+  assert.equal(s.receipts.at(-1).status, 'SUCCEEDED');
+});
 test('post-promotion failure restores stable traffic and previous maintenance image', async () => {
   const s = setup(2);
   await assert.rejects(executeRelease(config, s.deps), /preservados ou restaurados/);

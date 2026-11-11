@@ -63,6 +63,14 @@ test('preflight blocks incomplete or mismatched publication without exposing sec
     false,
   );
 });
+
+test('selected Google Meet mode removes the Daily dependency while retaining launch gates', () => {
+  const meet = { ...env, VIDEO_PROVIDER: 'google_meet', DAILY_API_KEY: '', DAILY_DOMAIN: '' };
+  assert.equal(preflight(meet).ready, true);
+  assert.equal(preflight({ ...meet, LEGAL_APPROVED: 'false' }).ready, false);
+  assert.equal(preflight({ ...meet, VIDEO_PROVIDER: 'invented' }).ready, false);
+  assert.equal(preflight({ ...meet, VIDEO_PROVIDER: 'daily' }).ready, false);
+});
 test('invalid origins and configuration typos fail before connecting external services', () => {
   for (const origin of [
     'https://talke.example/',

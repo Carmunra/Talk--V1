@@ -22,6 +22,7 @@ export interface RuntimeConfig {
   tokenKey: string;
   dailyKey: string;
   dailyDomain: string;
+  videoProvider: 'daily' | 'google_meet';
   termsVersion: string;
   asaasSandboxEnabled: boolean;
   asaasApiKey: string;
@@ -49,6 +50,9 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): RuntimeConfig 
   if (env.MP_ENVIRONMENT !== undefined && !['sandbox', 'live'].includes(env.MP_ENVIRONMENT))
     throw new Error('MP_ENVIRONMENT deve ser sandbox ou live');
   const production = env.NODE_ENV === 'production';
+  const videoProvider = env.VIDEO_PROVIDER || 'daily';
+  if (!['daily', 'google_meet'].includes(videoProvider))
+    throw new Error('VIDEO_PROVIDER deve ser daily ou google_meet');
   const asaasEnvironment = env.ASAAS_ENVIRONMENT || 'sandbox';
   if (!['sandbox', 'live'].includes(asaasEnvironment))
     throw new Error('ASAAS_ENVIRONMENT deve ser sandbox ou live');
@@ -92,6 +96,7 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): RuntimeConfig 
     tokenKey: env.TOKEN_ENCRYPTION_KEY || '',
     dailyKey: env.DAILY_API_KEY || '',
     dailyDomain: env.DAILY_DOMAIN || '',
+    videoProvider: videoProvider as 'daily' | 'google_meet',
     termsVersion: env.TERMS_VERSION || '2026-10-12',
     asaasSandboxEnabled: env.ASAAS_SANDBOX_ENABLED === 'true',
     asaasApiKey:
