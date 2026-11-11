@@ -73,7 +73,7 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): RuntimeConfig 
     trustProxyHops: Number(env.TRUST_PROXY_HOPS || 0),
     origin,
     projectId: env.FIREBASE_PROJECT_ID || '',
-    databaseId: env.FIRESTORE_DATABASE_ID || '(default)',
+    databaseId: env.FIRESTORE_DATABASE_ID || 'ai-studio-talke-e7757877-77cd-4823-8492-1ea523e3d9bf',
     legalName: env.LEGAL_NAME || '',
     legalCnpj: env.LEGAL_CNPJ || '',
     privacyEmail: env.PRIVACY_EMAIL || '',
@@ -187,6 +187,9 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): RuntimeConfig 
       );
     if (config.paymentsEnabled && config.livePayments && env.PAYMENTS_HOMOLOGATED !== 'true')
       throw new Error('Homologação do pagamento e split obrigatória');
+    if (config.tokenKey && Buffer.from(config.tokenKey, 'base64').length !== 32) {
+      throw new Error('TOKEN_ENCRYPTION_KEY deve ser base64 decodificável em 32 bytes');
+    }
     if (
       config.paymentsEnabled &&
       (!config.mpClientId ||
