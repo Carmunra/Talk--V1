@@ -74,6 +74,55 @@ after(async () => {
   await env.cleanup();
 });
 
+test('Firestore returns a cancelled plan credit exactly once under concurrent requests', async () => {
+  const f = await subscriptionFixture();
+  const lesson = await f.book();
+  const cycle = (await f.store.find('subscription_cycles', 'subscriptionId', 'sub_student'))[0];
+  const firebase = initializeApp({ projectId: 'demo-talke' }, 'lesson-cancellation-race');
+  try {
+    const store = new FirestoreStore(getFirestore(firebase));
+    const copies: [string, string][] = [
+      ['profiles', 'student'],
+      ['profiles', 'teacher'],
+      ['subscriptions', 'sub_student'],
+      ['asaas_payments', 'pay_first'],
+      ['subscription_cycles', cycle.id],
+      ['lessons', lesson.id],
+      ['subscription_reservations', lesson.id],
+      ['booking_days', 'teacher_' + lesson.scheduledDate],
+      ['booking_days', 'student_' + lesson.scheduledDate],
+    ];
+    await store.transaction(async (tx) => {
+      for (const [collection, id] of copies)
+        tx.set(collection, (await f.store.get(collection, id))!);
+    });
+    const platform = new Platform(store, f.config, new FakeGateway(), f.platform.now);
+    const subscriptions = new MonthlySubscriptions(platform, f.gateway);
+    await Promise.all([
+      subscriptions.cancelLesson(student, lesson.id),
+      subscriptions.cancelLesson(student, lesson.id),
+    ]);
+    nodeAssert.equal((await store.get('subscription_cycles', cycle.id))!.remaining, 4);
+    nodeAssert.equal(
+      (await store.get('subscription_cycles', cycle.id))!.expiresOn,
+      cycle.expiresOn,
+    );
+    nodeAssert.equal((await store.get('lessons', lesson.id))!.status, 'CANCELLED');
+    nodeAssert.equal(
+      (await store.get('subscription_reservations', lesson.id))!.status,
+      'CANCELLED',
+    );
+    nodeAssert.equal((await store.find('audit_events', 'lessonId', lesson.id)).length, 1);
+    nodeAssert.equal(
+      (await store.get('booking_days', 'teacher_' + lesson.scheduledDate))!.slots.length,
+      0,
+    );
+    nodeAssert.equal(f.gateway.sendCalls, 0);
+  } finally {
+    await deleteApp(firebase);
+  }
+});
+
 test('Firestore serializes competing Meet link claims across different paid lessons', async () => {
   const f = await fixture();
   f.config.videoProvider = 'google_meet';

@@ -5,6 +5,7 @@ import type { Row, UnitOfWork } from './store';
 import { cents, type SubscriptionGateway, type AsaasTransfer } from './asaas';
 import { ApiError, requireCondition } from './security';
 import { z } from 'zod';
+import { canCancelPlanLesson, PLAN_LESSON_CANCELLATION_HOURS } from '../domain/lessonPolicy';
 
 export const MONTHLY_TEACHER_PAYOUT_CENTS = 4000;
 export function addCalendarMonths(date: string, count: number, anchorDay?: number) {
@@ -565,6 +566,119 @@ export class MonthlySubscriptions {
       status: 'RESERVED',
     });
   }
+  async cancelLesson(actor: Identity, lessonId: string) {
+    const requestedAt = this.now();
+    await this.platform.ready(actor);
+    return this.store.transaction(async (tx) => {
+      const lesson = await tx.get('lessons', lessonId);
+      requireCondition(
+        lesson?.fundingSource === 'ASAAS_SUBSCRIPTION' && lesson.payerId === actor.uid,
+        403,
+        'Somente o pagador pode cancelar esta aula do plano; demais casos exigem suporte',
+      );
+      await this.platform.authorizedStudent(actor, lesson.studentId, tx);
+      const payer = await tx.get('profiles', actor.uid);
+      requireCondition(
+        payer?.status === 'ACTIVE' &&
+          !payer.deletedAt &&
+          payer.termsVersion === this.platform.config.termsVersion,
+        403,
+        'Cadastro do pagador indisponível',
+      );
+      // Repeated requests only report the first decision, even after the cutoff or a refund.
+      if (lesson.status === 'CANCELLED')
+        return {
+          status: 'CANCELLED',
+          creditReturned: lesson.cancellationCreditReturned === true,
+        };
+      requireCondition(
+        lesson.status === 'CONFIRMED' && lesson.isPaid,
+        409,
+        'Aula iniciada, concluída ou sem pagamento exige atendimento do suporte',
+      );
+      requireCondition(
+        canCancelPlanLesson(lesson.scheduledAt, requestedAt),
+        409,
+        'O prazo de cancelamento sem perder o crédito é de 24 horas antes da aula. Fora dele, use Relatar problema ou procure o suporte',
+      );
+      const reservation = await tx.get('subscription_reservations', lessonId);
+      requireCondition(
+        reservation?.status === 'RESERVED' &&
+          reservation.subscriptionId === lesson.subscriptionId &&
+          reservation.payerId === actor.uid &&
+          reservation.studentId === lesson.studentId &&
+          reservation.teacherId === lesson.teacherId,
+        409,
+        'Reserva de crédito inconsistente; procure o suporte',
+      );
+      const cycle = await tx.get('subscription_cycles', reservation.cycleId);
+      const payment = await tx.get('asaas_payments', reservation.paymentId);
+      const subscription = await tx.get('subscriptions', reservation.subscriptionId);
+      const payout = await tx.get('subscription_payouts', key(lessonId));
+      const days = await Promise.all(
+        [lesson.teacherId, lesson.studentId].map((uid) =>
+          tx.get('booking_days', `${uid}_${lesson.scheduledDate}`),
+        ),
+      );
+      const today = localDate(this.now());
+      requireCondition(
+        subscription?.payerId === actor.uid &&
+          subscription.studentId === lesson.studentId &&
+          cycle &&
+          cycle.subscriptionId === reservation.subscriptionId &&
+          cycle.paymentId === reservation.paymentId &&
+          cycle.status === 'FUNDED' &&
+          cycle.startsOn <= today &&
+          today < cycle.expiresOn &&
+          Number.isInteger(cycle.remaining) &&
+          cycle.remaining >= 0 &&
+          Number.isInteger(cycle.total) &&
+          cycle.remaining < cycle.total &&
+          payment &&
+          !payment.adverse &&
+          ['CONFIRMED', 'RECEIVED'].includes(payment.status) &&
+          !payout,
+        409,
+        'Pagamento ou validade do crédito exige análise do suporte',
+      );
+      const cancelledAt = new Date(requestedAt).toISOString();
+      tx.set('subscription_cycles', { ...cycle, remaining: cycle.remaining + 1 });
+      tx.set('subscription_reservations', {
+        ...reservation,
+        status: 'CANCELLED',
+        creditReturned: true,
+        cancelledAt,
+      });
+      tx.set('lessons', {
+        ...lesson,
+        status: 'CANCELLED',
+        cancelledAt,
+        cancelledBy: actor.uid,
+        cancellationNoticeHours: PLAN_LESSON_CANCELLATION_HOURS,
+        cancellationCreditReturned: true,
+      });
+      for (const day of days)
+        if (day)
+          tx.set('booking_days', {
+            ...day,
+            slots: day.slots.filter((slot: any) => slot.lessonId !== lessonId),
+          });
+      tx.remove('lesson_video_links', lessonId);
+      tx.set('room_closures', { id: lessonId, lessonId, status: 'PENDING' });
+      tx.set('audit_events', {
+        id: `plan-lesson-cancel-${key(lessonId)}`,
+        actorId: actor.uid,
+        action: 'CANCEL_PLAN_LESSON',
+        subjectId: lesson.studentId,
+        lessonId,
+        cycleId: cycle.id,
+        noticeHours: PLAN_LESSON_CANCELLATION_HOURS,
+        creditExpiresOn: cycle.expiresOn,
+        createdAt: cancelledAt,
+      });
+      return { status: 'CANCELLED', creditReturned: true };
+    });
+  }
   async queueCompleted(tx: UnitOfWork, lesson: Row) {
     requireCondition(
       lesson.status === 'COMPLETED' &&
@@ -578,6 +692,7 @@ export class MonthlySubscriptions {
     const reservation = await tx.get('subscription_reservations', lesson.id);
     requireCondition(
       reservation &&
+        ['RESERVED', 'COMPLETED'].includes(reservation.status) &&
         reservation.teacherId === lesson.teacherId &&
         reservation.studentId === lesson.studentId &&
         reservation.payerId === lesson.payerId,

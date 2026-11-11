@@ -47,6 +47,16 @@ export function PrivacyNotice({ config, terms = false }: { config: any; terms?: 
             O professor conclui a aula e o aluno adulto ou responsável confirma que ela ocorreu.
             Havendo discordância, use “Relatar problema” e procure o suporte antes de confirmar.
           </p>
+          <p>
+            Nas aulas do plano, o aluno adulto/pagador ou responsável pode cancelar com pelo menos
+            24 horas de antecedência do início, com devolução do crédito ao plano e preservação da
+            validade vigente. Para remarcar, cancele a reserva dentro desse prazo e escolha outro
+            horário disponível. Não há garantia de um novo horário antes de confirmá-lo.
+            Cancelamentos com menos de 24 horas e faltas exigem análise do suporte, sem devolução de
+            crédito ou repasse automático ao professor. Cancelar uma aula não cancela a renovação
+            nem solicita reembolso da mensalidade; direitos legais aplicáveis permanecem
+            preservados.
+          </p>
           {config.paymentsEnabled && (
             <>
               <p>

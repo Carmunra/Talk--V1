@@ -120,7 +120,7 @@ export async function subscriptionFixture(bind = true) {
     await subscriptions.bind(admin, binding);
     await subscriptions.reconcilePayment(payment.id);
   }
-  const book = (startTime = '10:00', requestKey = randomUUID()) =>
+  const book = (startTime = '10:00', requestKey: string = randomUUID()) =>
     f.platform.booking(student, { ...f.booking, startTime }, requestKey, {
       subscriptions,
       subscriptionId: binding.subscriptionId,

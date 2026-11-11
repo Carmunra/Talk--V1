@@ -54,6 +54,11 @@ export function MonthlyPlans({
         As aulas não usadas acumulam por mais um ciclo mensal.
       </p>
       <p className="text-sm text-slate-600">
+        Cancele uma aula com pelo menos 24 horas de antecedência para devolver o crédito ao plano,
+        mantendo a validade. Para remarcar, cancele e escolha outro horário disponível. Pedidos
+        tardios e faltas exigem análise do suporte.
+      </p>
+      <p className="text-sm text-slate-600">
         Assinatura mensal com renovação automática.{' '}
         {!onSelect && 'A contratação dos planos ainda não está disponível.'}
       </p>

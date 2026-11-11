@@ -22,6 +22,8 @@ Canal de privacidade/LGPD confirmado pelo operador: contato@talke.club. Esse end
 
 ## Pendências de definição e acesso
 
+Decisões recebidas em 11/11/2026: cancelamento/remarcação de aula sem perder crédito com pelo menos 24 horas de antecedência; pedidos tardios e faltas ficam para análise do suporte, sem devolução de crédito nem repasse automático. O operador ainda não confirmou o modelo comercial com o Asaas. A regra dos 60 dias após cancelar renovação permanece independente. Consulte [Cancelamento das aulas](CANCELAMENTO_AULAS_2026_11_11.md).
+
 - Registros de conexão do site gerados pelo provedor de hospedagem escolhido. O acesso à Hostinger foi confirmado e o DNS de e-mail está validado.
 - Projeto Firebase/Google Cloud de produção, faturamento e projeto separado para homologação.
 - Cadastro e verificação dos dois administradores no projeto Firebase correto.
