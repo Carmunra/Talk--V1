@@ -125,8 +125,10 @@ export function FamilyForm({ config, onSaved }: { config: any; onSaved: () => Pr
 export function TeacherEditor({
   teacher,
   onSaved,
+  monthlyOnly = true,
 }: {
   teacher: any;
+  monthlyOnly?: boolean;
   onSaved: () => Promise<void>;
 }) {
   const [message, setMessage] = useState(''),
@@ -158,7 +160,9 @@ export function TeacherEditor({
             body: JSON.stringify({
               headline: data.get('headline'),
               bio: data.get('bio'),
-              hourlyPriceBrl: Number(data.get('price')),
+              hourlyPriceBrl: monthlyOnly
+                ? teacher.hourlyPriceBrl || 100
+                : Number(data.get('price')),
               levelsTaught: data.getAll('levels').map(Number),
               specialties: data.getAll('specialties'),
               languages: ['Inglês'],
@@ -169,7 +173,11 @@ export function TeacherEditor({
               availability: days,
             }),
           });
-          setMessage('Perfil salvo. Publicação depende de aprovação e conexão Mercado Pago.');
+          setMessage(
+            monthlyOnly
+              ? 'Perfil salvo. A publicação depende da aprovação profissional e da verificação para receber os repasses.'
+              : 'Perfil salvo. Publicação depende de aprovação e conexão Mercado Pago.',
+          );
           await onSaved();
         } catch (error) {
           setMessage((error as Error).message);
@@ -187,18 +195,20 @@ export function TeacherEditor({
         Sobre suas aulas
         <textarea name="bio" defaultValue={teacher.bio} required minLength={20} maxLength={2000} />
       </label>
-      <label>
-        Preço por aula de 50 minutos (R$)
-        <input
-          name="price"
-          type="number"
-          min="10"
-          max="2000"
-          step="0.01"
-          required
-          defaultValue={teacher.hourlyPriceBrl || 100}
-        />
-      </label>
+      {!monthlyOnly && (
+        <label>
+          Preço por aula de 50 minutos (R$)
+          <input
+            name="price"
+            type="number"
+            min="10"
+            max="2000"
+            step="0.01"
+            required
+            defaultValue={teacher.hourlyPriceBrl || 100}
+          />
+        </label>
+      )}
       <fieldset>
         <legend>Níveis</legend>
         {[1, 2, 3, 4, 5, 6].map((n, i) => (
@@ -275,29 +285,45 @@ export function TeacherEditor({
           />
         </div>
       ))}
-      <p>
-        Comissão Talkê: 15%. Tarifas Mercado Pago são adicionais na parcela do professor. Consulte
-        os valores na sua conta.
-      </p>
-      <button disabled={busy}>Salvar perfil</button>
-      <button
-        type="button"
-        disabled={busy}
-        onClick={async () => {
-          try {
-            const result = await post('/api/payments/connect', {});
-            window.location.assign(result.url);
-          } catch (error) {
-            setMessage((error as Error).message);
-          }
-        }}
-      >
-        Conectar Mercado Pago
-      </button>
-      <p>
-        {teacher.isVerified ? 'Professor aprovado' : 'Aguardando aprovação'} ·{' '}
-        {teacher.paymentConnected ? 'Mercado Pago conectado' : 'Conexão pendente'}
-      </p>
+      {monthlyOnly ? (
+        <p>
+          Nos planos mensais, o repasse é de R$ 40 por aula de 50 minutos concluída e confirmada
+          pelo aluno adulto ou responsável. O suporte acompanha a verificação para recebimento.
+        </p>
+      ) : (
+        <>
+          <p>
+            Comissão Talkê: 15%. Tarifas Mercado Pago são adicionais na parcela do professor.
+            Consulte os valores na sua conta.
+          </p>
+          <button disabled={busy}>Salvar perfil</button>
+          <button
+            type="button"
+            disabled={busy}
+            onClick={async () => {
+              try {
+                const result = await post('/api/payments/connect', {});
+                window.location.assign(result.url);
+              } catch (error) {
+                setMessage((error as Error).message);
+              }
+            }}
+          >
+            Conectar Mercado Pago
+          </button>
+          <p>
+            {teacher.isVerified ? 'Professor aprovado' : 'Aguardando aprovação'} ·{' '}
+            {teacher.paymentConnected ? 'Mercado Pago conectado' : 'Conexão pendente'}
+          </p>
+        </>
+      )}
+      {monthlyOnly && (
+        <p>
+          {teacher.isVerified
+            ? 'Perfil profissional aprovado'
+            : 'Perfil profissional aguardando aprovação'}
+        </p>
+      )}
       {message && <p role="status">{message}</p>}
     </form>
   );

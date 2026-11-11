@@ -25,6 +25,12 @@ function login(uid: string) {
     .its('response.body.profile.id')
     .should('eq', uid);
   cy.contains('button', 'Minhas aulas').should('be.visible');
+  cy.contains('button', 'Início').click();
+  cy.get('section[aria-label="Resumo da sua conta"]').should('be.visible');
+  cy.get('nav[aria-label="Outras áreas da conta"]').then((nav) => {
+    if (!nav.is(':visible')) cy.contains('summary', 'Mais opções').click();
+  });
+  cy.contains('button', 'Professores').click();
   if (uid === 'student' || uid === 'other') {
     cy.wait('@currentStudent');
     cy.contains('Descubra seu Nível').should('be.visible');
@@ -426,6 +432,83 @@ describe('Fluxos comerciais protegidos com Auth emulator e gateway de teste', ()
     );
     cy.contains('button', 'Atualizar cadastro').click();
     cy.contains('button', 'Minhas aulas').should('be.visible');
+  });
+
+  it('mostra saldo na página inicial e organiza a navegação no celular', () => {
+    for (const endpoint of ['seed', 'enable'])
+      cy.request({
+        method: 'POST',
+        url: '/_test/subscriptions/' + endpoint,
+        headers: { 'x-test-key': 'local-e2e' },
+      });
+    cy.viewport(390, 844);
+    login('student');
+    cy.contains('button', 'Início').click();
+    cy.get('section[aria-label="Resumo da sua conta"]').within(() => {
+      cy.contains('Seu saldo de aulas').should('be.visible');
+      cy.contains('Primeira validade:').should('be.visible');
+    });
+    cy.get('nav[aria-label="Navegação principal"]')
+      .should('contain.text', 'Minhas aulas')
+      .and('contain.text', 'Planos');
+    cy.get('summary').contains('Mais opções').click();
+    cy.contains('button', 'Meus dados').should('be.visible');
+    cy.screenshot('talke-inicio-mobile', { capture: 'viewport' });
+    cy.viewport(1280, 900);
+  });
+  it('professor prepara Meet exclusivo, aluno acessa somente no horário e acompanha sua confirmação', () => {
+    cy.request({
+      method: 'POST',
+      url: '/_test/subscriptions/seed',
+      headers: { 'x-test-key': 'local-e2e' },
+    }).then(({ body }) => {
+      token('student').then((bearer) =>
+        cy
+          .request({
+            method: 'POST',
+            url: '/api/subscriptions/' + body.subscriptionId + '/bookings',
+            headers: { Authorization: 'Bearer ' + bearer, 'Idempotency-Key': crypto.randomUUID() },
+            body: body.booking,
+          })
+          .then(({ body: lesson }) => cy.wrap(lesson.id).as('meetLesson')),
+      );
+    });
+    for (const url of ['/_test/subscriptions/enable', '/_test/meet/enable'])
+      cy.request({ method: 'POST', url, headers: { 'x-test-key': 'local-e2e' } });
+    login('teacher');
+    cy.contains('button', 'Meu perfil').click();
+    cy.contains('Nos planos mensais, o repasse é de R$ 40').should('be.visible');
+    cy.contains('Conectar Mercado Pago').should('not.exist');
+    cy.get('input[name="price"]').should('not.exist');
+    cy.contains('button', 'Minhas aulas').click();
+    cy.contains('summary', 'Preparar Google Meet desta aula').click();
+    cy.get('input[name="url"]').type('https://meet.google.com/abc-defg-hij');
+    cy.get('input[name="controls"]').check();
+    cy.contains('button', 'Salvar link da aula').click();
+    cy.contains('Link salvo.').should('be.visible');
+    cy.contains('button', 'Sair').click();
+    login('student');
+    cy.contains('button', 'Minhas aulas').click();
+    cy.contains('button', 'Entrar na sala').click();
+    cy.get('[role="dialog"]').should('contain.text', '10 minutos antes');
+    cy.contains('button', 'Fechar sala').click();
+    cy.get('@meetLesson').then((id) =>
+      cy.request({
+        method: 'POST',
+        url: '/_test/meet/open/' + id,
+        headers: { 'x-test-key': 'local-e2e' },
+      }),
+    );
+    cy.contains('button', 'Entrar na sala').click();
+    cy.contains('a', 'Abrir aula no Google Meet')
+      .should('have.attr', 'href', 'https://meet.google.com/abc-defg-hij')
+      .and('have.attr', 'rel', 'noopener noreferrer');
+    cy.get('[role="dialog"]').should(
+      'contain.text',
+      'Fechar esta janela não encerra a chamada externa',
+    );
+    cy.screenshot('talke-aula-google-meet', { capture: 'viewport' });
+    cy.contains('button', 'Fechar sala').click();
   });
   it('reserva uma aula do plano e libera um único repasse de R$40 após conclusão e confirmação', () => {
     cy.request({

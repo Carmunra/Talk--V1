@@ -18,6 +18,10 @@ Revisar a [Lei 15.211/2025 — ECA Digital](https://www.planalto.gov.br/ccivil_0
 
 MINIMUM_AGE deve refletir a faixa aprovada. A data declarada e o vínculo aguardam verificação. A retirada da autorização bloqueia reservas e sala do dependente; a equipe precisa resolver aulas/reembolsos existentes.
 
+## Video externo e menores
+
+Na rota selecionada, o professor cria um Google Meet exclusivo por aula, controla admissao e encerra para todos. A Talke protege a entrega do link e bloqueia novas consultas apos revogacao, mas nao revoga enderecos copiados nem encerra uma chamada externa. A retirada de autorizacao, suspensao ou incidente exige tambem intervencao do professor/suporte no Meet. Treinar a equipe e validar esses controles em contas reais antes de aprovar o atendimento de menores. Consulte [Operacao do Google Meet](VIDEO_GOOGLE_MEET.md), inclusive limitacoes da evidencia automatizada. Nao afirmar que uma remocao de link encerrou a reuniao.
+
 ## Atendimento a titulares
 
 O painel exporta dados próprios ou do dependente autorizado e gera protocolos de acesso, correção, exclusão, oposição e retirada de autorização. A fila administrativa permite registrar a resolução e executar a exclusão operacional. Para contas suspensas/encerradas, o canal externo de privacidade permanece necessário.
@@ -32,7 +36,7 @@ Não foi implementado um prazo único de expurgo: o controlador deve aprovar pra
 
 ## Operadores, transferências e incidentes
 
-Contratar e revisar Firebase/Google, Asaas (assinaturas, subcontas e repasses), Mercado Pago quando avulsas habilitadas, Daily e AWS, com papéis, regiões, suboperadores, mecanismos de transferência e condições de exclusão. O e-mail do pagador verificado vincula o checkout à conta; CPF/cartão coletados na página hospedada não são copiados para a Talkê. Confirmar os papéis próprios do provedor financeiro e a informação a titulares/recebedores. Avaliar [Resolução ANPD 19/2024](https://www.gov.br/anpd/pt-br/acesso-a-informacao/institucional/atos-normativos/regulamentacoes_anpd/resolucao-cd-anpd-no-19-de-23-de-agosto-de-2024) quando houver transferência internacional.
+Contratar e revisar Firebase/Google, Asaas (assinaturas, subcontas e repasses), Mercado Pago quando avulsas habilitadas, Google Meet (ou Daily se selecionado) e AWS, com papéis, regiões, suboperadores, mecanismos de transferência e condições de exclusão. O e-mail do pagador verificado vincula o checkout à conta; CPF/cartão coletados na página hospedada não são copiados para a Talkê. Confirmar os papéis próprios do provedor financeiro e a informação a titulares/recebedores. Avaliar [Resolução ANPD 19/2024](https://www.gov.br/anpd/pt-br/acesso-a-informacao/institucional/atos-normativos/regulamentacoes_anpd/resolucao-cd-anpd-no-19-de-23-de-agosto-de-2024) quando houver transferência internacional.
 
 Definir responsáveis, canal de emergência, preservação de evidências, contenção, revogação de credenciais, avaliação de impacto e comunicação. A [Resolução ANPD 15/2024](https://www.gov.br/anpd/pt-br/assuntos/noticias/anpd-aprova-o-regulamento-de-comunicacao-de-incidente-de-seguranca) regula incidentes relevantes; o prazo geral indicado no regulamento é de três dias úteis, sujeito à análise das condições aplicáveis. Registrar incidentes e decisões mesmo quando não houver comunicação externa.
 

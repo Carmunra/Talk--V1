@@ -1,6 +1,8 @@
 # Talkê
 
-Aplicação de aulas de inglês com React/TypeScript, Express, Firebase Admin, Mercado Pago Checkout Pro com split e salas privadas Daily.
+Aplicação de aulas de inglês com React/TypeScript, Express, Firebase Admin, planos mensais Asaas e Google Meet com link exclusivo por aula. Checkout Pro e Daily permanecem alternativas condicionadas à configuração, sem habilitação automática.
+
+Estado atual e critérios de abertura: [Preparação de lançamento — 11/11/2026](docs/PREPARACAO_LANCAMENTO_2026_11_11.md). Código e testes não equivalem a uma implantação ou liberação de pagamentos reais.
 
 Esta versão substitui os fluxos demonstrativos por autenticação no servidor, autorização por titular, reservas atômicas, confirmação de pagamento pelo provedor e atendimento de privacidade. O catálogo, reservas, diagnóstico, materiais, registros pedagógicos e administração usam o novo fluxo. Carteira pré-paga e saques internos não fazem parte deste lançamento.
 
@@ -25,7 +27,7 @@ Copie .env.example e preencha o projeto Firebase e sua configuração pública w
 - npm audit identifica alertas conhecidos de dependências. O lockfile é npm; as versões transitivas corrigidas estão registradas em overrides.
 - npm run verify:lockfile verifica os binários nativos de Windows/Linux/macOS antes da instalação. Se uma instalação local do npm remover dependências opcionais de outro sistema, regenere o lockfile em uma pasta limpa sem node_modules e revise as alterações antes de enviá-lo.
 
-O fluxo CI não publica nem executa cobranças reais. Os testes de navegador não substituem homologação de Mercado Pago/Daily ou revisão de LGPD/ECA Digital.
+O fluxo CI não publica nem executa cobranças reais. Os testes de navegador não substituem homologação financeira, chamadas reais no provedor selecionado ou revisão de LGPD/ECA Digital. No Meet, o professor deve admitir os participantes e encerrar a chamada externa: consulte [Operação do Google Meet](VIDEO_GOOGLE_MEET.md).
 
 ## API e identidade
 

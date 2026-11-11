@@ -1,5 +1,7 @@
 # Validação das correções — 11 de outubro de 2026
 
+Registro historico. Estado atual: [Preparacao de lancamento — 11/11/2026](PREPARACAO_LANCAMENTO_2026_11_11.md). O video escolhido agora e Google Meet manual; conta Daily nao e requisito dessa rota.
+
 Etapa mais recente: [compra e gestão de assinatura, reserva com créditos, adaptador live protegido e preparação de publicação](PREPARACAO_PUBLICACAO_2026_10_12.md). Os registros abaixo são históricos; as configurações reais e a homologação externa continuam pendentes.
 
 Resultados atualizados de 12/10/2026: [catálogo, 143 testes unitários/integrados, 10 cenários Cypress, 6 testes Firestore e homologação externa parcial Asaas](VALIDACAO_2026_10_12.md). A correção do filtro de checkout foi validada contra a API Sandbox. Os bloqueios de produção, as autorizações pendentes e as limitações de liquidação/repasse estão registrados nesse relatório; não interpretar os testes como liberação de pagamentos ou conformidade jurídica. Os parágrafos seguintes registram a validação anterior.

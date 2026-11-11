@@ -1,5 +1,7 @@
 # Validações de publicação - 12/10/2026
 
+Registro historico. Estado atual: [Preparacao de lancamento — 11/11/2026](PREPARACAO_LANCAMENTO_2026_11_11.md). O video escolhido agora e Google Meet manual; conta Daily nao e requisito dessa rota.
+
 Registro desta etapa de homologação. A implementação posterior de contratação, acompanhamento, adaptador live protegido e paginação, com os bloqueios atuais, está em [Preparação da publicação](PREPARACAO_PUBLICACAO_2026_10_12.md). As pendências de interface e Sandbox exclusivo descritas abaixo refletem o estado anterior; a homologação externa e as liberações reais continuam pendentes.
 
 ## Regras e referência comercial

@@ -208,7 +208,8 @@ export class PrivacyService {
       for (const row of progress) tx.remove('student_progress', row.id);
       for (const row of [...studentNotes, ...teacherNotes]) tx.remove('lesson_notes', row.id);
       for (const review of reviews) tx.set('reviews', { ...review, comment: '' });
-      for (const lesson of lessons)
+      for (const lesson of lessons) {
+        tx.remove('lesson_video_links', lesson.id);
         tx.set('lessons', {
           ...lesson,
           ...(lesson.studentId === profile.id
@@ -217,6 +218,7 @@ export class PrivacyService {
           ...(lesson.teacherId === profile.id ? { teacherName: 'Cadastro excluído' } : {}),
           whiteboardNotes: '',
         });
+      }
       tx.set('privacy_requests', {
         ...request,
         details: '',

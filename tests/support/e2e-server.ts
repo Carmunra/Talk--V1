@@ -51,6 +51,7 @@ host.post('/_test/reset', async (req, res) => {
   state.config.subscriptionsEnabled = false;
   state.config.paymentsEnabled = true;
   state.config.subscriptionCancelCredits = 'block_booking';
+  state.config.videoProvider = 'daily';
   state.gateway.payments.clear();
   state.gateway.refunds = [];
   state.gateway.checkoutCalls = 0;
@@ -62,6 +63,18 @@ host.post('/_test/subscriptions/enable', (req, res) => {
   state.config.paymentsEnabled = false;
   state.config.subscriptionCancelCredits = '60_days_after_cancel';
   res.json({ enabled: true });
+});
+host.post('/_test/meet/enable', (req, res) => {
+  if (req.header('x-test-key') !== 'local-e2e') return res.sendStatus(403);
+  state.config.videoProvider = 'google_meet';
+  res.json({ enabled: true });
+});
+host.post('/_test/meet/open/:id', async (req, res) => {
+  if (req.header('x-test-key') !== 'local-e2e') return res.sendStatus(403);
+  const lesson = await state.store.get('lessons', req.params.id);
+  if (!lesson) return res.sendStatus(404);
+  state.advance(lesson.scheduledAt - state.platform.now());
+  res.json({ advanced: true });
 });
 host.post('/_test/subscriptions/seed', async (req, res) => {
   if (req.header('x-test-key') !== 'local-e2e') return res.sendStatus(403);

@@ -1,5 +1,7 @@
 # Preparação da contratação e publicação — 12/10/2026
 
+Registro historico. Estado atual: [Preparacao de lancamento — 11/11/2026](PREPARACAO_LANCAMENTO_2026_11_11.md). O video escolhido agora e Google Meet manual; conta Daily nao e requisito dessa rota.
+
 Atualização posterior: o operador aprovou os testes adicionais Sandbox, os 60 dias após cancelar renovação e a continuidade AWS na faixa de US$ 60–100/mês. Veja o [registro de continuidade](CONTINUIDADE_PUBLICACAO_2026_10_12.md) para a regra e os resultados atuais. Os pontos abaixo descrevem a etapa anterior.
 
 Esta etapa complementa o [registro anterior](VALIDACAO_2026_10_12.md). Código preparado não equivale à liberação da plataforma ou à homologação de pagamentos reais. Nenhuma cobrança, subconta, transferência ou servidor de produção foi criado nesta etapa.
@@ -26,10 +28,10 @@ Para produção, usar `ASAAS_ENVIRONMENT=live` e os campos `ASAAS_API_KEY`, `ASA
 
 `SUBSCRIPTION_CANCEL_CREDITS` precisa de escolha explícita antes de live:
 
-| Valor técnico | Comportamento preparado |
-| --- | --- |
+| Valor técnico     | Comportamento preparado                                                                                                                                                                  |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | keep_until_expiry | Cancela próximas renovações e permite reservar aulas já pagas até a validade original; não cria novo lote nem estende o prazo. Exclusão de conta exige resolver saldo pago ainda válido. |
-| block_booking | Cancela próximas renovações e bloqueia novas reservas; saldo e eventual reembolso precisam de atendimento. Este é apenas o padrão restritivo de preparação/teste. |
+| block_booking     | Cancela próximas renovações e bloqueia novas reservas; saldo e eventual reembolso precisam de atendimento. Este é apenas o padrão restritivo de preparação/teste.                        |
 
 Cancelar a recorrência não presume estorno de cobranças já emitidas. Reposição, ausência, cancelamento de aula e prazo de contestação aguardam decisão; a interface encaminha essas situações ao suporte e não aplica automaticamente 35%/50% do documento anterior.
 

@@ -1,5 +1,7 @@
 # Continuidade da publicação — 12/10/2026
 
+Registro historico. Estado atual: [Preparacao de lancamento — 11/11/2026](PREPARACAO_LANCAMENTO_2026_11_11.md). O video escolhido agora e Google Meet manual; conta Daily nao e requisito dessa rota.
+
 Este registro atualiza a [preparação anterior](PREPARACAO_PUBLICACAO_2026_10_12.md), que descreve a validação anterior às novas autorizações do operador. A plataforma ainda não foi publicada, e os pagamentos reais continuam desativados.
 
 ## Regra aprovada e implementação
@@ -14,14 +16,14 @@ As políticas técnicas anteriores permanecem disponíveis para compatibilidade 
 
 Foram usadas contas e valores fictícios. Não houve movimentação financeira de produção.
 
-| Operação | Resultado observado |
-| --- | --- |
-| Aprovar a subconta fictícia do professor | APPROVED |
-| Complementar R$ 5 fictícios | RECEIVED |
+| Operação                                             | Resultado observado                                                                 |
+| ---------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Aprovar a subconta fictícia do professor             | APPROVED                                                                            |
+| Complementar R$ 5 fictícios                          | RECEIVED                                                                            |
 | Transferir R$ 40 fictícios para a carteira vinculada | Uma única criação aceita; autorização final feita pelo operador; transferência DONE |
-| Gerar a mensalidade fictícia seguinte de R$ 439 | HTTP 400, invalid_action; renovação não homologada |
-| Estornar a mensalidade fictícia de R$ 439 | REFUNDED |
-| Cancelar a assinatura fictícia | Confirmado; deixou de aparecer como assinatura ativa do cliente |
+| Gerar a mensalidade fictícia seguinte de R$ 439      | HTTP 400, invalid_action; renovação não homologada                                  |
+| Estornar a mensalidade fictícia de R$ 439            | REFUNDED                                                                            |
+| Cancelar a assinatura fictícia                       | Confirmado; deixou de aparecer como assinatura ativa do cliente                     |
 
 A transferência foi aceita pelo provedor, mas a resposta possuía `account` sem `account.walletId`, com a carteira correta no campo principal `walletId`. O adaptador foi corrigido e a mesma transferência foi recuperada por consulta, verificando valor, referência e carteira. Não foi enviado um segundo POST. O operador concluiu a autorização de ação crítica no Sandbox, e a consulta posterior confirmou DONE. Os testes de regressão incluem esse formato e a remoção de dados pessoais da resposta.
 

@@ -25,7 +25,7 @@ Cadastrar estas variáveis do repositório GitHub, com prefixo STAGING_ e PRODUC
 | VITE_FIREBASE_APP_ID           | ID da aplicação web Firebase                           |
 | RELEASE_APPROVED               | true somente após revisão operacional do destino       |
 
-PRODUCTION_STAGING_VALIDATED_SHA deve conter o SHA completo da main efetivamente homologado com Mercado Pago, Daily, direitos de privacidade, proteção de menores quando habilitados, entrega de alertas e restauração. Essa variável registra uma decisão humana; não constitui prova ou certificação jurídica.
+PRODUCTION_STAGING_VALIDATED_SHA deve conter o SHA completo da main efetivamente homologado com os provedores financeiros e de vídeo selecionados, direitos de privacidade, proteção de menores quando habilitados, entrega de alertas e restauração. Essa variável registra uma decisão humana; não constitui prova ou certificação jurídica.
 
 Os valores secretos continuam no Secret Manager, referenciados por versões numéricas no site e no job. As variáveis acima são configuração pública/operacional. Não incluir chaves privadas, tokens, JSON de conta de serviço ou segredos Mercado Pago no GitHub.
 

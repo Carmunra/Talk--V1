@@ -2,11 +2,13 @@
 
 ## O que mudou
 
+Preparação atual: [Lançamento — 11/11/2026](PREPARACAO_LANCAMENTO_2026_11_11.md). A rota escolhida é AWS/Firebase, planos Asaas e Google Meet. Os módulos legados de aulas avulsas e Daily permanecem opcionais.
+
 A identidade é verificada com Firebase Admin, inclusive revogação de sessão. O navegador não lê/escreve diretamente no Firestore. Reservas e pagamentos têm dono, valores calculados no servidor e transações atômicas. Foram substituídos o saldo inicial fictício, o processamento de cartões e os saques simulados.
 
-O pagamento ocorre por aula no Checkout Pro, com credencial OAuth do professor e marketplace_fee de 15%. A parcela de 85% mostrada pela aplicação é anterior às tarifas do Mercado Pago; não representa saldo disponível para saque. Não há promessa de escrow nem liberação financeira condicionada à conclusão de aula.
+Nos planos mensais, o repasse é de R$ 40 por aula concluída pelo professor e confirmada pelo aluno adulto/pagador ou responsável. A assinatura, os créditos e os repasses usam o módulo Asaas, condicionado à homologação e aprovação comercial. A renovação cancelada preserva créditos pagos ainda válidos por 60 dias corridos, sem renovar o prazo em pedidos repetidos. Consulte [Planos mensais](PLANOS_MENSAIS.md). Somente se PAYMENTS_ENABLED=true, o módulo avulso legado usa Checkout Pro, credencial OAuth do professor e marketplace_fee de 15%, antes das tarifas do Mercado Pago; essa regra não se aplica aos planos.
 
-A sala Daily é privada, com token individual, janela de tempo e confirmação de pagamento. Os painéis de progresso usam registros de aulas reais, sem notas ou métricas demonstrativas. As telas do piloto foram substituídas para retirar seleção de identidade e resultados fictícios.
+A opção selecionada, VIDEO_PROVIDER=google_meet, permite ao professor aprovado cadastrar um link exclusivo por aula paga. Somente participantes autorizados recebem o endereço, dentro da janela da aula. O link fica em coleção privada, nunca no catálogo/listagem. A Talkê bloqueia novas consultas após revogação/conclusão, mas não consegue encerrar a chamada externa ou invalidar um link copiado. O professor controla admissão e encerramento conforme [Operação do Google Meet](VIDEO_GOOGLE_MEET.md). A alternativa Daily mantém salas privadas e tokens individuais. Os painéis de progresso usam registros de aulas reais.
 
 ## Preparação e implantação
 
@@ -17,9 +19,9 @@ O operador definiu [cinco planos mensais](PLANOS_MENSAIS.md), com renovação au
 1. Usar projetos Firebase distintos para desenvolvimento, homologação e produção. Habilitar Google Auth e domínio autorizado. Configurar banco, região e backups. Usar IAM mínimo e identidade do serviço, evitando arquivos de chave no repositório.
 2. Copiar .env.example para desenvolvimento e preencher a configuração pública web e as variáveis do servidor. Nunca incluir segredos em VITE_ ou no código do navegador. O build exige os quatro valores públicos VITE_FIREBASE_*; o projeto deve corresponder ao projeto do servidor.
 3. Aprovar documentos, controlador, contatos, idade mínima, procedimento de aferição de idade e proteção de menores. Ler PRIVACIDADE_OPERACAO.md. LEGAL_APPROVED e MINORS_SAFEGUARDS_APPROVED são declarações do operador após executar os requisitos; não executam a validação jurídica.
-4. Configurar Mercado Pago em sandbox, PKCE S256, URL OAuth exata APP_ORIGIN/api/payments/oauth/callback e webhook payment em APP_ORIGIN/api/payments/webhook. Gerar chave TOKEN_ENCRYPTION_KEY com 32 bytes aleatórios em base64 e guardar em cofre, com recuperação e rotação planejadas.
-5. Habilitar OAuth para cada professor, verificar elegibilidade da conta para split e aprovar o perfil após análise. A troca de conta recebedora exige migração com suporte; o token expirado exige reconexão explícita. Não há renovação automática silenciosa.
-6. Configurar DAILY_API_KEY e DAILY_DOMAIN, revisar contrato/região e restrições de gravação. Homologar vídeo em dispositivos reais e com responsável acompanhando a aula do menor.
+4. Nos planos, configurar Asaas e webhooks conforme [Homologação Asaas](ASAAS_HOMOLOGACAO.md), com ambientes/credenciais separados e chaves no cofre. Não habilitar produção antes de comprovar recorrência, reembolso, contestação, reconciliação e repasses.
+5. Verificar professores e recebedores. Mercado Pago/OAuth/PKCE e seu TOKEN_ENCRYPTION_KEY são exigidos apenas para aulas avulsas habilitadas; manter PAYMENTS_ENABLED=false no lançamento exclusivamente mensal. A troca de conta recebedora exige acompanhamento do suporte.
+6. Selecionar VIDEO_PROVIDER=google_meet, treinar os professores e homologar chamada real com duas contas, celular e responsável. DAILY_API_KEY/DAILY_DOMAIN não são exigidos nesse modo. Se selecionar daily, configurar suas credenciais, contrato/região e encerramento pelo provedor.
 7. Executar npm ci, lint, testes, regras, Cypress, build e verificação dos artefatos. Configurar HTTPS e APP_ORIGIN exato. Publicar somente dist/client como arquivos públicos; dist/server não pode ficar em pasta estática.
 8. Implantar firestore.rules e storage.rules restritivas com a CLI oficial e o projeto explicitamente selecionado. Nenhuma implantação remota foi executada nesta correção. Fazer backup e testar a mudança em homologação antes de produção.
 9. Conceder custom claim admin somente a contas verificadas, com conta operacional protegida por MFA e acesso restrito. O script scripts/set-admin.ts aceita UID grant|revoke ou --email EMAIL grant|revoke, resolve a conta no Firebase, preserva outras claims e revoga sessões. Não usa lista automática de e-mails nem cabeçalhos do cliente. Os contatos fornecidos e pendências estão em [Dados da publicação](DADOS_PUBLICACAO.md).
@@ -50,7 +52,7 @@ Validar com contabilidade o modelo de intermediação, a emissão de documentos 
 
 As antigas reservas, pagamentos “PAID” e carteiras foram gerados por fluxos permissivos. Não converter esses estados em crédito real. Fazer inventário e confronto com extratos do provedor, separar demonstrações de registros legítimos e documentar a migração. A nova versão exige cadastro ligado ao UID verificado; registros antigos sem perfil/vínculo não são automaticamente assumidos por outro usuário.
 
-Inventariar e encerrar também salas Daily antigas que tenham sido criadas como públicas e verificar eventuais gravações. A versão nova não reabre essas salas. O cancelamento, a suspensão e a retirada de autorização solicitam encerramento ao provedor; falhas ficam em room_closures e devem ser alertadas e repetidas pela manutenção.
+Inventariar e encerrar salas Daily antigas e verificar eventuais gravações antes de trocar de provedor. No modo Daily, cancelamento, suspensão e retirada da autorização solicitam encerramento e falhas ficam em room_closures. No modo Meet, remover o link na Talkê não encerra a reunião: professor/suporte devem executar o encerramento externo e registrar o atendimento. Não selecionar Meet para contornar uma fila Daily não resolvida.
 
 Definir RPO/RTO, retenção/expurgo, plano de reversão compatível com regras restritivas e operação de atendimento. Não reabrir as regras antigas para restaurar o piloto. Testar capacidade e limites em homologação antes de aumentar escala.
 

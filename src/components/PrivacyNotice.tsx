@@ -72,6 +72,8 @@ export function PrivacyNotice({ config, terms = false }: { config: any; terms?: 
             verificado para a modalidade de pagamento.
           </p>
           <p>
+            {config.videoProvider === 'google_meet' &&
+              'No Google Meet, o professor deve usar uma reunião exclusiva por aula, admitir somente os participantes previstos, não gravar a chamada e encerrá-la para todos ao terminar. '}
             Assédio, discriminação, exposição de dados e contato inadequado com menores são
             proibidos. Use “Relatar problema” na aula. A administração pode suspender acesso para
             apurar fatos e proteger participantes.
@@ -99,8 +101,11 @@ export function PrivacyNotice({ config, terms = false }: { config: any; terms?: 
           <p>
             O Firebase processa autenticação e armazenamento; o Asaas processa as assinaturas e
             repasses; o Mercado Pago atende aulas avulsas quando habilitadas; a AWS hospeda a
-            aplicação e o Daily fornece vídeo. A Talkê não solicita número completo de cartão ou
-            código de segurança.
+            aplicação.{' '}
+            {config.videoProvider === 'google_meet'
+              ? 'As chamadas são realizadas no Google Meet, em outra aba, sob os controles do organizador. O encerramento e a admissão dos participantes são feitos pelo professor; bloquear o link na Talkê não revoga links já copiados.'
+              : 'O Daily fornece vídeo integrado.'}{' '}
+            A Talkê não solicita número completo de cartão ou código de segurança.
           </p>
           <p>
             O catálogo publica apenas o perfil profissional aprovado. Dados de alunos e responsáveis

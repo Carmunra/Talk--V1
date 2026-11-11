@@ -1,5 +1,7 @@
 # Preparação técnica e operação
 
+Rota escolhida: AWS com Firebase. Seguir [Publicacao AWS](PUBLICACAO_AWS.md) e [preparacao atual](PREPARACAO_LANCAMENTO_2026_11_11.md). A secao Cloud Run abaixo documenta a alternativa, nao a hospedagem escolhida. Para o video selecionado, seguir [Operacao do Google Meet](VIDEO_GOOGLE_MEET.md): bloqueio na Talke nao encerra uma chamada externa.
+
 ## Entrega técnica
 
 A configuração em infra/cloud-run prepara Cloud Run na região de São Paulo, identidades separadas para site/manutenção/agendador, acesso restrito aos segredos, manutenção a cada cinco minutos, backup diário e alertas de indisponibilidade/falha financeira. Ela referencia um Firebase/Firestore existente e segredos já provisionados. Não cria documentos jurídicos, domínio, contas dos fornecedores nem o banco de dados.
@@ -19,7 +21,7 @@ Após provisionar o ambiente, seguir [PUBLICACAO_AUTOMATICA.md](PUBLICACAO_AUTOM
 5. Executar terraform init, validate e plan. Ler os recursos e permissões propostos, completar deployment_confirmed apenas após a revisão e aplicar no projeto de homologação. O banco é existente; não substituí-lo nem importar dados demonstrativos sem análise. A conta de aplicação recebe leitura/atualização de usuários Auth para revogação; a concessão de administrador continua sendo uma tarefa separada.
 6. Configurar origem HTTPS, DNS/roteamento e domínios autorizados do Firebase. O módulo não configura domínio customizado ou balanceador; verificar as opções e disponibilidade regional do provedor. Revisar APP_ORIGIN no servidor e as URLs exatas de OAuth/webhook do Mercado Pago.
 7. Implantar firestore.rules/storage.rules selecionando o projeto explicitamente. Verificar no ambiente real que o navegador não consegue ler/escrever as coleções privadas e que o servidor tem somente as permissões necessárias.
-8. Executar homologação Mercado Pago/Daily, conferir job/agendamento e provar entrega de alertas no contato operacional. O status de manutenção aparece na fila administrativa. Repetir os testes de restauração descritos abaixo e registrar evidências. Só então aplicar a imagem/configuração aprovadas em produção.
+8. Executar homologação do financeiro habilitado e do vídeo selecionado (Asaas/Google Meet na rota mensal), conferir job/agendamento e provar entrega de alertas no contato operacional. O status de manutenção aparece na fila administrativa. Repetir os testes de restauração descritos abaixo e registrar evidências. Só então aplicar a imagem/configuração aprovadas em produção.
 
 Referências oficiais: [containers Cloud Run](https://docs.cloud.google.com/run/docs/deploying), [agendamento de jobs](https://docs.cloud.google.com/run/docs/execute/jobs-on-schedule) e [backups Firestore](https://docs.cloud.google.com/firestore/native/docs/backups).
 

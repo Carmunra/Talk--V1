@@ -1,5 +1,7 @@
 # Hospedagem AWS da Talkê
 
+Estado mais recente: [Preparacao de lancamento — 11/11/2026](PREPARACAO_LANCAMENTO_2026_11_11.md). Orçamento de US$ 60–100/mês e as duas funções restritas de staging já autorizados; provider OIDC criado. Não houve apply/publicação confirmados. Saldo e preços abaixo são registros de outubro, não consulta atual de faturamento.
+
 Assinaturas Asaas: o runtime admite credenciais exclusivas Sandbox/live em Secrets Manager. Usar SUBSCRIPTIONS_ENABLED=false até concluir a homologação. Staging recusa live; produção recusa Sandbox habilitado. Live exige ASAAS_ENVIRONMENT=live, ASAAS_API_KEY, ASAAS_WEBHOOK_TOKEN separado, ASAAS_ACCOUNT_ID, PAYMENTS_HOMOLOGATED=true, ASAAS_PRODUCTION_APPROVED=true, SUBSCRIPTION_RULES_APPROVED=true e SUBSCRIPTION_CANCEL_CREDITS explicitamente escolhido. Não inserir chaves no arquivo de exemplo nem no GitHub. Consulte [Homologação Asaas](ASAAS_HOMOLOGACAO.md).
 
 Escolha confirmada pelo operador em 11/10/2026: hospedar na AWS e manter Firebase Authentication/Firestore. A consulta autorizada ao console confirmou US$ 1.100 estimados disponíveis: US$ 1.000 AWS Activate FOUNDERS até 31/10/2028 e US$ 100 AWS Free Tier até 06/10/2027, sem uso exibido. O saldo é estimado e pode levar cerca de 24 horas para refletir consumo; não equivale a um limite de gastos.
@@ -22,16 +24,16 @@ Esta arquitetura inicial usa uma única zona/instância por ambiente. Uma falha 
 
 Estimativa consultada em 11/10/2026 na [calculadora AWS](https://calculator.aws/), região São Paulo, Linux compartilhado sob demanda, sem reservas e com produção e homologação ligadas por 730 horas mensais:
 
-| Componente | Cálculo | US$/mês |
-| --- | --- | ---: |
-| Duas EC2 t3.small | 2 × 730 h × US$ 0,0336/h | 49,06 |
-| Dois discos gp3 de 20 GB | 40 GB × US$ 0,152/GB-mês | 6,08 |
-| Dois IPv4 públicos | 2 × 730 h × US$ 0,005/h | 7,30 |
-| Base de servidores, discos e IPs | Soma arredondada | **62,44** |
+| Componente                       | Cálculo                  |   US$/mês |
+| -------------------------------- | ------------------------ | --------: |
+| Duas EC2 t3.small                | 2 × 730 h × US$ 0,0336/h |     49,06 |
+| Dois discos gp3 de 20 GB         | 40 GB × US$ 0,152/GB-mês |      6,08 |
+| Dois IPv4 públicos               | 2 × 730 h × US$ 0,005/h  |      7,30 |
+| Base de servidores, discos e IPs | Soma arredondada         | **62,44** |
 
-O preço IPv4 está na [tabela oficial VPC](https://aws.amazon.com/vpc/pricing/). A calculadora de EC2 exibiu US$ 55,14 para servidores e discos; o IPv4 foi calculado separadamente. Secrets Manager, armazenamento de imagens ECR, logs de 30 dias, métricas/alarmes, transferência de dados, backups e impostos não estão nessa base. Os custos variáveis dependem de uso ainda não medido. Um orçamento inicial proposto de **US$ 100/mês** reserva US$ 37,56 acima da base para os demais componentes AWS; é uma proposta pendente, não uma cotação completa ou garantia. Firebase/Google Cloud, Daily e Mercado Pago ficam fora desse orçamento AWS.
+O preço IPv4 está na [tabela oficial VPC](https://aws.amazon.com/vpc/pricing/). A calculadora de EC2 exibiu US$ 55,14 para servidores e discos; o IPv4 foi calculado separadamente. Secrets Manager, armazenamento de imagens ECR, logs de 30 dias, métricas/alarmes, transferência de dados, backups e impostos não estão nessa base. Os custos variáveis dependem de uso ainda não medido. O orçamento de trabalho autorizado é de **US$ 60–100/mês**; US$ 100 reserva US$ 37,56 acima da base estimada em outubro para os demais componentes AWS. Não constitui cotação atual completa, teto técnico de cobrança ou garantia. Firebase/Google Cloud, Daily e Mercado Pago ficam fora desse orçamento AWS.
 
-Não há plano aplicado, servidor criado ou cobranças iniciadas por esta preparação. Antes de criar recursos, aprovar o orçamento, confirmar a estimativa dos componentes variáveis e revisar o plano real na conta. Homologação ligada também consome crédito; interromper a EC2 não elimina custos de discos e IPs reservados. Nenhuma compra de Savings Plans ou reservas foi realizada.
+Não há plano aplicado ou servidor criado com conclusão observada. Antes de criar recursos, confirmar a estimativa atual dos componentes variáveis e revisar o plano real na conta, dentro do orçamento e acessos já autorizados. Homologação ligada também consome crédito; interromper a EC2 não elimina custos de discos e IPs reservados. Nenhuma compra de Savings Plans ou reservas foi realizada.
 
 O módulo exige monthly_budget_usd informado e deployment_confirmed=true após revisão de recursos, custos e acesso. Os alertas previstos medem custos brutos da conta AWS, sem descontar créditos/reembolsos, e notificam o contato operacional aprovado a 80% do realizado e 100% do previsto. São alertas, não bloqueios de cobrança. Aprovar o destinatário e confirmar a inscrição SNS. Não comprar Savings Plans, assinaturas ou outras reservas como parte deste procedimento.
 
@@ -63,6 +65,7 @@ Inserir o valor diretamente no cofre, fora do Terraform e Git. O formato JSON te
   "environment": {
     "APP_ORIGIN": "https://talke.club",
     "FIREBASE_PROJECT_ID": "ID_REAL_DO_PROJETO",
+    "VIDEO_PROVIDER": "google_meet",
     "LEGAL_NAME": "68.199.377 MARESSA SOARES LOPES",
     "LEGAL_CNPJ": "68199377000155",
     "PRIVACY_EMAIL": "contato@talke.club",
@@ -79,6 +82,12 @@ Inserir o valor diretamente no cofre, fora do Terraform e Git. O formato JSON te
 ```
 
 Este exemplo incompleto não inicia produção. Preencher as configurações restantes de .env.example e a credencial dedicada aprovada. O controlador rejeita variáveis desconhecidas, emuladores, injeção de linhas, projeto divergente, credencial de outro projeto e imagem cliente de outro projeto. NODE_ENV, PORT, TRUST_PROXY_HOPS e GOOGLE_APPLICATION_CREDENTIALS são definidos pelo controlador. O segredo é recuperado por VersionId fixado; não usar AWSCURRENT no workflow.
+
+## Video selecionado e atualizacao do controlador
+
+VIDEO_PROVIDER=google_meet dispensa DAILY_API_KEY/DAILY_DOMAIN. Incluir a variavel na versao do segredo, homologar admissao/encerramento e seguir [Operacao do Google Meet](VIDEO_GOOGLE_MEET.md). Daily continua disponivel com VIDEO_PROVIDER=daily e suas credenciais. Nao alternar provedores sem encerrar salas antigas.
+
+O runtime.py do host precisa admitir VIDEO_PROVIDER na lista de variaveis. Em um host ja existente com controlador antigo, revisar e atualizar o controlador por procedimento de infraestrutura autorizado antes da release; somente publicar a imagem nao atualiza esse arquivo. Nao remover prevent_destroy nem substituir a EC2 por alteracao de user_data para contornar essa exigencia.
 
 ## Publicação e recuperação
 
