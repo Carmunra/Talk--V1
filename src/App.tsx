@@ -26,6 +26,7 @@ import { LaunchNavigation } from './components/LaunchNavigation';
 import { LaunchHome, FirstLessonJourney } from './components/LaunchHome';
 import { MeetLinkForm } from './components/MeetLinkForm';
 import { TeacherEarnings } from './components/TeacherEarnings';
+import { PlanLessonCancellation } from './components/PlanLessonCancellation';
 import { TALKE_CURRICULUM_MATERIALS } from './data/talkeMaterials';
 const VirtualClassroomModal = lazy(() =>
   import('./components/VirtualClassroomModal').then((module) => ({
@@ -495,6 +496,19 @@ export default function App() {
                     )[l.status] || 'Em andamento'}{' '}
                     · {l.isPaid ? 'Pagamento confirmado' : 'Sem confirmação de pagamento'}
                   </p>
+                  {l.fundingSource === 'ASAAS_SUBSCRIPTION' && l.payerId === firebaseUser?.uid && (
+                    <PlanLessonCancellation
+                      lesson={l}
+                      busy={busy}
+                      onCancel={() =>
+                        void action(
+                          () => post('/api/lessons/' + l.id + '/cancel', {}),
+                          'Aula cancelada. O crédito voltou ao plano com a mesma validade.',
+                        )
+                      }
+                      onRebook={() => setTab('teachers')}
+                    />
+                  )}
                   {config.videoProvider === 'google_meet' &&
                     l.isPaid &&
                     ['CONFIRMED', 'IN_PROGRESS'].includes(l.status) &&
@@ -554,8 +568,8 @@ export default function App() {
                     {l.fundingSource === 'ASAAS_SUBSCRIPTION' &&
                       ['CONFIRMED', 'COMPLETED'].includes(l.status) && (
                         <p>
-                          Para cancelamento ou contestação desta aula, use “Relatar problema” ou
-                          procure o suporte.
+                          Para contestar a realização, solicitar cancelamento pelo professor ou
+                          tratar pedidos fora do prazo, use “Relatar problema” ou procure o suporte.
                         </p>
                       )}
                     {l.teacherId === firebaseUser?.uid && l.status === 'CONFIRMED' && (

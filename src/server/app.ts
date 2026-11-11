@@ -458,7 +458,15 @@ export function createApp({
     wrap(async (req, res) => {
       let result;
       try {
-        result = await platform.cancel(actor(req), subject(req));
+        const existing = await platform.store.get('lessons', subject(req));
+        if (existing?.fundingSource === 'ASAAS_SUBSCRIPTION') {
+          requireCondition(
+            subscriptions,
+            503,
+            'Cancelamento do plano exige suporte neste ambiente',
+          );
+          result = await subscriptions.cancelLesson(actor(req), subject(req));
+        } else result = await platform.cancel(actor(req), subject(req));
       } finally {
         const lesson = await platform.store.get('lessons', subject(req));
         if (

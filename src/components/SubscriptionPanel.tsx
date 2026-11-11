@@ -83,6 +83,12 @@ export function SubscriptionPurchase({
           Informe no pagamento o mesmo e-mail da sua conta: <strong>{email}</strong>.
         </p>
         <p>Seu cartão será informado na página de pagamento do Asaas.</p>
+        <p>
+          Para cancelar uma aula sem perder o crédito, solicite com pelo menos 24 horas de
+          antecedência. O crédito conserva sua validade; para remarcar, escolha depois outro horário
+          disponível. Pedidos tardios e faltas ficam para análise do suporte, sem devolução de
+          crédito ou repasse automático ao professor.
+        </p>
         {error && <p role="alert">{error}</p>}
         {url ? (
           <div className="space-y-3">

@@ -262,6 +262,15 @@ export const BookingModal: React.FC<BookingModalProps> = ({
             </span>
           </div>
 
+          {usePlan && (
+            <p className="text-xs text-slate-600">
+              O crédito volta ao plano se você cancelar com pelo menos 24 horas de antecedência do
+              início, mantendo a validade. Para remarcar, cancele e escolha outro horário
+              disponível. Reservas feitas com menos de 24 horas não têm cancelamento automático com
+              devolução do crédito; o suporte analisa esses pedidos e as faltas, sem repasse
+              automático.
+            </p>
+          )}
           <div className="pt-2 border-t border-neutral-100 flex items-center justify-end gap-2">
             <button
               type="button"

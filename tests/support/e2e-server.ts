@@ -90,6 +90,13 @@ host.post('/_test/subscriptions/finish/:id', async (req, res) => {
   state.advance(lesson.scheduledAt + lesson.durationMinutes * 60_000 - state.platform.now());
   res.json({ advanced: true });
 });
+host.post('/_test/subscriptions/late/:id', async (req, res) => {
+  if (req.header('x-test-key') !== 'local-e2e') return res.sendStatus(403);
+  const lesson = await state.store.get('lessons', req.params.id);
+  if (!lesson) return res.sendStatus(404);
+  state.advance(lesson.scheduledAt - 24 * 3_600_000 + 1 - state.platform.now());
+  res.json({ advanced: true });
+});
 host.get('/_test/subscriptions/status', (req, res) => {
   if (req.header('x-test-key') !== 'local-e2e') return res.sendStatus(403);
   res.json({

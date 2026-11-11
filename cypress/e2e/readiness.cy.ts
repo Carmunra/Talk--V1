@@ -36,9 +36,92 @@ function login(uid: string) {
     cy.contains('Descubra seu Nível').should('be.visible');
   }
 }
+
+function seedPlanLesson() {
+  const headers = { 'x-test-key': 'local-e2e' };
+  return cy
+    .request({ method: 'POST', url: '/_test/subscriptions/seed', headers })
+    .then(({ body }) => {
+      const booking = body.booking;
+      return cy
+        .request({ method: 'POST', url: '/_test/subscriptions/enable', headers })
+        .then(() => token('student'))
+        .then((bearer) =>
+          cy.request({
+            method: 'POST',
+            url: '/api/subscriptions/sub_student/bookings',
+            headers: { Authorization: 'Bearer ' + bearer, 'Idempotency-Key': crypto.randomUUID() },
+            body: booking,
+          }),
+        );
+    })
+    .then(({ body }) => body);
+}
 describe('Fluxos comerciais protegidos com Auth emulator e gateway de teste', () => {
   beforeEach(() => {
     cy.request({ method: 'POST', url: '/_test/reset', headers: { 'x-test-key': 'local-e2e' } });
+  });
+  it('cancela uma aula no prazo, devolve o crédito e reserva outro horário pela interface', () => {
+    seedPlanLesson().then((lesson) => {
+      login('student');
+      cy.contains('button', 'Minhas aulas').click();
+      cy.contains('summary', 'Cancelar ou remarcar esta aula').click();
+      cy.contains('o crédito volta ao plano com a mesma validade.').should('be.visible');
+      cy.contains('Isso não cancela a renovação nem reembolsa a mensalidade.').should('be.visible');
+      cy.intercept('POST', '/api/lessons/' + lesson.id + '/cancel').as('cancelPlanLesson');
+      cy.contains('button', 'Confirmar cancelamento e devolver crédito').click();
+      cy.wait('@cancelPlanLesson').its('response.body.creditReturned').should('eq', true);
+      cy.contains('O crédito desta aula foi devolvido ao plano').should('be.visible');
+      cy.contains('button', 'Planos').click();
+      cy.contains('4 aulas disponíveis').should('be.visible');
+      cy.contains('button', 'Cancelar renovação').should('be.visible');
+      cy.contains('button', 'Minhas aulas').click();
+      cy.contains('button', 'Agendar outro horário').click();
+      cy.contains('button', 'Agendar').first().click();
+      const label = new Date(lesson.scheduledDate + 'T12:00:00Z').toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+      });
+      cy.contains('button', label).click();
+      cy.contains('button', '10:00').click();
+      cy.get('[role="dialog"]').should('contain.text', '24 horas');
+      cy.contains('button', 'Reservar com meu plano').click();
+      cy.contains('button', 'Planos').click();
+      cy.contains('3 aulas disponíveis').should('be.visible');
+      cy.request({ url: '/_test/subscriptions/status', headers: { 'x-test-key': 'local-e2e' } })
+        .its('body.calls')
+        .should('eq', 0);
+    });
+  });
+  it('recusa cancelamento tardio no servidor e encaminha o relato ao suporte sem repasse', () => {
+    seedPlanLesson().then((lesson) => {
+      login('student');
+      cy.contains('button', 'Minhas aulas').click();
+      cy.request({
+        method: 'POST',
+        url: '/_test/subscriptions/late/' + lesson.id,
+        headers: { 'x-test-key': 'local-e2e' },
+      });
+      cy.contains('summary', 'Cancelar ou remarcar esta aula').click();
+      cy.intercept('POST', '/api/lessons/' + lesson.id + '/cancel').as('lateCancellation');
+      cy.contains('button', 'Confirmar cancelamento e devolver crédito').click();
+      cy.wait('@lateCancellation').its('response.statusCode').should('eq', 409);
+      cy.contains('O prazo de cancelamento sem perder o crédito é de 24 horas').should(
+        'be.visible',
+      );
+      cy.contains('summary', 'Relatar problema')
+        .click()
+        .parent()
+        .find('textarea')
+        .type('Solicito análise de um cancelamento fora do prazo.');
+      cy.contains('button', 'Enviar relato').click();
+      cy.contains('Relato enviado para acompanhamento').should('be.visible');
+      cy.contains('button', 'Planos').click();
+      cy.contains('3 aulas disponíveis').should('be.visible');
+      cy.request({ url: '/_test/subscriptions/status', headers: { 'x-test-key': 'local-e2e' } })
+        .its('body.calls')
+        .should('eq', 0);
+    });
   });
   it('contrata pela interface, exige aceite e retoma apenas o checkout do próprio pagador', () => {
     cy.request({
