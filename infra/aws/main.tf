@@ -148,6 +148,7 @@ resource "aws_instance" "app" {
   credit_specification { cpu_credits = "standard" }
   lifecycle {
     prevent_destroy = true
+    ignore_changes  = [associate_public_ip_address]
     precondition {
       condition     = var.deployment_confirmed && split(":", var.github_oidc_provider_arn)[4] == var.account_id
       error_message = "Aprovação do plano/custos obrigatória e OIDC deve pertencer à conta verificada."
@@ -192,9 +193,9 @@ resource "aws_iam_role_policy" "deploy" {
 resource "aws_sns_topic" "alerts" { name = "${local.name}-alerts" }
 resource "aws_sns_topic_policy" "alarms" {
   arn = aws_sns_topic.alerts.arn
-  policy = jsonencode({ Version = "2012-10-17", Statement = [
-    { Effect = "Allow", Principal = { AWS = "arn:aws:iam::${var.account_id}:root" }, Action = "SNS:*", Resource = aws_sns_topic.alerts.arn },
-    { Effect = "Allow", Principal = { Service = "cloudwatch.amazonaws.com" }, Action = "sns:Publish", Resource = aws_sns_topic.alerts.arn,
+  policy = jsonencode({ Id = "${local.name}-alerts-policy", Version = "2012-10-17", Statement = [
+    { Effect = "Allow", Sid = "AllowAccountOwner", Principal = { AWS = "arn:aws:iam::${var.account_id}:root" }, Action = ["sns:AddPermission", "sns:DeleteTopic", "sns:GetTopicAttributes", "sns:ListSubscriptionsByTopic", "sns:Publish", "sns:RemovePermission", "sns:SetTopicAttributes", "sns:Subscribe"], Resource = aws_sns_topic.alerts.arn },
+    { Effect = "Allow", Sid = "AllowCloudWatchPublish", Principal = { Service = "cloudwatch.amazonaws.com" }, Action = "sns:Publish", Resource = aws_sns_topic.alerts.arn,
     Condition = { StringEquals = { "aws:SourceAccount" = var.account_id }, ArnLike = { "aws:SourceArn" = "arn:aws:cloudwatch:${var.region}:${var.account_id}:alarm:${local.name}-*" } } }
   ] })
 }
