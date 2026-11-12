@@ -63,7 +63,7 @@ export const DiagnosticAndGoalView: React.FC<DiagnosticAndGoalViewProps> = ({
     },
     {
       id: 4,
-      level: ProficiencyLevel.B2_UpperIntermediate,
+      level: ProficiencyLevel.B2_Upper_Intermediate,
       question: "By the time the meeting ends, we _____ all the quarterly goals.",
       options: ["will discuss", "will have discussed", "had discussed", "have been discussing"],
       correctIndex: 1,
@@ -80,7 +80,7 @@ export const DiagnosticAndGoalView: React.FC<DiagnosticAndGoalViewProps> = ({
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [calculatedLevel, setCalculatedLevel] = useState<ProficiencyLevel>(
-    currentStudent.proficiencyLevel || ProficiencyLevel.A1_Beginner
+    currentStudent.level || ProficiencyLevel.A1_Beginner
   );
   const [isSaving, setIsSaving] = useState(false);
 
@@ -107,7 +107,7 @@ export const DiagnosticAndGoalView: React.FC<DiagnosticAndGoalViewProps> = ({
       if (correctCount === 1) level = ProficiencyLevel.A1_Beginner;
       else if (correctCount === 2) level = ProficiencyLevel.A2_Elementary;
       else if (correctCount === 3) level = ProficiencyLevel.B1_Intermediate;
-      else if (correctCount === 4) level = ProficiencyLevel.B2_UpperIntermediate;
+      else if (correctCount === 4) level = ProficiencyLevel.B2_Upper_Intermediate;
       else if (correctCount >= 5) level = ProficiencyLevel.C1_Advanced;
 
       setCalculatedLevel(level);
