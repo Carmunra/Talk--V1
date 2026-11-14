@@ -10,7 +10,7 @@ ARG VITE_FIREBASE_PROJECT_ID
 ARG VITE_FIREBASE_APP_ID
 RUN npm run build
 
-FROM node:22.23.4-bookworm-slim AS runtime
+FROM node:22.23.4-alpine3.24 AS runtime
 ARG VITE_FIREBASE_PROJECT_ID
 LABEL com.talke.firebase.project=$VITE_FIREBASE_PROJECT_ID
 ENV NODE_ENV=production
