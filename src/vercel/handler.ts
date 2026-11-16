@@ -2,13 +2,13 @@ import { cert, initializeApp } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 import type { Request, Response } from 'express';
-import { createApp } from '../src/server/app';
-import { readConfig } from '../src/server/config';
-import { FirestoreStore } from '../src/server/store';
-import { Platform } from '../src/server/platform';
-import { MercadoPagoGateway } from '../src/server/marketplace';
-import { AsaasGateway } from '../src/server/asaas';
-import { MonthlySubscriptions } from '../src/server/subscriptions';
+import { createApp } from '../server/app';
+import { readConfig } from '../server/config';
+import { FirestoreStore } from '../server/store';
+import { Platform } from '../server/platform';
+import { MercadoPagoGateway } from '../server/marketplace';
+import { AsaasGateway } from '../server/asaas';
+import { MonthlySubscriptions } from '../server/subscriptions';
 
 function createBackend() {
   const config = readConfig();
