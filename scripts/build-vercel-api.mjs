@@ -11,6 +11,6 @@ await build({
   legalComments: 'none',
   outfile: 'api/handler.js',
   banner: {
-    js: "import { createRequire } from 'node:module'; const require = createRequire(import.meta.url);",
+    js: "import '@google-cloud/firestore'; import '@google-cloud/storage'; import { createRequire } from 'node:module'; const require = createRequire(import.meta.url);",
   },
 });
