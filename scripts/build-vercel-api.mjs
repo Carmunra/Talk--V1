@@ -6,6 +6,7 @@ await build({
   platform: 'node',
   format: 'esm',
   target: 'node22',
+  external: ['@google-cloud/*'],
   minify: true,
   legalComments: 'none',
   outfile: 'api/handler.js',
