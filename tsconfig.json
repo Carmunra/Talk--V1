@@ -17,6 +17,7 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": [
+    "api",
     "src",
     "server.ts",
     "tests",
