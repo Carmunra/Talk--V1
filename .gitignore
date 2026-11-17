@@ -30,3 +30,4 @@ gha-creds-*.json
 *.tfvars
 *.tfplan
 __pycache__/
+.env.local

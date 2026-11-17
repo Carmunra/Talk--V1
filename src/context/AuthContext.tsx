@@ -72,7 +72,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
   const loginWithGoogle = async () => {
     await authReady;
-    await signInWithPopup(auth, googleProvider);
+    try {
+      await signInWithPopup(auth, googleProvider);
+    } catch (error) {
+      const code = String((error as { code?: string }).code || (error as Error).message);
+      if (/api-key-not-valid|invalid-api-key/i.test(code))
+        throw new Error(
+          'A chave do Firebase publicada no site é inválida. Confira VITE_FIREBASE_API_KEY na Vercel e faça um novo deploy.',
+        );
+      if (/unauthorized-domain/i.test(code))
+        throw new Error(
+          'Este domínio não está autorizado no Firebase Authentication. Adicione www.talke.club aos domínios autorizados.',
+        );
+      if (/operation-not-allowed/i.test(code))
+        throw new Error('O login com Google não está ativado no Firebase Authentication.');
+      if (/popup-blocked/i.test(code))
+        throw new Error(
+          'O navegador bloqueou a janela de login. Permita pop-ups para este site e tente novamente.',
+        );
+      throw error;
+    }
   };
   const logout = async () => {
     ++generation.current;

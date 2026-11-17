@@ -10,7 +10,7 @@ import { DiagnosticAndGoalView } from './components/DiagnosticAndGoalView';
 import { PrivacyNotice } from './components/PrivacyNotice';
 import { SupportContacts } from './components/SupportContacts';
 import { MonthlyPlans } from './components/MonthlyPlans';
-import { SchoolOverview } from './components/SchoolOverview';
+import { PublicLanding } from './components/PublicLanding';
 import {
   SubscriptionPanel,
   SubscriptionPurchase,
@@ -224,31 +224,34 @@ export default function App() {
         <p role="status">{message || 'Carregando Talkê…'}</p>
       </main>
     );
+  const publicLanding = !firebaseUser && !loadingAuth && tab === 'teachers';
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800">
-      <header className="bg-white border-b p-4 flex items-center justify-between flex-wrap gap-4">
-        <a href="/" className="text-3xl font-bold text-blue-700">
-          Talkê<span className="text-sky-400">.</span>
-        </a>
-        <span>Aulas de inglês · 50 minutos</span>
-        {firebaseUser ? (
-          <div className="flex gap-4 items-center">
-            <span>{session?.profile?.name || firebaseUser.displayName || 'Sua conta'}</span>
-            <button
-              onClick={async () => {
-                await logout();
-                setTab('teachers');
-              }}
-            >
-              Sair
+      {!publicLanding && (
+        <header className="bg-white border-b p-4 flex items-center justify-between flex-wrap gap-4">
+          <a href="/" className="text-3xl font-bold text-blue-700">
+            Talkê<span className="text-sky-400">.</span>
+          </a>
+          <span>Aulas de inglês · 50 minutos</span>
+          {firebaseUser ? (
+            <div className="flex gap-4 items-center">
+              <span>{session?.profile?.name || firebaseUser.displayName || 'Sua conta'}</span>
+              <button
+                onClick={async () => {
+                  await logout();
+                  setTab('teachers');
+                }}
+              >
+                Sair
+              </button>
+            </div>
+          ) : (
+            <button onClick={() => void action(loginWithGoogle, 'Login realizado')}>
+              Entrar com Google
             </button>
-          </div>
-        ) : (
-          <button onClick={() => void action(loginWithGoogle, 'Login realizado')}>
-            Entrar com Google
-          </button>
-        )}
-      </header>
+          )}
+        </header>
+      )}
       {import.meta.env.MODE === 'test' && !firebaseUser && (
         <form
           className="p-4 flex gap-2"
@@ -272,39 +275,41 @@ export default function App() {
           <button>Entrar no emulador</button>
         </form>
       )}
-      <div className="max-w-7xl mx-auto p-4 md:p-8">
-        <LaunchNavigation
-          items={[
-            ...(active ? [['home', 'Início']] : []),
-            ['teachers', 'Professores'],
-            ['plans', 'Planos'],
-            ...(active
-              ? [
-                  ['lessons', 'Minhas aulas'],
-                  [
-                    'payments',
-                    role === 'TEACHER' && !config.paymentsEnabled ? 'Repasses' : 'Pagamentos',
-                  ],
-                  ['progress', 'Desenvolvimento'],
-                  ['materials', 'Materiais'],
-                ]
-              : []),
-            ...(firebaseUser && session?.profile ? [['privacy-panel', 'Meus dados']] : []),
-            ...(active && (role === 'STUDENT' || childId) ? [['diagnostic', 'Objetivos']] : []),
-            ...(active && role === 'GUARDIAN' ? [['family', 'Família']] : []),
-            ...(active && role === 'TEACHER' ? [['teacher-profile', 'Meu perfil']] : []),
-            ...(session?.isAdmin ? [['admin', 'Administração']] : []),
-            ['privacy', 'Privacidade'],
-            ['terms', 'Termos'],
-          ]}
-          selected={tab}
-          active={active}
-          role={role}
-          isAdmin={session?.isAdmin}
-          onNavigate={setTab}
-        />
+      <div className={publicLanding ? '' : 'max-w-7xl mx-auto p-4 md:p-8'}>
+        {!publicLanding && (
+          <LaunchNavigation
+            items={[
+              ...(active ? [['home', 'Início']] : []),
+              ['teachers', 'Professores'],
+              ['plans', 'Planos'],
+              ...(active
+                ? [
+                    ['lessons', 'Minhas aulas'],
+                    [
+                      'payments',
+                      role === 'TEACHER' && !config.paymentsEnabled ? 'Repasses' : 'Pagamentos',
+                    ],
+                    ['progress', 'Desenvolvimento'],
+                    ['materials', 'Materiais'],
+                  ]
+                : []),
+              ...(firebaseUser && session?.profile ? [['privacy-panel', 'Meus dados']] : []),
+              ...(active && (role === 'STUDENT' || childId) ? [['diagnostic', 'Objetivos']] : []),
+              ...(active && role === 'GUARDIAN' ? [['family', 'Família']] : []),
+              ...(active && role === 'TEACHER' ? [['teacher-profile', 'Meu perfil']] : []),
+              ...(session?.isAdmin ? [['admin', 'Administração']] : []),
+              ['privacy', 'Privacidade'],
+              ['terms', 'Termos'],
+            ]}
+            selected={tab}
+            active={active}
+            role={role}
+            isAdmin={session?.isAdmin}
+            onNavigate={setTab}
+          />
+        )}
         {(message || authError) && (
-          <p role="status" className="p-4 mb-4 rounded-xl bg-blue-50">
+          <p role="status" className="mx-auto max-w-7xl rounded-xl bg-blue-50 p-4">
             {message || authError}
           </p>
         )}
@@ -412,34 +417,59 @@ export default function App() {
           />
         ) : tab === 'teachers' ? (
           <>
-            {!firebaseUser && <SchoolOverview minorsEnabled={config.minorsEnabled} />}
-            {!firebaseUser && (
-              <MonthlyPlans
-                plans={config.monthlyPlans}
-                compact
-                onSelect={config.subscriptionsEnabled ? selectPlan : undefined}
+            {!firebaseUser && !loadingAuth ? (
+              <PublicLanding
+                onLogin={() => void action(loginWithGoogle, 'Login realizado')}
+                onNavigate={setTab}
+                minorsEnabled={config.minorsEnabled}
+                legalName={config.legalName}
+                supportEmail={config.supportEmail}
+                plans={
+                  <MonthlyPlans
+                    plans={config.monthlyPlans}
+                    compact
+                    onSelect={config.subscriptionsEnabled ? selectPlan : undefined}
+                  />
+                }
+                teachers={
+                  <>
+                    <TeacherDirectory
+                      monthlyOnly={!config.paymentsEnabled}
+                      teachers={teachers}
+                      currentStudent={student}
+                      onSelectTeacher={setProfileTeacher}
+                      onBookTeacher={() => setMessage('Entre e conclua o cadastro para reservar.')}
+                      onGoToDiagnostic={() => void action(loginWithGoogle, 'Login realizado')}
+                    />
+                    {!teachers.length && (
+                      <p>Nenhum professor disponível para reservas neste momento.</p>
+                    )}
+                  </>
+                }
+              />
+            ) : (
+              <TeacherDirectory
+                monthlyOnly={!config.paymentsEnabled}
+                teachers={teachers}
+                currentStudent={student}
+                onSelectTeacher={setProfileTeacher}
+                onBookTeacher={(teacher) => {
+                  if (!active || !student)
+                    setMessage(
+                      'Entre como aluno ou selecione um dependente liberado para reservar.',
+                    );
+                  else if (
+                    config.subscriptionsEnabled &&
+                    !config.paymentsEnabled &&
+                    !bookingSubscription
+                  ) {
+                    setMessage('Selecione um plano com aulas disponíveis antes de reservar.');
+                    setTab('plans');
+                  } else setBooking(teacher);
+                }}
+                onGoToDiagnostic={() => setTab('diagnostic')}
               />
             )}
-            <TeacherDirectory
-              monthlyOnly={!config.paymentsEnabled}
-              teachers={teachers}
-              currentStudent={student}
-              onSelectTeacher={setProfileTeacher}
-              onBookTeacher={(teacher) => {
-                if (!active || !student)
-                  setMessage('Entre como aluno ou selecione um dependente liberado para reservar.');
-                else if (
-                  config.subscriptionsEnabled &&
-                  !config.paymentsEnabled &&
-                  !bookingSubscription
-                ) {
-                  setMessage('Selecione um plano com aulas disponíveis antes de reservar.');
-                  setTab('plans');
-                } else setBooking(teacher);
-              }}
-              onGoToDiagnostic={() => setTab('diagnostic')}
-            />
-            {!teachers.length && <p>Nenhum professor disponível para reservas neste momento.</p>}
           </>
         ) : tab === 'family' ? (
           <FamilyForm config={config} onSaved={refreshProfiles} />
@@ -771,13 +801,15 @@ export default function App() {
           <p>Selecione uma opção disponível para sua conta.</p>
         )}
       </div>
-      <footer className="border-t p-6 text-center text-sm">
-        <a href="/planos">Planos mensais</a> · <a href="/privacidade">Aviso de privacidade</a> ·{' '}
-        <a href="/termos">Termos de uso</a>
-        <p>
-          {config.legalName || 'Talkê em preparação'} · <SupportContacts config={config} />
-        </p>
-      </footer>
+      {!publicLanding && (
+        <footer className="border-t p-6 text-center text-sm">
+          <a href="/planos">Planos mensais</a> · <a href="/privacidade">Aviso de privacidade</a> ·{' '}
+          <a href="/termos">Termos de uso</a>
+          <p>
+            {config.legalName || 'Talkê em preparação'} · <SupportContacts config={config} />
+          </p>
+        </footer>
+      )}
       {booking && student && (
         <BookingModal
           teacher={booking}
